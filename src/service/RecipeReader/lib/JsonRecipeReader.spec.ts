@@ -1,7 +1,7 @@
 import {readJsonRecipe} from "./JsonRecipeReader";
 
 describe("JsonRecipeType can bea read", () => {
-    it ("Simple recepy is OK", async () => {
+    it ("Simple recipe is OK", async () => {
         const result = await readJsonRecipe(    {
                 name: "Täisteraleib",
                 bakingTime: [

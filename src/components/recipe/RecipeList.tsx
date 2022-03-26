@@ -4,7 +4,7 @@ import {Recipe} from "../../models/interfaces/Recipe";
 import {readJsonRecipeToRecipeObjectArray} from "../../service/RecipeReader/lib/JsonRecipeReader";
 import {PREDEFINED_RECIPES} from "../../data/PredefinedRecipes";
 
-export const RecepiesList = () => {
+export const RecipeList = () => {
     const [recipes, setRecipes] = useState<Recipe[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     useEffect(() => {

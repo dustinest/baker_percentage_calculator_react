@@ -49,9 +49,9 @@ export const RecipeItem = ({recipe}: { recipe: Recipe }) => {
                     {microNutrients?.microNutrients ? (<section className="micronutrients"><MicroNutrientsResultList
                         microNutrientsResult={microNutrients.microNutrients}/></section>) : undefined}
                 </section>
-                <section className="recepie">
+                <section className="recipe">
                     {ingredientsMicros?.ingredients.map((ingredients, index) => (
-                        <IngredientsItem  ingredients={ingredients} recipe={recipe} key={`recepie_${index}`}/>
+                        <IngredientsItem  ingredients={ingredients} recipe={recipe} key={`recipe_${index}`}/>
                     ))}
                 </section>
                 <BakingTimeItems bakingTimes={recipe.getBakingTime()}/>
