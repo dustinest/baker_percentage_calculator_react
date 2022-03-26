@@ -1,0 +1,195 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+input {
+  text-align: right;
+  min-width: 4em;
+  max-width: 5em;
+}
+th label {
+  text-transform: capitalize;
+}
+td label {
+  display: block;
+}
+table th {
+  text-align: left;
+}
+table {
+  border: 1pt solid #cacaca;
+  margin: auto;
+}
+article {
+  border-width: 0 0 1pt 0;
+  border-style: solid;
+  border-color: #cacaca;
+  padding: 10pt 0;
+  margin: 0;
+}
+h3, h2 {
+  margin: 0;
+  padding: 0;
+}
+.description {
+  margin: 0;
+}
+
+ul.bakingTimes li {
+  list-style: none;
+}
+table {
+  border-width: 0;
+}
+section.edit {
+  border-width: 1pt 0;
+  border-style: dotted;
+  border-color: #cacaca;
+  padding: 10pt 0;
+  margin: 10pt 0;
+}
+
+
+table {
+  margin-top: 1em;
+  border-collapse: collapse;
+}
+table th, table td {
+  border-bottom: dashed 1px #cacaca;
+}
+table thead th {
+  text-align: center;
+}
+
+table thead th {
+  border-bottom: double 3pt #cacaca;
+}
+
+table tr:last-child td, table tr:last-child th {
+  border-bottom: solid 2pt #cacaca;
+}
+
+tbody th {
+  font-weight: normal;
+}
+
+td, th {
+  padding: 5pt 3pt;
+}
+td label, th label {
+  display: block;
+  page-break-inside: avoid;
+
+}
+th label {
+  text-align: left;
+}
+td label {
+  text-align: right;
+}
+
+tbody td {
+  min-width: 5em;
+  max-width: 6em;
+}
+
+tbody th {
+  min-width: 6em;
+  max-width: 8em;
+}
+
+ul.bakingTimes {
+  margin: 0.5em 0 0 0;
+}
+
+@media print {
+
+  tbody td {
+    min-width: 10em;
+    max-width: 10em;
+  }
+
+  tbody th {
+    min-width: 15em;
+    max-width: 15em;
+  }
+
+  h2 label {
+    font-size: 18pt;
+  }
+  h3 label {
+    font-size: 16pt;
+  }
+  label, input, .description {
+    font-size: 16pt;
+  }
+
+  .micronutrients h3 label {
+    font-size: 13pt;
+  }
+  .micronutrients th label, td label {
+    font-size: 13pt;
+  }
+
+  body{
+    background-color: #ffffff;
+    padding: 0;
+  }
+  label {
+    page-break-inside: avoid;
+  }
+
+  article section {
+    margin: 0 auto;
+    /*display: inline-block;*/
+    float: none;
+    padding: 0;
+    page-break-inside: avoid;
+  }
+  nav, section.base, .title span.rounded-button {
+    display: none;
+  }
+  input {
+    border-width: 0;
+    padding: 0;
+    margin: 0;
+  }
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  section.edit {
+    display: none;
+  }
+
+  article {
+    display: block;
+    float: none;
+    clear: both;
+    border-width: 0;
+    padding: 0;
+    margin: 18pt auto 0 auto;
+    page-break-inside: avoid;
+    position: relative;
+    height: 100%;
+    page-break-after: always;
+    text-align: center;
+  }
+  /*
+  article div.recipe {
+    position:relative;
+    z-index:15;
+    top:50%;
+    left:50%;
+    left: 0;
+    right: 0;
+  }
+   */
+}
