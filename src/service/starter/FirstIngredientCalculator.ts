@@ -17,7 +17,7 @@ export type StarterCalculationResult = {
 
 const calculateStarterFlour  = (value: DryAndLiquidCalculationResult): number => {
     const result = Math.floor(value.totals.flour * 4 / 200);
-    return result > 0 ? 10 : result;
+    return result > 10 ? 10 : result;
 }
 
 export const calculateStarter = async (ingredients: RecipeIngredients[]): Promise<StarterCalculationResult> => {

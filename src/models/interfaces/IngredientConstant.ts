@@ -61,8 +61,8 @@ export const INGREDIENT_CONSTANT:PredefinedIngredientConstant = (() => {
         DURUM_WHEAT: createPredefined("durum_wheat_flour", "Durum jahu", NutritionType.flour, 100, NutritionType.whole_grain, 100),
 
         WHOLE_RYE_MALT_FLOUR: createPredefined("rye_malt_flour", "Rukkilinnase jahu", NutritionType.flour, 100, NutritionType.whole_grain, 100),
-        WHEAT_405_FLOUR: createPredefined("wheat_flour_405", "Nisujahu 405", NutritionType.flour, 100, NutritionType.whole_grain, 100),
-        WHEAT_550_FLOUR: createPredefined("wheat_flour_550", "Nisujahu 550", NutritionType.flour, 100, NutritionType.whole_grain, 100)
+        WHEAT_405_FLOUR: createPredefined("wheat_flour_405", "Nisujahu 405", NutritionType.flour, 100),
+        WHEAT_550_FLOUR: createPredefined("wheat_flour_550", "Nisujahu 550", NutritionType.flour, 100)
     } as PredefinedIngredientConstant;
     return Object.freeze(result);
 })();
