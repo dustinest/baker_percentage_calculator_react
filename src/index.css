@@ -115,7 +115,7 @@ nav {
   border-color: #cacaca;
   border-width: 0 1pt 0 0;
   border-style: solid;
-  padding: 1em;
+  padding: 0;
   margin: 0;
   height: 100%;
 }
@@ -127,14 +127,23 @@ nav ul {
 }
 nav ul li {
   padding: 0;
-  margin: 0.4em 0;
+  margin: 0.1em 0;
   text-align: left;
 }
 
-nav ul li a, a:visited {
+nav ul li a, nav ul li a:visited, nav ul li a:active {
+  margin: 0;
+  padding: 0.1em 1em;
   color: #000000;
   font-size: 12pt;
-
+  display: block;
+  border-width: 1pt 0;
+  border-style: solid;
+  border-color: transparent;
+  text-decoration: none;
+}
+nav ul li a:hover {
+  border-color: #cacaca;
 }
 
 @media print {

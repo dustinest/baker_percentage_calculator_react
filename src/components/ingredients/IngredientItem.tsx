@@ -12,7 +12,7 @@ export const IngredientItem = ({ingredient, onGramsChange, onPercentChange}: Ing
 
     return (
         <tr>
-            <th><label><TranslatedLabel label={ingredient.getName()}/></label></th>
+            <th><TranslatedLabel label={ingredient.getName()}/></th>
             <td className="label">
                 <InputNumber value={ingredient.getGrams()} suffix="g" onChange={ onGramsChange } />
             </td>
