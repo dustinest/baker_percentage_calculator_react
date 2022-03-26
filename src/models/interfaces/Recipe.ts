@@ -6,6 +6,7 @@ export interface Recipe {
     getId(): string;
     getName(): string;
 
+    getAmount(): number;
     getBakingTime(): BakingTime[]
     getIngredients(): RecipeIngredients[];
     getDescription(): string | null;
@@ -18,6 +19,7 @@ export class SimpleRecipe implements Recipe {
     private readonly bakingTime: BakingTime[]
     private readonly ingredients: RecipeIngredients[];
     private readonly description: string | null;
+    private readonly amount: number;
     constructor(a: Recipe | RecipeType) {
         this.id = (a as Recipe).getId ? (a as Recipe).getId() : (a as RecipeType).id;
         this.name = (a as Recipe).getName ? (a as Recipe).getName() : (a as RecipeType).name;
@@ -25,6 +27,11 @@ export class SimpleRecipe implements Recipe {
         this.ingredients = ((a as Recipe).getIngredients ? (a as Recipe).getIngredients() : (a as RecipeType).ingredients).map(getSimpleRecipeIngredients);
         const description = ((a as Recipe).getDescription ? (a as Recipe).getDescription() : (a as RecipeType).description);
         this.description = description ? description : null;
+        this.amount = (a as Recipe).getAmount ? (a as Recipe).getAmount() : (a as RecipeType).amount;
+    }
+
+    getAmount(): number {
+        return this.amount;
     }
 
     getBakingTime(): BakingTime[] {
@@ -53,7 +60,8 @@ export class SimpleRecipe implements Recipe {
             name: this.getName(),
             bakingTime: this.getBakingTime().map(e => e.toType()),
             ingredients: this.getIngredients().map(e => e.toType()),
-            description: this.description || undefined
+            description: this.description || undefined,
+            amount: this.getAmount()
         }
     }
 

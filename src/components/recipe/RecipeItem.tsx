@@ -4,8 +4,8 @@ import {BakingTimeItems} from "../baking/BakingTimeItems";
 import {useEffect, useState} from "react";
 import {recalculateRecipePercents, RecipePercentsResult} from "../../utils/RecipeCalulation";
 import {MicroNutrientsResultList} from "../micronutrients/MicroNutrientsResultList";
-import {TranslatedLabel} from "../common/TranslatedLabel";
 import {splitStarterAndDough} from "../../service/starter/IngredientStarterService";
+import {RecipeLabel} from "./RecipeLabel";
 
 export const RecipeItem = ({recipe}: { recipe: Recipe }) => {
     //const [ingredients, setIngredients] = useState<RecipeIngredients[] | undefined>()
@@ -34,9 +34,9 @@ export const RecipeItem = ({recipe}: { recipe: Recipe }) => {
     }
 
     return (
-        <article>
+        <article id={recipe.getId()}>
             <div className="recipe">
-                <h2><TranslatedLabel label={recipe.getName()}/></h2>
+                <h2><RecipeLabel recipe={recipe}/></h2>
                 <section className="edit">
                     <section className="ingredients">
                         {microNutrients?.ingredients.map((ingredients, index) => (

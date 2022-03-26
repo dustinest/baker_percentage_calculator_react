@@ -66,12 +66,14 @@ const getPredefined = (ingredient: JsonRecipeIngredientsIngredientType, grams?: 
 }
 
 export const readJsonRecipe = async (recipe: JsonRecipeType): Promise<RecipeType> => {
+    const _amount = recipe.amount || 1;
     const result: RecipeType = {
-        id: base64Encode(recipe, recipe.name),
+        id: base64Encode(recipe, recipe.name, _amount.toString()),
         name: recipe.name,
         ingredients: [],
         bakingTime: resolveBakingTime(recipe.bakingTime),
-        description: recipe.description
+        description: recipe.description,
+        amount: recipe.amount || 0
     };
     const _ingredients: IngredientsType[] = [];
     const ingredientGrams: IngredientGramsType[] = [];
@@ -154,12 +156,13 @@ export const readJsonRecipeToRecipeObjectArray = async (jsonRecipes: JsonRecipeT
             const _result = await jSonRecipeToRecipeObject(recipe);
             result.push(_result);
 
-            const newName = recipe.name + " x 2";
+            const newName = recipe.name;
             const recipe_x2 = {
                 ...recipe,
                 ...{
-                    id: recipe.id ? recipe.id + "_x2" : undefined,
+                    id: recipe.id ? recipe.id : undefined,
                     name: newName,
+                    amount: recipe.amount ? recipe.amount * 2 : 2,
                     ingredients: recipe.ingredients.map((e) => ({
                         ...e,
                         ...{ingredients: e.ingredients.map((i) => {

@@ -107,8 +107,40 @@ ul.bakingTimes {
   margin: 0.5em 0 0 0;
 }
 
-@media print {
+nav {
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: #ffffff;
+  border-color: #cacaca;
+  border-width: 0 1pt 0 0;
+  border-style: solid;
+  padding: 1em;
+  margin: 0;
+  height: 100%;
+}
 
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+nav ul li {
+  padding: 0;
+  margin: 0.4em 0;
+  text-align: left;
+}
+
+nav ul li a, a:visited {
+  color: #000000;
+  font-size: 12pt;
+
+}
+
+@media print {
+  nav {
+    display: none;
+  }
   tbody td {
     min-width: 10em;
     max-width: 10em;

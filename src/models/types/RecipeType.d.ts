@@ -4,6 +4,7 @@ import {RecipeIngredientsType} from "./RecipeIngredientsType";
 export type RecipeType = {
     id: string;
     name: string;
+    amount: number;
 
     bakingTime: BakingTimeType[];
     ingredients: RecipeIngredientsType[];

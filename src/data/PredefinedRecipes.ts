@@ -128,7 +128,8 @@ export const PREDEFINED_RECIPES = [
         ],
     },
     {
-        name: "3 x Pizza",
+        name: "Pizza",
+        amount: 3,
         ingredients: [
             {
                 ingredients: [
@@ -146,6 +147,7 @@ export const PREDEFINED_RECIPES = [
     },
     {
         name: "Vastlakuklid",
+        amount: 18,
         description: "Sisetemperatuur 82℃ - 88℃",
         ingredients: [
             {
