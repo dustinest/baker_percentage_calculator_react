@@ -1,17 +1,25 @@
-import {Recipe} from "../../models/interfaces/Recipe";
-import {RecipeLabel} from "./RecipeLabel";
+import {JsonRecipeType} from "../../service/RecipeReader/types";
+import {useRecipeIdNameAndAmount} from "../../service/RecipeReader";
 
 type RecipeNavigationProps = {
-    recipes: Recipe[];
+    recipes: JsonRecipeType[];
 }
+
+const RecipeMenuItem = ({recipe}: { recipe: JsonRecipeType } ) => {
+    const recipeId = useRecipeIdNameAndAmount(recipe);
+    return (
+        <>{recipeId ? (<li key={recipeId.id}><a href={`#${recipeId.id}`}>{recipeId.label}</a ></li>) : undefined}</>
+    );
+}
+
 
 export const RecipeNavigation = ({recipes} : RecipeNavigationProps) => {
     return (
         <nav className="recipesMenu">
             <ul>
                 {
-                    recipes.map((recipe) =>
-                        (<li key={recipe.getId()}><a href={`#${recipe.getId()}`}><RecipeLabel recipe={recipe}/></a ></li>)
+                    recipes.map((recipe, index) =>
+                        (<RecipeMenuItem key={index} recipe={recipe}/>)
                     )
                 }
             </ul>

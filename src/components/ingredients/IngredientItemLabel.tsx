@@ -2,7 +2,7 @@ import {TranslatedLabel} from "../common/TranslatedLabel";
 import {NumberLabel} from "../common/NumberLabel";
 import {useEffect, useState} from "react";
 import {normalizeNumberString} from "../../utils/NumberValue";
-import {IngredientWithPercent} from "../../utils/RecipeCalulation";
+import {IngredientWithPercent} from "../../utils/BakerPercentageCalulation";
 
 type IngredientItemLabelProps = {
     ingredient: IngredientWithPercent,

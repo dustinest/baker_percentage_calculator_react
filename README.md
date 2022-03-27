@@ -5,8 +5,39 @@ There are some hacks in code which might need some attention (IE starter for pan
 
 Check [src/data/PredefinedRecipes.ts](src/data/PredefinedRecipes.ts) for predefined recipes.
 
+The predefined flour even can be defined as percentage. But the total of the percentages must be less than 100. For instance:
+```
+[{
+    name: "flour1"
+    amount: 123,
+},
+{
+    name: "flour2"
+    percent: 100,
+}]
+```
+Will fail. As there can not be total 200% of flour.
+
+```
+[{
+    name: "flour1"
+    amount: 123,
+},
+{
+    name: "flour2"
+    percent: 2,
+},
+{
+    name: "flour3"
+    percent: 50,
+}]
+```
+Does not fail, as flour1 percentage will be `123 * (100 - 2 - 50) / 100`
+
+## Next steps:
 // TODO: at the moment the inputs do not matter but they should!
 
+# Setup
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

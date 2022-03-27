@@ -1,5 +1,5 @@
-import {NutritionType} from "../../models/interfaces/NutritionType";
 import {IngredientGramsType} from "../../models/types";
+import {calculateFlourAndWaterPercent} from "./FlourAndWaterCalculation";
 
 export interface DryAndLiquidCalculationResult {
     ingredients: {
@@ -12,6 +12,33 @@ export interface DryAndLiquidCalculationResult {
         liquid: number,
         water: number
     }
+}
+
+
+
+export type DryAndLiquidIngredientResult = {
+    flour: {
+        percent: number,
+        grams: number;
+    }
+    water: {
+        percent: number,
+        grams: number;
+    }
+}
+
+export const calculateDryAndLiquidNutrition = (ingredient: IngredientGramsType): DryAndLiquidIngredientResult => {
+    const flourAndWaterPercent = calculateFlourAndWaterPercent(ingredient.nutrients);
+    return {
+        flour: {
+            percent: flourAndWaterPercent.flour,
+            grams: flourAndWaterPercent.flour > 0 ? (ingredient.grams * 100 / flourAndWaterPercent.flour) : 0
+        },
+        water: {
+            percent: flourAndWaterPercent.water,
+            grams: flourAndWaterPercent.water > 0 ? (ingredient.grams * 100 / flourAndWaterPercent.water) : 0
+        }
+    } as DryAndLiquidIngredientResult;
 }
 
 export const calculateDryAndLiquid = async (ingredients: IngredientGramsType[]): Promise<DryAndLiquidCalculationResult> => {
@@ -31,17 +58,19 @@ export const calculateDryAndLiquid = async (ingredients: IngredientGramsType[]):
 
 
     ingredients.forEach((ingredient) => {
-        const type = ingredient.nutrients.find(e => e.type === NutritionType.flour || e.type === NutritionType.water);
-        if (type?.type === NutritionType.flour) {
+        const amount = calculateDryAndLiquidNutrition(ingredient);
+        if (amount.flour.percent > 0) {
             result.ingredients.dry.push(ingredient);
-            result.totals.flour += ingredient.grams * 100 / type.percent;
-        } else if (type?.type === NutritionType.water && type.percent> 50) {
+            result.totals.flour += amount.flour.grams;
+        }
+        if (amount.water.percent > 0) {
             result.ingredients.liquid.push(ingredient);
-            result.totals.liquid += ingredient.grams * 100 / type.percent;
-            if (type.percent=== 100) {
+            result.totals.liquid += amount.water.grams;
+            if (amount.water.percent === 100) {
                 result.totals.water += ingredient.grams;
             }
-        } else {
+        }
+        if (amount.flour.percent === 0 && amount.water.percent === 0) {
             result.ingredients.other.push(ingredient);
         }
     });

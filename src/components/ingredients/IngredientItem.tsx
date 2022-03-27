@@ -1,6 +1,6 @@
 import {InputNumber} from "../common/InputNumber";
 import {TranslatedLabel} from "../common/TranslatedLabel";
-import {IngredientWithPercent} from "../../utils/RecipeCalulation";
+import {IngredientWithPercent} from "../../utils/BakerPercentageCalulation";
 
 type IngredientItemProps = {
     ingredient: IngredientWithPercent,

@@ -14,12 +14,12 @@ export interface RecipeIngredientsWithPercent extends RecipeIngredients {
 
 }
 
-export type RecipePercentsResult = {
+export type BakerPercentageResult = {
     microNutrients: MicroNutrientsCalculationResult;
     ingredients: RecipeIngredientsWithPercent[]
 }
 
-export const recalculateRecipePercents = (ingredients: RecipeIngredients[]): RecipePercentsResult => {
+export const recalculateBakerPercentage = (ingredients: RecipeIngredients[]): BakerPercentageResult => {
     const microNutrients = calculateMicroNutrientsResult(ingredients);
 
     const total = DRY_NUTRIENTS.map((e) => microNutrients.get(e)).map((e) => e.getGrams()).filter(e => e > 0).reduce((e1, e2) => e1 + e2, 0);
@@ -70,5 +70,5 @@ export const recalculateRecipePercents = (ingredients: RecipeIngredients[]): Rec
     return {
         microNutrients,
         ingredients: percentages
-    } as RecipePercentsResult;
+    } as BakerPercentageResult;
 }

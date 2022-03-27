@@ -1,39 +1,27 @@
 import {
     JsonBakingTimeType, JsonDryIngredient,
     JsonDryIngredientGrams,
-    JsonDryIngredientPercentage,
     JsonRecipeIngredientConstantGramsType,
-    JsonRecipeIngredientConstantPercentType,
     JsonRecipeIngredientConstantType,
     JsonRecipeIngredientsIngredientType,
-    JsonRecipeIngredientsType,
     JsonRecipeType
 } from "../types";
 import {
     BakingTimeType, GramsAmountType,
     IngredientGramsType,
-    IngredientPercentType, NumberIntervalType,
+    IngredientPercentType,
+    NumberIntervalType,
     RecipeIngredientsType,
     RecipeType
 } from "../../../models/types";
 import {
     PREDEFINED_INGREDIENT,
 } from "../../../models/interfaces/IngredientConstant";
-import {calculateDryAndLiquid} from "../../DryAndLiquidCalculator/DryAndLiquidCalculator";
-import {getRecipe, Recipe} from "../../../models/interfaces/Recipe";
 import {base64Encode} from "./Base64";
-import {iterateLater} from "../../RunLater";
+import {resolveJsonRecipeTypeId} from "./JsonRecepyIdGenerator";
+import {calculateFlourAndWaterPercent} from "../../DryAndLiquidCalculator/FlourAndWaterCalculation";
 
 type JsonIngredientGramsType = IngredientGramsType | JsonRecipeIngredientConstantGramsType | JsonDryIngredientGrams;
-type JsonIngredientPercentType = IngredientPercentType | JsonRecipeIngredientConstantPercentType | JsonDryIngredientPercentage;
-
-type IngredientContainer = IngredientGramsType | JsonIngredientPercentType;
-
-type IngredientsType = {
-    jsonRecipe: JsonRecipeIngredientsType,
-    ingredients: IngredientContainer[];
-};
-
 
 const resolveNumberIntervalType = (value: NumberIntervalType | number): NumberIntervalType => {
     const first: number = typeof value === "number" ? value as number : (value as NumberIntervalType).from;
@@ -67,120 +55,90 @@ const getPredefined = (ingredient: JsonRecipeIngredientsIngredientType, grams?: 
 }
 
 export const readJsonRecipe = async (recipe: JsonRecipeType): Promise<RecipeType> => {
-    const _amount = recipe.amount || 1;
-    const result: RecipeType = {
-        id: base64Encode(recipe, recipe.name, _amount.toString()),
+    const result = {
+        id: resolveJsonRecipeTypeId(recipe),
         name: recipe.name,
         ingredients: [],
         bakingTime: resolveBakingTime(recipe.bakingTime),
         description: recipe.description,
         amount: recipe.amount || 0
-    };
-    const _ingredients: IngredientsType[] = [];
-    const ingredientGrams: IngredientGramsType[] = [];
-    recipe.ingredients.forEach((ingredients) => {
-        const currentIngredients: IngredientContainer[] = [];
+    } as RecipeType;
 
+    const toBeCalculated = {
+        flour: {
+            grams: 0,
+            totalPercentage: 0
+        },
+        flourCalculation: [] as {
+            gram:  IngredientGramsType,
+            percent: number
+        }[],
+        ingredients: [] as {
+            gram:  IngredientGramsType,
+            percent: number
+        }[]
+    };
+
+    recipe.ingredients.forEach((ingredients) => {
+        const recipeIngredientsType: RecipeIngredientsType = {
+            name: ingredients.name,
+            description: ingredients.description,
+            bakingTime: resolveBakingTime(ingredients.bakingTime),
+            starter: ingredients.starter === true,
+            ingredients: []
+        } as RecipeIngredientsType;
         ingredients.ingredients.forEach((ingredient) => {
             if ((ingredient as JsonIngredientGramsType).grams === undefined) {
-                currentIngredients.push(ingredient as JsonIngredientPercentType);
-                return;
-            }
-            if ((ingredient as JsonRecipeIngredientConstantGramsType).type === undefined) {
-                const ingredientGram = ingredient as IngredientGramsType;
-                currentIngredients.push(ingredientGram);
-                ingredientGrams.push(ingredientGram);
-                return;
-            }
-            const value = getPredefined(ingredient);
-            currentIngredients.push(value);
-            ingredientGrams.push(value);
-        })
-        _ingredients.push({
-            jsonRecipe: ingredients,
-            ingredients: currentIngredients,
-        } as IngredientsType);
-    });
-    const flourAmount = (await calculateDryAndLiquid(ingredientGrams)).totals.flour;
-    _ingredients.forEach((ingredients) => {
-        const currentIngredients: IngredientGramsType[] = [];
-        ingredients.ingredients.forEach((ingredient) => {
-            if ((ingredient as IngredientGramsType).grams !== undefined) {
-                currentIngredients.push(ingredient as IngredientGramsType);
-                return;
-            }
-            const grams = Math.round((ingredient as JsonIngredientPercentType).percent * flourAmount / 10) / 10;
-            if ((ingredient as JsonRecipeIngredientConstantPercentType).type === undefined) {
-                const v = ingredient as IngredientPercentType;
-                currentIngredients.push({
-                    id: v.id,
-                    name: v.name,
-                    grams,
-                    nutrients: v.nutrients
-                } as IngredientGramsType);
-                return;
-            }
-            const value = getPredefined(ingredient, grams);
-            currentIngredients.push(value);
-            ingredientGrams.push(value);
-        });
-        result.ingredients.push({
-            name: ingredients.jsonRecipe.name,
-            starter: ingredients.jsonRecipe.starter === true,
-            bakingTime: resolveBakingTime(ingredients.jsonRecipe.bakingTime),
-            description: ingredients.jsonRecipe.description,
-            ingredients: currentIngredients
-        } as RecipeIngredientsType);
-    });
-
-    return result;
-};
-
-const buildDuplicateJsonRecipe = (jsonRecipes: JsonRecipeType[]): Promise<JsonRecipeType[]> => {
-    return new Promise<JsonRecipeType[]>((resolve, reject) => {
-        const result: JsonRecipeType[] = [];
-        iterateLater([...jsonRecipes], ((value) => {
-            result.push(value);
-            const recipe_x2 = {
-                ...value,
-                ...{
-                    id: value.id,
-                    name: value.name,
-                    amount: value.amount ? value.amount * 2 : 2,
-                    ingredients: value.ingredients.map((e) => ({
-                        ...e,
-                        ...{ingredients: e.ingredients.map((i) => {
-                                const jsonGrams = i as JsonIngredientGramsType;
-                                if (jsonGrams.grams) {
-                                    return {
-                                        ...jsonGrams,
-                                        ...{grams: jsonGrams.grams * 2}
-                                    } as JsonIngredientGramsType;
-                                }
-                                return i;
-                            })}
-                    }))
+                const ingredientPercent = ingredient as IngredientPercentType;
+                const ingredientGram = (ingredient as JsonRecipeIngredientConstantType).type === undefined ?
+                    {
+                        id: ingredientPercent.id,
+                        name: ingredientPercent.name,
+                        grams: 100,
+                        nutrients: ingredientPercent.nutrients
+                    } as IngredientGramsType :
+                    getPredefined(ingredient, 100);
+                recipeIngredientsType.ingredients.push(ingredientGram);
+                // check if there is any flour
+                const flourAndWater = calculateFlourAndWaterPercent(ingredientGram.nutrients);
+                if (flourAndWater.flour > 0) {
+                    toBeCalculated.flour.totalPercentage += ingredientPercent.percent * 100 / flourAndWater.flour;
+                    toBeCalculated.flourCalculation.push({
+                        percent: ingredientPercent.percent,
+                        gram: ingredientGram
+                    });
+                } else {
+                    toBeCalculated.ingredients.push({
+                        percent: ingredientPercent.percent,
+                        gram: ingredientGram
+                    });
                 }
-            } as JsonRecipeType;
-            result.push(recipe_x2);
-        })).then(() => {
-            resolve(result);
-        }).then(reject);
+            } else {
+                const ingredientGram = (ingredient as JsonRecipeIngredientConstantGramsType).type === undefined ?
+                    ingredient as IngredientGramsType :
+                    getPredefined(ingredient);
+                recipeIngredientsType.ingredients.push(ingredientGram);
+                const flourAndWater = calculateFlourAndWaterPercent(ingredientGram.nutrients);
+                if (flourAndWater.flour > 0) {
+                    toBeCalculated.flour.grams += ingredientGram.grams;
+                }
+            }
+        });
+        result.ingredients.push(recipeIngredientsType)
     });
-};
 
+    // recalculate flour percentages
+    if (toBeCalculated.flour.totalPercentage > 0) {
+        if (toBeCalculated.flour.totalPercentage >= 100) throw new Error("Somehow other flour percentage is larger than 100!")
+        toBeCalculated.flour.grams = toBeCalculated.flour.grams * 100 / (100 - toBeCalculated.flour.totalPercentage);
+        toBeCalculated.flourCalculation.forEach((ingredient) => {
+            ingredient.gram.grams = Math.round(ingredient.percent * toBeCalculated.flour.grams / 10) / 10;
+        });
+    }
 
-export const readJsonRecipeToRecipeObjectArray = async (jsonRecipes: JsonRecipeType[]): Promise<Recipe[]> => {
-    return new Promise<Recipe[]>((resolve, reject) => {
-        buildDuplicateJsonRecipe(jsonRecipes)
-            .then((recipes) => {
-                const result: Recipe[] = [];
-                iterateLater(recipes, (recipe) =>
-                    readJsonRecipe(recipe).then(getRecipe).then(v => result.push(v))
-                )
-                    .then(() => resolve(result))
-                    .catch(reject)
-            })
-            .catch(reject)
+    // recalculate percentages
+    toBeCalculated.ingredients.forEach((ingredient) => {
+        ingredient.gram.grams = Math.round(ingredient.percent * toBeCalculated.flour.grams / 10) / 10;
     });
+    return result;
 };

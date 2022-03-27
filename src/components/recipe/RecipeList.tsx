@@ -1,8 +1,8 @@
 import {RecipeItem} from "./RecipeItem";
-import {Recipe} from "../../models/interfaces/Recipe";
+import {JsonRecipeType} from "../../service/RecipeReader/types";
 
 type RecipeListProps = {
-    recipes: Recipe[];
+    recipes: JsonRecipeType[];
 }
 
 export const RecipeList = ({recipes}: RecipeListProps) => {
@@ -10,7 +10,7 @@ export const RecipeList = ({recipes}: RecipeListProps) => {
         <>
         <div className="recipes">
             {
-                recipes.map((recipe) => (<RecipeItem recipe={recipe} key={recipe.getId()}/>))
+                recipes.map((recipe, index) => (<RecipeItem recipe={recipe} key={index}/>))
             }
         </div>
         </>

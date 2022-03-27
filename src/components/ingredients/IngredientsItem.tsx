@@ -2,7 +2,7 @@ import {IngredientItem} from "./IngredientItem";
 import {Recipe} from "../../models/interfaces/Recipe";
 import {BakingTimeItems} from "../baking/BakingTimeItems";
 import {TranslatedLabel} from "../common/TranslatedLabel";
-import {RecipeIngredientsWithPercent} from "../../utils/RecipeCalulation";
+import {RecipeIngredientsWithPercent} from "../../utils/BakerPercentageCalulation";
 import {IngredientItemLabel} from "./IngredientItemLabel";
 
 type callbackType =  (value: number, index: number) => Promise<void>;
