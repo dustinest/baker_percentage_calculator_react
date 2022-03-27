@@ -50,7 +50,7 @@ export const PREDEFINED_RECIPES = [
             {
                 ingredients: [
                     { type: "WHEAT_405_FLOUR", grams: 463 },
-                    { type: "WATER", grams: 378 },
+                    { type: "WATER", percent: 82 },
                     { type: "SALT", percent: 1.76 }
                 ]
 
