@@ -12,6 +12,7 @@ export type UseRecipeResult = {
     recipe: {
         recipe: Recipe;
         microNutrients: BakerPercentageResult;
+        raw: RecipeType;
     }
     ingredients: {
         ingredients: RecipeIngredients[];
@@ -35,7 +36,8 @@ export const UseRecipe = (recipe: JsonRecipeType): { result: UseRecipeResult | u
             setRecipeArgs({
                 recipe: {
                     recipe: recipeObject,
-                    microNutrients: micronutrients
+                    microNutrients: micronutrients,
+                    raw: recipeType
                 },
                 ingredients: {
                     ingredients: ingredients,

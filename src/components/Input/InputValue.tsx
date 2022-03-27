@@ -1,9 +1,10 @@
 import {useEffect, useState} from "react";
 import {normalizeNumber} from "../../utils/NumberValue";
+import {OnChangeType} from "./OnChangeType";
 
 type InputValueProps<T> = {
     value: T;
-    onChange: (value: T) => Promise<void>;
+    onChange: OnChangeType<T, Promise<void>>;
     timeout?: number;
 };
 

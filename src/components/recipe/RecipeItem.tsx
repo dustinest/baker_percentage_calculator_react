@@ -9,6 +9,7 @@ import {
     RecipeIdNameAndAmount,
 } from "../../service/RecipeReader";
 import {UseRecipe, UseRecipeResult} from "./RecipeDataHolder";
+import {TranslatedLabel} from "../common/TranslatedLabel";
 
 const RenderMicros = ({microNutrients}: {microNutrients: BakerPercentageResult}) => {
     return (<section className="micronutrients"><MicroNutrientsResultList microNutrientsResult={microNutrients.microNutrients}/></section>)
@@ -17,11 +18,18 @@ const RenderMicros = ({microNutrients}: {microNutrients: BakerPercentageResult})
 type RecipeItemToRenderProps = {
     recipe: UseRecipeResult;
     onGramsChange: (grams: number, ingredientIndex: number, index: number) => Promise<void>;
+    showComponents: boolean;
 }
 
-const RecipeItemToRender = ({recipe, onGramsChange}: RecipeItemToRenderProps) => {
+const RecipeItemToRender = ({recipe, onGramsChange, showComponents}: RecipeItemToRenderProps) => {
+    const editClassName = showComponents ? "edit" : "edit hidden";
+    const [rawRecipe, setRawRecipe] = useState<string>("");
+    useEffect(() => {
+        setRawRecipe(JSON.stringify(recipe.recipe.raw, null, 2))
+    }, [recipe])
+
     return (<>
-        <section className="edit">
+        <section className={editClassName}>
             <section className="ingredients">
                 {recipe.recipe.microNutrients.ingredients.map((ingredients, index) => (
                     <IngredientsItem ingredients={ingredients} recipe={recipe.recipe.recipe}
@@ -30,6 +38,10 @@ const RecipeItemToRender = ({recipe, onGramsChange}: RecipeItemToRenderProps) =>
                 ))}
             </section>
             <RenderMicros microNutrients={recipe.recipe.microNutrients}/>
+            <section className="rawRecepie">
+                <h3><TranslatedLabel label="Json presentation"/></h3>
+                <textarea value={rawRecipe}/>
+            </section>
         </section>
         <section className="recipe">
             {recipe.ingredients.microNutrients.ingredients.map((ingredients, index) => (
@@ -42,7 +54,12 @@ const RecipeItemToRender = ({recipe, onGramsChange}: RecipeItemToRenderProps) =>
     </>)
 }
 
-export const RecipeItem = ({recipe}: { recipe: JsonRecipeType }) => {
+type RecipeItemProps = {
+    recipe: JsonRecipeType;
+    showComponents: boolean;
+}
+
+export const RecipeItem = ({recipe, showComponents}: RecipeItemProps) => {
     const {result, setGrams} = UseRecipe(recipe);
     const [recipeIdNameAndAmount, seRecipeIdNameAndAmount] = useState<RecipeIdNameAndAmount | undefined>();
 
@@ -57,7 +74,7 @@ export const RecipeItem = ({recipe}: { recipe: JsonRecipeType }) => {
                 <div className="recipe">
                     <h2>{recipeIdNameAndAmount.label}</h2>
                     {result ?
-                        <RecipeItemToRender recipe={result} onGramsChange={setGrams}/> :
+                        <RecipeItemToRender recipe={result} onGramsChange={setGrams} showComponents={showComponents}/> :
                         <label className="loading">loading...</label>
                     }
                 </div>

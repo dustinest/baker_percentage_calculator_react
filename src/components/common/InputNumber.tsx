@@ -1,5 +1,5 @@
 import {SuffixType, UseSuffix} from "./UseSuffix";
-import {InputValue} from "./InputValue";
+import {InputValue} from "../Input/InputValue";
 
 type InputNumberProps = {
     value: number;
