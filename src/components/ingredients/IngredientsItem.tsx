@@ -1,27 +1,51 @@
-import {IngredientItem} from "./IngredientItem";
 import {Recipe} from "../../models/interfaces/Recipe";
 import {BakingTimeItems} from "../baking/BakingTimeItems";
 import {TranslatedLabel} from "../common/TranslatedLabel";
-import {RecipeIngredientsWithPercent} from "../../utils/BakerPercentageCalulation";
-import {IngredientItemLabel} from "./IngredientItemLabel";
+import {IngredientWithPercent, RecipeIngredientsWithPercent} from "../../utils/BakerPercentageCalulation";
+import {InputNumber} from "../common/InputNumber";
+import {useEffect, useState} from "react";
+import {normalizeNumberString} from "../../utils/NumberValue";
+import {NumberLabel} from "../common/NumberLabel";
 
 type callbackType =  (value: number, index: number) => Promise<void>;
 
 type IngredientsItemProps = {
     ingredients: RecipeIngredientsWithPercent;
     recipe: Recipe,
+    onGramsChange?: callbackType,
+    onPercentChange?: callbackType,
 }
 
-type IngredientsItemPropsWithCallback = {
-    onGramsChange: callbackType,
-    onPercentChange: callbackType,
-} & IngredientsItemProps
+type IngredientItemLabelProps = {
+    ingredient: IngredientWithPercent,
+}
 
+const RenderLabel = ({ingredient}: IngredientItemLabelProps) => {
+    const [amountNumber, setAmountNumber] = useState<number|undefined>();
 
-export const IngredientsItem = (props: IngredientsItemProps | IngredientsItemPropsWithCallback) => {
-    const ingredients = props.ingredients;
-    const recipe = props.recipe;
+    useEffect(() => {
+        if (ingredient.getId() === "egg") {
+            setAmountNumber(ingredient.getGrams() / 64);
+        } else {
+            setAmountNumber(undefined);
+        }
+    }, [ingredient])
 
+    return (
+        <label>
+            {amountNumber !== undefined
+                ? (<>{amountNumber} tk - {normalizeNumberString(ingredient.getGrams(), 0)}g</>)
+                : (<>{normalizeNumberString(ingredient.getGrams(), 0)}g</>)
+            }
+        </label>
+    )
+};
+
+const RenderPercent = ({ingredient}: IngredientItemLabelProps) => {
+    return (<NumberLabel value={ingredient.getPercent()} suffix="%"/>)
+};
+
+export const IngredientsItem = ({ingredients, recipe, onGramsChange, onPercentChange}: IngredientsItemProps) => {
     return (
         <>
             <table className="ingredients">
@@ -37,12 +61,24 @@ export const IngredientsItem = (props: IngredientsItemProps | IngredientsItemPro
                 <tbody>
                 {
                 ingredients.getIngredientWithPercent().map((e, index)=>
-                    ((props as IngredientsItemPropsWithCallback).onGramsChange && (props as IngredientsItemPropsWithCallback).onPercentChange ?
-                            (<IngredientItem
-                                ingredient={e}
-                                onGramsChange={(value) => (props as IngredientsItemPropsWithCallback).onGramsChange(value, index)}
-                                onPercentChange={(value) => (props as IngredientsItemPropsWithCallback).onPercentChange(value, index)} key={e.getId()}/>):
-                            (<IngredientItemLabel ingredient={e} key={e.getId()}/>)
+                    (
+                        <tr key={index}>
+                            <th><TranslatedLabel label={e.getName()}/></th>
+                            <td className="label">
+                                {
+                                    onGramsChange ?
+                                        <InputNumber value={e.getGrams()} suffix="g" onChange={ (value) => onGramsChange(value, index) } /> :
+                                        <RenderLabel ingredient={e}/>
+                                }
+                            </td>
+                            <td className="percent">
+                                {
+                                    onPercentChange ?
+                                        <InputNumber value={e.getPercent()} suffix="%" onChange={ (value) => onPercentChange(value, index) }/> :
+                                        <RenderPercent ingredient={e}/>
+                                }
+                            </td>
+                        </tr>
                     )
                 )}
                 </tbody>

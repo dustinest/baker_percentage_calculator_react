@@ -25,7 +25,7 @@ export const recalculateBakerPercentage = (ingredients: RecipeIngredients[]): Ba
     const total = DRY_NUTRIENTS.map((e) => microNutrients.get(e)).map((e) => e.getGrams()).filter(e => e > 0).reduce((e1, e2) => e1 + e2, 0);
     const percentages: RecipeIngredientsWithPercent[] = ingredients.map((ingredients) => {
         const _ingredients: IngredientWithPercent[] = ingredients.getIngredients().map((ingredient) => {
-            const percent = total > 0 ? ingredient.getGrams() * 100 / total : 0;
+            const percent = total > 0 && ingredient.getGrams() > 0 ? ingredient.getGrams() * 100 / total : 0;
             return {
                 getId(): string {
                     return ingredient.getId();

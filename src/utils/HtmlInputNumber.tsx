@@ -1,14 +1,8 @@
 import {ChangeEvent} from "react";
 
-export const onNumberInputChange = (e: ChangeEvent<HTMLInputElement>): Promise<number> => {
-    try {
-        const value = Number.parseFloat(e.target.value);
-        return Promise.resolve(value);
-    } catch (err) {
-        return Promise.reject(err);
+export const onNumberInputChange = async (e: ChangeEvent<HTMLInputElement>): Promise<number | null> => {
+    if (e.target.value !== undefined && e.target.value !== null && e.target.value !== "") {
+        return Number.parseFloat(e.target.value);
     }
+    return null;
 };
-
-export const onNumberInputChangeCall = (e: ChangeEvent<HTMLInputElement>, callback: (value: number) => void) => {
-    onNumberInputChange(e).then(callback).catch(console.error);
-}

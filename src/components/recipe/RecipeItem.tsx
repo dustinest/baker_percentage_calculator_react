@@ -29,23 +29,18 @@ const RenderMicros = ({microNutrients}: {microNutrients: BakerPercentageResult})
     return (<section className="micronutrients"><MicroNutrientsResultList microNutrientsResult={microNutrients.microNutrients}/></section>)
 }
 
-const RecipeItemToRender = ({recipe}: { recipe: RecipeArgs }) => {
-    const onGramsChange = (grams: number, index: number): Promise<void> => {
-        console.log("Resolve the grams change");
-        return Promise.resolve();
-    }
-    const onPercentChange = (percent: number, index: number): Promise<void> => {
-        console.log("Resolve the percent change");
-        return Promise.resolve();
-    }
+type RecipeItemToRenderProps = {
+    recipe: RecipeArgs;
+    onGramsChange: (grams: number, ingredientIndex: number, index: number) => Promise<void>;
+}
 
+const RecipeItemToRender = ({recipe, onGramsChange}: RecipeItemToRenderProps) => {
     return (<>
         <section className="edit">
             <section className="ingredients">
                 {recipe.recipe.microNutrients.ingredients.map((ingredients, index) => (
                     <IngredientsItem ingredients={ingredients} recipe={recipe.recipe.recipe}
-                                     onPercentChange={onPercentChange}
-                                     onGramsChange={onGramsChange}
+                                     onGramsChange={(grams, i) => onGramsChange(grams, index, i)}
                                      key={`ingredients_${index}`}/>
                 ))}
             </section>
@@ -66,11 +61,17 @@ export const RecipeItem = ({recipe}: { recipe: JsonRecipeType }) => {
     const [recipeArgs, setRecipeArgs] = useState<RecipeArgs | undefined>();
     const [recipeIdNameAndAmount, seRecipeIdNameAndAmount] = useState<RecipeIdNameAndAmount | undefined>();
 
-    useEffect(() => {
-        seRecipeIdNameAndAmount(getRecipeIdNameAndAmount(recipe));
-        setRecipeArgs(undefined);
+    const parseRecipe = (params?: {grams?: number, percent?: number, ingredientIndex: number, index: number}) => {
+        if (!params) setRecipeArgs(undefined);
+        if (recipe === undefined) return;
         runPromiseLater(async () => {
             const recipeType = await readJsonRecipe(recipe);
+            if (params) {
+                const ingredient = recipeType.ingredients[params.ingredientIndex].ingredients[params.index];
+                if (params.grams && params.grams > 0) {
+                    ingredient.grams = params.grams;
+                }
+            }
             const recipeObject = getRecipe(recipeType);
             const micronutrients = recalculateBakerPercentage(recipeObject.getIngredients());
             runPromiseLater(async () => {
@@ -88,14 +89,25 @@ export const RecipeItem = ({recipe}: { recipe: JsonRecipeType }) => {
                 } as RecipeArgs);
             }, 1).catch(console.error);
         }).catch(console.error);
+    };
+
+    const onGramsChange = async (grams: number, ingredientIndex: number, index: number): Promise<void> => {
+        parseRecipe({grams, ingredientIndex, index});
+    }
+
+    useEffect(() => {
+        seRecipeIdNameAndAmount(getRecipeIdNameAndAmount(recipe));
+        parseRecipe();
+        // eslint-disable-next-line
     }, [recipe]);
+
     return (<>{
         recipeIdNameAndAmount ?
             (<article id={recipeIdNameAndAmount.id}>
                 <div className="recipe">
                     <h2>{recipeIdNameAndAmount.label}</h2>
                     {recipeArgs ?
-                        <RecipeItemToRender recipe={recipeArgs}/> :
+                        <RecipeItemToRender recipe={recipeArgs} onGramsChange={onGramsChange}/> :
                         <label className="loading">loading...</label>
                     }
                 </div>
