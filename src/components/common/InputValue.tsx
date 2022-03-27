@@ -4,9 +4,10 @@ import {normalizeNumber} from "../../utils/NumberValue";
 type InputValueProps<T> = {
     value: T;
     onChange: (value: T) => Promise<void>;
+    timeout?: number;
 };
 
-export const InputValue = <T extends number | string, >({value, onChange}: InputValueProps<T>) => {
+export const InputValue = <T extends number | string, >({value, onChange, timeout = 100}: InputValueProps<T>) => {
     const type: "string" | "number" = typeof value === "number" ? "number" : "string";
     const [tempValue, setTempValue] = useState<T | undefined>(undefined);
     const [timeoutValue, setTimeoutValue] = useState<NodeJS.Timeout | undefined>(undefined);
@@ -35,9 +36,8 @@ export const InputValue = <T extends number | string, >({value, onChange}: Input
             if (tempValue !== undefined && tempValue !== value) {
                 if (tempValue === value) return;
                 onChange(tempValue).catch(console.error);
-                console.log(tempValue);
             }
-        }, 100));
+        }, timeout));
         // eslint-disable-next-line
     }, [tempValue]);
 
