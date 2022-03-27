@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {Recipe} from "../models/interfaces/Recipe";
-import {readJsonRecipeToRecipeObjectArray} from "../service/RecipeReader/lib/JsonRecipeReader";
+import {readJsonRecipeToRecipeObjectArray} from "../service/RecipeReader";
 import {PREDEFINED_RECIPES} from "../data/PredefinedRecipes";
 import {RecipeNavigation} from "./recipe/RecipeNavigation";
 import {RecipeList} from "./recipe/RecipeList";

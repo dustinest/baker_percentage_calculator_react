@@ -4,7 +4,7 @@ import {BakingTimeItems} from "../baking/BakingTimeItems";
 import {useEffect, useState} from "react";
 import {recalculateRecipePercents, RecipePercentsResult} from "../../utils/RecipeCalulation";
 import {MicroNutrientsResultList} from "../micronutrients/MicroNutrientsResultList";
-import {splitStarterAndDough} from "../../service/starter/IngredientStarterService";
+import {splitStarterAndDough} from "../../service/SourdoughStarter";
 import {RecipeLabel} from "./RecipeLabel";
 
 export const RecipeItem = ({recipe}: { recipe: Recipe }) => {
