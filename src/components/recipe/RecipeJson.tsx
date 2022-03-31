@@ -2,8 +2,8 @@ import {RecipeType} from "../../models/types";
 import {useEffect, useState} from "react";
 import {recipeType2RecipeJson} from "../../service/RecipeReader";
 import './RecipeJson.css';
-import {GoogleMaterialSwitch} from "../common/GoogleMaterialIcon";
 import {useTranslation} from "../../service/TranslationService";
+import {ToggleButton, ToggleButtonGroup} from "@mui/material";
 
 const resolveRecipeJson = async (recipe: RecipeType): Promise<string> => {
     const result = await recipeType2RecipeJson(recipe);
@@ -12,20 +12,25 @@ const resolveRecipeJson = async (recipe: RecipeType): Promise<string> => {
 
 export const RecipeJson = ({recipe}: {recipe: RecipeType}) => {
     const [recipeJson, setRecipeJson] = useState<string | undefined>();
-    const [recipeJsonVisible, setRecepieJsonVisible] = useState<boolean>(false);
-    const showJsonTranslation = useTranslation("Show json");
-    const hideJsonTranslation = useTranslation("Hide json");
+    const icons = {
+        show: useTranslation("Show JSON"),
+        hide: useTranslation("Hide JSON")
+    };
+
+    const [json, setJson] = useState<string | null>(null);
 
     useEffect(() => {
-        if (recipeJsonVisible) {
+        if (json === "JSON") {
             resolveRecipeJson(recipe).then(setRecipeJson).catch(console.error);
         } else {
             setRecipeJson(undefined);
         }
-    }, [recipe, recipeJsonVisible])
+    }, [recipe, json])
 
     return (<section className="rawRecepie">
-            <GoogleMaterialSwitch labelBefore={recipeJsonVisible ? hideJsonTranslation: showJsonTranslation} onChange={setRecepieJsonVisible} icons={{unchecked: "expand_more", checked: "expand_less"}} value={recipeJsonVisible}/>
+            <ToggleButtonGroup exclusive={true} size="small" value={json} onChange={(e, value) => setJson(value)}>
+                <ToggleButton value="JSON">{json === "JSON" ? icons.hide: icons.show}</ToggleButton>
+            </ToggleButtonGroup>
             {recipeJson ? <pre>{recipeJson}</pre> : undefined }
         </section>)
 }

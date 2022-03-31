@@ -29,7 +29,7 @@ nav li.recipe:hover {
     border-color: #cacaca;
 }
 
-span.checkbox, nav a, nav a:visited, nav a:active {
+nav .switch-visibility, nav a, nav a:visited, nav a:active {
     margin: 0;
     padding: 0.1em 1em;
     color: #000000;

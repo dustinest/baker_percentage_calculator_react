@@ -1,8 +1,8 @@
 import {JsonRecipeType} from "../../service/RecipeReader/types";
 import {useRecipeIdNameAndAmount} from "../../service/RecipeReader";
-import {InputCheckBox} from "../Input/InputCheckBox";
 import {OnChangeType} from "../Input/OnChangeType";
 import './RecipeNavigation.css';
+import {FormControlLabel, Switch} from "@mui/material";
 
 type RecipeNavigationProps = {
     recipes: JsonRecipeType[];
@@ -21,7 +21,7 @@ export const RecipeNavigation = ({recipes, onComponentViewChange} : RecipeNaviga
     return (
         <nav className="recipesMenu">
             <ol>
-                <li><span><InputCheckBox label="Komponendid" value={true} onChange={onComponentViewChange} /></span></li>
+                <li><FormControlLabel className="switch-visibility" control={<Switch checked={true} onChange={(e) => onComponentViewChange(e.target.checked)}/>} label="Komponendid"/></li>
                 {
                     recipes.map((recipe, index) =>
                         (<RecipeMenuItem key={index} recipe={recipe} />)

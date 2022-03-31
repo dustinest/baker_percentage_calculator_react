@@ -34,11 +34,12 @@ Will fail. As there can not be total 200% of flour.
 ```
 Does not fail, as flour1 percentage will be `123 * (100 - 2 - 50) / 100`
 
-## Next steps:
-// TODO: at the moment the inputs do not matter but they should!
+## Material icons
+Project uses MUI https://mui.com/components
 
 # Setup
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
 
 ## Available Scripts
 
