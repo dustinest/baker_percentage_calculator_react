@@ -111,72 +111,15 @@ ul.bakingTimes {
   margin: 0.5em 0 0 0;
 }
 
-nav {
-  position: fixed;
-  left: 0;
-  top: 0;
-  background-color: #ffffff;
-  border-color: #cacaca;
-  border-width: 0 1pt 0 0;
-  border-style: solid;
-  padding: 0;
-  margin: 0;
-  height: 100%;
-  width: 12em;
-}
+
 
 div.recipes {
   margin-left: 12em;
   padding: 0 2em;
 }
 
-nav ol {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-nav li {
-  padding: 0;
-  margin: 0.1em 0;
-  text-align: left;
-  border-width: 1pt 0;
-  border-style: solid;
-  border-color: transparent;
-}
-nav li.recipe:hover {
-  border-color: #cacaca;
-}
-
-nav span, nav a, nav a:visited, nav a:active {
-  margin: 0;
-  padding: 0.1em 1em;
-  color: #000000;
-  font-size: 12pt;
-  display: block;
-  text-decoration: none;
-}
-
-nav input[type=checkbox] {
-  transform: scale(1);
-  margin: 0;
-  display: inline;
-}
-
-nav span label {
-  padding-left: 0.2em;
-}
-
-pre {
-  text-align: left;
-  border: 1pt solid #cacaca;
-  padding: 1em;
-  overflow: auto;
-}
 
 @media print {
-  nav {
-    display: none;
-  }
   div.recipes {
     margin: 0;
     padding: 0;
@@ -223,7 +166,7 @@ pre {
     padding: 0;
     page-break-inside: avoid;
   }
-  nav, section.base, .title span.rounded-button {
+  section.base, .title span.rounded-button {
     display: none;
   }
   input {
@@ -254,14 +197,4 @@ pre {
     page-break-after: always;
     text-align: center;
   }
-  /*
-  article div.recipe {
-    position:relative;
-    z-index:15;
-    top:50%;
-    left:50%;
-    left: 0;
-    right: 0;
-  }
-   */
 }

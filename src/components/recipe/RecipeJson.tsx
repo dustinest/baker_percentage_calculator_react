@@ -2,6 +2,7 @@ import {RecipeType} from "../../models/types";
 import {useEffect, useState} from "react";
 import {TranslatedLabel} from "../common/TranslatedLabel";
 import {recipeType2RecipeJson} from "../../service/RecipeReader";
+import './RecipeJson.css';
 
 const resolveRecipeJson = async (recipe: RecipeType): Promise<string> => {
     const result = await recipeType2RecipeJson(recipe);

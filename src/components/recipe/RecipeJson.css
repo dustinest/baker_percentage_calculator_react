@@ -1,0 +1,6 @@
+pre {
+    text-align: left;
+    border: 1pt solid #cacaca;
+    padding: 1em;
+    overflow: auto;
+}

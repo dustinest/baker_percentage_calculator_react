@@ -2,6 +2,7 @@ import {JsonRecipeType} from "../../service/RecipeReader/types";
 import {useRecipeIdNameAndAmount} from "../../service/RecipeReader";
 import {InputCheckBox} from "../Input/InputCheckBox";
 import {OnChangeType} from "../Input/OnChangeType";
+import './RecipeNavigation.css';
 
 type RecipeNavigationProps = {
     recipes: JsonRecipeType[];
