@@ -44,7 +44,7 @@ export const UseRecipe = (recipe: JsonRecipeType): { result: UseRecipeResult | u
                     microNutrients: ingredientMicros
                 }
             } as UseRecipeResult);
-        }, 1).catch(console.error);
+        }).catch(console.error);
     }, [recipeType])
 
     const setGrams = async(grams: number, ingredientIndex: number, index: number) => {

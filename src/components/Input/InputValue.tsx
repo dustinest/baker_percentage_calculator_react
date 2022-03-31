@@ -1,17 +1,43 @@
-import {useEffect, useState} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import {normalizeNumber} from "../../utils/NumberValue";
 import {OnChangeType} from "./OnChangeType";
+import {InputAdornment, OutlinedInput, TextField} from "@mui/material";
+import {SuffixData, SuffixType, UseSuffix} from "../common/UseSuffix";
 
 type InputValueProps<T> = {
     value: T;
     onChange: OnChangeType<T, Promise<void>>;
     timeout?: number;
+    suffix?: SuffixType;
 };
 
-export const InputValue = <T extends number | string, >({value, onChange, timeout = 100}: InputValueProps<T>) => {
+const StandardInput = ({value, onChange, suffix, type}: {
+    value: string | number,
+    type: "string" | "number",
+    onChange: (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void,
+    suffix: SuffixData | undefined}
+) => {
+    return (<>{
+            suffix ?
+                (<OutlinedInput
+                    type={type}
+                    id="outlined-adornment-weight"
+                    value={value}
+                    onChange={onChange}
+                    endAdornment={<InputAdornment position="end">{suffix.suffix}</InputAdornment>}
+                    inputProps={{
+                        'aria-label': suffix.label,
+                    }}
+                />):
+                (<TextField id="standard-basic" variant="standard" type={type} value={value} onChange={onChange}/>)
+        }</>)
+}
+
+export const InputValue = <T extends number | string, >({value, onChange, suffix, timeout = 100}: InputValueProps<T>) => {
     const type: "string" | "number" = typeof value === "number" ? "number" : "string";
-    const [tempValue, setTempValue] = useState<T | undefined>(undefined);
+    const [valueUsed, setValueUsed] = useState<T | undefined>(undefined);
     const [timeoutValue, setTimeoutValue] = useState<NodeJS.Timeout | undefined>(undefined);
+    const _suffix = UseSuffix(suffix);
 
     const clearTimeoutValue = (newTimeout?: NodeJS.Timeout) => {
         if (timeoutValue !== undefined) {
@@ -22,8 +48,8 @@ export const InputValue = <T extends number | string, >({value, onChange, timeou
 
     const setNormalizedValue = (val: T) => {
         const _value: T = type === "string" ? val : normalizeNumber(val as number) as T;
-        if (_value !== tempValue) {
-            setTempValue(_value as T);
+        if (_value !== valueUsed) {
+            setValueUsed(_value as T);
         }
     }
 
@@ -34,13 +60,13 @@ export const InputValue = <T extends number | string, >({value, onChange, timeou
 
     useEffect(() => {
         clearTimeoutValue(setTimeout(() => {
-            if (tempValue !== undefined && tempValue !== value) {
-                if (tempValue === value) return;
-                onChange(tempValue).catch(console.error);
+            if (valueUsed !== undefined && valueUsed !== value) {
+                if (valueUsed === value) return;
+                onChange(valueUsed).catch(console.error);
             }
         }, timeout));
         // eslint-disable-next-line
-    }, [tempValue]);
+    }, [valueUsed]);
 
-    return (<>{tempValue !== undefined ? <input type={type} value={tempValue} onChange={(e) => setNormalizedValue(e.target.value as T)}/> : undefined}</>)
+    return (<>{valueUsed !== undefined ? <StandardInput type={type} value={valueUsed} onChange={(e) => setNormalizedValue(e.target.value as T)} suffix={_suffix}/> : undefined}</>)
 }

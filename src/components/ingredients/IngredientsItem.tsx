@@ -1,19 +1,18 @@
 import {Recipe} from "../../models/interfaces/Recipe";
-import {BakingTimeItems} from "../baking/BakingTimeItems";
-import {TranslatedLabel} from "../common/TranslatedLabel";
+import {BakingTimeItems} from "../recipe/BakingTimeItems";
 import {IngredientWithPercent, RecipeIngredientsWithPercent} from "../../utils/BakerPercentageCalulation";
-import {InputNumber} from "../common/InputNumber";
 import {useEffect, useState} from "react";
 import {normalizeNumberString} from "../../utils/NumberValue";
 import {NumberLabel} from "../common/NumberLabel";
-
-type callbackType =  (value: number, index: number) => Promise<void>;
+import {TableBody} from "@mui/material";
+import {RTableHead, RTableRow} from "../common/RTable";
+import {InputValue} from "../Input/InputValue";
 
 type IngredientsItemProps = {
     ingredients: RecipeIngredientsWithPercent;
     recipe: Recipe,
-    onGramsChange?: callbackType,
-    onPercentChange?: callbackType,
+    onGramsChange?: (value: number, index: number) => Promise<void>,
+    onPercentChange?: (value: number, index: number) => Promise<void>,
 }
 
 type IngredientItemLabelProps = {
@@ -41,50 +40,53 @@ const RenderLabel = ({ingredient}: IngredientItemLabelProps) => {
     )
 };
 
-const RenderPercent = ({ingredient}: IngredientItemLabelProps) => {
-    return (<NumberLabel value={ingredient.getPercent()} suffix="%"/>)
-};
-
-export const IngredientsItem = ({ingredients, recipe, onGramsChange, onPercentChange}: IngredientsItemProps) => {
+const IngredientsItem = ({ingredients, recipe, onGramsChange, onPercentChange}: IngredientsItemProps) => {
     return (
         <>
             <table className="ingredients">
-                {ingredients.getName() && ingredients.getName() !== recipe.getName() ? (
-                        <thead>
-                        <tr>
-                            <th colSpan={3}>
-                            <h3><TranslatedLabel label={ingredients.getName() || ""}/></h3>
-                            </th>
-                        </tr>
-                        </thead>
-                    ) : undefined}
-                <tbody>
+                {ingredients.getName() && ingredients.getName() !== recipe.getName() ? (<RTableHead label={ingredients.getName() || ""}/>) : undefined}
+                <TableBody>
                 {
                 ingredients.getIngredientWithPercent().map((e, index)=>
                     (
-                        <tr key={index}>
-                            <th><TranslatedLabel label={e.getName()}/></th>
-                            <td className="label">
-                                {
-                                    onGramsChange ?
-                                        <InputNumber value={e.getGrams()} suffix="g" onChange={ (value) => onGramsChange(value, index) } /> :
-                                        <RenderLabel ingredient={e}/>
-                                }
-                            </td>
-                            <td className="percent">
-                                {
-                                    onPercentChange ?
-                                        <InputNumber value={e.getPercent()} suffix="%" onChange={ (value) => onPercentChange(value, index) }/> :
-                                        <RenderPercent ingredient={e}/>
-                                }
-                            </td>
-                        </tr>
+                        <RTableRow
+                            key={index}
+                            label={e.getName()}
+                            grams={onGramsChange ?
+                                <InputValue value={e.getGrams()} onChange={ (value) => onGramsChange(value, index) } suffix="g"/>  :
+                                <RenderLabel ingredient={e}/>}
+                            percent={
+                                onPercentChange ?
+                                    <InputValue value={e.getPercent()} onChange={ (value) => onPercentChange(value, index) } suffix="%"/>:
+                                    <NumberLabel value={e.getPercent()} suffix="%"/>
+                            }
+                        />
                     )
                 )}
-                </tbody>
+                </TableBody>
             </table>
             <BakingTimeItems bakingTimes={ingredients.getBakingTime()}/>
             {ingredients.getDescription() ? (<div className="description">{ingredients.getDescription()}</div>) : undefined}
         </>
     )
+}
+
+type IngredientsItemsCallback =  (value: number, ingredientsIndex: number, index: number) => Promise<void>;
+type IngredientsItemsProps = {
+    ingredients: RecipeIngredientsWithPercent[];
+    recipe: Recipe,
+    onGramsChange?: IngredientsItemsCallback,
+    onPercentChange?: IngredientsItemsCallback,
+}
+export const IngredientsItems = ({ingredients, recipe, onGramsChange, onPercentChange}: IngredientsItemsProps) => {
+    return (<>{
+        ingredients.map((ingredients, index) => (
+            <IngredientsItem
+                ingredients={ingredients}
+                recipe={recipe}
+                onGramsChange={onGramsChange ? (value, _index) => onGramsChange(value, index, _index) : undefined}
+                onPercentChange={onPercentChange ? (value, _index) => onPercentChange(value, index, _index) : undefined}
+                key={`ingredients_${index}`}/>
+        ))
+    }</>)
 }

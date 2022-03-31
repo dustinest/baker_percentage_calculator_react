@@ -2,17 +2,39 @@ import {useEffect, useState} from "react";
 
 export type SuffixType = "g" | "%" | "m" | "c" | undefined;
 
-export const UseSuffix = (suffix: SuffixType): string | undefined => {
-    const [_suffix, setSuffix] = useState<string | undefined>();
+export type SuffixData = {
+    type: SuffixType,
+    label: string;
+    suffix: string;
+};
+
+export const UseSuffix = (suffix: SuffixType): SuffixData | undefined => {
+    const [_suffix, setSuffix] = useState<SuffixData | undefined>();
     useEffect(() => {
         if (suffix === "g") {
-            setSuffix(" g");
+            setSuffix({
+                type: suffix,
+                label: "weight",
+                suffix: "g"
+            })
         } else if (suffix === "%") {
-            setSuffix(" %");
+            setSuffix({
+                type: suffix,
+                label: "percent",
+                suffix: "%"
+            })
         } else if (suffix === "m") {
-            setSuffix(" minutit");
+            setSuffix({
+                type: suffix,
+                label: "minutes",
+                suffix: "m"
+            })
         } else if (suffix === "c") {
-            setSuffix(" ℃"); // celsius
+            setSuffix({
+                type: suffix,
+                label: "temperature",
+                suffix: "℃"
+            })
         } else {
             setSuffix(undefined);
         }

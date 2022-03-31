@@ -14,39 +14,23 @@ input[type=text], input[type=number] {
   min-width: 4em;
   max-width: 5em;
 }
-th label {
-  text-transform: capitalize;
-}
-td label {
-  display: block;
-}
-table th {
-  text-align: left;
-}
 table {
-  border: 1pt solid #cacaca;
-  margin: auto;
-}
-article {
-  border-width: 0 0 1pt 0;
-  border-style: solid;
-  border-color: #cacaca;
-  padding: 10pt 0;
-  margin: 0;
-}
-h3, h2 {
-  margin: 0;
-  padding: 0;
-}
-.description {
-  margin: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-ul.bakingTimes li {
-  list-style: none;
+td.label {
+  text-transform: capitalize;
 }
-table {
+
+td.amount, td.percent {
+  text-align: right;
+}
+
+article {
   border-width: 0;
+  padding: 10pt 0;
+  margin: 0;
 }
 section.edit {
   border-width: 1pt 0;
@@ -57,58 +41,9 @@ section.edit {
 }
 
 
-table {
-  margin-top: 1em;
-  border-collapse: collapse;
-}
-table th, table td {
-  border-bottom: dashed 1px #cacaca;
-}
-table thead th {
-  text-align: center;
-}
-
-table thead th {
-  border-bottom: double 3pt #cacaca;
-}
-
-table tr:last-child td, table tr:last-child th {
-  border-bottom: solid 2pt #cacaca;
-}
-
-tbody th {
-  font-weight: normal;
-}
-
-td, th {
-  padding: 5pt 3pt;
-}
-td label, th label {
-  display: block;
-  page-break-inside: avoid;
-
-}
-th label {
-  text-align: left;
-}
-td label {
-  text-align: right;
-}
-
-tbody td {
-  min-width: 5em;
-  max-width: 6em;
-}
-
-tbody th {
-  min-width: 6em;
-  max-width: 8em;
-}
-
 ul.bakingTimes {
   margin: 0.5em 0 0 0;
 }
-
 
 
 div.recipes {
@@ -116,37 +51,27 @@ div.recipes {
   padding: 0 2em;
 }
 
+table th {
+  font-size: 1em!important;
+}
 
 @media print {
+  .MuiCardHeader-root .MuiTypography-h5 {
+    font-size: 1.2rem!important;
+  }
+  table th {
+    font-size: 1em!important;
+  }
+
+  table.baker-percentage td, table.baker-percentage th {
+    margin: 0;
+    padding: 0.5em;
+    font-size: 0.9em;
+  }
+
   div.recipes {
     margin: 0;
     padding: 0;
-  }
-  tbody td {
-    min-width: 10em;
-    max-width: 10em;
-  }
-
-  tbody th {
-    min-width: 15em;
-    max-width: 15em;
-  }
-
-  h2 label {
-    font-size: 18pt;
-  }
-  h3 label {
-    font-size: 16pt;
-  }
-  label, input, .description {
-    font-size: 16pt;
-  }
-
-  .micronutrients h3 label {
-    font-size: 13pt;
-  }
-  .micronutrients th label, td label {
-    font-size: 13pt;
   }
 
   body{
@@ -163,19 +88,6 @@ div.recipes {
     float: none;
     padding: 0;
     page-break-inside: avoid;
-  }
-  section.base, .title span.rounded-button {
-    display: none;
-  }
-  input {
-    border-width: 0;
-    padding: 0;
-    margin: 0;
-  }
-  input[type=number]::-webkit-inner-spin-button,
-  input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
   }
 
   section.edit {
@@ -194,5 +106,11 @@ div.recipes {
     height: 100%;
     page-break-after: always;
     text-align: center;
+  }
+
+  article .MuiPaper-root {
+    border-width: 0;
+    padding: 0;
+    margin: 0;
   }
 }

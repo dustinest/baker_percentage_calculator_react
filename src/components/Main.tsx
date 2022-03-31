@@ -5,6 +5,7 @@ import {RecipeList} from "./recipe/RecipeList";
 import {JsonRecipeType} from "../service/RecipeReader/types";
 import {GramsAmountType} from "../models/types";
 import {runLater} from "../service/RunLater";
+import {CircularProgress} from "@mui/material";
 
 const getDouble = (value: JsonRecipeType): JsonRecipeType => {
     return {
@@ -65,7 +66,7 @@ export const Main = () => {
         <>
             {
                 recipes.length === 0 && loading ?
-                    (<label>Loading...</label>) :
+                    (<CircularProgress />) :
                     recipes.length === 0 ?
                         (<label>No recipes</label>) :
                         (

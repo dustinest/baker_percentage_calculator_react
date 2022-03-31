@@ -1,8 +1,8 @@
-import {IngredientsItem} from "../ingredients/IngredientsItem";
-import {BakingTimeItems} from "../baking/BakingTimeItems";
+import {IngredientsItems} from "../ingredients/IngredientsItem";
+import {BakingTimeItems} from "./BakingTimeItems";
 import {useEffect, useState} from "react";
 import {BakerPercentageResult} from "../../utils/BakerPercentageCalulation";
-import {MicroNutrientsResultList} from "../micronutrients/MicroNutrientsResultList";
+import {BakerPercentage} from "./BakerPercentage";
 import {JsonRecipeType} from "../../service/RecipeReader/types";
 import {
     getRecipeIdNameAndAmount,
@@ -10,9 +10,10 @@ import {
 } from "../../service/RecipeReader";
 import {UseRecipe, UseRecipeResult} from "./RecipeDataHolder";
 import {RecipeJson} from "./RecipeJson";
+import {Card, CardHeader, CircularProgress, Typography} from "@mui/material";
 
 const RenderMicros = ({microNutrients}: {microNutrients: BakerPercentageResult}) => {
-    return (<section className="micronutrients"><MicroNutrientsResultList microNutrientsResult={microNutrients.microNutrients}/></section>)
+    return (<Typography variant="body1" component="div"><BakerPercentage microNutrientsResult={microNutrients.microNutrients}/></Typography>)
 }
 
 type RecipeItemToRenderProps = {
@@ -27,22 +28,16 @@ const RecipeItemToRender = ({recipe, onGramsChange, showComponents}: RecipeItemT
     return (<>
         <section className={editClassName}>
             <section className="ingredients">
-                {recipe.recipe.microNutrients.ingredients.map((ingredients, index) => (
-                    <IngredientsItem ingredients={ingredients} recipe={recipe.recipe.recipe}
-                                     onGramsChange={(grams, i) => onGramsChange(grams, index, i)}
-                                     key={`ingredients_${index}`}/>
-                ))}
+                <IngredientsItems ingredients={recipe.recipe.microNutrients.ingredients} recipe={recipe.recipe.recipe} onGramsChange={onGramsChange} />
             </section>
             <RenderMicros microNutrients={recipe.recipe.microNutrients}/>
             <RecipeJson recipe={recipe.recipe.raw}/>
         </section>
         <section className="recipe">
-            {recipe.ingredients.microNutrients.ingredients.map((ingredients, index) => (
-                <IngredientsItem  ingredients={ingredients} recipe={recipe.recipe.recipe} key={`recipe_${index}`}/>
-            ))}
+            <IngredientsItems ingredients={recipe.ingredients.microNutrients.ingredients} recipe={recipe.recipe.recipe} />
         </section>
         <BakingTimeItems bakingTimes={recipe.recipe.recipe.getBakingTime()}/>
-        <div className="description">{recipe.recipe.recipe.getDescription()}</div>
+        <Typography variant="body1">{recipe.recipe.recipe.getDescription()}</Typography>
         <RenderMicros microNutrients={recipe.ingredients.microNutrients}/>
     </>)
 }
@@ -63,14 +58,9 @@ export const RecipeItem = ({recipe, showComponents}: RecipeItemProps) => {
 
     return (<>{
         recipeIdNameAndAmount ?
-            (<article id={recipeIdNameAndAmount.id}>
-                <div className="recipe">
-                    <h2>{recipeIdNameAndAmount.label}</h2>
-                    {result ?
-                        <RecipeItemToRender recipe={result} onGramsChange={setGrams} showComponents={showComponents}/> :
-                        <label className="loading">loading...</label>
-                    }
-                </div>
-            </article>) : undefined
+            (<article id={recipeIdNameAndAmount.id}><Card variant="outlined" className="recipe">
+                <CardHeader title={recipeIdNameAndAmount.label}/>
+                {result ? <RecipeItemToRender recipe={result} onGramsChange={setGrams} showComponents={showComponents}/> : <CircularProgress /> }
+            </Card></article>) : undefined
     }</>)
 };
