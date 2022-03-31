@@ -91,23 +91,5 @@ export const recipeType2RecipeJson = async (recipe: RecipeType):Promise<JsonReci
     if (recipe.bakingTime && recipe.bakingTime.length > 0) {
         result.bakingTime = recipe.bakingTime.map(recipeTypeBakingTime2JsonBakingTime);
     }
-    console.log(recipe);
-
-    /*
-    const result: JsonRecipeType = {
-        id: recipe.id,
-        name: recipe.name,
-        description: recipe.description,
-        amount: recipe.description,
-        bakingTime: recipe.bakingTime,
-        ingredients: recipe.ingredients.map((ingredients) => {
-            return {
-                name: ingredients.name,
-                description: ingredients.description,
-
-            }
-        })
-    }
-     */
     return result;
 }
