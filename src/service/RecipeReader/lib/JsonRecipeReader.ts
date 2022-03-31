@@ -17,9 +17,10 @@ import {
 import {
     PREDEFINED_INGREDIENT,
 } from "../../../models/interfaces/IngredientConstant";
-import {base64Encode} from "./Base64";
 import {resolveJsonRecipeTypeId} from "./JsonRecepyIdGenerator";
 import {calculateFlourAndWaterPercent} from "../../DryAndLiquidCalculator/FlourAndWaterCalculation";
+import {generateJsonDryIngredientId} from "./Base64";
+
 
 type JsonIngredientGramsType = IngredientGramsType | JsonRecipeIngredientConstantGramsType | JsonDryIngredientGrams;
 
@@ -43,12 +44,14 @@ const resolveBakingTime = (bakingTimes?: JsonBakingTimeType[]): BakingTimeType[]
     return [];
 };
 
+
 const getPredefined = (ingredient: JsonRecipeIngredientsIngredientType, grams?: number) => {
     const type = (ingredient as (JsonRecipeIngredientConstantType | JsonDryIngredient)).type;
     const _grams = grams || (ingredient as GramsAmountType).grams;
     if (type === "DRY") {
-        const name = (ingredient as JsonDryIngredient).name;
-        const id = base64Encode(ingredient as JsonDryIngredient, name);
+        const dryIngredient = ingredient as JsonDryIngredient;
+        const name = dryIngredient.name;
+        const id = dryIngredient.id ? dryIngredient.id : generateJsonDryIngredientId(dryIngredient, _grams);
         return PREDEFINED_INGREDIENT.DRY(id, name, _grams);
     }
     return PREDEFINED_INGREDIENT[type](_grams).toType();

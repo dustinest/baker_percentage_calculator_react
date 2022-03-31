@@ -9,7 +9,7 @@ import {
     RecipeIdNameAndAmount,
 } from "../../service/RecipeReader";
 import {UseRecipe, UseRecipeResult} from "./RecipeDataHolder";
-import {TranslatedLabel} from "../common/TranslatedLabel";
+import {RecipeJson} from "./RecipeJson";
 
 const RenderMicros = ({microNutrients}: {microNutrients: BakerPercentageResult}) => {
     return (<section className="micronutrients"><MicroNutrientsResultList microNutrientsResult={microNutrients.microNutrients}/></section>)
@@ -23,10 +23,6 @@ type RecipeItemToRenderProps = {
 
 const RecipeItemToRender = ({recipe, onGramsChange, showComponents}: RecipeItemToRenderProps) => {
     const editClassName = showComponents ? "edit" : "edit hidden";
-    const [rawRecipe, setRawRecipe] = useState<string>("");
-    useEffect(() => {
-        setRawRecipe(JSON.stringify(recipe.recipe.raw, null, 2))
-    }, [recipe])
 
     return (<>
         <section className={editClassName}>
@@ -38,10 +34,7 @@ const RecipeItemToRender = ({recipe, onGramsChange, showComponents}: RecipeItemT
                 ))}
             </section>
             <RenderMicros microNutrients={recipe.recipe.microNutrients}/>
-            <section className="rawRecepie">
-                <h3><TranslatedLabel label="Json presentation"/></h3>
-                <textarea value={rawRecipe}/>
-            </section>
+            <RecipeJson recipe={recipe.recipe.raw}/>
         </section>
         <section className="recipe">
             {recipe.ingredients.microNutrients.ingredients.map((ingredients, index) => (

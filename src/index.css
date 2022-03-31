@@ -122,6 +122,12 @@ nav {
   padding: 0;
   margin: 0;
   height: 100%;
+  width: 12em;
+}
+
+div.recipes {
+  margin-left: 12em;
+  padding: 0 2em;
 }
 
 nav ol {
@@ -160,9 +166,20 @@ nav span label {
   padding-left: 0.2em;
 }
 
+pre {
+  text-align: left;
+  border: 1pt solid #cacaca;
+  padding: 1em;
+  overflow: auto;
+}
+
 @media print {
   nav {
     display: none;
+  }
+  div.recipes {
+    margin: 0;
+    padding: 0;
   }
   tbody td {
     min-width: 10em;

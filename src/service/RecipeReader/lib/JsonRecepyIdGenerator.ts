@@ -1,13 +1,13 @@
 import {JsonRecipeType} from "../types";
-import {Buffer} from "buffer";
 import {useEffect, useState} from "react";
 import {getTranslation} from "../../TranslationService";
+import {generateJsonRecipeTypeId} from "./Base64";
 
 export const resolveJsonRecipeTypeId = (value: JsonRecipeType): string => {
     if (value.id) return value.id;
-    const id = JSON.stringify([value.name, value.amount || 1]);
-    return Buffer.from(id, 'utf8').toString('base64');
+    return generateJsonRecipeTypeId(value);
 };
+
 
 export type RecipeIdNameAndAmount = {
     id: string;

@@ -24,6 +24,7 @@ export interface PredefinedIngredientConstant {
     WHEAT_405_FLOUR: IngredientType,
     WHEAT_550_FLOUR: IngredientType,
 }
+
 const createPredefined = (id: string, name: string, ...nutrients: (NutritionType | number)[]): IngredientType => {
     const _nutrients: NutrientPercentType[] = [];
     for (let i = 0; i < nutrients.length; i+=2) {
@@ -69,7 +70,6 @@ export const INGREDIENT_CONSTANT:PredefinedIngredientConstant = (() => {
 
 type PredefinedIngredientType = {[Property in keyof PredefinedIngredientConstant]: (grams: number) => Ingredient} & {DRY: (id: string, name: string, grams: number, nutrients?: {type: NutritionType, percent: number}[]) => IngredientGramsType};
 
-
 // @ts-ignore
 export const PREDEFINED_INGREDIENT: PredefinedIngredientType = {
     DRY: (id: string, name: string, grams: number, nutrients?: NutrientPercentType[]) => {
@@ -82,6 +82,8 @@ export const PREDEFINED_INGREDIENT: PredefinedIngredientType = {
         }
     }
 };
+
+
 // @ts-ignore
 Object.keys(INGREDIENT_CONSTANT).forEach((key) => {
     // @ts-ignore
