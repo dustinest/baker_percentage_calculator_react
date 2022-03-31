@@ -10,7 +10,17 @@ import {
 } from "../../service/RecipeReader";
 import {UseRecipe, UseRecipeResult} from "./RecipeDataHolder";
 import {RecipeJson} from "./RecipeJson";
-import {Card, CardHeader, CircularProgress, Typography} from "@mui/material";
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Card,
+    CardHeader,
+    CircularProgress,
+    Typography
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import {TranslatedLabel} from "../common/TranslatedLabel";
 
 const RenderMicros = ({microNutrients}: {microNutrients: BakerPercentageResult}) => {
     return (<Typography variant="body1" component="div"><BakerPercentage microNutrientsResult={microNutrients.microNutrients}/></Typography>)
@@ -19,18 +29,28 @@ const RenderMicros = ({microNutrients}: {microNutrients: BakerPercentageResult})
 type RecipeItemToRenderProps = {
     recipe: UseRecipeResult;
     onGramsChange: (grams: number, ingredientIndex: number, index: number) => Promise<void>;
-    showComponents: boolean;
 }
 
-const RecipeItemToRender = ({recipe, onGramsChange, showComponents}: RecipeItemToRenderProps) => {
-    const editClassName = showComponents ? "edit" : "edit hidden";
+const RecipeItemToRender = ({recipe, onGramsChange}: RecipeItemToRenderProps) => {
+    const [isExpanded, setExpanded] = useState<boolean>(false);
 
     return (<>
-        <section className={editClassName}>
-            <section className="ingredients">
-                <IngredientsItems ingredients={recipe.recipe.microNutrients.ingredients} recipe={recipe.recipe.recipe} onGramsChange={onGramsChange} />
-            </section>
-            <RenderMicros microNutrients={recipe.recipe.microNutrients}/>
+        <section className="edit">
+            <Accordion expanded={isExpanded} onChange={(_, i) => {setExpanded(i)}}>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                >
+                    <Typography><TranslatedLabel label="Komponendid"/></Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    <section className="ingredients">
+                        <IngredientsItems ingredients={recipe.recipe.microNutrients.ingredients} recipe={recipe.recipe.recipe} onGramsChange={onGramsChange} />
+                    </section>
+                    <RenderMicros microNutrients={recipe.recipe.microNutrients}/>
+                </AccordionDetails>
+            </Accordion>
             <RecipeJson recipe={recipe.recipe.raw}/>
         </section>
         <section className="recipe">
@@ -44,10 +64,9 @@ const RecipeItemToRender = ({recipe, onGramsChange, showComponents}: RecipeItemT
 
 type RecipeItemProps = {
     recipe: JsonRecipeType;
-    showComponents: boolean;
 }
 
-export const RecipeItem = ({recipe, showComponents}: RecipeItemProps) => {
+export const RecipeItem = ({recipe}: RecipeItemProps) => {
     const {result, setGrams} = UseRecipe(recipe);
     const [recipeIdNameAndAmount, seRecipeIdNameAndAmount] = useState<RecipeIdNameAndAmount | undefined>();
 
@@ -60,7 +79,7 @@ export const RecipeItem = ({recipe, showComponents}: RecipeItemProps) => {
         recipeIdNameAndAmount ?
             (<article id={recipeIdNameAndAmount.id}><Card variant="outlined" className="recipe">
                 <CardHeader title={recipeIdNameAndAmount.label}/>
-                {result ? <RecipeItemToRender recipe={result} onGramsChange={setGrams} showComponents={showComponents}/> : <CircularProgress /> }
+                {result ? <RecipeItemToRender recipe={result} onGramsChange={setGrams}/> : <CircularProgress /> }
             </Card></article>) : undefined
     }</>)
 };

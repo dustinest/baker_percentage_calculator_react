@@ -2,8 +2,15 @@ import {RecipeType} from "../../models/types";
 import {useEffect, useState} from "react";
 import {recipeType2RecipeJson} from "../../service/RecipeReader";
 import './RecipeJson.css';
-import {useTranslation} from "../../service/TranslationService";
-import {ToggleButton, ToggleButtonGroup} from "@mui/material";
+
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary, CircularProgress,
+    Typography
+} from "@mui/material";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {TranslatedLabel} from "../common/TranslatedLabel";
 
 const resolveRecipeJson = async (recipe: RecipeType): Promise<string> => {
     const result = await recipeType2RecipeJson(recipe);
@@ -11,26 +18,29 @@ const resolveRecipeJson = async (recipe: RecipeType): Promise<string> => {
 };
 
 export const RecipeJson = ({recipe}: {recipe: RecipeType}) => {
+    const [isExpanded, setExpanded] = useState<boolean>(false);
     const [recipeJson, setRecipeJson] = useState<string | undefined>();
-    const icons = {
-        show: useTranslation("Show JSON"),
-        hide: useTranslation("Hide JSON")
-    };
-
-    const [json, setJson] = useState<string | null>(null);
 
     useEffect(() => {
-        if (json === "JSON") {
+        if (isExpanded) {
             resolveRecipeJson(recipe).then(setRecipeJson).catch(console.error);
         } else {
             setRecipeJson(undefined);
         }
-    }, [recipe, json])
+    }, [recipe, isExpanded])
 
-    return (<section className="rawRecepie">
-            <ToggleButtonGroup exclusive={true} size="small" value={json} onChange={(e, value) => setJson(value)}>
-                <ToggleButton value="JSON">{json === "JSON" ? icons.hide: icons.show}</ToggleButton>
-            </ToggleButtonGroup>
-            {recipeJson ? <pre>{recipeJson}</pre> : undefined }
-        </section>)
+    return (
+        <Accordion expanded={isExpanded} onChange={(_, i) => {setExpanded(i)}}>
+            <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+            >
+                <Typography><TranslatedLabel label="JSON"/></Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+                {recipeJson ? <pre>{recipeJson}</pre> : <CircularProgress />}
+            </AccordionDetails>
+        </Accordion>
+    )
 }

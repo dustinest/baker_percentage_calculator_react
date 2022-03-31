@@ -43,7 +43,6 @@ const getRecipes = (): JsonRecipeType[] => {
 export const Main = () => {
     const [recipes, setRecipes] = useState<JsonRecipeType[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    const [showComponents,setShowComponents] = useState<boolean>(true);
 
     const workOnRecipes = () => {
         try {
@@ -71,8 +70,8 @@ export const Main = () => {
                         (<label>No recipes</label>) :
                         (
                             <>
-                                <RecipeNavigation recipes={recipes} onComponentViewChange={setShowComponents}/>
-                                <RecipeList recipes={recipes} showComponents={showComponents}/>
+                                <RecipeNavigation recipes={recipes}/>
+                                <RecipeList recipes={recipes}/>
                             </>
                         )
             }
