@@ -1,5 +1,6 @@
 import {OnChangeType} from "./OnChangeType";
-import {ChangeEvent, useEffect, useState} from "react";
+import "./InputCheckBox.css";
+import {GoogleMaterialSwitch} from "../common/GoogleMaterialIcon";
 
 type InputCheckBoxProps = {
     label?: string;
@@ -7,19 +8,9 @@ type InputCheckBoxProps = {
     onChange: OnChangeType<boolean, void>;
 };
 export const InputCheckBox = ({value, label, onChange}: InputCheckBoxProps) => {
-    const [isChecked, setChecked] = useState<boolean>(value === true);
-    const _onChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.checked !== isChecked) {
-            setChecked(e.target.checked);
-        }
-    };
-    useEffect(() => {
-        onChange(isChecked);
-        // eslint-disable-next-line
-    }, [isChecked])
     return (
-        <>
-            <input type="checkbox" checked={isChecked} onChange={_onChange}/>{label ? <label onClick={() => setChecked(!isChecked)}>{label}</label> : undefined}
-        </>
+        <span className="checkbox">
+            <GoogleMaterialSwitch value={value} onChange={onChange} labelAfter={label} icons={{checked: "task_alt", unchecked: "radio_button_unchecked"}}/>
+        </span>
     )
 }

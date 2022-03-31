@@ -29,7 +29,7 @@ nav li.recipe:hover {
     border-color: #cacaca;
 }
 
-nav span, nav a, nav a:visited, nav a:active {
+span.checkbox, nav a, nav a:visited, nav a:active {
     margin: 0;
     padding: 0.1em 1em;
     color: #000000;
@@ -37,17 +37,6 @@ nav span, nav a, nav a:visited, nav a:active {
     display: block;
     text-decoration: none;
 }
-
-nav input[type=checkbox] {
-    transform: scale(1);
-    margin: 0;
-    display: inline;
-}
-
-nav span label {
-    padding-left: 0.2em;
-}
-
 
 @media print {
     nav {
