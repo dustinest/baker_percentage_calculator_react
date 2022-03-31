@@ -12,18 +12,15 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {TranslatedLabel} from "../common/TranslatedLabel";
 
-const resolveRecipeJson = async (recipe: RecipeType): Promise<string> => {
-    const result = await recipeType2RecipeJson(recipe);
-    return JSON.stringify(result, null, 2)
-};
-
 export const RecipeJson = ({recipe}: {recipe: RecipeType}) => {
     const [isExpanded, setExpanded] = useState<boolean>(false);
     const [recipeJson, setRecipeJson] = useState<string | undefined>();
 
     useEffect(() => {
         if (isExpanded) {
-            resolveRecipeJson(recipe).then(setRecipeJson).catch(console.error);
+            recipeType2RecipeJson(recipe)
+                .then((result) => JSON.stringify(result, null, 2))
+                .then(setRecipeJson).catch(console.error);
         } else {
             setRecipeJson(undefined);
         }
@@ -39,7 +36,7 @@ export const RecipeJson = ({recipe}: {recipe: RecipeType}) => {
                 <Typography><TranslatedLabel label="JSON"/></Typography>
             </AccordionSummary>
             <AccordionDetails>
-                {recipeJson ? <pre>{recipeJson}</pre> : <CircularProgress />}
+                {isExpanded && recipeJson ? <pre>{recipeJson}</pre> : <CircularProgress />}
             </AccordionDetails>
         </Accordion>
     )
