@@ -1,17 +1,19 @@
-import {useEffect, useState} from "react";
 import {PREDEFINED_RECIPES} from "../data/PredefinedRecipes";
 import {RecipeNavigation} from "./recipe/RecipeNavigation";
 import {RecipeList} from "./recipe/RecipeList";
 import {JsonRecipeType} from "../service/RecipeReader/types";
 import {GramsAmountType} from "../models/types";
-import {runLater} from "../service/RunLater";
 import {CircularProgress} from "@mui/material";
+import {AsyncStatus, useAsyncEffect} from "../service/AsyncHooks";
+import {useTranslation} from "react-i18next";
+import {getJsonRecipeTypeLabel, resolveJsonRecipeTypeId} from "../service/RecipeReader";
+import {JsonRecipeTypeWithLabel} from "./recipe/JsonRecipeTypeWithLabel";
 
 const getDouble = (value: JsonRecipeType): JsonRecipeType => {
     return {
         ...value,
         ...{
-            id: value.id,
+            id: undefined,
             name: value.name,
             amount: value.amount ? value.amount * 2 : 2,
             ingredients: value.ingredients.map((e) => ({
@@ -31,47 +33,26 @@ const getDouble = (value: JsonRecipeType): JsonRecipeType => {
     } as JsonRecipeType;
 };
 
-const getRecipes = (): JsonRecipeType[] => {
-    const result:JsonRecipeType[] = [];
-    PREDEFINED_RECIPES.forEach((e) => {
-        result.push(e);
-        result.push(getDouble(e));
-    });
-    return result;
+const getRecipes = (translate: (label: string) => string): JsonRecipeTypeWithLabel[] => {
+    return PREDEFINED_RECIPES
+        .reduce((current, value) => ( [...current, ...[value, getDouble(value)]] ), [] as JsonRecipeType[])
+        .map((e) => ({...e, ...{id: resolveJsonRecipeTypeId(e), label: getJsonRecipeTypeLabel(e, translate(e.name))}} as JsonRecipeTypeWithLabel));
 }
 
 export const Main = () => {
-    const [recipes, setRecipes] = useState<JsonRecipeType[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-
-    const workOnRecipes = () => {
-        try {
-            setRecipes(getRecipes());
-        } catch (e) {
-            console.error(e);
-        }
-        setLoading(false);
-    }
-
-    useEffect(() => {
-        setLoading(true);
-        setRecipes([]);
-        runLater(workOnRecipes).catch(e => {
-            console.error(e);
-            setLoading(false);
-        })
-    }, []);
+    const translate = useTranslation();
+    const result = useAsyncEffect<JsonRecipeTypeWithLabel[]>(async () => getRecipes(translate.t) , []);
     return (
         <>
             {
-                recipes.length === 0 && loading ?
-                    (<CircularProgress />) :
-                    recipes.length === 0 ?
-                        (<label>No recipes</label>) :
+                result.waiting ? (<CircularProgress />):
+                    result.status === AsyncStatus.CANCELLED ? translate.t("Cancelled"):
+                        result.failed ? <label className="error">{result.error}</label>:
+                                result.value.length === 0 ? (<label>No recipes</label>):
                         (
                             <>
-                                <RecipeNavigation recipes={recipes}/>
-                                <RecipeList recipes={recipes}/>
+                                <RecipeNavigation recipes={result.value}/>
+                                <RecipeList recipes={result.value}/>
                             </>
                         )
             }

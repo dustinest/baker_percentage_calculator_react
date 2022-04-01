@@ -1,8 +1,8 @@
 import {RecipeItem} from "./RecipeItem";
-import {JsonRecipeType} from "../../service/RecipeReader/types";
+import {JsonRecipeTypeWithLabel} from "./JsonRecipeTypeWithLabel";
 
 type RecipeListProps = {
-    recipes: JsonRecipeType[];
+    recipes: JsonRecipeTypeWithLabel[];
 }
 
 export const RecipeList = ({recipes}: RecipeListProps) => {

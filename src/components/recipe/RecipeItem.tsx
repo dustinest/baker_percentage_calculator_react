@@ -1,13 +1,8 @@
 import {IngredientsItems} from "./IngredientsItem";
 import {BakingTimeItems} from "./BakingTimeItems";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {BakerPercentageResult} from "../../utils/BakerPercentageCalulation";
 import {BakerPercentage} from "./BakerPercentage";
-import {JsonRecipeType} from "../../service/RecipeReader/types";
-import {
-    getRecipeIdNameAndAmount,
-    RecipeIdNameAndAmount,
-} from "../../service/RecipeReader";
 import {UseRecipe, UseRecipeResult} from "./RecipeDataHolder";
 import {RecipeJson} from "./RecipeJson";
 import {
@@ -16,12 +11,13 @@ import {
     AccordionSummary,
     Card,
     CardHeader,
-    CircularProgress,
+    Skeleton,
     Typography
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {TranslatedLabel} from "../common/TranslatedLabel";
-import {useTranslation} from "react-i18next";
+import {JsonRecipeTypeWithLabel} from "./JsonRecipeTypeWithLabel";
+import "./RecipeItem.css";
 
 const RenderMicros = ({microNutrients}: {microNutrients: BakerPercentageResult}) => {
     return (<Typography variant="body1" className="baker-percentage" component="div"><BakerPercentage microNutrientsResult={microNutrients.microNutrients}/></Typography>)
@@ -64,24 +60,25 @@ const RecipeItemToRender = ({recipe, onGramsChange}: RecipeItemToRenderProps) =>
 }
 
 type RecipeItemProps = {
-    recipe: JsonRecipeType;
+    recipe: JsonRecipeTypeWithLabel;
+}
+
+const RecipeLoader = () => {
+    return (
+        <div className="recipe-loader">
+            <Skeleton />
+            <Skeleton animation="wave" />
+            <Skeleton animation={false} />
+            <Skeleton animation="wave" />
+            <Skeleton />
+        </div>);
 }
 
 export const RecipeItem = ({recipe}: RecipeItemProps) => {
     const {result, setGrams} = UseRecipe(recipe);
-    const [recipeIdNameAndAmount, seRecipeIdNameAndAmount] = useState<RecipeIdNameAndAmount | undefined>();
-    const translate = useTranslation();
 
-    useEffect(() => {
-        seRecipeIdNameAndAmount(getRecipeIdNameAndAmount(recipe, translate.t(recipe.name)));
-        // eslint-disable-next-line
-    }, [recipe]);
-
-    return (<>{
-        recipeIdNameAndAmount ?
-            (<article id={recipeIdNameAndAmount.id}><Card variant="outlined" className="recipe">
-                <CardHeader title={recipeIdNameAndAmount.label}/>
-                {result ? <RecipeItemToRender recipe={result} onGramsChange={setGrams}/> : <CircularProgress /> }
-            </Card></article>) : undefined
-    }</>)
+    return (<article id={recipe.id}><Card variant="outlined" className="recipe">
+        <CardHeader title={recipe.label}/>
+        {result.success ? <RecipeItemToRender recipe={result.value} onGramsChange={setGrams}/> : <RecipeLoader /> }
+    </Card></article>)
 };

@@ -1,16 +1,14 @@
-import {JsonRecipeType} from "../../service/RecipeReader/types";
-import {useRecipeIdNameAndAmount} from "../../service/RecipeReader";
 import './RecipeNavigation.css';
 import {Drawer, List, ListItem, ListItemText} from "@mui/material";
+import {JsonRecipeTypeWithLabel} from "./JsonRecipeTypeWithLabel";
 
 type RecipeNavigationProps = {
-    recipes: JsonRecipeType[];
+    recipes: JsonRecipeTypeWithLabel[];
 }
-const RecipeMenuItem = ({recipe}: { recipe: JsonRecipeType } ) => {
-    const recipeId = useRecipeIdNameAndAmount(recipe);
+const RecipeMenuItem = ({recipe}: { recipe: JsonRecipeTypeWithLabel } ) => {
     const onClick = () => {
-        if (recipeId?.id) {
-            const element = document.getElementById(recipeId.id);
+        if (recipe.id) {
+            const element = document.getElementById(recipe.id);
             if (element) {
                 if (element.scrollIntoView !== undefined) {
                     element.scrollIntoView({
@@ -19,16 +17,14 @@ const RecipeMenuItem = ({recipe}: { recipe: JsonRecipeType } ) => {
                 } else if (window.scrollTo !== undefined) {
                     window.scrollTo(element.offsetLeft, element.offsetTop);
                 } else {
-                    document.location.hash = recipeId.id;
+                    document.location.hash = recipe.id;
                 }
             }
         }
     };
 
     return (
-        <>{recipeId ? (
-                <ListItem button onClick={onClick} ><ListItemText primary={recipeId.label} /></ListItem>
-        ) : undefined}</>
+        <><ListItem button onClick={onClick} ><ListItemText primary={recipe.label} /></ListItem></>
     );
 }
 
