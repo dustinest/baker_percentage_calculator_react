@@ -15,10 +15,6 @@ table {
   margin-right: auto;
 }
 
-td.label {
-  text-transform: capitalize;
-}
-
 td.amount, td.percent {
   text-align: right;
 }
@@ -51,18 +47,23 @@ table th {
   font-size: 1em!important;
 }
 
+div.baker-percentage {
+  margin-top: 1em;
+  border-top: 1pt dotted #cacaca;
+}
+table.baker-percentage td, table.baker-percentage th {
+  margin: 0;
+  font-weight: normal;
+  padding: 0.5em;
+  font-size: 0.8em;
+}
+
 @media print {
   .MuiCardHeader-root .MuiTypography-h5 {
     font-size: 1.2rem!important;
   }
   table th {
     font-size: 1em!important;
-  }
-
-  table.baker-percentage td, table.baker-percentage th {
-    margin: 0;
-    padding: 0.5em;
-    font-size: 0.9em;
   }
 
   div.recipes {

@@ -1,13 +1,14 @@
-import {getTranslation} from "../../service/TranslationService";
+import {useTranslation} from "react-i18next";
 
 type TranslateProps = {
     label: string;
 };
 
 export const RenderTranslation = ({label}: TranslateProps) => {
-    return <>{getTranslation(label)}</>;
+    const translate = useTranslation();
+    return <>{translate.t(label)}</>;
 }
 
 export const TranslatedLabel = ({label}: TranslateProps) => {
-    return (<label>{getTranslation(label)}</label>)
+    return (<label><RenderTranslation label={label}/></label>)
 }

@@ -231,7 +231,7 @@ export const PREDEFINED_RECIPES = [
             }
         ],
         bakingTime: [
-            { time: { from: 10 }, temperature: 180, steam: true },
+            { time: 10, temperature: 180, steam: true },
             { time: { from: 15, until: 20 }, temperature: 180 },
         ],
     },

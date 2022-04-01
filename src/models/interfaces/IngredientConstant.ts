@@ -1,5 +1,5 @@
 import {IngredientGramsType, IngredientType, NutrientPercentType} from "../types";
-import {NutritionType} from "./NutritionType";
+import {NutritionType} from "../types/NutritionType";
 import {getIngredient, Ingredient} from "./Ingredient";
 
 export interface PredefinedIngredientConstant {
@@ -44,26 +44,26 @@ const createPredefined = (id: string, name: string, ...nutrients: (NutritionType
 
 export const INGREDIENT_CONSTANT:PredefinedIngredientConstant = (() => {
     const result = {
-        SALT: createPredefined("salt", "Sool", NutritionType.salt, 100),
-        SUGAR: createPredefined("sugar", "Suhkur", NutritionType.sugar, 100),
-        SUGAR_BROWN: createPredefined("sugar_brown", "Pruunsuhkur", NutritionType.sugar, 100),
-        WATER: createPredefined("water", "Vesi", NutritionType.water, 100),
-        BUTTER: createPredefined("butter_82", "Või (82%)", NutritionType.fat, 82, NutritionType.water, 18),
+        SALT: createPredefined("salt", "Salt", NutritionType.salt, 100),
+        SUGAR: createPredefined("sugar", "Sugar", NutritionType.sugar, 100),
+        SUGAR_BROWN: createPredefined("sugar_brown", "Brown sugar", NutritionType.sugar, 100),
+        WATER: createPredefined("water", "Water", NutritionType.water, 100),
+        BUTTER: createPredefined("butter_82", "Butter", NutritionType.fat, 82, NutritionType.water, 18),
         OIL: createPredefined("oil", "Õli", NutritionType.fat, 82, NutritionType.fat, 100),
-        MILK: createPredefined("milk_2_5", "Piim (2.8%)", NutritionType.fat, 2.5, NutritionType.water, 97.5),
-        EGG: createPredefined("egg", "Muna", NutritionType.egg, 100),
+        MILK: createPredefined("milk_2_5", "Milk", NutritionType.fat, 2.8, NutritionType.water, 97.5),
+        EGG: createPredefined("egg", "Egg", NutritionType.egg, 100),
 
-        CARDAMOM: createPredefined("cardamom", "Kardemon", NutritionType.spice, 100),
-        CINNAMON: createPredefined("cinnamon", "Kaneel", NutritionType.spice, 100),
+        CARDAMOM: createPredefined("cardamom", "Cardamom", NutritionType.spice, 100),
+        CINNAMON: createPredefined("cinnamon", "Cinnamon", NutritionType.spice, 100),
 
-        OLIVE_OIL: createPredefined("olive_oil", "Oliivõli", NutritionType.fat, 100),
-        WHOLE_RYE_FLOUR: createPredefined("whole_grain_rye_flour", "Täistera rukkijahu", NutritionType.flour, 100, NutritionType.whole_grain, 100),
-        WHOLE_WHEAT_FLOUR: createPredefined("whole_grain_wheat_flour", "Täistera nisujahu", NutritionType.flour, 100, NutritionType.whole_grain, 100),
-        DURUM_WHEAT: createPredefined("durum_wheat_flour", "Durum jahu", NutritionType.flour, 100, NutritionType.whole_grain, 100),
+        OLIVE_OIL: createPredefined("olive_oil", "Olive oil", NutritionType.fat, 100),
+        WHOLE_RYE_FLOUR: createPredefined("whole_grain_rye_flour", "Whole grain rye flour", NutritionType.flour, 100, NutritionType.whole_grain, 100),
+        WHOLE_WHEAT_FLOUR: createPredefined("whole_grain_wheat_flour", "Whole grain wheat flour", NutritionType.flour, 100, NutritionType.whole_grain, 100),
+        DURUM_WHEAT: createPredefined("durum_wheat_flour", "Durum flour", NutritionType.flour, 100, NutritionType.whole_grain, 100),
 
-        WHOLE_RYE_MALT_FLOUR: createPredefined("rye_malt_flour", "Rukkilinnase jahu", NutritionType.flour, 100, NutritionType.whole_grain, 100),
-        WHEAT_405_FLOUR: createPredefined("wheat_flour_405", "Nisujahu 405", NutritionType.flour, 100),
-        WHEAT_550_FLOUR: createPredefined("wheat_flour_550", "Nisujahu 550", NutritionType.flour, 100)
+        WHOLE_RYE_MALT_FLOUR: createPredefined("rye_malt_flour", "Rye malt flour", NutritionType.flour, 100, NutritionType.whole_grain, 100),
+        WHEAT_405_FLOUR: createPredefined("wheat_flour_405", "Wheat flour", NutritionType.flour, 100, NutritionType.ash, 405),
+        WHEAT_550_FLOUR: createPredefined("wheat_flour_550", "Wheat flour", NutritionType.flour, 100, NutritionType.ash, 550)
     } as PredefinedIngredientConstant;
     return Object.freeze(result);
 })();

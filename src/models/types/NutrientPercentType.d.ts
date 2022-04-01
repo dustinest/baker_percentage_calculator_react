@@ -1,4 +1,4 @@
-import {NutritionType} from "../interfaces/NutritionType";
+import {NutritionType} from "./NutritionType";
 import {PercentAmountType} from "./AmountTypes";
 
 export type NutrientPercentType = {

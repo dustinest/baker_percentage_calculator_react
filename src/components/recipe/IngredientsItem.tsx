@@ -1,15 +1,38 @@
 import {Recipe} from "../../models/interfaces/Recipe";
 import {BakingTimeItems} from "./BakingTimeItems";
-import {RecipeIngredientsWithPercent} from "../../utils/BakerPercentageCalulation";
+import {IngredientWithPercent, RecipeIngredientsWithPercent} from "../../utils/BakerPercentageCalulation";
 import {TableBody} from "@mui/material";
 import {RTableHead, RTableRow} from "../common/RTable";
 import {InputValue} from "../common/InputValue";
+import {NutritionType} from "../../models/types/NutritionType";
 
 type IngredientsItemProps = {
     ingredients: RecipeIngredientsWithPercent;
     recipe: Recipe,
     onGramsChange?: (value: number, index: number) => Promise<void>,
     onPercentChange?: (value: number, index: number) => Promise<void>,
+}
+
+const mapIngredient = (ingredient: IngredientWithPercent) => {
+    const result = {
+        key: ingredient.getId(),
+        label: ingredient.getName(),
+        type: ingredient.getId(),
+        grams: ingredient.getGrams(),
+        percent: ingredient.getPercent(),
+        fat: 0,
+        ash: 0
+    };
+    const fat = ingredient.getNutrients().find(e => e.getType() === NutritionType.fat);
+    const water = ingredient.getNutrients().find(e => e.getType() === NutritionType.water);
+    const ash = ingredient.getNutrients().find(e => e.getType() === NutritionType.ash);
+    if (fat && water) {
+        result.fat = fat.getPercent()
+    }
+    if (ash) {
+        result.ash = ash.getPercent();
+    }
+    return result;
 }
 
 const IngredientsItem = ({ingredients, recipe, onGramsChange, onPercentChange}: IngredientsItemProps) => {
@@ -19,19 +42,23 @@ const IngredientsItem = ({ingredients, recipe, onGramsChange, onPercentChange}: 
                 {ingredients.getName() && ingredients.getName() !== recipe.getName() ? (<RTableHead label={ingredients.getName() || ""}/>) : undefined}
                 <TableBody>
                 {
-                ingredients.getIngredientWithPercent().map((e, index)=>
+                ingredients.getIngredientWithPercent().map(mapIngredient).map((value, index)=>
                     (
                         <RTableRow
                             key={index}
-                            label={e.getName()}
-                            type={e.getId()}
-                            grams={onGramsChange ?
-                                <InputValue value={e.getGrams()} onChange={ (value) => onGramsChange(value, index) } suffix="g"/>  :
-                                e.getGrams()}
+                            label={value.label}
+                            type={value.type}
+                            fat={value.fat}
+                            ash={value.ash}
+                            grams={
+                            onGramsChange ?
+                                <InputValue value={value.grams} onChange={ (value) => onGramsChange(value, index) } suffix="g"/>  :
+                                value.grams
+                            }
                             percent={
                                 onPercentChange ?
-                                    <InputValue value={e.getPercent()} onChange={ (value) => onPercentChange(value, index) } suffix="%"/>:
-                                    e.getPercent()
+                                    <InputValue value={value.percent} onChange={ (value) => onPercentChange(value, index) } suffix="%"/>:
+                                    value.percent
                             }
                         />
                     )

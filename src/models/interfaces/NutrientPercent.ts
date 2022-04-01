@@ -1,4 +1,4 @@
-import {NutritionType} from "./NutritionType";
+import {NutritionType} from "../types/NutritionType";
 import {NutrientPercentType} from "../types";
 
 export interface NutrientPercent {

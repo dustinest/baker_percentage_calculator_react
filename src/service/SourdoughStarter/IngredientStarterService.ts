@@ -2,7 +2,7 @@ import {
     getSimpleRecipeIngredients,
     RecipeIngredients,
 } from "../../models/interfaces/RecipeIngredients";
-import {NutritionType} from "../../models/interfaces/NutritionType";
+import {NutritionType} from "../../models/types/NutritionType";
 import {calculateStarter, StarterIngredients} from "./FirstIngredientCalculator";
 import {IngredientGramsType} from "../../models/types";
 

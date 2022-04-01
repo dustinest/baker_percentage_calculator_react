@@ -21,9 +21,10 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {TranslatedLabel} from "../common/TranslatedLabel";
+import {useTranslation} from "react-i18next";
 
 const RenderMicros = ({microNutrients}: {microNutrients: BakerPercentageResult}) => {
-    return (<Typography variant="body1" component="div"><BakerPercentage microNutrientsResult={microNutrients.microNutrients}/></Typography>)
+    return (<Typography variant="body1" className="baker-percentage" component="div"><BakerPercentage microNutrientsResult={microNutrients.microNutrients}/></Typography>)
 }
 
 type RecipeItemToRenderProps = {
@@ -69,9 +70,10 @@ type RecipeItemProps = {
 export const RecipeItem = ({recipe}: RecipeItemProps) => {
     const {result, setGrams} = UseRecipe(recipe);
     const [recipeIdNameAndAmount, seRecipeIdNameAndAmount] = useState<RecipeIdNameAndAmount | undefined>();
+    const translate = useTranslation();
 
     useEffect(() => {
-        seRecipeIdNameAndAmount(getRecipeIdNameAndAmount(recipe));
+        seRecipeIdNameAndAmount(getRecipeIdNameAndAmount(recipe, translate.t(recipe.name)));
         // eslint-disable-next-line
     }, [recipe]);
 

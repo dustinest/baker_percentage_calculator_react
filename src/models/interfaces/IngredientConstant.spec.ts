@@ -1,4 +1,4 @@
-import {NutritionType} from "./NutritionType";
+import {NutritionType} from "../types/NutritionType";
 import {INGREDIENT_CONSTANT, PREDEFINED_INGREDIENT} from "./IngredientConstant";
 
 describe("INGREDIENT_CONSTANT are defined", () => {

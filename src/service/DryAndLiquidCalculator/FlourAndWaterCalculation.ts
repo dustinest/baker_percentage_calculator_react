@@ -1,5 +1,5 @@
 import {NutrientPercentType} from "../../models/types";
-import {NutritionType} from "../../models/interfaces/NutritionType";
+import {NutritionType} from "../../models/types/NutritionType";
 
 export type FlourAndWaterPercent = {
     flour: number;

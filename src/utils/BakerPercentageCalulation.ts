@@ -1,11 +1,11 @@
-import {DRY_NUTRIENTS} from "../models/interfaces/NutritionType";
+import {DRY_NUTRIENTS} from "../models/types/NutritionType";
 import {Ingredient} from "../models/interfaces/Ingredient";
 import {calculateMicroNutrientsResult, MicroNutrientsCalculationResult} from "./MicroNutrientsCalculator";
 import {RecipeIngredients} from "../models/interfaces/RecipeIngredients";
 import {NutrientPercent} from "../models/interfaces/NutrientPercent";
 import {BakingTime} from "../models/interfaces/BakingTime";
 
-interface IngredientWithPercent extends Ingredient {
+export interface IngredientWithPercent extends Ingredient {
     getPercent(): number;
 }
 

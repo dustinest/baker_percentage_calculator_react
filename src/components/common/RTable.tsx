@@ -1,32 +1,45 @@
 import {TableCell, TableHead, TableRow} from "@mui/material";
-import {RenderTranslation, TranslatedLabel} from "./TranslatedLabel";
+import {TranslatedLabel} from "./TranslatedLabel";
 import {normalizeNumber} from "../../utils/NumberValue";
+import {useTranslation} from "react-i18next";
 
 
 export const RTableHead = ({label}: {label: string}) => {
     return (<TableHead><TableRow><TableCell colSpan={3}><TranslatedLabel label={label}/></TableCell></TableRow></TableHead>)
 }
 
+type RenderTranslatableLabelProps = {
+    label: string,
+    type?: string,
+    grams: any,
+    fat?:number,
+    ash?:number
+}
+
+const RenderTranslatableLabel = ({label, grams, type, fat, ash}: RenderTranslatableLabelProps) => {
+    const translate = useTranslation();
+    return (<label>{
+        type === "egg" && typeof grams === "number" ?
+            <>{translate.t(label, {count: Math.round(grams / 64)})}</>:
+            fat && fat > 0 ? <>{translate.t(label, {count: fat})}</>:
+                ash && ash > 0 ? <>{translate.t(label, {count: ash})}</>:
+                    <>{translate.t(label)}</>
+    }</label>);
+}
+
 type RTableRowProps = {
-    type?: string;
-    label: string;
-    grams: any;
     percent:any;
-}
-
-const RenderTranslatableLabel = ({label, grams, type}: {label: string, type?: string, grams: any}) => {
-    return (<label>{type === "egg" && typeof grams === "number" ? <> {Math.round(grams / 64)} </> : undefined}<RenderTranslation label={label}/></label>)
-}
+} & RenderTranslatableLabelProps;
 
 
-export const RTableRow = ({label, grams, percent, type}: RTableRowProps) => {
+export const RTableRow = (props: RTableRowProps) => {
     return (<TableRow>
-        <TableCell className="label"><label><RenderTranslatableLabel label={label} type={type} grams={grams}/></label></TableCell>
+        <TableCell className="label"><RenderTranslatableLabel {...props}/></TableCell>
         <TableCell className="amount">{
-            typeof grams === "number" ? <label>{normalizeNumber(grams)} g</label> : grams
+            typeof props.grams === "number" ? <label>{normalizeNumber(props.grams)} g</label> : props.grams
         }</TableCell>
         <TableCell className="percent">{
-            typeof percent === "number" ? <label>{normalizeNumber(percent)}%</label> : percent
+            typeof props.percent === "number" ? <label>{normalizeNumber(props.percent)}%</label> : props.percent
         }</TableCell>
     </TableRow>);
 }
