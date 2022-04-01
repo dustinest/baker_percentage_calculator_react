@@ -1,4 +1,4 @@
-export const runPromiseLater = <T>(runnable: () => Promise<T>, timeout:number = 1): Promise<T> => {
+export const runPromiseLater = <T>(runnable: () => Promise<T>, timeout: number = 1): Promise<T> => {
     return new Promise<T>((resolve, reject) => {
         setTimeout(() => runnable().then(resolve).catch(reject), timeout);
     });

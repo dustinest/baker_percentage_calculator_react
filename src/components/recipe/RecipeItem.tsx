@@ -3,7 +3,7 @@ import {BakingTimeItems} from "./BakingTimeItems";
 import {useState} from "react";
 import {BakerPercentageResult} from "../../utils/BakerPercentageCalulation";
 import {BakerPercentage} from "./BakerPercentage";
-import {UseRecipe, UseRecipeResult} from "./RecipeDataHolder";
+import {UseRecipe, UseRecipeValues} from "./RecipeDataHolder";
 import {RecipeJson} from "./RecipeJson";
 import {
     Accordion,
@@ -24,7 +24,7 @@ const RenderMicros = ({microNutrients}: {microNutrients: BakerPercentageResult})
 }
 
 type RecipeItemToRenderProps = {
-    recipe: UseRecipeResult;
+    recipe: UseRecipeValues;
     onGramsChange: (grams: number, ingredientIndex: number, index: number) => Promise<void>;
 }
 
@@ -73,12 +73,10 @@ const RecipeLoader = () => {
             <Skeleton />
         </div>);
 }
-
 export const RecipeItem = ({recipe}: RecipeItemProps) => {
     const {result, setGrams} = UseRecipe(recipe);
-
     return (<article id={recipe.id}><Card variant="outlined" className="recipe">
         <CardHeader title={recipe.label}/>
-        {result.success ? <RecipeItemToRender recipe={result.value} onGramsChange={setGrams}/> : <RecipeLoader /> }
+        {result.result ? <RecipeItemToRender recipe={result.result} onGramsChange={setGrams}/> : <RecipeLoader /> }
     </Card></article>)
 };
