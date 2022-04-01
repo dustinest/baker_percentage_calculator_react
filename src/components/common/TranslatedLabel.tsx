@@ -1,6 +1,13 @@
-import {useTranslation} from "../../service/TranslationService";
+import {getTranslation} from "../../service/TranslationService";
 
-export const TranslatedLabel = ({label}: {label: string}) => {
-    const translation = useTranslation(label);
-    return (<label>{translation}</label>)
+type TranslateProps = {
+    label: string;
+};
+
+export const RenderTranslation = ({label}: TranslateProps) => {
+    return <>{getTranslation(label)}</>;
+}
+
+export const TranslatedLabel = ({label}: TranslateProps) => {
+    return (<label>{getTranslation(label)}</label>)
 }

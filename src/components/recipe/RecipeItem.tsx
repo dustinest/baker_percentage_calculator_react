@@ -1,4 +1,4 @@
-import {IngredientsItems} from "../ingredients/IngredientsItem";
+import {IngredientsItems} from "./IngredientsItem";
 import {BakingTimeItems} from "./BakingTimeItems";
 import {useEffect, useState} from "react";
 import {BakerPercentageResult} from "../../utils/BakerPercentageCalulation";
@@ -42,7 +42,7 @@ const RecipeItemToRender = ({recipe, onGramsChange}: RecipeItemToRenderProps) =>
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                    <Typography><TranslatedLabel label="Komponendid"/></Typography>
+                    <Typography><TranslatedLabel label="Recipe components"/></Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <section className="ingredients">

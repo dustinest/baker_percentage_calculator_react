@@ -1,12 +1,12 @@
 import {ChangeEvent, useEffect, useState} from "react";
 import {normalizeNumber} from "../../utils/NumberValue";
-import {OnChangeType} from "./OnChangeType";
 import {InputAdornment, OutlinedInput, TextField} from "@mui/material";
-import {SuffixData, SuffixType, UseSuffix} from "../common/UseSuffix";
+
+export type SuffixType = "g" | "%";
 
 type InputValueProps<T> = {
     value: T;
-    onChange: OnChangeType<T, Promise<void>>;
+    onChange: (value: T) => Promise<void>;
     timeout?: number;
     suffix?: SuffixType;
 };
@@ -15,7 +15,8 @@ const StandardInput = ({value, onChange, suffix, type}: {
     value: string | number,
     type: "string" | "number",
     onChange: (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void,
-    suffix: SuffixData | undefined}
+    suffix?: SuffixType
+}
 ) => {
     return (<>{
             suffix ?
@@ -24,10 +25,7 @@ const StandardInput = ({value, onChange, suffix, type}: {
                     id="outlined-adornment-weight"
                     value={value}
                     onChange={onChange}
-                    endAdornment={<InputAdornment position="end">{suffix.suffix}</InputAdornment>}
-                    inputProps={{
-                        'aria-label': suffix.label,
-                    }}
+                    endAdornment={<InputAdornment position="end">{suffix}</InputAdornment>}
                 />):
                 (<TextField id="standard-basic" variant="standard" type={type} value={value} onChange={onChange}/>)
         }</>)
@@ -37,7 +35,6 @@ export const InputValue = <T extends number | string, >({value, onChange, suffix
     const type: "string" | "number" = typeof value === "number" ? "number" : "string";
     const [valueUsed, setValueUsed] = useState<T | undefined>(undefined);
     const [timeoutValue, setTimeoutValue] = useState<NodeJS.Timeout | undefined>(undefined);
-    const _suffix = UseSuffix(suffix);
 
     const clearTimeoutValue = (newTimeout?: NodeJS.Timeout) => {
         if (timeoutValue !== undefined) {
@@ -68,5 +65,5 @@ export const InputValue = <T extends number | string, >({value, onChange, suffix
         // eslint-disable-next-line
     }, [valueUsed]);
 
-    return (<>{valueUsed !== undefined ? <StandardInput type={type} value={valueUsed} onChange={(e) => setNormalizedValue(e.target.value as T)} suffix={_suffix}/> : undefined}</>)
+    return (<>{valueUsed !== undefined ? <StandardInput type={type} value={valueUsed} onChange={(e) => setNormalizedValue(e.target.value as T)} suffix={suffix}/> : undefined}</>)
 }

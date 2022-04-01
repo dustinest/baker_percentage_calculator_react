@@ -1,5 +1,6 @@
 import {TableCell, TableHead, TableRow} from "@mui/material";
-import {TranslatedLabel} from "./TranslatedLabel";
+import {RenderTranslation, TranslatedLabel} from "./TranslatedLabel";
+import {normalizeNumber} from "../../utils/NumberValue";
 
 
 export const RTableHead = ({label}: {label: string}) => {
@@ -7,15 +8,25 @@ export const RTableHead = ({label}: {label: string}) => {
 }
 
 type RTableRowProps = {
+    type?: string;
     label: string;
     grams: any;
     percent:any;
 }
 
-export const RTableRow = ({label, grams, percent}: RTableRowProps) => {
+const RenderTranslatableLabel = ({label, grams, type}: {label: string, type?: string, grams: any}) => {
+    return (<label>{type === "egg" && typeof grams === "number" ? <> {Math.round(grams / 64)} </> : undefined}<RenderTranslation label={label}/></label>)
+}
+
+
+export const RTableRow = ({label, grams, percent, type}: RTableRowProps) => {
     return (<TableRow>
-        <TableCell className="label"><TranslatedLabel label={label}/></TableCell>
-        <TableCell className="amount">{grams}</TableCell>
-        <TableCell className="percent">{percent}</TableCell>
+        <TableCell className="label"><label><RenderTranslatableLabel label={label} type={type} grams={grams}/></label></TableCell>
+        <TableCell className="amount">{
+            typeof grams === "number" ? <label>{normalizeNumber(grams)} g</label> : grams
+        }</TableCell>
+        <TableCell className="percent">{
+            typeof percent === "number" ? <label>{normalizeNumber(percent)}%</label> : percent
+        }</TableCell>
     </TableRow>);
 }

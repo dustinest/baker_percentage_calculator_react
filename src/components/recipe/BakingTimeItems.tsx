@@ -1,10 +1,21 @@
 import {BakingTime} from "../../models/interfaces/BakingTime";
 import {TranslatedLabel} from "../common/TranslatedLabel";
-import {NumberIntervalLabel} from "../common/NumberIntervalLabel";
 import {Typography} from "@mui/material";
+import {NumberInterval} from "../../models/interfaces/NumberInterval";
 
 export type BakingTimeItemsProps = {
     bakingTimes: BakingTime[];
+}
+
+const NumberIntervalLabel = ({interval}: {interval: NumberInterval}) => {
+    return (
+        <>
+            { interval.getFrom() === interval.getUntil()
+                ? (<>{interval.getFrom()}</>)
+                : (<>{interval.getFrom()} - {interval.getUntil()}</>)
+            }
+        </>
+    )
 }
 
 export const BakingTimeItems = ({bakingTimes}: BakingTimeItemsProps) => {

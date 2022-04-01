@@ -5,7 +5,7 @@ import {RecipeIngredients} from "../models/interfaces/RecipeIngredients";
 import {NutrientPercent} from "../models/interfaces/NutrientPercent";
 import {BakingTime} from "../models/interfaces/BakingTime";
 
-export interface IngredientWithPercent extends Ingredient {
+interface IngredientWithPercent extends Ingredient {
     getPercent(): number;
 }
 

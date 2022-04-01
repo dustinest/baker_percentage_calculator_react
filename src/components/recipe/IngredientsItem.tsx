@@ -1,12 +1,9 @@
 import {Recipe} from "../../models/interfaces/Recipe";
-import {BakingTimeItems} from "../recipe/BakingTimeItems";
-import {IngredientWithPercent, RecipeIngredientsWithPercent} from "../../utils/BakerPercentageCalulation";
-import {useEffect, useState} from "react";
-import {normalizeNumberString} from "../../utils/NumberValue";
-import {NumberLabel} from "../common/NumberLabel";
+import {BakingTimeItems} from "./BakingTimeItems";
+import {RecipeIngredientsWithPercent} from "../../utils/BakerPercentageCalulation";
 import {TableBody} from "@mui/material";
 import {RTableHead, RTableRow} from "../common/RTable";
-import {InputValue} from "../Input/InputValue";
+import {InputValue} from "../common/InputValue";
 
 type IngredientsItemProps = {
     ingredients: RecipeIngredientsWithPercent;
@@ -14,31 +11,6 @@ type IngredientsItemProps = {
     onGramsChange?: (value: number, index: number) => Promise<void>,
     onPercentChange?: (value: number, index: number) => Promise<void>,
 }
-
-type IngredientItemLabelProps = {
-    ingredient: IngredientWithPercent,
-}
-
-const RenderLabel = ({ingredient}: IngredientItemLabelProps) => {
-    const [amountNumber, setAmountNumber] = useState<number|undefined>();
-
-    useEffect(() => {
-        if (ingredient.getId() === "egg") {
-            setAmountNumber(ingredient.getGrams() / 64);
-        } else {
-            setAmountNumber(undefined);
-        }
-    }, [ingredient])
-
-    return (
-        <label>
-            {amountNumber !== undefined
-                ? (<>{amountNumber} tk - {normalizeNumberString(ingredient.getGrams(), 0)}g</>)
-                : (<>{normalizeNumberString(ingredient.getGrams(), 0)}g</>)
-            }
-        </label>
-    )
-};
 
 const IngredientsItem = ({ingredients, recipe, onGramsChange, onPercentChange}: IngredientsItemProps) => {
     return (
@@ -52,13 +24,14 @@ const IngredientsItem = ({ingredients, recipe, onGramsChange, onPercentChange}: 
                         <RTableRow
                             key={index}
                             label={e.getName()}
+                            type={e.getId()}
                             grams={onGramsChange ?
                                 <InputValue value={e.getGrams()} onChange={ (value) => onGramsChange(value, index) } suffix="g"/>  :
-                                <RenderLabel ingredient={e}/>}
+                                e.getGrams()}
                             percent={
                                 onPercentChange ?
                                     <InputValue value={e.getPercent()} onChange={ (value) => onPercentChange(value, index) } suffix="%"/>:
-                                    <NumberLabel value={e.getPercent()} suffix="%"/>
+                                    e.getPercent()
                             }
                         />
                     )

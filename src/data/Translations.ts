@@ -10,6 +10,8 @@ export const TRANSLATIONS = {
         egg: "muna",
         other: "teised",
         Starter: "Juuretis",
-        Dough: "Taigen"
+        Dough: "Taigen",
+        "Recipe components": "Retsepti komponendid",
+        "Baker's percentage": "Pagari protsent"
     }
 } as {[key: string]: {[key: string]: string}}

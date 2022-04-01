@@ -1,25 +1,42 @@
-import {DISPLAYABLE_NUTRIENTS_TYPE_ARRAY} from "../../models/interfaces/NutritionType";
-import {NumberLabel} from "../common/NumberLabel";
+import {DISPLAYABLE_NUTRIENTS_TYPE_ARRAY, NutritionType} from "../../models/interfaces/NutritionType";
 import {MicroNutrientsCalculationResult} from "../../utils/MicroNutrientsCalculator";
 import {TableBody} from "@mui/material";
 import {RTableHead, RTableRow} from "../common/RTable";
+import {hasValue} from "../../utils/NullSafe";
 
 type MicroNutrientsResultListParams = {
     microNutrientsResult: MicroNutrientsCalculationResult;
 }
+
+type BakerPercentageValues = {
+    type: NutritionType;
+    grams: number;
+    percent: number;
+}
+
+const RemapMicroNutrients = (microNutrientsResult: MicroNutrientsCalculationResult): BakerPercentageValues[] =>
+    DISPLAYABLE_NUTRIENTS_TYPE_ARRAY.map((type) => {
+        const value = microNutrientsResult.get(type);
+        if (value.getGrams() === 0 && value.getPercent() === 0) return undefined;
+        return {
+            type: type,
+            grams: value.getGrams(),
+            percent: value.getPercent()
+        } as BakerPercentageValues;
+    }).filter(hasValue);
+
 export const BakerPercentage = ({microNutrientsResult} : MicroNutrientsResultListParams) => {
     return (
         <table className="baker-percentage">
-            <RTableHead label="Pagari protsent"/>
+            <RTableHead label="Baker's percentage"/>
             <TableBody>
-            {DISPLAYABLE_NUTRIENTS_TYPE_ARRAY
-                .filter(type => microNutrientsResult.get(type).getGrams() > 0 || microNutrientsResult.get(type).getPercent() > 0)
-                .map((type) => (
+            {
+                RemapMicroNutrients(microNutrientsResult).map((value) => (
                     <RTableRow
-                        key={type}
-                        label={type}
-                        grams={<NumberLabel value={microNutrientsResult.get(type).getGrams()} digits={0} suffix="g"/>}
-                        percent={<NumberLabel value={microNutrientsResult.get(type).getPercent()} suffix="%"/>}/>
+                        key={value.type}
+                        label={value.type}
+                        grams={value.grams}
+                        percent={value.percent}/>
                 ))}
             </TableBody>
         </table>
