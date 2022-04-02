@@ -3,11 +3,11 @@ import {JsonRecipeType} from "../service/RecipeReader/types";
 export const PREDEFINED_RECIPES = [
     {
         name: "Täisteraleib",
-        description: "Sisetemperatuur 88℃ - 99℃",
         bakingTime: [
             { time: 20, temperature: 240, steam: true },
-            { time: 40, temperature: 240 }
+            { time: 40, temperature: 240 },
         ],
+        innerTemperature: {from: 88, until: 99},
         ingredients: [
             {
                 ingredients: [
@@ -22,11 +22,11 @@ export const PREDEFINED_RECIPES = [
     },
     {
         name: "Suurem leib",
-        description: "Sisetemperatuur 88℃ - 99℃",
         bakingTime: [
             { time: 25, temperature: 240, steam: true },
             { time: 50, temperature: 240 }
         ],
+        innerTemperature: {from: 88, until: 99},
         ingredients: [
             {
                 ingredients: [
@@ -41,11 +41,12 @@ export const PREDEFINED_RECIPES = [
     },
     {
         name: "Sai",
-        description: "Sisetemperatuur 88℃ - 99℃i. 30g kukkel küpseta 180℃ 25min",
+        description: "Kukkel küpseta 25 minutit 180℃",
         bakingTime: [
             { time: 20, temperature: 240, steam: true },
             { time: 20, temperature: 240 }
         ],
+        innerTemperature: {from: 88, until: 99},
         ingredients: [
             {
                 ingredients: [
@@ -59,11 +60,11 @@ export const PREDEFINED_RECIPES = [
     },
     {
         name: "Sai seemnetega",
-        description: "Sisetemperatuur 88℃ - 99℃",
         bakingTime: [
             { time: 20, temperature: 240, steam: true },
             { time: 20, temperature: 240 }
         ],
+        innerTemperature: {from: 88, until: 99},
         ingredients: [
             {
                 ingredients: [
@@ -79,10 +80,10 @@ export const PREDEFINED_RECIPES = [
     },
     {
         name: "Croissant",
-        description: "Sisetemperatuur 82℃ - 88℃",
         bakingTime: [
             { time: { from: 20, until: 30 }, temperature: 210 },
         ],
+        innerTemperature: {from: 82, until: 88},
         ingredients: [
             {
                 ingredients: [
@@ -148,7 +149,6 @@ export const PREDEFINED_RECIPES = [
     {
         name: "Vastlakuklid",
         amount: 18,
-        description: "Sisetemperatuur 82℃ - 88℃",
         ingredients: [
             {
                 ingredients: [
@@ -163,13 +163,13 @@ export const PREDEFINED_RECIPES = [
 
             }
         ],
+        innerTemperature: {from: 82, until: 88},
         bakingTime: [
             { time: { from: 20, until: 25 }, temperature: 180 },
         ],
     },
     {
         name: "Kaneelirullid",
-        description: "Sisetemperatuur 82℃ - 88℃",
         ingredients: [
             {
                 ingredients: [
@@ -196,10 +196,11 @@ export const PREDEFINED_RECIPES = [
         bakingTime: [
             { time: { from: 20, until: 25 }, temperature: 210 },
         ],
+        innerTemperature: {from: 82, until: 88},
     },
     {
         name: "Plaadikook",
-        description: "Sisetemperatuur 82℃ - 88℃, pirukad umbes 180℃ 30 - 40 min",
+        description: "Pirukad küpseta umbes 30 - 40 minutit 180℃",
         ingredients: [
             {
                 ingredients: [
@@ -215,10 +216,10 @@ export const PREDEFINED_RECIPES = [
         bakingTime: [
             { time: { from: 20, until: 30 }, temperature: 210 },
         ],
+        innerTemperature: {from: 82, until: 88},
     },
     {
         name: "Pikk sai",
-        description: "Sisetemperatuur 82℃ - 88℃",
         ingredients: [
             {
                 ingredients: [
@@ -234,13 +235,14 @@ export const PREDEFINED_RECIPES = [
             { time: 10, temperature: 180, steam: true },
             { time: { from: 15, until: 20 }, temperature: 180 },
         ],
+        innerTemperature: {from: 82, until: 88},
     },
     {
         name: "Moskva saiakesed",
-        description: "Sisetemperatuur 82℃ - 88℃",
         bakingTime: [
             { time: { from: 20, until: 25 }, temperature: 180 },
         ],
+        innerTemperature: {from: 82, until: 88},
         ingredients: [
             {
                 ingredients: [

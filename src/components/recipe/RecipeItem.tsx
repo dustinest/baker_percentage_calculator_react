@@ -1,9 +1,9 @@
 import {IngredientsItems} from "./IngredientsItem";
-import {BakingTimeItems} from "./BakingTimeItems";
+import {RenderBakingTimeAware} from "./RenderBakingTimeAware";
 import {useState} from "react";
 import {BakerPercentageResult} from "../../utils/BakerPercentageCalulation";
 import {BakerPercentage} from "./BakerPercentage";
-import {UseRecipe, UseRecipeValues} from "./RecipeDataHolder";
+import {UseRecipe, UseRecipeItemValues} from "./RecipeItemData";
 import {RecipeJson} from "./RecipeJson";
 import {
     Accordion,
@@ -24,7 +24,7 @@ const RenderMicros = ({microNutrients}: {microNutrients: BakerPercentageResult})
 }
 
 type RecipeItemToRenderProps = {
-    recipe: UseRecipeValues;
+    recipe: UseRecipeItemValues;
     onGramsChange: (grams: number, ingredientIndex: number, index: number) => Promise<void>;
 }
 
@@ -53,8 +53,7 @@ const RecipeItemToRender = ({recipe, onGramsChange}: RecipeItemToRenderProps) =>
         <section className="recipe">
             <IngredientsItems ingredients={recipe.ingredients.microNutrients.ingredients} recipe={recipe.recipe.recipe} />
         </section>
-        <BakingTimeItems bakingTimes={recipe.recipe.recipe.getBakingTime()}/>
-        <Typography variant="body1">{recipe.recipe.recipe.getDescription()}</Typography>
+        <RenderBakingTimeAware value={recipe.recipe.recipe}/>
         <RenderMicros microNutrients={recipe.ingredients.microNutrients}/>
     </>)
 }

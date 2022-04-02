@@ -1,12 +1,9 @@
-import {BakingTimeType} from "./BakingTimeType";
 import {RecipeIngredientsType} from "./RecipeIngredientsType";
+import {InnerTemperatureAwareType} from "./InnerTemperatureAwareType";
 
 export type RecipeType = {
     id: string;
     name: string;
     amount: number;
-
-    bakingTime: BakingTimeType[];
     ingredients: RecipeIngredientsType[];
-    description?: string;
-};
+} & InnerTemperatureAwareType;

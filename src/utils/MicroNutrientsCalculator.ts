@@ -1,8 +1,8 @@
 import {
     DRY_NUTRIENTS,
-    NutritionType
-} from "../models/types/NutritionType";
-import {RecipeIngredients} from "../models/interfaces/RecipeIngredients";
+    NutritionType,
+    RecipeIngredients
+} from "../models";
 
 export type MicroNutrientsCalculationDetails = {
     getPercent(): number;

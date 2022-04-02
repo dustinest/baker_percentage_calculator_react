@@ -1,7 +1,9 @@
-import {NumberIntervalType} from "../../../models/types";
+import {NumberIntervalType} from "../../../models";
+
+export type JsonNumberIntervalType = NumberIntervalType | number;
 
 export type JsonBakingTimeType = {
-    time: NumberIntervalType | number;
-    temperature: NumberIntervalType | number;
+    time: JsonNumberIntervalType;
+    temperature: JsonNumberIntervalType;
     steam?: boolean;
 };

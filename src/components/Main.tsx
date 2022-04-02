@@ -2,7 +2,7 @@ import {PREDEFINED_RECIPES} from "../data/PredefinedRecipes";
 import {RecipeNavigation} from "./recipe/RecipeNavigation";
 import {RecipeList} from "./recipe/RecipeList";
 import {JsonRecipeType} from "../service/RecipeReader/types";
-import {GramsAmountType} from "../models/types";
+import {GramsAmountType} from "../models";
 import {CircularProgress} from "@mui/material";
 import {AsyncStatus, useAsyncEffect} from "../utils/Async";
 import {useTranslation} from "react-i18next";

@@ -1,9 +1,5 @@
-import {DRY_NUTRIENTS} from "../models/types/NutritionType";
-import {Ingredient} from "../models/interfaces/Ingredient";
+import {DRY_NUTRIENTS, BakingTime, NutrientPercent, RecipeIngredients, Ingredient, NumberInterval} from "../models";
 import {calculateMicroNutrientsResult, MicroNutrientsCalculationResult} from "./MicroNutrientsCalculator";
-import {RecipeIngredients} from "../models/interfaces/RecipeIngredients";
-import {NutrientPercent} from "../models/interfaces/NutrientPercent";
-import {BakingTime} from "../models/interfaces/BakingTime";
 
 export interface IngredientWithPercent extends Ingredient {
     getPercent(): number;
@@ -53,6 +49,9 @@ export const recalculateBakerPercentage = (ingredients: RecipeIngredients[]): Ba
             },
             getBakingTime(): BakingTime[]{
                 return ingredients.getBakingTime();
+            },
+            getInnerTemperature(): NumberInterval | null {
+                return ingredients.getInnerTemperature();
             },
 
             getDescription(): string | null{

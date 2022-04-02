@@ -1,10 +1,10 @@
 import {
     getSimpleRecipeIngredients,
     RecipeIngredients,
-} from "../../models/interfaces/RecipeIngredients";
-import {NutritionType} from "../../models/types/NutritionType";
+    IngredientGramsType,
+    NutritionType
+} from "../../models";
 import {calculateStarter, StarterIngredients} from "./FirstIngredientCalculator";
-import {IngredientGramsType} from "../../models/types";
 
 const remapIngredient = (ingredient: IngredientGramsType, grams?: number): IngredientGramsType => {
     if (grams !== undefined) {
@@ -78,6 +78,7 @@ export const splitStarterAndDough = async (recipeName: string, recipeIngredients
                 name: ingredients.getName() || "Dough",
                 ingredients: _others.length > 0 ? [...toAdd, ..._others] : [...toAdd],
                 bakingTime: [],
+                innerTemperature: null,
                 description: undefined
             }));
             return;
@@ -86,12 +87,14 @@ export const splitStarterAndDough = async (recipeName: string, recipeIngredients
             name: "Eeltaigen",
             ingredients: starterIngredients,
             bakingTime: [],
+            innerTemperature: null,
             description: undefined
         }))
         result.push(getSimpleRecipeIngredients({
             name: ingredients.getName() || "Dough",
             ingredients: nonStarter,
             bakingTime: ingredients.getBakingTime().map(e => e.toType()),
+            innerTemperature: ingredients.getInnerTemperature()?.toType() || null,
             description: ingredients.getDescription() || undefined
         }))
         return;

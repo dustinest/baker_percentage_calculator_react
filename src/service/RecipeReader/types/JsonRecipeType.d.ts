@@ -1,5 +1,5 @@
 import {JsonRecipeIngredientsType} from "./JsonRecipeIngredientsType";
-import {JsonBakingTimeType} from "./JsonBakingTimeType";
+import {JsonBakingTimeType, JsonNumberIntervalType} from "./JsonBakingTimeType";
 
 export type JsonRecipeType = {
     id?: string;
@@ -7,6 +7,7 @@ export type JsonRecipeType = {
     amount?: number;
 
     bakingTime?: JsonBakingTimeType[];
+    innerTemperature?: JsonNumberIntervalType;
     ingredients: JsonRecipeIngredientsType[];
     description?: string;
 };

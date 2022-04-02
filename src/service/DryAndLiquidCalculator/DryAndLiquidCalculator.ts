@@ -1,4 +1,4 @@
-import {IngredientGramsType} from "../../models/types";
+import {IngredientGramsType} from "../../models";
 import {calculateFlourAndWaterPercent} from "./FlourAndWaterCalculation";
 
 export interface DryAndLiquidCalculationResult {

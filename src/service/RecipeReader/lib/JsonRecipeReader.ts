@@ -12,11 +12,9 @@ import {
     IngredientPercentType,
     NumberIntervalType,
     RecipeIngredientsType,
-    RecipeType
-} from "../../../models/types";
-import {
-    PREDEFINED_INGREDIENT,
-} from "../../../models/interfaces/IngredientConstant";
+    RecipeType,
+    PREDEFINED_INGREDIENT
+} from "../../../models";
 import {resolveJsonRecipeTypeId} from "./JsonRecepyIdGenerator";
 import {calculateFlourAndWaterPercent} from "../../DryAndLiquidCalculator/FlourAndWaterCalculation";
 import {generateJsonDryIngredientId} from "./Base64";
@@ -32,6 +30,11 @@ const resolveNumberIntervalType = (value: NumberIntervalType | number): NumberIn
         until: Math.max(first, second),
     } as NumberIntervalType;
 };
+
+const resolveInnerTemperature = (value?: NumberIntervalType | number): NumberIntervalType | null => {
+    if (value === undefined || value === null) return null;
+    return resolveNumberIntervalType(value);
+}
 
 const resolveBakingTime = (bakingTimes?: JsonBakingTimeType[]): BakingTimeType[] => {
     if (bakingTimes) {
@@ -63,8 +66,9 @@ export const readJsonRecipe = async (recipe: JsonRecipeType): Promise<RecipeType
         name: recipe.name,
         ingredients: [],
         bakingTime: resolveBakingTime(recipe.bakingTime),
+        innerTemperature: resolveInnerTemperature(recipe.innerTemperature),
         description: recipe.description,
-        amount: recipe.amount || 0
+        amount: recipe.amount || 0,
     } as RecipeType;
 
     const toBeCalculated = {
@@ -87,6 +91,7 @@ export const readJsonRecipe = async (recipe: JsonRecipeType): Promise<RecipeType
             name: ingredients.name,
             description: ingredients.description,
             bakingTime: resolveBakingTime(ingredients.bakingTime),
+            innerTemperature: resolveInnerTemperature(ingredients.innerTemperature),
             starter: ingredients.starter === true,
             ingredients: []
         } as RecipeIngredientsType;

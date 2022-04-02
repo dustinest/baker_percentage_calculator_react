@@ -1,5 +1,4 @@
-import {RecipeIngredients} from "../../models/interfaces/RecipeIngredients";
-import {NutritionType} from "../../models/types/NutritionType";
+import {NutritionType, RecipeIngredients} from "../../models";
 import {calculateDryAndLiquid, DryAndLiquidCalculationResult} from "../DryAndLiquidCalculator/DryAndLiquidCalculator";
 
 export interface StarterIngredients {

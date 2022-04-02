@@ -35,3 +35,8 @@ export const getNumberInterval = (value: NumberIntervalType | NumberInterval | n
         (value as NumberInterval).getUntil ? (value as NumberInterval).getUntil() : (value as NumberIntervalType).until
     );
 };
+
+export const getNumberIntervalOrNull = (value?: NumberIntervalType | NumberInterval | number): NumberInterval | null => {
+    if (value === undefined || value === null) return null;
+    return getNumberInterval(value);
+}

@@ -1,4 +1,4 @@
-import {DISPLAYABLE_NUTRIENTS_TYPE_ARRAY, NutritionType} from "../../models/types/NutritionType";
+import {DISPLAYABLE_NUTRIENTS_TYPE_ARRAY, NutritionType} from "../../models";
 import {MicroNutrientsCalculationResult} from "../../utils/MicroNutrientsCalculator";
 import {TableBody} from "@mui/material";
 import {RTableHead, RTableRow} from "../common/RTable";

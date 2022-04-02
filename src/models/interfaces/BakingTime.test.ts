@@ -12,7 +12,11 @@ describe("Baking time are defined", () => {
     });
 
      it("Baking time and temperature interval is the same", () => {
-        const time = getBakingTime({time: {from: 10, until: 10}, temperature: {from: 100, until: 100}, steam: false});
+        const time = getBakingTime({
+            time: {from: 10, until: 10},
+            temperature: {from: 100, until: 100},
+            steam: false
+        });
         expect(time.getInterval().getFrom()).toBe(10);
         expect(time.getInterval().getUntil()).toBe(10);
         expect(time.getTemperature().getFrom()).toBe(100);

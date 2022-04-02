@@ -1,5 +1,5 @@
-import {GramsAmountType, PercentAmountType} from "../../../models/types";
-import {PredefinedIngredientConstant} from "../../../models/interfaces/IngredientConstant";
+import {GramsAmountType, PercentAmountType} from "../../../models";
+import {PredefinedIngredientConstant} from "../../../models";
 
 export type JsonRecipeIngredientConstantType = {
     type: keyof PredefinedIngredientConstant;

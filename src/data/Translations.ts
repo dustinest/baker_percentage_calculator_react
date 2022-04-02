@@ -46,5 +46,6 @@ export const TRANSLATIONS = {
         "minutes": "minutit",
         "Bake": "Küpseta",
         "Steam": "Auruta",
+        "Inner temperature": "Sisetemperatuur"
     }
 } as {[key in TranslationLanguage]: TranslationValues}

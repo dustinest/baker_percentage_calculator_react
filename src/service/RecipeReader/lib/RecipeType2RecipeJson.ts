@@ -3,9 +3,9 @@ import {
     IngredientGramsType,
     NumberIntervalType,
     RecipeIngredientsType,
-    RecipeType
-} from "../../../models/types";
-import {INGREDIENT_CONSTANT} from "../../../models/interfaces/IngredientConstant";
+    RecipeType,
+    INGREDIENT_CONSTANT
+} from "../../../models";
 import {
     JsonBakingTimeType, JsonDryIngredient, JsonDryIngredientGrams, JsonRecipeIngredientConstantGramsType,
     JsonRecipeIngredientsIngredientType,

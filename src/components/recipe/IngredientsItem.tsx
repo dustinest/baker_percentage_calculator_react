@@ -1,10 +1,9 @@
-import {Recipe} from "../../models/interfaces/Recipe";
-import {BakingTimeItems} from "./BakingTimeItems";
+import {NutritionType, Recipe} from "../../models";
+import {RenderBakingTimeAware} from "./RenderBakingTimeAware";
 import {IngredientWithPercent, RecipeIngredientsWithPercent} from "../../utils/BakerPercentageCalulation";
 import {TableBody} from "@mui/material";
 import {RTableHead, RTableRow} from "../common/RTable";
 import {InputValue} from "../common/InputValue";
-import {NutritionType} from "../../models/types/NutritionType";
 
 type IngredientsItemProps = {
     ingredients: RecipeIngredientsWithPercent;
@@ -65,8 +64,7 @@ const IngredientsItem = ({ingredients, recipe, onGramsChange, onPercentChange}: 
                 )}
                 </TableBody>
             </table>
-            <BakingTimeItems bakingTimes={ingredients.getBakingTime()}/>
-            {ingredients.getDescription() ? (<div className="description">{ingredients.getDescription()}</div>) : undefined}
+            <RenderBakingTimeAware value={ingredients}/>
         </>
     )
 }

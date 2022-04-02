@@ -1,15 +1,20 @@
-import {BakingTime, getBakingTime} from "./BakingTime";
+import {BakingTime} from "./BakingTime";
 import {getSimpleRecipeIngredients, RecipeIngredients} from "./RecipeIngredients";
 import {RecipeType} from "../types";
+import {BakingTimeAware} from "./BakingTimeAware";
+import {NumberInterval} from "./NumberInterval";
+import {
+    resolveBakingTimeAwareInnerTemperature,
+    resolveBakingTimeAwareBakingTime,
+    resolveBakingTimeAwareDescription, resolveBakingTimeAwareInnerTemperatureType
+} from "./BakingTimeAwareHelper";
 
-export interface Recipe {
+export interface Recipe extends BakingTimeAware {
     getId(): string;
     getName(): string;
 
     getAmount(): number;
-    getBakingTime(): BakingTime[]
     getIngredients(): RecipeIngredients[];
-    getDescription(): string | null;
     toType(): RecipeType;
 }
 
@@ -20,14 +25,15 @@ export class SimpleRecipe implements Recipe {
     private readonly ingredients: RecipeIngredients[];
     private readonly description: string | null;
     private readonly amount: number;
+    private readonly innerTemperature: NumberInterval | null;
     constructor(a: Recipe | RecipeType) {
         this.id = (a as Recipe).getId ? (a as Recipe).getId() : (a as RecipeType).id;
         this.name = (a as Recipe).getName ? (a as Recipe).getName() : (a as RecipeType).name;
-        this.bakingTime = ((a as Recipe).getBakingTime ? (a as Recipe).getBakingTime() : (a as RecipeType).bakingTime).map(getBakingTime);
         this.ingredients = ((a as Recipe).getIngredients ? (a as Recipe).getIngredients() : (a as RecipeType).ingredients).map(getSimpleRecipeIngredients);
-        const description = ((a as Recipe).getDescription ? (a as Recipe).getDescription() : (a as RecipeType).description);
-        this.description = description ? description : null;
         this.amount = (a as Recipe).getAmount ? (a as Recipe).getAmount() : (a as RecipeType).amount;
+        this.bakingTime = resolveBakingTimeAwareBakingTime(a);
+        this.description = resolveBakingTimeAwareDescription(a);
+        this.innerTemperature = resolveBakingTimeAwareInnerTemperature(a);
     }
 
     getAmount(): number {
@@ -54,14 +60,19 @@ export class SimpleRecipe implements Recipe {
         return this.name;
     }
 
+    getInnerTemperature(): NumberInterval | null {
+        return this.innerTemperature;
+    }
+
     toType(): RecipeType {
         return {
             id: this.getId(),
             name: this.getName(),
-            bakingTime: this.getBakingTime().map(e => e.toType()),
-            ingredients: this.getIngredients().map(e => e.toType()),
             description: this.description || undefined,
-            amount: this.getAmount()
+            amount: this.getAmount(),
+            ingredients: this.getIngredients().map(e => e.toType()),
+            bakingTime: this.getBakingTime().map(e => e.toType()),
+            innerTemperature: resolveBakingTimeAwareInnerTemperatureType(this)
         }
     }
 

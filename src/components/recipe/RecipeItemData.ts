@@ -1,15 +1,14 @@
 import {useEffect, useState} from "react";
 import {readJsonRecipe} from "../../service/RecipeReader";
-import {getRecipe, Recipe} from "../../models/interfaces/Recipe";
+import {RecipeIngredients, getRecipe, Recipe} from "../../models";
 import {BakerPercentageResult, recalculateBakerPercentage} from "../../utils/BakerPercentageCalulation";
 import {splitStarterAndDough} from "../../service/SourdoughStarter";
-import {RecipeIngredients} from "../../models/interfaces/RecipeIngredients";
 import {JsonRecipeType} from "../../service/RecipeReader/types";
-import {RecipeType} from "../../models/types";
+import {RecipeType} from "../../models";
 import {AsyncResulError, AsyncStatus, useAsync, useAsyncEffect} from "../../utils/Async";
 import {newBlockingPromiseQueue} from "../../utils/BlockingQueue";
 
-export type UseRecipeValues = {
+export type UseRecipeItemValues = {
     recipe: {
         recipe: Recipe;
         microNutrients: BakerPercentageResult;
@@ -22,7 +21,7 @@ export type UseRecipeValues = {
 }
 
 export type UseRecipeResult = {
-    result?: UseRecipeValues;
+    result?: UseRecipeItemValues;
     error?: Error;
     loading: boolean;
 }
@@ -30,50 +29,46 @@ export type UseRecipeResult = {
 type SetValueProps = (value: number, ingredientIndex: number, index: number) => Promise<void>;
 
 
-const resolveRecipeType = async (recipe: JsonRecipeType, recipeType?: RecipeType): Promise<RecipeType> => {
-    if (recipeType) return recipeType;
-    return readJsonRecipe(recipe);
-}
-
 const blockAndRunLater = (() => {
     const queue = newBlockingPromiseQueue();
     return (callable: () => Promise<any>) => queue.blockAndRun(callable);
 })();
 
 export const UseRecipe = (recipe: JsonRecipeType): { result: UseRecipeResult; setGrams: SetValueProps; } => {
-    const [recipeType, setRecipeType] = useState<RecipeType | undefined>();
+    const [recipeTypeValue, setRecipeTypeValue] = useState<RecipeType | undefined>();
     const [result, setResult] = useState<UseRecipeResult>({loading: true});
 
-    const [recipeArgs, loadRecipeArgs] = useAsync<UseRecipeValues>(async (recipeType?: RecipeType) => {
-        const _recipeType = await resolveRecipeType(recipe, recipeType);
-        setRecipeType(_recipeType);
-        const type = await readJsonRecipe(_recipeType);
-        const _recipe = getRecipe(type);
+    const [recipeArgs, loadRecipeArgs] = useAsync<UseRecipeItemValues>(async (recipeType?: RecipeType) => {
+        if (recipeType === undefined) {
+            recipeType = await readJsonRecipe(recipe);
+        }
+        const _recipe = getRecipe(recipeType);
 
         const micronutrients = recalculateBakerPercentage(_recipe.getIngredients());
         const ingredients = await splitStarterAndDough(_recipe.getName(), _recipe.getIngredients());
         const ingredientMicros = recalculateBakerPercentage(ingredients);
+        setRecipeTypeValue(recipeType);
         return {
             recipe: {
                 recipe: _recipe,
                 microNutrients: micronutrients,
-                raw: _recipeType
+                raw: recipeType
             },
             ingredients: {
                 ingredients: ingredients,
                 microNutrients: ingredientMicros
             }
-        } as UseRecipeValues;
+        } as UseRecipeItemValues;
     });
 
     const loader = useAsyncEffect(() => blockAndRunLater(loadRecipeArgs), [recipe])
 
     const setGrams = async(grams: number, ingredientIndex: number, index: number) => {
-        if (recipeType && recipeType.ingredients[ingredientIndex].ingredients[index].grams !== grams) {
-            const _data = {...recipeType};
-            _data.ingredients[ingredientIndex].ingredients[index].grams = grams;
-            setRecipeType(_data);
-            loadRecipeArgs(_data);
+        if (recipeTypeValue && recipeTypeValue.ingredients[ingredientIndex].ingredients[index].grams !== grams) {
+            const recipeType = {...recipeTypeValue};
+            recipeType.ingredients[ingredientIndex].ingredients[index].grams = grams;
+            // noinspection ES6MissingAwait
+            loadRecipeArgs(recipeType);
         }
     }
     useEffect(() => {
@@ -96,6 +91,7 @@ export const UseRecipe = (recipe: JsonRecipeType): { result: UseRecipeResult; se
                 setResult({loading: true});
             }
         } else if (recipeArgs.failed) {
+            console.error((recipeArgs as AsyncResulError<Error>).error);
             setResult({
                 loading: false,
                 error: (recipeArgs as AsyncResulError<Error>).error

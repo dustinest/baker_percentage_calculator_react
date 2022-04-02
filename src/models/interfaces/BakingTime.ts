@@ -35,8 +35,8 @@ class SimpleBakingTime implements BakingTime {
         return {
             time: this.getInterval().toType(),
             temperature: this.getTemperature().toType(),
-            steam: this.isSteam()
-        }
+            steam: this.isSteam(),
+        } as BakingTimeType;
     }
 
     getInterval(): NumberInterval { return this.interval; }
@@ -46,8 +46,8 @@ class SimpleBakingTime implements BakingTime {
 
 export const getBakingTime = (value: BakingTimeType | BakingTime): BakingTime => {
     return new SimpleBakingTime(
-        getNumberInterval((value as BakingTimeType).time ? (value as BakingTimeType).time : (value as BakingTime).getInterval()),
-        getNumberInterval((value as BakingTimeType).temperature ? (value as BakingTimeType).temperature : (value as BakingTime).getTemperature()),
+        getNumberInterval((value as BakingTime).getInterval ? (value as BakingTime).getInterval() : (value as BakingTimeType).time),
+        getNumberInterval((value as BakingTime).getTemperature ? (value as BakingTime).getTemperature() : (value as BakingTimeType).temperature),
         isStream(value)
     )
 }

@@ -1,9 +1,9 @@
-import {IngredientGramsType, IngredientPercentType} from "../../../models/types";
+import {IngredientGramsType, IngredientPercentType} from "../../../models";
 import {
     JsonDryIngredientGrams, JsonDryIngredientPercentage,
     JsonRecipeIngredientConstantGramsType, JsonRecipeIngredientConstantPercentType,
 } from "./JsonRecipeIngredientType";
-import {JsonBakingTimeType} from "./JsonBakingTimeType";
+import {JsonBakingTimeType, JsonNumberIntervalType} from "./JsonBakingTimeType";
 
 export type JsonRecipeIngredientsIngredientType = IngredientGramsType |
     IngredientPercentType |
@@ -16,6 +16,7 @@ export type JsonRecipeIngredientsType = {
     name?: string;
     ingredients: JsonRecipeIngredientsIngredientType[];
     bakingTime?: JsonBakingTimeType[]
+    innerTemperature?: JsonNumberIntervalType;
 
     description?: string;
     starter?: boolean; // to be included with starter. A corner case. Check pancakes
