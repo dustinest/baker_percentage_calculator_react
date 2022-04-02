@@ -1,6 +1,6 @@
 import {IngredientsItems} from "./IngredientsItem";
 import {RenderBakingTimeAware} from "./RenderBakingTimeAware";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {BakerPercentageResult} from "../../utils/BakerPercentageCalulation";
 import {BakerPercentage} from "./BakerPercentage";
 import {UseRecipe, UseRecipeItemValues} from "./RecipeItemData";
@@ -9,6 +9,7 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
+    Button,
     Card,
     CardHeader,
     Skeleton,
@@ -20,6 +21,8 @@ import "./RecipeItem.css";
 import {RecipeType} from "../../models";
 import {useTranslation} from "react-i18next";
 import {getJsonRecipeTypeLabel} from "../../service/RecipeReader";
+import {RecipesContext, StateActionTypes, UpdateRecipesAction} from "../../State";
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 
 const RenderMicros = ({microNutrients}: {microNutrients: BakerPercentageResult}) => {
     return (<Typography variant="body1" className="baker-percentage" component="div"><BakerPercentage microNutrientsResult={microNutrients.microNutrients}/></Typography>)
@@ -33,6 +36,13 @@ type RecipeItemToRenderProps = {
 
 const RecipeItemToRender = ({recipe, onGramsChange, showComponents}: RecipeItemToRenderProps) => {
     const [isExpanded, setExpanded] = useState<boolean>(false);
+    const {recipesDispatch} = useContext(RecipesContext);
+    const onSubmit = () => {
+        recipesDispatch({
+            type: StateActionTypes.UPDATE_RECIPE,
+            value: recipe.recipe.raw
+        } as UpdateRecipesAction);
+    };
 
     return (<>
         {showComponents ? (
@@ -49,6 +59,7 @@ const RecipeItemToRender = ({recipe, onGramsChange, showComponents}: RecipeItemT
                     <section className="ingredients">
                         <IngredientsItems ingredients={recipe.recipe.microNutrients.ingredients} recipe={recipe.recipe.recipe} onGramsChange={onGramsChange} />
                     </section>
+                    <Button variant="contained" onClick={onSubmit} startIcon={<PlaylistAddCheckIcon />}> Ok </Button>
                     <RenderMicros microNutrients={recipe.recipe.microNutrients}/>
                 </AccordionDetails>
             </Accordion>

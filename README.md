@@ -36,6 +36,7 @@ Does not fail, as flour1 percentage will be `123 * (100 - 2 - 50) / 100`
 
 ## Material icons
 Project uses MUI https://mui.com/components
+Icons can be found at https://mui.com/components/material-icons/
 
 # Setup
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

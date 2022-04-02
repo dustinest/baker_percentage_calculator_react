@@ -7,13 +7,18 @@ export const updateRecipesReducer = (recipes: RecipeType[], action: StateActions
         return action.value;
     } else if (action.type === StateActionTypes.UPDATE_RECIPE) {
         const result:RecipeType[] = [];
+        let updated = false;
         recipes.forEach((e) => {
             if (e.id === action.value.id) {
                 result.push(action.value);
+                updated = true;
             } else {
                 result.push(e);
             }
         })
+        if (!updated) {
+            result.push(action.value);
+        }
         return result;
     }
     return recipes;
