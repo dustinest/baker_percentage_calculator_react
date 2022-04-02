@@ -75,6 +75,7 @@ const normalizeIngredients = (ingredients: RecipeIngredientsType): JsonRecipeIng
     if (ingredients.description) { result.name = ingredients.description; }
     if (ingredients.starter) { result.starter = ingredients.starter; }
     if (ingredients.bakingTime && ingredients.bakingTime.length > 0) { result.bakingTime = ingredients.bakingTime.map(recipeTypeBakingTime2JsonBakingTime); }
+    if (ingredients.innerTemperature) result.innerTemperature = normalizeNumberIntervalType(ingredients.innerTemperature);
     return result;
 }
 
@@ -91,5 +92,6 @@ export const recipeType2RecipeJson = async (recipe: RecipeType):Promise<JsonReci
     if (recipe.bakingTime && recipe.bakingTime.length > 0) {
         result.bakingTime = recipe.bakingTime.map(recipeTypeBakingTime2JsonBakingTime);
     }
+    if (recipe.innerTemperature) result.innerTemperature = normalizeNumberIntervalType(recipe.innerTemperature);
     return result;
 }

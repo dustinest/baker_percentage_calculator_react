@@ -1,9 +1,7 @@
 import {useEffect, useState} from "react";
-import {readJsonRecipe} from "../../service/RecipeReader";
 import {RecipeIngredients, getRecipe, Recipe} from "../../models";
 import {BakerPercentageResult, recalculateBakerPercentage} from "../../utils/BakerPercentageCalulation";
 import {splitStarterAndDough} from "../../service/SourdoughStarter";
-import {JsonRecipeType} from "../../service/RecipeReader/types";
 import {RecipeType} from "../../models";
 import {AsyncResulError, AsyncStatus, useAsync, useAsyncEffect} from "../../utils/Async";
 import {newBlockingPromiseQueue} from "../../utils/BlockingQueue";
@@ -12,7 +10,7 @@ export type UseRecipeItemValues = {
     recipe: {
         recipe: Recipe;
         microNutrients: BakerPercentageResult;
-        raw: RecipeType;
+        raw: RecipeType
     }
     ingredients: {
         ingredients: RecipeIngredients[];
@@ -34,13 +32,13 @@ const blockAndRunLater = (() => {
     return (callable: () => Promise<any>) => queue.blockAndRun(callable);
 })();
 
-export const UseRecipe = (recipe: JsonRecipeType): { result: UseRecipeResult; setGrams: SetValueProps; } => {
-    const [recipeTypeValue, setRecipeTypeValue] = useState<RecipeType | undefined>();
+export const UseRecipe = (recipe: RecipeType): { result: UseRecipeResult; setGrams: SetValueProps; } => {
+    const [recipeTypeValue, setRecipeTypeValue] = useState<RecipeType>(recipe);
     const [result, setResult] = useState<UseRecipeResult>({loading: true});
 
     const [recipeArgs, loadRecipeArgs] = useAsync<UseRecipeItemValues>(async (recipeType?: RecipeType) => {
         if (recipeType === undefined) {
-            recipeType = await readJsonRecipe(recipe);
+            recipeType = recipeTypeValue;
         }
         const _recipe = getRecipe(recipeType);
 

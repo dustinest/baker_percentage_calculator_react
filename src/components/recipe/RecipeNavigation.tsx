@@ -1,45 +1,60 @@
 import './RecipeNavigation.css';
-import {Drawer, List, ListItem, ListItemText} from "@mui/material";
-import {JsonRecipeTypeWithLabel} from "./JsonRecipeTypeWithLabel";
+import {Drawer, List, ListItem, ListItemText, Tab, Tabs} from "@mui/material";
+import {SyntheticEvent, useContext, useEffect, useMemo, useState} from "react";
+import {RecipesContext, SelectedRecipeContext, SelectRecipeAction, StateActionTypes} from "../../State";
+import {RecipeType} from "../../models";
+import {useTranslation} from "react-i18next";
+import {getJsonRecipeTypeLabel} from "../../service/RecipeReader";
 
-type RecipeNavigationProps = {
-    recipes: JsonRecipeTypeWithLabel[];
-}
-const RecipeMenuItem = ({recipe}: { recipe: JsonRecipeTypeWithLabel } ) => {
-    const onClick = () => {
-        if (recipe.id) {
-            const element = document.getElementById(recipe.id);
-            if (element) {
-                if (element.scrollIntoView !== undefined) {
-                    element.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                } else if (window.scrollTo !== undefined) {
-                    window.scrollTo(element.offsetLeft, element.offsetTop);
-                } else {
-                    document.location.hash = recipe.id;
-                }
-            }
-        }
-    };
-
+const RecipeMenuItem = ({recipe, onSelect}: { recipe: RecipeType, onSelect: () => void }) => {
+    const translate = useTranslation();
     return (
-        <><ListItem button onClick={onClick} ><ListItemText primary={recipe.label} /></ListItem></>
+        <><ListItem button onClick={onSelect}><ListItemText
+            primary={getJsonRecipeTypeLabel(recipe, translate.t(recipe.name))}/></ListItem></>
     );
 }
 
-
-export const RecipeNavigation = ({recipes} : RecipeNavigationProps) => {
-    return (
-        <Drawer variant="permanent"
-                anchor="left">
+const RecipeNavigationList = ({handleItemClick}: { handleItemClick: (recipe: RecipeType) => void }) => {
+    const {recipes} = useContext(RecipesContext);
+    return useMemo(() => {
+        return (
             <List>
                 {
-                    recipes.map((recipe, index) =>
-                        (<RecipeMenuItem key={index} recipe={recipe} />)
+                    recipes.recipes.map((recipe) =>
+                        (<RecipeMenuItem key={recipe.id} recipe={recipe} onSelect={() => handleItemClick(recipe)}/>)
                     )
                 }
             </List>
-        </Drawer>
-    )
+        );
+        // eslint-disable-next-line
+    }, [recipes]);
+};
+
+export const RecipeNavigation = () => {
+    const {selectedRecipeDispatch} = useContext(SelectedRecipeContext);
+    const [tabIndex, setTabIndex] = useState<number>(0);
+    const [recipeId, setRecipeId] = useState<string | undefined>();
+    const handleTabSwitch = (event: SyntheticEvent, newValue: number) => {
+        setTabIndex(newValue)
+    }
+    const handleItemClick = (recipe: RecipeType) => {
+        setRecipeId(recipe.id);
+    };
+    useEffect(() => {
+        selectedRecipeDispatch({
+            type: StateActionTypes.SELECT_RECIPE,
+            value: recipeId ? recipeId : null,
+            filter: tabIndex === 1
+        } as SelectRecipeAction);
+    }, [recipeId, tabIndex, selectedRecipeDispatch])
+
+        return (
+            <Drawer variant="permanent" anchor="left">
+                <Tabs value={tabIndex} onChange={handleTabSwitch} aria-label="basic tabs example">
+                    <Tab label="All"/>
+                    <Tab label="Filter"/>
+                </Tabs>
+                <RecipeNavigationList handleItemClick={handleItemClick}/>
+            </Drawer>
+        );
 }

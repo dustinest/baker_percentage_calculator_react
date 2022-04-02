@@ -2,7 +2,7 @@ import {readJsonRecipe} from "./JsonRecipeReader";
 
 describe("JsonRecipeType can be read", () => {
     it ("Simple recipe is OK", async () => {
-        const result = await readJsonRecipe(    {
+        const result = readJsonRecipe(    {
                 name: "Täisteraleib",
                 bakingTime: [
                     { time: 20, temperature: 240 },
@@ -45,7 +45,7 @@ describe("JsonRecipeType can be read", () => {
     });
 
     it ("When amount is in percentage", async () => {
-        const result = await readJsonRecipe(    {
+        const result = readJsonRecipe(    {
                 name: "Täisteraleib",
                 bakingTime: [
                     { time: 20, temperature: 240 },
@@ -88,7 +88,7 @@ describe("JsonRecipeType can be read", () => {
     });
 
     it ("Test with dry", async () => {
-        const result = await readJsonRecipe(    {
+        const result = readJsonRecipe(    {
             name: "Sai seemnetega",
             description: "Sisetemperatuur 88℃ - 99℃",
             bakingTime: [

@@ -1,16 +1,46 @@
 import {RecipeItem} from "./RecipeItem";
-import {JsonRecipeTypeWithLabel} from "./JsonRecipeTypeWithLabel";
+import {useContext, useEffect, useMemo, useState} from "react";
+import {RecipesContext, SelectedRecipeContext} from "../../State";
+import {RecipeType} from "../../models";
 
-type RecipeListProps = {
-    recipes: JsonRecipeTypeWithLabel[];
-}
+export const RecipeList = () => {
+    const [recipesList, setRecipesList] = useState<RecipeType[]>([]);
+    const {recipes} = useContext(RecipesContext);
+    const {selectedRecipe} = useContext(SelectedRecipeContext);
 
-export const RecipeList = ({recipes}: RecipeListProps) => {
-    return (
-        <>
-        <div className="recipes">
-            { recipes.map((recipe, index) => (<RecipeItem recipe={recipe} key={index}/>)) }
-        </div>
-        </>
-    )
+    useEffect(() => {
+        const id = selectedRecipe.selectedRecipe?.id;
+        if (id === undefined || id === null) {
+            setRecipesList(recipes.recipes);
+            return;
+        }
+        if (selectedRecipe.selectedRecipe?.filter) {
+            setRecipesList(recipes.recipes.filter((e) => e.id === id));
+            return;
+        } else if (id) {
+            const element = document.getElementById(id);
+            if (element) {
+                if (element.scrollIntoView !== undefined) {
+                    element.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                } else if (window.scrollTo !== undefined) {
+                    window.scrollTo(element.offsetLeft, element.offsetTop);
+                } else {
+                    document.location.hash = id;
+                }
+            }
+        }
+        setRecipesList(recipes.recipes);
+    }, [recipes, selectedRecipe]);
+
+    return useMemo(() => {
+        return (
+                <div className="recipes">
+                    {recipesList.map((recipe) => (<RecipeItem recipe={recipe} key={recipe.id} showComponents={selectedRecipe.selectedRecipe?.filter === true}/>))}
+                </div>
+        );
+        // Filter is unnecessary to filter here
+        // eslint-disable-next-line
+    }, [recipesList]);
 }

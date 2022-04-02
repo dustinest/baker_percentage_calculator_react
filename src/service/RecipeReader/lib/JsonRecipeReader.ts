@@ -60,7 +60,7 @@ const getPredefined = (ingredient: JsonRecipeIngredientsIngredientType, grams?: 
     return PREDEFINED_INGREDIENT[type](_grams).toType();
 }
 
-export const readJsonRecipe = async (recipe: JsonRecipeType): Promise<RecipeType> => {
+export const readJsonRecipe = (recipe: JsonRecipeType): RecipeType => {
     const result = {
         id: resolveJsonRecipeTypeId(recipe),
         name: recipe.name,

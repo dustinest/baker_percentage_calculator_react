@@ -16,8 +16,10 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {TranslatedLabel} from "../common/TranslatedLabel";
-import {JsonRecipeTypeWithLabel} from "./JsonRecipeTypeWithLabel";
 import "./RecipeItem.css";
+import {RecipeType} from "../../models";
+import {useTranslation} from "react-i18next";
+import {getJsonRecipeTypeLabel} from "../../service/RecipeReader";
 
 const RenderMicros = ({microNutrients}: {microNutrients: BakerPercentageResult}) => {
     return (<Typography variant="body1" className="baker-percentage" component="div"><BakerPercentage microNutrientsResult={microNutrients.microNutrients}/></Typography>)
@@ -26,12 +28,14 @@ const RenderMicros = ({microNutrients}: {microNutrients: BakerPercentageResult})
 type RecipeItemToRenderProps = {
     recipe: UseRecipeItemValues;
     onGramsChange: (grams: number, ingredientIndex: number, index: number) => Promise<void>;
+    showComponents: boolean;
 }
 
-const RecipeItemToRender = ({recipe, onGramsChange}: RecipeItemToRenderProps) => {
+const RecipeItemToRender = ({recipe, onGramsChange, showComponents}: RecipeItemToRenderProps) => {
     const [isExpanded, setExpanded] = useState<boolean>(false);
 
     return (<>
+        {showComponents ? (
         <section className="edit">
             <Accordion expanded={isExpanded} onChange={(_, i) => {setExpanded(i)}}>
                 <AccordionSummary
@@ -50,6 +54,7 @@ const RecipeItemToRender = ({recipe, onGramsChange}: RecipeItemToRenderProps) =>
             </Accordion>
             <RecipeJson recipe={recipe.recipe.raw}/>
         </section>
+            ) : undefined }
         <section className="recipe">
             <IngredientsItems ingredients={recipe.ingredients.microNutrients.ingredients} recipe={recipe.recipe.recipe} />
         </section>
@@ -59,7 +64,8 @@ const RecipeItemToRender = ({recipe, onGramsChange}: RecipeItemToRenderProps) =>
 }
 
 type RecipeItemProps = {
-    recipe: JsonRecipeTypeWithLabel;
+    recipe: RecipeType;
+    showComponents: boolean;
 }
 
 const RecipeLoader = () => {
@@ -72,10 +78,12 @@ const RecipeLoader = () => {
             <Skeleton />
         </div>);
 }
-export const RecipeItem = ({recipe}: RecipeItemProps) => {
+export const RecipeItem = ({recipe, showComponents}: RecipeItemProps) => {
     const {result, setGrams} = UseRecipe(recipe);
+    const translate = useTranslation();
+
     return (<article id={recipe.id}><Card variant="outlined" className="recipe">
-        <CardHeader title={recipe.label}/>
-        {result.result ? <RecipeItemToRender recipe={result.result} onGramsChange={setGrams}/> : <RecipeLoader /> }
+        <CardHeader title={getJsonRecipeTypeLabel(recipe, translate.t(recipe.name))}/>
+        {result.result ? <RecipeItemToRender recipe={result.result} onGramsChange={setGrams} showComponents={showComponents}/> : <RecipeLoader /> }
     </Card></article>)
 };
