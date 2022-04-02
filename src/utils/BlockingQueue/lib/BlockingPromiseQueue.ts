@@ -1,3 +1,5 @@
+import {BlockingPromiseQueue} from "../type/BlockingPromiseQueue.d";
+
 const generateToken = (): string => {
     const startStr = Date.now().toString();
     const endStr = Math.floor((1 + Math.random()) * 0x10000)
@@ -6,7 +8,7 @@ const generateToken = (): string => {
     return `${startStr}-${endStr}`;
 };
 
-export class BlockingPromiseQueue {
+export class BlockingPromiseQueueImpl implements BlockingPromiseQueue {
     private blockingQueue: string[] = [];
 
     private waitQueueEnd(token: string | null): Promise<void> {
@@ -50,3 +52,5 @@ export class BlockingPromiseQueue {
         return this.waitQueueEnd(null).then(callable);
     }
 }
+
+export const newBlockingPromiseQueue = (): BlockingPromiseQueue => new BlockingPromiseQueueImpl();

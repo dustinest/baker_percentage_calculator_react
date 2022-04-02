@@ -1,8 +1,8 @@
-import { BlockingPromiseQueue } from "./BlockingPromiseQueue";
+import {newBlockingPromiseQueue} from "./BlockingPromiseQueue";
 
 describe("Blocking promise works", () => {
     it("When queue is unblocked", async () => {
-        const blockingPromiseQueue = new BlockingPromiseQueue();
+        const blockingPromiseQueue = newBlockingPromiseQueue();
 
         const waitingResult1 = await blockingPromiseQueue.whenUnblocked(() =>
             Promise.resolve("abc")
@@ -23,7 +23,7 @@ describe("Blocking promise works", () => {
     });
 
     it("When queue is blocking", async () => {
-        const queue = new BlockingPromiseQueue();
+        const queue = newBlockingPromiseQueue();
 
         const values: number[] = [];
 

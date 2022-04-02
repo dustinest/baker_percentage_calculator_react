@@ -4,7 +4,7 @@ import {RecipeList} from "./recipe/RecipeList";
 import {JsonRecipeType} from "../service/RecipeReader/types";
 import {GramsAmountType} from "../models/types";
 import {CircularProgress} from "@mui/material";
-import {AsyncStatus, useAsyncEffect} from "../service/AsyncHooks";
+import {AsyncStatus, useAsyncEffect} from "../utils/Async";
 import {useTranslation} from "react-i18next";
 import {getJsonRecipeTypeLabel, resolveJsonRecipeTypeId} from "../service/RecipeReader";
 import {JsonRecipeTypeWithLabel} from "./recipe/JsonRecipeTypeWithLabel";

@@ -1,6 +1,6 @@
 import {TableCell, TableHead, TableRow} from "@mui/material";
 import {TranslatedLabel} from "./TranslatedLabel";
-import {normalizeNumber} from "../../utils/NumberValue";
+import {normalizeNumber} from "../../utils/Numbers";
 import {useTranslation} from "react-i18next";
 
 

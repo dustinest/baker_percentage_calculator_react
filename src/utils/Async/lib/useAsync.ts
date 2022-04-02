@@ -10,34 +10,28 @@ import {
 } from "../type/AsyncStatus.d";
 import {useLatest} from "./useLatest";
 
-interface AsyncReducerState<ValueType, ErrorType> {
+interface AsyncReducedState<ValueType, ErrorType> {
     status: AsyncStatus;
     value?: ValueType;
     error?: ErrorType;
 }
 
-type AsyncActionStatus<T extends AsyncStatus> = {
-    status: T;
-}
-
 type AsyncActionSuccess<ValueType> = {
+    status: AsyncStatus.SUCCESS;
     value: ValueType;
-} & AsyncActionStatus<AsyncStatus.SUCCESS>
-
+}
 type AsyncActionError<ErrorType> = {
+    status: AsyncStatus.ERROR;
     error?: ErrorType
-} & AsyncActionStatus<AsyncStatus.ERROR>
-
-type AsyncStatusIdle = AsyncActionStatus<AsyncStatus.IDLE>
-type AsyncStatusLoading = AsyncActionStatus<AsyncStatus.LOADING>
-type AsyncStatusCancelled = AsyncActionStatus<AsyncStatus.CANCELLED>
+}
+type AsyncStatusPending = {
+    status: AsyncStatus.IDLE | AsyncStatus.LOADING | AsyncStatus.CANCELLED;
+}
 
 type AsyncAction<ValueType, ErrorType> =
     AsyncActionSuccess<ValueType> |
     AsyncActionError<ErrorType> |
-    AsyncStatusIdle |
-    AsyncStatusLoading |
-    AsyncStatusCancelled;
+    AsyncStatusPending;
 
 export function useAsync<
     ValueType extends any = any,
@@ -46,30 +40,17 @@ export function useAsync<
     >(asyncCallback: (...args: Args) => Promise<ValueType>) {
     const [state, dispatch] = useReducer<
         Reducer<
-            AsyncReducerState<ValueType, ErrorType>,
+            AsyncReducedState<ValueType, ErrorType>,
             AsyncAction<ValueType, ErrorType>
             >,
         undefined
         >((prev, action) => ({
-            // This is the current status of the promise or async/await function. A
-            // promise or async/await can only be in one state at a time.
             status: action.status,
-            // The value is persisted between 'success' statuses. This means I can
-            // still display things that depend on my current value while my new
-            // value is loading.
             value: action.status === AsyncStatus.SUCCESS ? (action as AsyncActionSuccess<ValueType>).value : prev.value,
-            // Errors get reset each time we leave the error state. There's really
-            // no use in keeping those around. They go stale once we leave.
             error: action.status === AsyncStatus.ERROR ? (action as AsyncActionError<ErrorType>).error : void 0,
-        }),
+        } as AsyncReducedState<ValueType, ErrorType>),
         void 0,
-        () => {
-            return {
-                status: AsyncStatus.IDLE,
-                value: void 0,
-                error: void 0,
-            }
-        }
+        () => ({ status: AsyncStatus.IDLE, value: void 0, error: void 0 } as AsyncStatusPending)
     );
 
     // Creates a stable callback that manages our loading/success/error status updates
@@ -84,7 +65,7 @@ export function useAsync<
             async (...args: Args) => {
                 // Reloading automatically cancels previous promises
                 cancelled.add(previous)
-                dispatch({status: AsyncStatus.LOADING} as AsyncStatusLoading)
+                dispatch({status: AsyncStatus.LOADING} as AsyncStatusPending)
                 let current: Promise<ValueType> | null = null
 
                 try {

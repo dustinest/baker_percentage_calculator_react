@@ -6,9 +6,8 @@ import {splitStarterAndDough} from "../../service/SourdoughStarter";
 import {RecipeIngredients} from "../../models/interfaces/RecipeIngredients";
 import {JsonRecipeType} from "../../service/RecipeReader/types";
 import {RecipeType} from "../../models/types";
-import {AsyncResulError, AsyncStatus, useAsync, useAsyncEffect} from "../../service/AsyncHooks";
-import {runLater} from "../../utils/RunLater";
-import {BlockingPromiseQueue} from "../../utils/BlockingPromiseQueue";
+import {AsyncResulError, AsyncStatus, useAsync, useAsyncEffect} from "../../utils/Async";
+import {newBlockingPromiseQueue} from "../../utils/BlockingQueue";
 
 export type UseRecipeValues = {
     recipe: {
@@ -37,8 +36,8 @@ const resolveRecipeType = async (recipe: JsonRecipeType, recipeType?: RecipeType
 }
 
 const blockAndRunLater = (() => {
-    const queue = new BlockingPromiseQueue();
-    return (callable: () => Promise<any>) => queue.blockAndRun(() => runLater(callable));
+    const queue = newBlockingPromiseQueue();
+    return (callable: () => Promise<any>) => queue.blockAndRun(callable);
 })();
 
 export const UseRecipe = (recipe: JsonRecipeType): { result: UseRecipeResult; setGrams: SetValueProps; } => {

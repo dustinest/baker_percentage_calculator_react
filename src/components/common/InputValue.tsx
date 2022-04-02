@@ -1,5 +1,5 @@
 import {ChangeEvent, useEffect, useState} from "react";
-import {normalizeNumber} from "../../utils/NumberValue";
+import {normalizeNumber} from "../../utils/Numbers";
 import {InputAdornment, OutlinedInput, TextField} from "@mui/material";
 
 export type SuffixType = "g" | "%";
