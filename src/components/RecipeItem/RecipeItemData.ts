@@ -81,7 +81,7 @@ export const UseRecipe = (recipe: RecipeType): UseRecipeResultType => {
     }
 
     const setName = async(name: string) => {
-        if (!name || name.trim().length == 0 || recipeTypeValue.name === name) {
+        if (!name || name.trim().length === 0 || recipeTypeValue.name === name) {
             return;
         }
         await withRecipeArgs (async (recipeType) => {
