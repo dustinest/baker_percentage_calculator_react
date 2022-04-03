@@ -12,10 +12,10 @@ export type RecipeIdNameAndAmount = {
     label: string;
 }
 
-export const getJsonRecipeTypeLabel = (value: { amount?: number }, name: string): string => {
+export const getJsonRecipeTypeLabel = (value: { amount: number, name: string }): string => {
     if (value.amount && value.amount > 0) {
-        return `${name} x ${value.amount}`;
+        return `${value.name} x ${value.amount}`;
     } else {
-        return name;
+        return value.name;
     }
 }

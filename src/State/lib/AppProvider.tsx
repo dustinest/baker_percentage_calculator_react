@@ -1,45 +1,25 @@
 import {createContext, Dispatch, useReducer, ReactNode, useMemo} from "react";
 import {StateActions} from "../type/StateActions.d";
-import {RecipesState, SelectedRecipeState} from "../type/AppState";
-import {setRecipeReducer, updateRecipesReducer} from "./recipesReducer";
+import {updateRecipesReducer} from "./recipesReducer";
+import {RecipeType} from "../../models";
 
-const initialRecipesState:RecipesState = { recipes: [] }
-const initialSelectedRecipeState:SelectedRecipeState = {
-    id: null,
-    filter: false
-}
+const initialRecipesState: RecipeType[] = []
 
 type RecipesContextType = {
-    recipes: RecipesState;
+    recipes:  RecipeType[];
     recipesDispatch: Dispatch<StateActions>;
 };
 
 export const RecipesContext = createContext<RecipesContextType>({recipes: initialRecipesState, recipesDispatch: () => null });
 
-type SelectedRecipeContextType = {
-    selectedRecipe: SelectedRecipeState;
-    selectedRecipeDispatch: Dispatch<StateActions>;
-};
-
-export const SelectedRecipeContext = createContext<SelectedRecipeContextType>({selectedRecipe: initialSelectedRecipeState, selectedRecipeDispatch: () => null });
-
-
 const combinedRecipesStateReducers = (
-    { recipes }: RecipesState,
+    recipes: RecipeType[],
     action: StateActions
-) => ({
-    recipes: updateRecipesReducer(recipes, action)
-});
-
-const combinedSelectedRecipeSateReducers = (
-    state: SelectedRecipeState,
-    action: StateActions
-) => setRecipeReducer(state, action);
+) => updateRecipesReducer(recipes, action);
 
 
-export const AppProvider = ({ children }: { children: ReactNode }) => {
+export const RecipesProvider = ({ children }: { children: ReactNode }) => {
     const [recipes, recipesDispatch] = useReducer(combinedRecipesStateReducers, initialRecipesState);
-    const [selectedRecipe, selectedRecipeDispatch] = useReducer(combinedSelectedRecipeSateReducers, initialSelectedRecipeState);
     // Watches for any changes in the state and keeps the state update in sync
     //Refresh state on any action dispatched
     /*
@@ -54,27 +34,21 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         recipes, recipesDispatch
     }), [recipes]);
 
-    const selectedRecipesMemo = useMemo(() => ({
-        selectedRecipe, selectedRecipeDispatch
-    }), [selectedRecipe]);
-
     return (
-        <SelectedRecipeContext.Provider value={selectedRecipesMemo}>
         <RecipesContext.Provider value={recipesMemo}>
                 {children}
         </RecipesContext.Provider>
-        </SelectedRecipeContext.Provider>
     );
 };
 
-export const RecipesContextConsumer = ({ children }: { children: (args: RecipesContextType) => ReactNode }) => {
+export const RecipesConsumer = ({ children }: { children: (args: RecipeType[]) => ReactNode }) => {
     return (
         <RecipesContext.Consumer>
             {(context) => {
                 if (context === undefined) {
                     throw new Error('CountConsumer must be used within a CountProvider')
                 }
-                return children(context)
+                return children(context.recipes)
             }}
         </RecipesContext.Consumer>
     )

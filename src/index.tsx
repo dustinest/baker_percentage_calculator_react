@@ -2,13 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import {AppProvider} from "./State";
+import {RecipesProvider} from "./State";
 
 ReactDOM.render(
   <React.StrictMode>
-      <AppProvider>
+      <RecipesProvider>
           <App />
-      </AppProvider>
+      </RecipesProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -1,9 +1,8 @@
-import {ReactNode, SyntheticEvent, useContext, useEffect, useState} from "react";
-import {Divider, Drawer, IconButton, styled, Tab, Tabs} from "@mui/material";
+import {ReactNode, useState} from "react";
+import {Divider, Drawer, IconButton, styled} from "@mui/material";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import {useTranslation} from "react-i18next";
-import {SelectedRecipeContext, SetFilterAction, StateActionTypes} from "../../State";
 
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -16,22 +15,10 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export const MenuCollapsable = ({ children }: { children: ReactNode }) => {
     const translation = useTranslation();
-    const {selectedRecipe, selectedRecipeDispatch} = useContext(SelectedRecipeContext);
     const [open, setOpen] = useState<boolean>(false);
 
     const handleDrawerOpen = () => setOpen(true);
     const handleDrawerClose = () => setOpen(false);
-
-    const [tabIndex, setTabIndex] = useState<number>(selectedRecipe.filter ? 1 : 0);
-    const handleTabSwitch = (event: SyntheticEvent, newValue: number) => {
-        selectedRecipeDispatch({
-            type: StateActionTypes.SET_FILTER,
-            value: newValue === 1,
-        } as SetFilterAction);
-    }
-    useEffect(() => {
-        setTabIndex(selectedRecipe.filter ? 1 : 0);
-    }, [selectedRecipe])
 
     return (<>
         <IconButton color="inherit" className="menu-trigger" aria-label={translation.t("Menu")} sx={{
@@ -45,10 +32,6 @@ export const MenuCollapsable = ({ children }: { children: ReactNode }) => {
                     anchor="left"
                     open={open}>
             <DrawerHeader>
-                <Tabs value={tabIndex} onChange={handleTabSwitch} aria-label="basic tabs example">
-                    <Tab label={translation.t("All")}/>
-                    <Tab label={translation.t("Edit")}/>
-                </Tabs>
                 <IconButton onClick={handleDrawerClose}><ChevronLeftIcon /></IconButton>
             </DrawerHeader>
             <Divider />

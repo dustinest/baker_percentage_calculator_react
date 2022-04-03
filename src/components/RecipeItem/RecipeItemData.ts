@@ -24,15 +24,18 @@ export type UseRecipeResult = {
     loading: boolean;
 }
 
-type SetValueProps = (value: number, ingredientIndex: number, index: number) => Promise<void>;
-
+type UseRecipeResultType = {
+    result: UseRecipeResult;
+    setGrams: (value: number, ingredientIndex: number, index: number) => Promise<void>;
+    setName: (value: string) => Promise<void>
+};
 
 const blockAndRunLater = (() => {
     const queue = newBlockingPromiseQueue();
     return (callable: () => Promise<any>) => queue.blockAndRun(callable);
 })();
 
-export const UseRecipe = (recipe: RecipeType): { result: UseRecipeResult; setGrams: SetValueProps; } => {
+export const UseRecipe = (recipe: RecipeType): UseRecipeResultType => {
     const [recipeTypeValue, setRecipeTypeValue] = useState<RecipeType>(recipe);
     const [result, setResult] = useState<UseRecipeResult>({loading: true});
 
@@ -61,14 +64,32 @@ export const UseRecipe = (recipe: RecipeType): { result: UseRecipeResult; setGra
 
     const loader = useAsyncEffect(() => blockAndRunLater(loadRecipeArgs), [recipe])
 
-    const setGrams = async(grams: number, ingredientIndex: number, index: number) => {
-        if (recipeTypeValue && recipeTypeValue.ingredients[ingredientIndex].ingredients[index].grams !== grams) {
-            const recipeType = {...recipeTypeValue};
-            recipeType.ingredients[ingredientIndex].ingredients[index].grams = grams;
-            // noinspection ES6MissingAwait
-            loadRecipeArgs(recipeType);
+    const withRecipeArgs = async (callable: (newRecipe: RecipeType) => Promise<RecipeType | undefined>) => {
+        const result = await callable({...recipeTypeValue});
+        if (result) {
+            await loadRecipeArgs(result);
         }
     }
+
+    const setGrams = async(grams: number, ingredientIndex: number, index: number) => {
+        if (recipeTypeValue && recipeTypeValue.ingredients[ingredientIndex].ingredients[index].grams !== grams) {
+            await withRecipeArgs (async (recipeType) => {
+                recipeType.ingredients[ingredientIndex].ingredients[index].grams = grams;
+                return recipeType;
+            });
+        }
+    }
+
+    const setName = async(name: string) => {
+        if (!name || name.trim().length == 0 || recipeTypeValue.name === name) {
+            return;
+        }
+        await withRecipeArgs (async (recipeType) => {
+            recipeType.name = name.trim();
+            return recipeType;
+        });
+    }
+
     useEffect(() => {
         if (loader.failed) {
             setResult({
@@ -100,6 +121,7 @@ export const UseRecipe = (recipe: RecipeType): { result: UseRecipeResult; setGra
 
     return {
         result: result,
-        setGrams
+        setGrams,
+        setName
     }
 };
