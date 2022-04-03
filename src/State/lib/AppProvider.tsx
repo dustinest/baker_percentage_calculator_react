@@ -4,7 +4,10 @@ import {RecipesState, SelectedRecipeState} from "../type/AppState";
 import {setRecipeReducer, updateRecipesReducer} from "./recipesReducer";
 
 const initialRecipesState:RecipesState = { recipes: [] }
-const initialSelectedRecipeState:SelectedRecipeState = { selectedRecipe: null }
+const initialSelectedRecipeState:SelectedRecipeState = {
+    id: null,
+    filter: false
+}
 
 type RecipesContextType = {
     recipes: RecipesState;
@@ -29,11 +32,9 @@ const combinedRecipesStateReducers = (
 });
 
 const combinedSelectedRecipeSateReducers = (
-    { selectedRecipe }: SelectedRecipeState,
+    state: SelectedRecipeState,
     action: StateActions
-) => ({
-    selectedRecipe: setRecipeReducer(selectedRecipe, action)
-});
+) => setRecipeReducer(state, action);
 
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {

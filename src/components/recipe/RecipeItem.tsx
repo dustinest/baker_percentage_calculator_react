@@ -1,22 +1,17 @@
 import {IngredientsItems} from "./IngredientsItem";
 import {RenderBakingTimeAware} from "./RenderBakingTimeAware";
-import {useContext, useState} from "react";
+import {useContext} from "react";
 import {BakerPercentageResult} from "../../utils/BakerPercentageCalulation";
 import {BakerPercentage} from "./BakerPercentage";
 import {UseRecipe, UseRecipeItemValues} from "./RecipeItemData";
 import {RecipeJson} from "./RecipeJson";
 import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
     Button,
     Card,
     CardHeader,
     Skeleton,
     Typography
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {TranslatedLabel} from "../common/TranslatedLabel";
 import "./RecipeItem.css";
 import {RecipeType} from "../../models";
 import {useTranslation} from "react-i18next";
@@ -35,7 +30,6 @@ type RecipeItemToRenderProps = {
 }
 
 const RecipeItemToRender = ({recipe, onGramsChange, showComponents}: RecipeItemToRenderProps) => {
-    const [isExpanded, setExpanded] = useState<boolean>(false);
     const {recipesDispatch} = useContext(RecipesContext);
     const onSubmit = () => {
         recipesDispatch({
@@ -46,31 +40,20 @@ const RecipeItemToRender = ({recipe, onGramsChange, showComponents}: RecipeItemT
 
     return (<>
         {showComponents ? (
-        <section className="edit">
-            <Accordion expanded={isExpanded} onChange={(_, i) => {setExpanded(i)}}>
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                >
-                    <Typography><TranslatedLabel label="Recipe components"/></Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                    <section className="ingredients">
-                        <IngredientsItems ingredients={recipe.recipe.microNutrients.ingredients} recipe={recipe.recipe.recipe} onGramsChange={onGramsChange} />
-                    </section>
-                    <Button variant="contained" onClick={onSubmit} startIcon={<PlaylistAddCheckIcon />}> Ok </Button>
-                    <RenderMicros microNutrients={recipe.recipe.microNutrients}/>
-                </AccordionDetails>
-            </Accordion>
-            <RecipeJson recipe={recipe.recipe.raw}/>
-        </section>
-            ) : undefined }
+            <section className="edit">
+                <section className="ingredients">
+                    <IngredientsItems ingredients={recipe.recipe.microNutrients.ingredients} recipe={recipe.recipe.recipe} onGramsChange={onGramsChange} />
+                </section>
+                <Button variant="contained" onClick={onSubmit} startIcon={<PlaylistAddCheckIcon />}> Ok </Button>
+                <RenderMicros microNutrients={recipe.recipe.microNutrients}/>
+            </section>
+        ) : undefined }
         <section className="recipe">
             <IngredientsItems ingredients={recipe.ingredients.microNutrients.ingredients} recipe={recipe.recipe.recipe} />
         </section>
         <RenderBakingTimeAware value={recipe.recipe.recipe}/>
         <RenderMicros microNutrients={recipe.ingredients.microNutrients}/>
+        {showComponents ? <RecipeJson recipe={recipe.recipe.raw}/> : undefined }
     </>)
 }
 

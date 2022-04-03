@@ -1,10 +1,16 @@
 import './RecipeNavigation.css';
-import {Drawer, List, ListItem, ListItemText, Tab, Tabs} from "@mui/material";
-import {SyntheticEvent, useContext, useEffect, useMemo, useState} from "react";
-import {RecipesContext, SelectedRecipeContext, SelectRecipeAction, StateActionTypes} from "../../State";
+import {List, ListItem, ListItemText} from "@mui/material";
+import {useContext, useEffect, useMemo, useState} from "react";
+import {
+    RecipesContext,
+    SelectedRecipeContext,
+    SelectRecipeAction,
+    StateActionTypes
+} from "../../State";
 import {RecipeType} from "../../models";
 import {useTranslation} from "react-i18next";
 import {getJsonRecipeTypeLabel} from "../../service/RecipeReader";
+import {MenuCollapsable} from "../containers/MenuCollapsable";
 
 const RecipeMenuItem = ({recipe, onSelect}: { recipe: RecipeType, onSelect: () => void }) => {
     const translate = useTranslation();
@@ -32,11 +38,8 @@ const RecipeNavigationList = ({handleItemClick}: { handleItemClick: (recipe: Rec
 
 export const RecipeNavigation = () => {
     const {selectedRecipeDispatch} = useContext(SelectedRecipeContext);
-    const [tabIndex, setTabIndex] = useState<number>(0);
     const [recipeId, setRecipeId] = useState<string | undefined>();
-    const handleTabSwitch = (event: SyntheticEvent, newValue: number) => {
-        setTabIndex(newValue)
-    }
+
     const handleItemClick = (recipe: RecipeType) => {
         setRecipeId(recipe.id);
     };
@@ -44,17 +47,12 @@ export const RecipeNavigation = () => {
         selectedRecipeDispatch({
             type: StateActionTypes.SELECT_RECIPE,
             value: recipeId ? recipeId : null,
-            filter: tabIndex === 1
         } as SelectRecipeAction);
-    }, [recipeId, tabIndex, selectedRecipeDispatch])
+    }, [recipeId, selectedRecipeDispatch])
 
         return (
-            <Drawer variant="permanent" anchor="left">
-                <Tabs value={tabIndex} onChange={handleTabSwitch} aria-label="basic tabs example">
-                    <Tab label="All"/>
-                    <Tab label="Filter"/>
-                </Tabs>
+            <MenuCollapsable>
                 <RecipeNavigationList handleItemClick={handleItemClick}/>
-            </Drawer>
+            </MenuCollapsable>
         );
 }

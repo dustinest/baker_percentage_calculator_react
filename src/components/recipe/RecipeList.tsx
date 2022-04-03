@@ -9,27 +9,26 @@ export const RecipeList = () => {
     const {selectedRecipe} = useContext(SelectedRecipeContext);
 
     useEffect(() => {
-        const id = selectedRecipe.selectedRecipe?.id;
-        if (id === undefined || id === null) {
+        if (selectedRecipe.id === undefined || selectedRecipe.id === null) {
             setRecipesList(recipes.recipes);
             return;
         }
-        if (selectedRecipe.selectedRecipe?.filter) {
-            setRecipesList(recipes.recipes.filter((e) => e.id === id));
+        if (selectedRecipe.filter) {
+            setRecipesList(recipes.recipes.filter((e) => e.id === selectedRecipe.id));
             return;
-        } else if (id) {
-            const element = document.getElementById(id);
-            if (element) {
-                if (element.scrollIntoView !== undefined) {
-                    element.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                } else if (window.scrollTo !== undefined) {
-                    window.scrollTo(element.offsetLeft, element.offsetTop);
-                } else {
-                    document.location.hash = id;
-                }
-            }
+        }
+        const element = document.getElementById(selectedRecipe.id);
+        if (!element) {
+            return;
+        }
+        if (element.scrollIntoView !== undefined) {
+            element.scrollIntoView({
+                behavior: 'smooth'
+            });
+        } else if (window.scrollTo !== undefined) {
+            window.scrollTo(element.offsetLeft, element.offsetTop);
+        } else {
+            document.location.hash = selectedRecipe.id;
         }
         setRecipesList(recipes.recipes);
     }, [recipes, selectedRecipe]);
@@ -37,7 +36,7 @@ export const RecipeList = () => {
     return useMemo(() => {
         return (
                 <div className="recipes">
-                    {recipesList.map((recipe) => (<RecipeItem recipe={recipe} key={recipe.id} showComponents={selectedRecipe.selectedRecipe?.filter === true}/>))}
+                    {recipesList.map((recipe) => (<RecipeItem recipe={recipe} key={recipe.id} showComponents={selectedRecipe.filter}/>))}
                 </div>
         );
         // Filter is unnecessary to filter here

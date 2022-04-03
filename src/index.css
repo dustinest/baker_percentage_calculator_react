@@ -38,11 +38,6 @@ ul.bakingTimes {
 }
 
 
-div.recipes {
-  margin-left: 12em;
-  padding: 0 2em;
-}
-
 table th {
   font-size: 1em!important;
 }
@@ -58,7 +53,12 @@ table.baker-percentage td, table.baker-percentage th {
   font-size: 0.8em;
 }
 
+
 @media print {
+  section.edit, .menu-trigger, .MuiDrawer-root {
+    display: none!important;
+  }
+
   .MuiCardHeader-root .MuiTypography-h5 {
     font-size: 1.2rem!important;
   }
@@ -81,15 +81,12 @@ table.baker-percentage td, table.baker-percentage th {
 
   article section {
     margin: 0 auto;
-    /*display: inline-block;*/
     float: none;
     padding: 0;
     page-break-inside: avoid;
   }
 
-  section.edit {
-    display: none;
-  }
+
 
   article {
     display: block;

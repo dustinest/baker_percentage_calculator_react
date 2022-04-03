@@ -1,6 +1,6 @@
 import {StateActions, StateActionTypes} from "../type/StateActions.d";
-import {SelectedRecipeType} from "../type/AppState";
 import {RecipeType} from "../../models";
+import {SelectedRecipeState} from "../type/AppState";
 
 export const updateRecipesReducer = (recipes: RecipeType[], action: StateActions): RecipeType[] => {
     if (action.type === StateActionTypes.SET_RECIPES) {
@@ -24,12 +24,20 @@ export const updateRecipesReducer = (recipes: RecipeType[], action: StateActions
     return recipes;
 }
 
-export const setRecipeReducer = (selectedRecipe: SelectedRecipeType | null, action:StateActions): SelectedRecipeType | null => {
-    if (action.type === StateActionTypes.SELECT_RECIPE && (action.value !== selectedRecipe?.id || action.filter !== selectedRecipe?.filter)) {
+export const setRecipeReducer = (selectedRecipe: SelectedRecipeState, action:StateActions): SelectedRecipeState => {
+    if (action.type === StateActionTypes.SELECT_RECIPE && action.value !== selectedRecipe.id) {
+        console.log("Selected: ", selectedRecipe.filter, action.value);
         return {
             id: action.value,
-            filter: action.filter
-        } as SelectedRecipeType;
+            filter: selectedRecipe.filter
+        } as SelectedRecipeState;
+    }
+    if (action.type === StateActionTypes.SET_FILTER && action.value !== selectedRecipe.filter) {
+        console.log("Selected: ", selectedRecipe.filter, "Set Selected: ", action.value);
+        return {
+            id: selectedRecipe.id,
+            filter: action.value
+        } as SelectedRecipeState;
     }
     return selectedRecipe;
 }
