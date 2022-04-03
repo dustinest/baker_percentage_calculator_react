@@ -53,12 +53,24 @@ table.baker-percentage td, table.baker-percentage th {
   font-size: 0.8em;
 }
 
+table {
+  width: 100%;
+}
 
 @media print {
-  section.edit, .menu-trigger, .MuiDrawer-root {
+  section.edit, .menu-trigger, .MuiDrawer-root, .MuiCardHeader-action {
     display: none!important;
   }
 
+  .MuiPaper-root {
+    border-width: 0!important;
+    padding: 0;
+    margin: 0;
+  }
+
+  .MuiTableCell-root {
+    padding: 0.5em!important;
+  }
   .MuiCardHeader-root .MuiTypography-h5 {
     font-size: 1.2rem!important;
   }
@@ -86,8 +98,6 @@ table.baker-percentage td, table.baker-percentage th {
     page-break-inside: avoid;
   }
 
-
-
   article {
     display: block;
     float: none;
@@ -100,11 +110,5 @@ table.baker-percentage td, table.baker-percentage th {
     height: 100%;
     page-break-after: always;
     text-align: center;
-  }
-
-  article .MuiPaper-root {
-    border-width: 0;
-    padding: 0;
-    margin: 0;
   }
 }

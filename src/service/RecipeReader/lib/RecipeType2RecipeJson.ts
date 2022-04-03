@@ -12,7 +12,7 @@ import {
     JsonRecipeIngredientsType,
     JsonRecipeType
 } from "../types";
-import {generateJsonDryIngredientId, generateJsonRecipeTypeId} from "./Base64";
+import {resolveJsonRecipeTypeId, resolveJsonDryIngredientId} from "./JsonRecepyIdGenerator";
 
 const normalizeNumberIntervalType = (time: NumberIntervalType): NumberIntervalType | number  => {
     if (time.from === time.until) return time.from;
@@ -46,7 +46,7 @@ const normalizeIngredient = (ingredient: IngredientGramsType): JsonRecipeIngredi
             grams: ingredient.grams
         } as JsonRecipeIngredientConstantGramsType
     } else if (ingredient.nutrients.find(e => e.type === "dry") &&
-        generateJsonDryIngredientId({ type: "DRY", name: ingredient.name } as JsonDryIngredient, ingredient.grams) === ingredient.id) {
+        resolveJsonDryIngredientId({ type: "DRY", name: ingredient.name } as JsonDryIngredient, ingredient.grams) === ingredient.id) {
         const nutrients = ingredient.nutrients.filter(e => e.type !== "dry");
         const result = {
             type: "DRY",
@@ -85,7 +85,7 @@ export const recipeType2RecipeJson = async (recipe: RecipeType):Promise<JsonReci
         ingredients: recipe.ingredients.map(normalizeIngredients)
     };
     if (recipe.amount > 0) { result.amount = recipe.amount; }
-    const id = generateJsonRecipeTypeId(result);
+    const id = resolveJsonRecipeTypeId(result);
 
     if (id !== recipe.id) { result.id = recipe.id; }
     if (recipe.description) { result.description = recipe.description; }

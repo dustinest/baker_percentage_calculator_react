@@ -15,9 +15,8 @@ import {
     RecipeType,
     PREDEFINED_INGREDIENT
 } from "../../../models";
-import {resolveJsonRecipeTypeId} from "./JsonRecepyIdGenerator";
+import {resolveJsonRecipeTypeId, resolveJsonDryIngredientId} from "./JsonRecepyIdGenerator";
 import {calculateFlourAndWaterPercent} from "../../DryAndLiquidCalculator/FlourAndWaterCalculation";
-import {generateJsonDryIngredientId} from "./Base64";
 
 
 type JsonIngredientGramsType = IngredientGramsType | JsonRecipeIngredientConstantGramsType | JsonDryIngredientGrams;
@@ -54,7 +53,7 @@ const getPredefined = (ingredient: JsonRecipeIngredientsIngredientType, grams?: 
     if (type === "DRY") {
         const dryIngredient = ingredient as JsonDryIngredient;
         const name = dryIngredient.name;
-        const id = dryIngredient.id ? dryIngredient.id : generateJsonDryIngredientId(dryIngredient, _grams);
+        const id =  resolveJsonDryIngredientId(dryIngredient, _grams);
         return PREDEFINED_INGREDIENT.DRY(id, name, _grams);
     }
     return PREDEFINED_INGREDIENT[type](_grams).toType();
