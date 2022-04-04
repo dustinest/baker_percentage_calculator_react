@@ -67,7 +67,7 @@ export const readJsonRecipe = (recipe: JsonRecipeType): RecipeType => {
         bakingTime: resolveBakingTime(recipe.bakingTime),
         innerTemperature: resolveInnerTemperature(recipe.innerTemperature),
         description: recipe.description,
-        amount: recipe.amount || 0,
+        amount: recipe.amount || 1,
     } as RecipeType;
 
     const toBeCalculated = {

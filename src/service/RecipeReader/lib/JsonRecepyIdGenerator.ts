@@ -12,7 +12,7 @@ export const resolveJsonDryIngredientId = (ingredient: JsonDryIngredient, grams:
 }
 
 export const getJsonRecipeTypeLabel = (value: { amount: number, name: string }): string => {
-    if (value.amount && value.amount > 0) {
+    if (value.amount && value.amount > 1) {
         return `${value.name} x ${value.amount}`;
     } else {
         return value.name;
