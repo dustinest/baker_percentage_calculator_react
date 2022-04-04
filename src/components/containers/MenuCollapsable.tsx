@@ -1,8 +1,7 @@
 import {ReactNode, useState} from "react";
-import {Divider, Drawer, IconButton, styled} from "@mui/material";
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
-import {useTranslation} from "react-i18next";
+import {Divider, Drawer, styled} from "@mui/material";
+import {MenuCloseIcon, MenuOpenIcon} from "../common/Icons";
+import {RIconButton} from "../common/RButton";
 
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -14,25 +13,22 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export const MenuCollapsable = ({ children }: { children: ReactNode }) => {
-    const translation = useTranslation();
     const [open, setOpen] = useState<boolean>(false);
 
     const handleDrawerOpen = () => setOpen(true);
     const handleDrawerClose = () => setOpen(false);
 
     return (<>
-        <IconButton color="inherit" className="menu-trigger" aria-label={translation.t("Menu")} sx={{
+        <RIconButton className="menu-trigger" onClick={handleDrawerOpen} icon={<MenuOpenIcon />} label="Menu" sx={{
             position: 'fixed',
             top: 0,
             left: 0,
-        }}  onClick={handleDrawerOpen}>
-            <MenuOutlinedIcon />
-        </IconButton >
+        }} />
         <Drawer variant="persistent"
                     anchor="left"
                     open={open}>
             <DrawerHeader>
-                <IconButton onClick={handleDrawerClose}><ChevronLeftIcon /></IconButton>
+                <RIconButton onClick={handleDrawerClose} icon={<MenuCloseIcon />} label="CLose menu"/>
             </DrawerHeader>
             <Divider />
             {children}

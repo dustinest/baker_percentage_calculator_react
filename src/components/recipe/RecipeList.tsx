@@ -34,6 +34,7 @@ export const RecipeList = () => {
                         recipe={recipe}
                         key={recipe.id}
                         onEdit={() => onEdit(recipe.id)}
+                        onCancel={() => setEditRecipeId(undefined)}
                         onSave={onSave}/>
                     ))}
                 </div>

@@ -10,7 +10,6 @@ export type UseRecipeItemValues = {
     recipe: {
         recipe: Recipe;
         microNutrients: BakerPercentageResult;
-        raw: RecipeType
     }
     ingredients: {
         ingredients: RecipeIngredients[];
@@ -18,16 +17,17 @@ export type UseRecipeItemValues = {
     }
 }
 
-export type UseRecipeResult = {
+export type UseRecipeActions = {
+    cancel: () => void;
+
+    setGrams: (value: number, ingredientIndex: number, index: number) => Promise<void>;
+    setName: (value: string) => Promise<void>
+}
+
+export type UseRecipeResultStatus = {
     result?: UseRecipeItemValues;
     error?: Error;
     loading: boolean;
-}
-
-type UseRecipeResultType = {
-    result: UseRecipeResult;
-    setGrams: (value: number, ingredientIndex: number, index: number) => Promise<void>;
-    setName: (value: string) => Promise<void>
 };
 
 const blockAndRunLater = (() => {
@@ -35,9 +35,13 @@ const blockAndRunLater = (() => {
     return (callable: () => Promise<any>) => queue.blockAndRun(callable);
 })();
 
-export const UseRecipe = (recipe: RecipeType): UseRecipeResultType => {
+export const UseRecipe = (recipe: RecipeType): [RecipeType, UseRecipeActions, UseRecipeResultStatus] => {
     const [recipeTypeValue, setRecipeTypeValue] = useState<RecipeType>(recipe);
-    const [result, setResult] = useState<UseRecipeResult>({loading: true});
+    const [result, setResult] = useState<{
+        result?: UseRecipeItemValues;
+        error?: Error;
+        loading: boolean;
+    }>({loading: true});
 
     const [recipeArgs, loadRecipeArgs] = useAsync<UseRecipeItemValues>(async (recipeType?: RecipeType) => {
         if (recipeType === undefined) {
@@ -52,8 +56,7 @@ export const UseRecipe = (recipe: RecipeType): UseRecipeResultType => {
         return {
             recipe: {
                 recipe: _recipe,
-                microNutrients: micronutrients,
-                raw: recipeType
+                microNutrients: micronutrients
             },
             ingredients: {
                 ingredients: ingredients,
@@ -65,30 +68,33 @@ export const UseRecipe = (recipe: RecipeType): UseRecipeResultType => {
     const loader = useAsyncEffect(() => blockAndRunLater(loadRecipeArgs), [recipe])
 
     const withRecipeArgs = async (callable: (newRecipe: RecipeType) => Promise<RecipeType | undefined>) => {
-        const result = await callable({...recipeTypeValue});
+        const result = await callable(getRecipe(recipeTypeValue).toType());
         if (result) {
             await loadRecipeArgs(result);
         }
     }
 
-    const setGrams = async(grams: number, ingredientIndex: number, index: number) => {
-        if (recipeTypeValue && recipeTypeValue.ingredients[ingredientIndex].ingredients[index].grams !== grams) {
+    const recipeActions: UseRecipeActions = {
+        cancel: async () => loadRecipeArgs(recipe),
+        setGrams: async(grams: number, ingredientIndex: number, index: number) => {
+            if (recipeTypeValue && recipeTypeValue.ingredients[ingredientIndex].ingredients[index].grams !== grams) {
+                await withRecipeArgs(async (recipeType) => {
+                    recipeType.ingredients[ingredientIndex].ingredients[index].grams = grams;
+                    return recipeType;
+                });
+            }
+        },
+        setName: async(name: string) => {
+            if (!name || name.trim().length === 0 || recipeTypeValue.name === name) {
+                return;
+            }
             await withRecipeArgs (async (recipeType) => {
-                recipeType.ingredients[ingredientIndex].ingredients[index].grams = grams;
+                recipeType.name = name.trim();
                 return recipeType;
             });
         }
     }
 
-    const setName = async(name: string) => {
-        if (!name || name.trim().length === 0 || recipeTypeValue.name === name) {
-            return;
-        }
-        await withRecipeArgs (async (recipeType) => {
-            recipeType.name = name.trim();
-            return recipeType;
-        });
-    }
 
     useEffect(() => {
         if (loader.failed) {
@@ -119,9 +125,5 @@ export const UseRecipe = (recipe: RecipeType): UseRecipeResultType => {
         // eslint-disable-next-line
     }, [recipeArgs])
 
-    return {
-        result: result,
-        setGrams,
-        setName
-    }
+    return [ recipeTypeValue, recipeActions, result ];
 };
