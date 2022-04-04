@@ -1,5 +1,5 @@
 import {ReactNode, useState} from "react";
-import {Divider, Drawer, styled} from "@mui/material";
+import {Divider, Drawer, styled, Typography} from "@mui/material";
 import {MenuCloseIcon, MenuOpenIcon} from "../common/Icons";
 import {RIconButton} from "../common/RButton";
 
@@ -12,7 +12,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-end',
 }));
 
-export const MenuCollapsable = ({ children }: { children: ReactNode }) => {
+export const MenuCollapsable = ({ children, title }: { children: ReactNode, title?: string }) => {
     const [open, setOpen] = useState<boolean>(false);
 
     const handleDrawerOpen = () => setOpen(true);
@@ -28,6 +28,7 @@ export const MenuCollapsable = ({ children }: { children: ReactNode }) => {
                     anchor="left"
                     open={open}>
             <DrawerHeader>
+                <Typography variant="subtitle1" noWrap component="div">{title}</Typography>
                 <RIconButton onClick={handleDrawerClose} icon={<MenuCloseIcon />} label="CLose menu"/>
             </DrawerHeader>
             <Divider />

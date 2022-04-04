@@ -2,11 +2,13 @@ import {PREDEFINED_RECIPES} from "../data/PredefinedRecipes";
 import {RecipeNavigation} from "./recipe/RecipeNavigation";
 import {JsonRecipeType} from "../service/RecipeReader/types";
 import {GramsAmountType, RecipeType} from "../models";
-import {CircularProgress} from "@mui/material";
+import {CircularProgress, IconButton, Snackbar} from "@mui/material";
 import {readJsonRecipe} from "../service/RecipeReader";
 import {useContext, useEffect, useState} from "react";
 import {RecipesContext, StateActionTypes} from "../State";
 import {RecipeList} from "./recipe/RecipeList";
+import {CloseIcon} from "./common/Icons";
+import {useTranslation} from "react-i18next";
 
 const getDouble = (value: JsonRecipeType): JsonRecipeType => {
     return {
@@ -40,14 +42,19 @@ const getRecipes = (): RecipeType[] => {
 }
 
 export const Main = () => {
-    const { recipesDispatch } = useContext(RecipesContext);
+    const translation = useTranslation();
+    const { recipes, recipesDispatch } = useContext(RecipesContext);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Error | undefined>(undefined);
+
+    const [snackBarAmount, setSnackBarAmount] = useState<number>(0);
+    const [showSnackBar, setShowSnackBar] = useState<boolean>(false);
 
     useEffect(() => {
         setLoading(true);
         try {
             const result = getRecipes();
+            setSnackBarAmount(result.length);
             recipesDispatch({
                 type: StateActionTypes.SET_RECIPES,
                 value: result
@@ -58,6 +65,10 @@ export const Main = () => {
             setLoading(false);
         }
     } , [recipesDispatch]);
+
+    useEffect(() => setSnackBarAmount(recipes.length), [recipes]);
+    useEffect(() => setShowSnackBar(snackBarAmount > 0), [snackBarAmount]);
+    const closeSnackBar = () => setShowSnackBar(false);
 
     return (
         <>
@@ -71,6 +82,22 @@ export const Main = () => {
                             </>
                         )
             }
+            <Snackbar
+                open={showSnackBar}
+                autoHideDuration={6000}
+                onClose={closeSnackBar}
+                message={`${translation.t("snackbar.recipes", {count: snackBarAmount})}. ${translation.t("snackbar.print_pages", {count: Math.floor(snackBarAmount / 2)})}`}
+                action={
+                    <IconButton
+                        size="small"
+                        aria-label="close"
+                        color="inherit"
+                        onClick={closeSnackBar}
+                    >
+                        <CloseIcon fontSize="small" />
+                    </IconButton>
+                }
+            />
         </>
     )
 }

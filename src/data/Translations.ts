@@ -1,4 +1,4 @@
-type TranslationValues = {[key: string]: string};
+type TranslationValues = {[key: string]: (string | {[key: string]: string})};
 enum TranslationLanguage {
     en= "en",
     et = "et"
@@ -13,7 +13,13 @@ export const TRANSLATIONS = {
         "Wheat flour_other": "Wheat flour ({{count}} ash)",
         Butter_other: "Butter ({{count}}% fats)",
         "Egg_one": "{{count}} egg",
-        "Egg_other": "{{count}} eggs"
+        "Egg_other": "{{count}} eggs",
+        snackbar: {
+            recipes_one: "one recipe",
+            recipes_other: "{{count}} recipes",
+            print_pages_one: "Print one double side page",
+            print_pages_other: "Print {{count}} double side pages"
+        }
     },
     et: {
         water: "vesi",
@@ -46,6 +52,12 @@ export const TRANSLATIONS = {
         "minutes": "minutit",
         "Bake": "Küpseta",
         "Steam": "Auruta",
-        "Inner temperature": "Sisetemperatuur"
+        "Inner temperature": "Sisetemperatuur",
+        snackbar: {
+            recipes_one: "üks retsept",
+            recipes_other: "{{count}} retsepti",
+            print_pages_one: "Prindid ühe kahepoolse lehe",
+            print_pages_other: "Prindid {{count}} kahepoolse lehte"
+        }
     }
 } as {[key in TranslationLanguage]: TranslationValues}

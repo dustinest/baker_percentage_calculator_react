@@ -58,7 +58,7 @@ table {
 }
 
 @media print {
-  section.edit, .menu-trigger, .MuiDrawer-root, .MuiCardHeader-action {
+  section.edit, .menu-trigger, .MuiDrawer-root, .MuiCardHeader-action, .MuiSnackbar-root {
     display: none!important;
   }
 
