@@ -1,5 +1,5 @@
 import {createContext, Dispatch, useReducer, ReactNode, useMemo} from "react";
-import {StateActions} from "../type/StateActions.d";
+import {RecipesStateActions} from "../type/RecipesStateActions";
 import {updateRecipesReducer} from "./recipesReducer";
 import {RecipeType} from "../../types";
 
@@ -7,15 +7,17 @@ const initialRecipesState: RecipeType[] = []
 
 type RecipesContextType = {
     recipes:  RecipeType[];
-    recipesDispatch: Dispatch<StateActions>;
+    recipesDispatch: Dispatch<RecipesStateActions>;
 };
 
-export const RecipesContext = createContext<RecipesContextType>({recipes: initialRecipesState, recipesDispatch: () => null });
+export const RecipesContext = createContext<RecipesContextType>({recipes: initialRecipesState, recipesDispatch: () => null } as RecipesContextType);
 
 const combinedRecipesStateReducers = (
     recipes: RecipeType[],
-    action: StateActions
+    action: RecipesStateActions
 ) => updateRecipesReducer(recipes, action);
+
+
 
 
 export const RecipesProvider = ({ children }: { children: ReactNode }) => {
@@ -26,7 +28,7 @@ export const RecipesProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         //Update the localstorage after detected change
         localStorage.setItem(APP_STATE_NAME, JSON.stringify(state));
-    }, [state]);
+    }, [recipes]);
      */
     /*
      */

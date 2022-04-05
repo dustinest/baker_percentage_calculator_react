@@ -9,6 +9,9 @@ import {getJsonRecipeTypeLabel} from "../../../service/RecipeReader";
 import {RIconButton} from "../../common/RButton";
 import {RecipeEditIcon} from "../../common/Icons";
 import {RecipeLoader} from "./RecipeLoader";
+import {useContext} from "react";
+import {EditRecipeStateActionTypes} from "../../../State";
+import {EditRecipeContext} from "../../../State/lib/EditRecipeProvider";
 
 
 export const RecipeItemData  = ({recipe, result, error, loading}: UseRecipeResultStatus & {recipe: RecipeType}) => {
@@ -29,21 +32,27 @@ export const RecipeItemData  = ({recipe, result, error, loading}: UseRecipeResul
 
 type RecipeItemHeaderProps = {
   recipe: RecipeType;
-  onEdit: () => void;
 }
 
-const RecipeItemHeader = ({recipe, onEdit}: RecipeItemHeaderProps) => {
+const RecipeItemHeader = ({recipe}: RecipeItemHeaderProps) => {
+  const { editRecipeDispatch } = useContext(EditRecipeContext);
+  const editRecipe = () => {
+    editRecipeDispatch({
+      type: EditRecipeStateActionTypes.EDIT_RECIPE,
+      value: recipe
+    });
+  }
   const translation = useTranslation();
-  return (<CardHeader title={getJsonRecipeTypeLabel(recipe)} action={<RIconButton icon={<RecipeEditIcon />} label={translation.t("Edit")}  onClick={onEdit}/>}/>);
+  return (<CardHeader title={getJsonRecipeTypeLabel(recipe)} action={<RIconButton icon={<RecipeEditIcon />} label={translation.t("Edit")}  onClick={editRecipe}/>}/>);
 }
 
 type RecipeItemDetailsProps = RecipeItemHeaderProps;
 
-export const RecipeItemDetails = ({recipe, onEdit}: RecipeItemDetailsProps) => {
+export const RecipeItemDetails = ({recipe}: RecipeItemDetailsProps) => {
   const {result, error, loading} = useRecipeType(recipe);
 
   return (<>
-    <RecipeItemHeader recipe={recipe} onEdit={onEdit}/>
+    <RecipeItemHeader recipe={recipe}/>
     <RecipeItemData recipe={recipe} result={result} error={error} loading={loading}/>
    </>);
 }

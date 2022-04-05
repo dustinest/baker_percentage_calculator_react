@@ -1,5 +1,3 @@
-import {useRecipeItemData} from "./UseRecipeType";
-import {RecipeType} from "../../../types";
 import {IngredientsItems} from "../IngredientsItem";
 import {RecipeJson} from "../RecipeJson";
 import {RecipeItemData} from "./RecipeItemData";
@@ -8,41 +6,36 @@ import {InputValue} from "../../common/InputValue";
 import {RecipeCancelIcon, RecipeSaveIcon} from "../../common/Icons";
 import {useTranslation} from "react-i18next";
 import {RecipeLoader} from "./RecipeLoader";
+import {useRecipeItemEdit} from "./useRecipeItemEdit";
 
-type RecipeEditDialogProps = {
-  recipe: RecipeType;
-  edit: boolean;
-  onSave: (recipe: RecipeType) => void;
-  onCancel: () => void;
-}
-export const RecipeEditDialog = ({edit, recipe, onSave, onCancel}: RecipeEditDialogProps) => {
+export const RecipeEditDialog = () => {
   const translation = useTranslation();
-  const [recipeTypeValue, {cancel, setGrams, setName, setAmount}, {result, error, loading}] = useRecipeItemData(recipe);
+  const {
+    isEdit,
+    editData,
+    result, error, loading,
+    saveRecipe, onCancelAction, setGrams, setName, setAmount
+  } = useRecipeItemEdit();
 
-  const onCancelAction = () => {
-    cancel();
-    onCancel();
-  }
-
-  return (<Dialog open={edit}>
+  return (<Dialog open={isEdit}>
     <DialogTitle id="customized-dialog-title">
-      <InputValue value={recipeTypeValue.name} onChange={setName} label={translation.t("Name")}/>
-      <InputValue value={recipeTypeValue.amount} onChange={setAmount} label={translation.t("Amount")}/>
+      <InputValue value={editData?.recipe?.name || ""} onChange={setName} label={translation.t("Name")}/>
+      <InputValue value={editData?.recipe?.amount || 0} onChange={setAmount} label={translation.t("Amount")}/>
     </DialogTitle >
     <DialogContent dividers>
-      { result ? <>
+      { editData ? <>
         <section className="edit">
           <section className="ingredients">
-            <IngredientsItems ingredients={result.recipe.microNutrients.ingredients} recipe={recipeTypeValue} onGramsChange={setGrams} />
+            <IngredientsItems ingredients={editData.status.recipe.microNutrients.ingredients} recipe={editData.recipe} onGramsChange={setGrams} />
           </section>
         </section>
-        <RecipeItemData result={result} error={error} loading={loading} recipe={recipeTypeValue}/>
-        <RecipeJson recipe={recipeTypeValue}/>
+        <RecipeItemData result={result} error={error} loading={loading} recipe={editData.recipe}/>
+        <RecipeJson recipe={editData.recipe}/>
       </> : <RecipeLoader/> }
     </DialogContent>
     <DialogActions>
       <Button onClick={onCancelAction} startIcon={<RecipeCancelIcon/>}>{translation.t("Cancel")}</Button>
-      <Button onClick={() => onSave(recipeTypeValue)} startIcon={<RecipeSaveIcon/>}>{translation.t("Save")}</Button>
+      <Button onClick={saveRecipe} startIcon={<RecipeSaveIcon/>}>{translation.t("Save")}</Button>
     </DialogActions>
   </Dialog>);
 };

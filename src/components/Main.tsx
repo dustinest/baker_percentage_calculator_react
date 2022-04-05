@@ -5,10 +5,12 @@ import {GramsAmountType, RecipeType} from "../types";
 import {CircularProgress, IconButton, Snackbar} from "@mui/material";
 import {readJsonRecipe} from "../service/RecipeReader";
 import {useContext, useEffect, useState} from "react";
-import {RecipesContext, StateActionTypes} from "../State";
+import {RecipesContext, RecipesStateActionTypes} from "../State";
 import {RecipeList} from "./recipe/RecipeList";
 import {CloseIcon} from "./common/Icons";
 import {useTranslation} from "react-i18next";
+import {EditRecipeProvider} from "../State/lib/EditRecipeProvider";
+import {RecipeEditDialog} from "./RecipeItem/RecipeItemDetails/RecipeItemEdit";
 
 const getDouble = (value: JsonRecipeType): JsonRecipeType => {
     return {
@@ -56,7 +58,7 @@ export const Main = () => {
             const result = getRecipes();
             setSnackBarAmount(result.length);
             recipesDispatch({
-                type: StateActionTypes.SET_RECIPES,
+                type: RecipesStateActionTypes.SET_RECIPES,
                 value: result
             });
         } catch (error) {
@@ -78,7 +80,7 @@ export const Main = () => {
                         (
                             <>
                                 <RecipeNavigation/>
-                                <RecipeList/>
+                                <EditRecipeProvider><RecipeEditDialog/><RecipeList/></EditRecipeProvider>
                             </>
                         )
             }

@@ -1,2 +1,3 @@
-export * from "./lib/AppProvider";
-export * from "./type/StateActions.d";
+export * from "./lib/RecipesProvider";
+export * from "./type/RecipesStateActions.d";
+export * from "./type/EditRecipeStateAction.d";
