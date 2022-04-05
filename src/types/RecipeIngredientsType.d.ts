@@ -1,8 +1,8 @@
 import {IngredientGramsType} from "./IngredientType";
-import {InnerTemperatureAwareType} from "./InnerTemperatureAwareType";
+import {BakingAwareType} from "./BakingAware";
 
 export type RecipeIngredientsType = {
     name?: string;
     ingredients: IngredientGramsType[];
     starter?: boolean; // to be included with starter. A corner case. Check pancakes
-} & InnerTemperatureAwareType;
+} & BakingAwareType;

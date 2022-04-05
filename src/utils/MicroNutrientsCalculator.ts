@@ -1,8 +1,4 @@
-import {
-    DRY_NUTRIENTS,
-    NutritionType,
-    RecipeIngredients
-} from "../models";
+import {DRY_NUTRIENTS, NutritionType, RecipeIngredientsType} from "../types";
 
 export type MicroNutrientsCalculationDetails = {
     getPercent(): number;
@@ -20,19 +16,19 @@ const dummyMicroNutrientsCalculationDetails: MicroNutrientsCalculationDetails = 
     getPercent(): number { return 0; },
 };
 
-export const calculateMicroNutrientsResult = (recipeIngredients: RecipeIngredients[]): MicroNutrientsCalculationResult => {
+export const calculateMicroNutrientsResult = (recipeIngredients: RecipeIngredientsType[]): MicroNutrientsCalculationResult => {
     const microNutrients = new Map<NutritionType, number>();
 
     const dryNutrients = recipeIngredients
-        .flatMap((ingredients) => ingredients.getIngredients())
+        .flatMap((ingredients) => ingredients.ingredients)
         .map((ingredient) =>
-            ingredient.getNutrients().map((nutrient) => {
-                const grams = nutrient.getPercent() > 0 && ingredient.getGrams() > 0 ? ingredient.getGrams() * nutrient.getPercent() / 100 : 0;
+            ingredient.nutrients.map((nutrient) => {
+                const grams = nutrient.percent > 0 && ingredient.grams > 0 ? ingredient.grams * nutrient.percent / 100 : 0;
                 if (grams <= 0) return 0;
 
-                microNutrients.set(nutrient.getType(), (microNutrients.get(nutrient.getType()) || 0) + grams);
+                microNutrients.set(nutrient.type, (microNutrients.get(nutrient.type) || 0) + grams);
 
-                return DRY_NUTRIENTS.includes(nutrient.getType()) ? grams : 0;
+                return DRY_NUTRIENTS.includes(nutrient.type) ? grams : 0;
             }).reduce((a1, a2) => a1 + a2, 0)
         ).reduce((a1, a2) => a1 + a2, 0);
 

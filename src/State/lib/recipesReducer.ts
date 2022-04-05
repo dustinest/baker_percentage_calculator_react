@@ -1,5 +1,5 @@
 import {StateActions, StateActionTypes} from "../type/StateActions.d";
-import {RecipeType} from "../../models";
+import {RecipeType} from "../../types";
 
 export const updateRecipesReducer = (recipes: RecipeType[], action: StateActions): RecipeType[] => {
     if (action.type === StateActionTypes.SET_RECIPES) {

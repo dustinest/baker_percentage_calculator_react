@@ -1,4 +1,4 @@
-import {NumberIntervalType} from "../../../models";
+import {NumberIntervalType} from "../../../types";
 
 export type JsonNumberIntervalType = NumberIntervalType | number;
 

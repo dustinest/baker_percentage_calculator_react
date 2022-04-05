@@ -1,17 +1,15 @@
 import {
-    getSimpleRecipeIngredients,
-    RecipeIngredients,
+    copyIngredientGramsType,
+    copyRecipeIngredientsType,
     IngredientGramsType,
+    RecipeIngredientsType,
     NutritionType
-} from "../../models";
+} from "../../types";
 import {calculateStarter, StarterIngredients} from "./FirstIngredientCalculator";
 
-const remapIngredient = (ingredient: IngredientGramsType, grams?: number): IngredientGramsType => {
-    if (grams !== undefined) {
-        return {...ingredient, ...{grams: grams}};
-    }
-    return {...ingredient};
-}
+const remapIngredient = (ingredient: IngredientGramsType, grams?: number): IngredientGramsType =>
+  copyIngredientGramsType(grams !== undefined ? {...ingredient, ...{grams: grams}} : ingredient);
+
 
 const calculate = (container: IngredientGramsType[], starterIngredients: IngredientGramsType[], leftovers: IngredientGramsType[], dryAndLiquid: StarterIngredients) => {
     let counted = 0;
@@ -33,7 +31,7 @@ const calculate = (container: IngredientGramsType[], starterIngredients: Ingredi
     });
 };
 
-export const splitStarterAndDough = async (recipeName: string, recipeIngredients: RecipeIngredients[]): Promise<RecipeIngredients[]> => {
+export const splitStarterAndDough = async (recipeName: string, recipeIngredients: RecipeIngredientsType[]): Promise<RecipeIngredientsType[]> => {
     const dryAndLiquid = await calculateStarter(recipeIngredients);
     if (dryAndLiquid === undefined) return [];
 
@@ -50,10 +48,10 @@ export const splitStarterAndDough = async (recipeName: string, recipeIngredients
     calculate(dryAndLiquid.ingredients.dry, starterIngredients, leftovers, dryAndLiquid?.starter.flour);
     calculate(dryAndLiquid.ingredients.liquid, starterIngredients, leftovers, dryAndLiquid?.starter.liquid);
 
-    const result: RecipeIngredients[] = [];
+    const result: RecipeIngredientsType[] = [];
     recipeIngredients.forEach((ingredients, index) => {
         if (index > 0) {
-            result.push(getSimpleRecipeIngredients(ingredients));
+            result.push(copyRecipeIngredientsType(ingredients));
             return;
         }
         const nonStarter: IngredientGramsType[] = [...leftovers.filter(e => Math.floor(e.grams) > 0)];
@@ -63,39 +61,39 @@ export const splitStarterAndDough = async (recipeName: string, recipeIngredients
         if (dryAndLiquid.starter.flour.isFixed) { // check the pancakes
             const toAdd: IngredientGramsType[] = starterIngredients.filter((e) => !nonStarter.find(o => o.id === e.id));
             // @ts-ignore
-            const _others: IngredientGramsType[] = ingredients.getIngredients().map((o) => {
-                const _toAdd = toAdd.find(e => e.id === o.getId());
+            const _others: IngredientGramsType[] = ingredients.ingredients.map((o) => {
+                const _toAdd = toAdd.find(e => e.id === o.id);
                 if (_toAdd) {
                     //_toAdd.grams = o.grams;
                     return undefined;
                 }
-                const item = starterIngredients.find(e => e.id === o.getId());
-                if (!item) return remapIngredient(o.toType());
-                return remapIngredient(o.toType(), o.getGrams() - dryAndLiquid?.starter.flour.fridge);
+                const item = starterIngredients.find(e => e.id === o.id);
+                if (!item) return remapIngredient(o);
+                return remapIngredient(o, o.grams - dryAndLiquid?.starter.flour.fridge);
             }).filter((o) => o !== undefined && o !== null);
 
-            result.push(getSimpleRecipeIngredients({
-                name: ingredients.getName() || "Dough",
+            result.push(copyRecipeIngredientsType({
+                name: ingredients.name || "Dough",
                 ingredients: _others.length > 0 ? [...toAdd, ..._others] : [...toAdd],
                 bakingTime: [],
                 innerTemperature: null,
-                description: undefined
+                description: null
             }));
             return;
         }
-        result.push(getSimpleRecipeIngredients({
+        result.push(copyRecipeIngredientsType({
             name: "Eeltaigen",
             ingredients: starterIngredients,
             bakingTime: [],
             innerTemperature: null,
-            description: undefined
+            description: null
         }))
-        result.push(getSimpleRecipeIngredients({
-            name: ingredients.getName() || "Dough",
+        result.push(copyRecipeIngredientsType({
+            name: ingredients.name || "Dough",
             ingredients: nonStarter,
-            bakingTime: ingredients.getBakingTime().map(e => e.toType()),
-            innerTemperature: ingredients.getInnerTemperature()?.toType() || null,
-            description: ingredients.getDescription() || undefined
+            bakingTime: ingredients.bakingTime,
+            innerTemperature: ingredients.innerTemperature,
+            description: ingredients.description
         }))
         return;
     });

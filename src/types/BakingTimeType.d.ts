@@ -5,3 +5,4 @@ export type BakingTimeType = {
     temperature: NumberIntervalType;
     steam: boolean;
 };
+

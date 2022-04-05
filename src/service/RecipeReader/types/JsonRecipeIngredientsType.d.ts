@@ -1,16 +1,16 @@
-import {IngredientGramsType, IngredientPercentType} from "../../../models";
+import {IngredientGramsType, IngredientPercentType} from "../../../types";
 import {
-    JsonDryIngredientGrams, JsonDryIngredientPercentage,
-    JsonRecipeIngredientConstantGramsType, JsonRecipeIngredientConstantPercentType,
+    JsonExtraStandardIngredientGrams, JsonExtraStandardIngredientPercentage,
+    JsonStandardIngredientTypeGramsType, JsonStandardIngredientTypePercentType,
 } from "./JsonRecipeIngredientType";
 import {JsonBakingTimeType, JsonNumberIntervalType} from "./JsonBakingTimeType";
 
 export type JsonRecipeIngredientsIngredientType = IngredientGramsType |
     IngredientPercentType |
-    JsonRecipeIngredientConstantGramsType |
-    JsonRecipeIngredientConstantPercentType |
-    JsonDryIngredientGrams |
-    JsonDryIngredientPercentage;
+    JsonStandardIngredientTypeGramsType |
+    JsonStandardIngredientTypePercentType |
+    JsonExtraStandardIngredientGrams |
+    JsonExtraStandardIngredientPercentage;
 
 export type JsonRecipeIngredientsType = {
     name?: string;

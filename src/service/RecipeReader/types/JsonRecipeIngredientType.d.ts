@@ -1,18 +1,18 @@
-import {GramsAmountType, PercentAmountType} from "../../../models";
-import {PredefinedIngredientConstant} from "../../../models";
+import {GramsAmountType, PercentAmountType} from "../../../types";
+import {ExtraStandardIngredient, StandardIngredient, StandardIngredients} from "../../../Constant/Ingredient";
 
-export type JsonRecipeIngredientConstantType = {
-    type: keyof PredefinedIngredientConstant;
+export type JsonStandardIngredientType = {
+    type: keyof StandardIngredients;
 };
 
-export type JsonDryIngredient = {
+export type JsonExtraStandardIngredientType = {
     id?: string;
-    type: "DRY",
+    type: keyof ExtraStandardIngredient,
     name: string,
 }
 
-export type JsonDryIngredientGrams = JsonDryIngredient & GramsAmountType;
-export type JsonDryIngredientPercentage = JsonDryIngredient & PercentAmountType;
+export type JsonExtraStandardIngredientGrams = JsonExtraStandardIngredientType & GramsAmountType;
+export type JsonExtraStandardIngredientPercentage = JsonExtraStandardIngredientType & PercentAmountType;
 
-export type JsonRecipeIngredientConstantGramsType = JsonRecipeIngredientConstantType & GramsAmountType;
-export type JsonRecipeIngredientConstantPercentType = JsonRecipeIngredientConstantType & PercentAmountType;
+export type JsonStandardIngredientTypeGramsType = JsonStandardIngredientType & GramsAmountType;
+export type JsonStandardIngredientTypePercentType = JsonStandardIngredientType & PercentAmountType;

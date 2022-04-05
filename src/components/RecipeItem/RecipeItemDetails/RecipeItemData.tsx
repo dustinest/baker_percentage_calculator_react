@@ -1,5 +1,5 @@
 import {UseRecipeResultStatus, useRecipeType} from "./UseRecipeType";
-import {RecipeType} from "../../../models";
+import {RecipeType} from "../../../types";
 import {IngredientsItems} from "../IngredientsItem";
 import {RenderBakingTimeAware} from "../RenderBakingTimeAware";
 import {MicroNutrients} from "./MicroNutrients";
@@ -11,15 +11,15 @@ import {RecipeEditIcon} from "../../common/Icons";
 import {RecipeLoader} from "./RecipeLoader";
 
 
-export const RecipeItemData  = ({result, error, loading}: UseRecipeResultStatus) => {
+export const RecipeItemData  = ({recipe, result, error, loading}: UseRecipeResultStatus & {recipe: RecipeType}) => {
   return (<>
     {
       loading ? <RecipeLoader/>:
         result ? <>
           <section className="recipe">
-            <IngredientsItems ingredients={result.recipe.microNutrients.ingredients} recipe={result.recipe.recipe} />
+            <IngredientsItems ingredients={result.recipe.microNutrients.ingredients} recipe={recipe} />
           </section>
-          <RenderBakingTimeAware value={result.recipe.recipe}/>
+          <RenderBakingTimeAware value={recipe}/>
           <MicroNutrients microNutrients={result.ingredients.microNutrients}/>
         </>:
           <Typography variant="body2" display="block" gutterBottom>{error?.toString()}</Typography>
@@ -44,6 +44,6 @@ export const RecipeItemDetails = ({recipe, onEdit}: RecipeItemDetailsProps) => {
 
   return (<>
     <RecipeItemHeader recipe={recipe} onEdit={onEdit}/>
-    <RecipeItemData result={result} error={error} loading={loading}/>
+    <RecipeItemData recipe={recipe} result={result} error={error} loading={loading}/>
    </>);
 }

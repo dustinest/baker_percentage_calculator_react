@@ -1,36 +1,35 @@
-import {NutritionType, Recipe} from "../../models";
 import {RenderBakingTimeAware} from "./RenderBakingTimeAware";
-import {IngredientWithPercent, RecipeIngredientsWithPercent} from "../../utils/BakerPercentageCalulation";
+import {
+    IngredientWithPercentType,
+    RecipeIngredientsWithPercentType
+} from "../../utils/BakerPercentageCalulation";
 import {TableBody} from "@mui/material";
 import {RTableHead, RTableRow} from "../common/RTable";
 import {InputValue} from "../common/InputValue";
+import {NutritionType, RecipeType} from "../../types";
 
 type IngredientsItemProps = {
-    ingredients: RecipeIngredientsWithPercent;
-    recipe: Recipe,
+    ingredients: RecipeIngredientsWithPercentType;
+    recipe: RecipeType,
     onGramsChange?: (value: number, index: number) => Promise<void>,
     onPercentChange?: (value: number, index: number) => Promise<void>,
 }
 
-const mapIngredient = (ingredient: IngredientWithPercent) => {
+const mapIngredient = (ingredient: IngredientWithPercentType) => {
     const result = {
-        key: ingredient.getId(),
-        label: ingredient.getName(),
-        type: ingredient.getId(),
-        grams: ingredient.getGrams(),
-        percent: ingredient.getPercent(),
+        key: ingredient.id,
+        label: ingredient.name,
+        type: ingredient.id,
+        grams: ingredient.grams,
+        percent: ingredient.percent,
         fat: 0,
         ash: 0
     };
-    const fat = ingredient.getNutrients().find(e => e.getType() === NutritionType.fat);
-    const water = ingredient.getNutrients().find(e => e.getType() === NutritionType.water);
-    const ash = ingredient.getNutrients().find(e => e.getType() === NutritionType.ash);
-    if (fat && water) {
-        result.fat = fat.getPercent()
-    }
-    if (ash) {
-        result.ash = ash.getPercent();
-    }
+    const fat = ingredient.nutrients.find(e => e.type === NutritionType.fat);
+    const water = ingredient.nutrients.find(e => e.type === NutritionType.water);
+    const ash = ingredient.nutrients.find(e => e.type === NutritionType.ash);
+    if (fat && water) result.fat = fat.percent;
+    if (ash) result.ash = ash.percent;
     return result;
 }
 
@@ -38,10 +37,10 @@ const IngredientsItem = ({ingredients, recipe, onGramsChange, onPercentChange}: 
     return (
         <>
             <table className="ingredients">
-                {ingredients.getName() && ingredients.getName() !== recipe.getName() ? (<RTableHead label={ingredients.getName() || ""}/>) : undefined}
+                {ingredients.name && ingredients.name !== recipe.name ? (<RTableHead label={ingredients.name || ""}/>) : undefined}
                 <TableBody>
                 {
-                ingredients.getIngredientWithPercent().map(mapIngredient).map((value, index)=>
+                ingredients.ingredientWithPercent.map(mapIngredient).map((value, index)=>
                     (
                         <RTableRow
                             key={index}
@@ -71,8 +70,8 @@ const IngredientsItem = ({ingredients, recipe, onGramsChange, onPercentChange}: 
 
 type IngredientsItemsCallback =  (value: number, ingredientsIndex: number, index: number) => Promise<void>;
 type IngredientsItemsProps = {
-    ingredients: RecipeIngredientsWithPercent[];
-    recipe: Recipe,
+    ingredients: RecipeIngredientsWithPercentType[];
+    recipe: RecipeType,
     onGramsChange?: IngredientsItemsCallback,
     onPercentChange?: IngredientsItemsCallback,
 }

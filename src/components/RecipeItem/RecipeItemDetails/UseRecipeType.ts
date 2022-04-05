@@ -1,18 +1,16 @@
 import {useEffect, useState} from "react";
-import {RecipeIngredients, getRecipe, Recipe} from "../../../models";
 import {BakerPercentageResult, recalculateBakerPercentage} from "../../../utils/BakerPercentageCalulation";
 import {splitStarterAndDough} from "../../../service/SourdoughStarter";
-import {RecipeType} from "../../../models";
+import {copyRecipeType, RecipeIngredientsType, RecipeType} from "../../../types";
 import {AsyncResulError, AsyncStatus, useAsyncEffect} from "../../../utils/Async";
 import {newBlockingPromiseQueue} from "../../../utils/BlockingQueue";
 
 export type UseRecipeItemValues = {
     recipe: {
-        recipe: Recipe;
         microNutrients: BakerPercentageResult;
     }
     ingredients: {
-        ingredients: RecipeIngredients[];
+        ingredients: RecipeIngredientsType[];
         microNutrients: BakerPercentageResult;
     }
 }
@@ -35,13 +33,11 @@ export const useRecipeType = (recipe: RecipeType): UseRecipeResultStatus => {
     }>({loading: true});
 
     const recipeItems = useAsyncEffect<UseRecipeItemValues>(async () => blockAndRunLater(async () => {
-        const _recipe = getRecipe(recipe);
-        const micronutrients = recalculateBakerPercentage(_recipe.getIngredients());
-        const ingredients = await splitStarterAndDough(_recipe.getName(), _recipe.getIngredients());
+        const micronutrients = recalculateBakerPercentage(recipe.ingredients);
+        const ingredients = await splitStarterAndDough(recipe.name, recipe.ingredients);
         const ingredientMicros = recalculateBakerPercentage(ingredients);
         return {
             recipe: {
-                recipe: _recipe,
                 microNutrients: micronutrients
             },
             ingredients: {
@@ -78,7 +74,7 @@ export type UseRecipeActions = {
     cancel: () => void;
     setGrams: (value: number, ingredientIndex: number, index: number) => Promise<void>;
     setName: (value: string) => Promise<void>;
-    setAmount: (valye: number) => Promise<void>;
+    setAmount: (value: number) => Promise<void>;
 }
 
 
@@ -88,7 +84,7 @@ export const useRecipeItemData = (recipe: RecipeType): [RecipeType, UseRecipeAct
     const result = useRecipeType(recipeTypeValue);
 
     const withRecipeArgs = async (callable: (newRecipe: RecipeType) => Promise<RecipeType | undefined>) => {
-        const result = await callable(getRecipe(recipeTypeValue).toType());
+        const result = await callable(copyRecipeType(recipeTypeValue));
         if (result) {
             setRecipeTypeValue(result);
         }

@@ -2,7 +2,7 @@ import {
   Card,
 } from "@mui/material";
 import "./RecipeItem.css";
-import {RecipeType} from "../../models";
+import {RecipeType} from "../../types";
 import {useContext, useState} from "react";
 import {RecipesContext, StateActionTypes, UpdateRecipesAction} from "../../State";
 import {RecipeItemDetails} from "./RecipeItemDetails/RecipeItemData";

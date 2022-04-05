@@ -1,7 +1,7 @@
 import {PREDEFINED_RECIPES} from "../data/PredefinedRecipes";
 import {RecipeNavigation} from "./recipe/RecipeNavigation";
 import {JsonRecipeType} from "../service/RecipeReader/types";
-import {GramsAmountType, RecipeType} from "../models";
+import {GramsAmountType, RecipeType} from "../types";
 import {CircularProgress, IconButton, Snackbar} from "@mui/material";
 import {readJsonRecipe} from "../service/RecipeReader";
 import {useContext, useEffect, useState} from "react";

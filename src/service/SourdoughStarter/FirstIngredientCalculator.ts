@@ -1,5 +1,5 @@
-import {NutritionType, RecipeIngredients} from "../../models";
 import {calculateDryAndLiquid, DryAndLiquidCalculationResult} from "../DryAndLiquidCalculator/DryAndLiquidCalculator";
+import {NutritionType, copyIngredientGramsType, RecipeIngredientsType} from "../../types";
 
 export interface StarterIngredients {
     fridge: number,
@@ -19,8 +19,8 @@ const calculateStarterFlour  = (value: DryAndLiquidCalculationResult): number =>
     return result > 10 ? 10 : result;
 }
 
-export const calculateStarter = async (ingredients: RecipeIngredients[]): Promise<StarterCalculationResult> => {
-    const dryAndLiquidResult = await calculateDryAndLiquid(ingredients[0].getIngredients().map(e => e.toType()));
+export const calculateStarter = async (ingredients: RecipeIngredientsType[]): Promise<StarterCalculationResult> => {
+    const dryAndLiquidResult = await calculateDryAndLiquid(ingredients[0].ingredients.map(copyIngredientGramsType));
     const flour = Math.floor(dryAndLiquidResult.totals.flour);
     const water = Math.floor(dryAndLiquidResult.totals.water);
     const liquid = Math.floor(dryAndLiquidResult.totals.liquid);
@@ -37,12 +37,12 @@ export const calculateStarter = async (ingredients: RecipeIngredients[]): Promis
         ...{
             starter: {
                 flour: {
-                    isFixed: ingredients[0].isStarter(),
+                    isFixed: ingredients[0].starter === true,
                     fridge: flourFromFridge,
                     amount: 0
                 },
                 liquid: {
-                    isFixed: ingredients[0].isStarter(),
+                    isFixed: ingredients[0].starter === true,
                     fridge: flourFromFridge,
                     amount: 0
                 }

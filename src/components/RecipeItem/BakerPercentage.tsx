@@ -1,8 +1,8 @@
-import {DISPLAYABLE_NUTRIENTS_TYPE_ARRAY, NutritionType} from "../../models";
 import {MicroNutrientsCalculationResult} from "../../utils/MicroNutrientsCalculator";
 import {TableBody} from "@mui/material";
 import {RTableHead, RTableRow} from "../common/RTable";
 import {hasValue} from "../../utils/NullSafe";
+import {DISPLAYABLE_NUTRIENTS_TYPE_ARRAY, NutritionType} from "../../types";
 
 type MicroNutrientsResultListParams = {
     microNutrientsResult: MicroNutrientsCalculationResult;

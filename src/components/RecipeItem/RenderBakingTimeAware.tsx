@@ -1,19 +1,18 @@
-import {NumberInterval} from "../../models";
+import {BakingAwareType, NumberIntervalType} from "../../types";
 import {TranslatedLabel} from "../common/TranslatedLabel";
 import {Typography} from "@mui/material";
 import {useTranslation} from "react-i18next";
-import {BakingTimeAware} from "../../models/interfaces/BakingTimeAware";
 
 export type RenderBakingTimeAwareProps = {
-    value: BakingTimeAware;
+    value: BakingAwareType;
 }
 
-const NumberIntervalLabel = ({interval, suffix}: {interval: NumberInterval, suffix?: string}) => {
+const NumberIntervalLabel = ({interval, suffix}: {interval: NumberIntervalType, suffix?: string}) => {
     return (
         <>
-            { interval.getFrom() === interval.getUntil()
-                ? (<>{interval.getFrom()}{suffix ? suffix : undefined}</>)
-                : (<>{interval.getFrom()}{suffix ? suffix : undefined} - {interval.getUntil()}{suffix ? suffix : undefined}</>)
+            { interval.from === interval.until
+                ? (<>{interval.from}{suffix ? suffix : undefined}</>)
+                : (<>{interval.from}{suffix ? suffix : undefined} - {interval.until}{suffix ? suffix : undefined}</>)
             }
         </>
     )
@@ -21,16 +20,16 @@ const NumberIntervalLabel = ({interval, suffix}: {interval: NumberInterval, suff
 
 export const RenderBakingTimeAware = ({value}: RenderBakingTimeAwareProps) => {
     const translate = useTranslation();
-    const innerTemperature:NumberInterval | null = value.getInnerTemperature();
-    const description: null | string = value.getDescription();
+    const innerTemperature:NumberIntervalType | null = value.innerTemperature;
+    const description: null | string = value.description;
     return (
         <>
             {
-                value.getBakingTime().map((bakingTime, index) => (
+                value.bakingTime.map((bakingTime, index) => (
                     <Typography variant="body1" key={index}>
-                        <TranslatedLabel label={bakingTime.isSteam() ? translate.t("Steam") : translate.t("Bake")}/>
+                        <TranslatedLabel label={bakingTime.steam ? translate.t("Steam") : translate.t("Bake")}/>
                         {" "}
-                        <NumberIntervalLabel interval={bakingTime.getInterval()}/> {translate.t("minutes")} <NumberIntervalLabel interval={bakingTime.getTemperature()}/>℃
+                        <NumberIntervalLabel interval={bakingTime.time}/> {translate.t("minutes")} <NumberIntervalLabel interval={bakingTime.temperature}/>℃
                     </Typography>
                 ))
             }

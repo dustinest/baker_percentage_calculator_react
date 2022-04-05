@@ -1,5 +1,5 @@
 import {useRecipeItemData} from "./UseRecipeType";
-import {RecipeType} from "../../../models";
+import {RecipeType} from "../../../types";
 import {IngredientsItems} from "../IngredientsItem";
 import {RecipeJson} from "../RecipeJson";
 import {RecipeItemData} from "./RecipeItemData";
@@ -33,11 +33,11 @@ export const RecipeEditDialog = ({edit, recipe, onSave, onCancel}: RecipeEditDia
       { result ? <>
         <section className="edit">
           <section className="ingredients">
-            <IngredientsItems ingredients={result.recipe.microNutrients.ingredients} recipe={result.recipe.recipe} onGramsChange={setGrams} />
+            <IngredientsItems ingredients={result.recipe.microNutrients.ingredients} recipe={recipeTypeValue} onGramsChange={setGrams} />
           </section>
         </section>
-        <RecipeItemData result={result} error={error} loading={loading}/>
-        <RecipeJson recipe={recipe}/>
+        <RecipeItemData result={result} error={error} loading={loading} recipe={recipeTypeValue}/>
+        <RecipeJson recipe={recipeTypeValue}/>
       </> : <RecipeLoader/> }
     </DialogContent>
     <DialogActions>

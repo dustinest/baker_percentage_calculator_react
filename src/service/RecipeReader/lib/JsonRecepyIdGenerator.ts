@@ -1,4 +1,4 @@
-import {JsonDryIngredient, JsonRecipeType} from "../types";
+import {JsonExtraStandardIngredientType, JsonRecipeType} from "../types";
 import {base64Encode} from "./Base64";
 
 export const resolveJsonRecipeTypeId = (value: JsonRecipeType): string => {
@@ -6,9 +6,9 @@ export const resolveJsonRecipeTypeId = (value: JsonRecipeType): string => {
     return base64Encode(value.name, value.amount || 1);
 };
 
-export const resolveJsonDryIngredientId = (ingredient: JsonDryIngredient, grams: number) => {
+export const resolveJsonExtraStandardIngredient = (ingredient: JsonExtraStandardIngredientType, grams: number) => {
     if (ingredient.id) return ingredient.id;
-    return base64Encode(ingredient.type, ingredient.name, grams);
+    return base64Encode(ingredient.type.toString(), ingredient.name, grams);
 }
 
 export const getJsonRecipeTypeLabel = (value: { amount: number, name: string }): string => {

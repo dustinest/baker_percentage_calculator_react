@@ -1,4 +1,4 @@
-import {RecipeType} from "../../models";
+import {RecipeType} from "../../types";
 import {useEffect, useState} from "react";
 import {recipeType2RecipeJson} from "../../service/RecipeReader";
 import './RecipeJson.css';

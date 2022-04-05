@@ -1,18 +1,22 @@
 import {
+    NutritionType,
     BakingTimeType,
     IngredientGramsType,
     NumberIntervalType,
     RecipeIngredientsType,
     RecipeType,
-    INGREDIENT_CONSTANT
-} from "../../../models";
+} from "../../../types";
 import {
-    JsonBakingTimeType, JsonDryIngredient, JsonDryIngredientGrams, JsonRecipeIngredientConstantGramsType,
+    JsonBakingTimeType,
+    JsonExtraStandardIngredientGrams,
+    JsonExtraStandardIngredientType,
     JsonRecipeIngredientsIngredientType,
     JsonRecipeIngredientsType,
-    JsonRecipeType
+    JsonRecipeType,
+    JsonStandardIngredientTypeGramsType
 } from "../types";
-import {resolveJsonRecipeTypeId, resolveJsonDryIngredientId} from "./JsonRecepyIdGenerator";
+import {resolveJsonExtraStandardIngredient, resolveJsonRecipeTypeId} from "./JsonRecepyIdGenerator";
+import {StandardIngredients} from "../../../Constant/Ingredient";
 
 const normalizeNumberIntervalType = (time: NumberIntervalType): NumberIntervalType | number  => {
     if (time.from === time.until) return time.from;
@@ -33,26 +37,27 @@ const recipeTypeBakingTime2JsonBakingTime = (bakingTime: BakingTimeType): JsonBa
     return result;
 }
 
-const INGREDIENT_CONSTANT_ID_MAP: { [key: string]: string } = Object.keys(INGREDIENT_CONSTANT).reduce((obj,key) => {
-    // @ts-ignore
-    obj[INGREDIENT_CONSTANT[key].id] = key;
+const INGREDIENT_CONSTANT_ID_MAP: { [key: string]: string } = Object.entries(StandardIngredients).reduce((obj,[key, type]) => {
+    obj[type.id] = key;
     return obj;
-}, {});
+}, {} as { [key: string]: string });
 
 const normalizeIngredient = (ingredient: IngredientGramsType): JsonRecipeIngredientsIngredientType => {
     if (INGREDIENT_CONSTANT_ID_MAP[ingredient.id]) {
         return {
             type: INGREDIENT_CONSTANT_ID_MAP[ingredient.id],
             grams: ingredient.grams
-        } as JsonRecipeIngredientConstantGramsType
-    } else if (ingredient.nutrients.find(e => e.type === "dry") &&
-        resolveJsonDryIngredientId({ type: "DRY", name: ingredient.name } as JsonDryIngredient, ingredient.grams) === ingredient.id) {
-        const nutrients = ingredient.nutrients.filter(e => e.type !== "dry");
+        } as JsonStandardIngredientTypeGramsType
+    } else if (ingredient.nutrients.find(e => e.type === NutritionType.dry) &&
+        resolveJsonExtraStandardIngredient(
+          { type: "DRY", name: ingredient.name } as JsonExtraStandardIngredientType,
+          ingredient.grams) === ingredient.id) {
+        const nutrients = ingredient.nutrients.filter(e => e.type !== NutritionType.dry);
         const result = {
             type: "DRY",
             name: ingredient.name,
             grams: ingredient.grams
-        } as JsonDryIngredientGrams;
+        } as JsonExtraStandardIngredientGrams;
         if (nutrients && nutrients.length > 0) {
             // @ts-ignore
             result.nutrients = nutrients;

@@ -1,7 +1,7 @@
 import {createContext, Dispatch, useReducer, ReactNode, useMemo} from "react";
 import {StateActions} from "../type/StateActions.d";
 import {updateRecipesReducer} from "./recipesReducer";
-import {RecipeType} from "../../models";
+import {RecipeType} from "../../types";
 
 const initialRecipesState: RecipeType[] = []
 

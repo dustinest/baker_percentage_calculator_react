@@ -1,8 +1,8 @@
 import {
-    JsonBakingTimeType, JsonDryIngredient,
-    JsonDryIngredientGrams,
-    JsonRecipeIngredientConstantGramsType,
-    JsonRecipeIngredientConstantType,
+    JsonBakingTimeType, JsonExtraStandardIngredientType,
+    JsonExtraStandardIngredientGrams,
+    JsonStandardIngredientTypeGramsType,
+    JsonStandardIngredientType,
     JsonRecipeIngredientsIngredientType,
     JsonRecipeType
 } from "../types";
@@ -12,14 +12,17 @@ import {
     IngredientPercentType,
     NumberIntervalType,
     RecipeIngredientsType,
-    RecipeType,
-    PREDEFINED_INGREDIENT
-} from "../../../models";
-import {resolveJsonRecipeTypeId, resolveJsonDryIngredientId} from "./JsonRecepyIdGenerator";
+    RecipeType
+} from "../../../types";
+import {resolveJsonRecipeTypeId, resolveJsonExtraStandardIngredient} from "./JsonRecepyIdGenerator";
 import {calculateFlourAndWaterPercent} from "../../DryAndLiquidCalculator/FlourAndWaterCalculation";
+import {
+    ExtraStandardIngredientMethods,
+    StandardIngredientMethods,
+} from "../../../Constant/Ingredient";
 
 
-type JsonIngredientGramsType = IngredientGramsType | JsonRecipeIngredientConstantGramsType | JsonDryIngredientGrams;
+type JsonIngredientGramsType = IngredientGramsType | JsonStandardIngredientTypeGramsType | JsonExtraStandardIngredientGrams;
 
 const resolveNumberIntervalType = (value: NumberIntervalType | number): NumberIntervalType => {
     const first: number = typeof value === "number" ? value as number : (value as NumberIntervalType).from;
@@ -48,15 +51,18 @@ const resolveBakingTime = (bakingTimes?: JsonBakingTimeType[]): BakingTimeType[]
 
 
 const getPredefined = (ingredient: JsonRecipeIngredientsIngredientType, grams?: number) => {
-    const type = (ingredient as (JsonRecipeIngredientConstantType | JsonDryIngredient)).type;
+    const type = (ingredient as (JsonStandardIngredientType | JsonExtraStandardIngredientType)).type.toString();
     const _grams = grams || (ingredient as GramsAmountType).grams;
-    if (type === "DRY") {
-        const dryIngredient = ingredient as JsonDryIngredient;
+    // @ts-ignore
+    if (ExtraStandardIngredientMethods[type] !== undefined) {
+        const dryIngredient = ingredient as JsonExtraStandardIngredientType;
         const name = dryIngredient.name;
-        const id =  resolveJsonDryIngredientId(dryIngredient, _grams);
-        return PREDEFINED_INGREDIENT.DRY(id, name, _grams);
+        const id =  resolveJsonExtraStandardIngredient(dryIngredient, _grams);
+        // @ts-ignore
+        return ExtraStandardIngredientMethods[type](id, name, _grams);
     }
-    return PREDEFINED_INGREDIENT[type](_grams).toType();
+    // @ts-ignore
+    return StandardIngredientMethods[type](_grams);
 }
 
 export const readJsonRecipe = (recipe: JsonRecipeType): RecipeType => {
@@ -97,7 +103,7 @@ export const readJsonRecipe = (recipe: JsonRecipeType): RecipeType => {
         ingredients.ingredients.forEach((ingredient) => {
             if ((ingredient as JsonIngredientGramsType).grams === undefined) {
                 const ingredientPercent = ingredient as IngredientPercentType;
-                const ingredientGram = (ingredient as JsonRecipeIngredientConstantType).type === undefined ?
+                const ingredientGram = (ingredient as JsonStandardIngredientType).type === undefined ?
                     {
                         id: ingredientPercent.id,
                         name: ingredientPercent.name,
@@ -121,7 +127,7 @@ export const readJsonRecipe = (recipe: JsonRecipeType): RecipeType => {
                     });
                 }
             } else {
-                const ingredientGram = (ingredient as JsonRecipeIngredientConstantGramsType).type === undefined ?
+                const ingredientGram = (ingredient as JsonStandardIngredientTypeGramsType).type === undefined ?
                     ingredient as IngredientGramsType :
                     getPredefined(ingredient);
                 recipeIngredientsType.ingredients.push(ingredientGram);
