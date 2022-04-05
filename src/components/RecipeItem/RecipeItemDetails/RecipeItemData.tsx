@@ -1,33 +1,27 @@
-import {UseRecipeResultStatus, useRecipeType} from "./UseRecipeType";
+import {UseRecipeItemValues, useRecipeType} from "./UseRecipeType";
 import {RecipeType} from "../../../types";
 import {IngredientsItems} from "../IngredientsItem";
 import {RenderBakingTimeAware} from "../RenderBakingTimeAware";
 import {MicroNutrients} from "./MicroNutrients";
 import {useTranslation} from "react-i18next";
-import {CardHeader, Typography} from "@mui/material";
+import {CardHeader} from "@mui/material";
 import {getJsonRecipeTypeLabel} from "../../../service/RecipeReader";
 import {RIconButton} from "../../common/RButton";
 import {RecipeEditIcon} from "../../common/Icons";
-import {RecipeLoader} from "./RecipeLoader";
+import {RecipeContentLoader} from "./RecipeLoader";
 import {useContext} from "react";
 import {EditRecipeStateActionTypes} from "../../../State";
 import {EditRecipeContext} from "../../../State/lib/EditRecipeProvider";
 
 
-export const RecipeItemData  = ({recipe, result, error, loading}: UseRecipeResultStatus & {recipe: RecipeType}) => {
+export const RecipeItemData  = ({recipe, result}: {recipe: RecipeType, result: UseRecipeItemValues}) => {
   return (<>
-    {
-      loading ? <RecipeLoader/>:
-        result ? <>
-          <section className="recipe">
-            <IngredientsItems ingredients={result.recipe.microNutrients.ingredients} recipe={recipe} />
-          </section>
-          <RenderBakingTimeAware value={recipe}/>
-          <MicroNutrients microNutrients={result.ingredients.microNutrients}/>
-        </>:
-          <Typography variant="body2" display="block" gutterBottom>{error?.toString()}</Typography>
-    }
-  </>)
+    <section className="recipe">
+      <IngredientsItems ingredients={result.recipe.microNutrients.ingredients} recipe={recipe} />
+    </section>
+    <RenderBakingTimeAware value={recipe}/>
+    <MicroNutrients microNutrients={result.ingredients.microNutrients}/>
+  </>);
 }
 
 type RecipeItemHeaderProps = {
@@ -53,6 +47,7 @@ export const RecipeItemDetails = ({recipe}: RecipeItemDetailsProps) => {
 
   return (<>
     <RecipeItemHeader recipe={recipe}/>
-    <RecipeItemData recipe={recipe} result={result} error={error} loading={loading}/>
+    <RecipeContentLoader loading={loading} error={error}/>
+    { result ? <RecipeItemData recipe={recipe} result={result}/> : undefined }
    </>);
 }

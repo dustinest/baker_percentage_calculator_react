@@ -70,9 +70,24 @@ const useRecipeItemData = (recipe: RecipeType | null): [RecipeType | null, UseRe
 };
 
 
-export const useRecipeItemEdit = () => {
+export type UseRecipeItemEditResultActions = {
+  save: () => void,
+  cancel: () => void,
+} & UseRecipeActions;
+
+export type UseRecipeItemEditResultStatus = {
+  isEdit: boolean; error?: Error; loading: boolean;
+}
+export type UseRecipeItemEditResult = {
+  status: UseRecipeItemEditResultStatus,
+  recipe?: RecipeType;
+  result?: UseRecipeItemValues;
+  methods: UseRecipeItemEditResultActions;
+}
+
+export const useRecipeItemEdit = (): UseRecipeItemEditResult => {
   const [edit, setEdit] = useState<boolean>(false);
-  const [editData, setEditData] = useState<{recipe: RecipeType, status: UseRecipeItemValues} | null>(null);
+  const [editData, setEditData] = useState<{recipe: RecipeType, result: UseRecipeItemValues} | null>(null);
 
   const { editRecipe, editRecipeDispatch } = useContext(EditRecipeContext);
   const { recipesDispatch } = useContext(RecipesContext);
@@ -98,7 +113,7 @@ export const useRecipeItemEdit = () => {
     if (!!result && !!recipeTypeValue) {
       setEditData({
         recipe: recipeTypeValue,
-        status: result
+        result: result
       })
       setEdit(true);
     } else {
@@ -107,9 +122,13 @@ export const useRecipeItemEdit = () => {
   }, [result, recipeTypeValue]);
 
   return {
-    isEdit: edit,
-    editData,
-    result, error, loading,
-    saveRecipe, onCancelAction, setGrams, setName, setAmount
+    status: {isEdit: edit, error, loading},
+    recipe: editData?.recipe,
+    result: editData?.result,
+    methods: {
+      save: saveRecipe,
+      cancel: onCancelAction,
+      setGrams, setName, setAmount
+    }
   };
 };

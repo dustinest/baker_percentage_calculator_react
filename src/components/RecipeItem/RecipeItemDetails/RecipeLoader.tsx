@@ -1,4 +1,4 @@
-import {Skeleton} from "@mui/material";
+import {Skeleton, Typography} from "@mui/material";
 
 export const RecipeLoader = () => {
   return (
@@ -9,4 +9,14 @@ export const RecipeLoader = () => {
       <Skeleton animation="wave" />
       <Skeleton />
     </div>);
+}
+
+export const RecipeContentLoader = ({loading, error}: { loading?: boolean, error?: Error }) => {
+    return (<>
+        {
+            error? <Typography variant="body2" display="block" gutterBottom>{error?.toString()}</Typography> :
+                loading ? <RecipeLoader/>: undefined
+
+        }
+    </>);
 }
