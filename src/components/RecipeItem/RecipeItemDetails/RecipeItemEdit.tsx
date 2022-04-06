@@ -6,16 +6,15 @@ import {InputValue} from "../../common/InputValue";
 import {RecipeCancelIcon, RecipeSaveIcon} from "../../common/Icons";
 import {RecipeContentLoader} from "./RecipeLoader";
 import {
-  useRecipeItemEdit,
-  UseRecipeItemEditResultActions, UseRecipeItemEditResultStatus
-} from "./useRecipeItemEdit";
+  useRecipeItemActions,
+  UseRecipeItemEditResultActions, UseRecipeItemEditResultStatus, UseRecipeTypeResult
+} from "../../../service/ReciepeCallbacks";
 import {RecipeType} from "../../../types";
-import {UseRecipeItemValues} from "./UseRecipeType";
 import {Translation, useTranslation} from "../../../Translations";
 
 type RenderRecipeEditDialogContentProps = {
   recipe: RecipeType;
-  result: UseRecipeItemValues;
+  result: UseRecipeTypeResult;
   methods: UseRecipeItemEditResultActions;
 };
 
@@ -34,7 +33,7 @@ const RenderRecipeEditDialogContent = ({recipe, result, methods}: RenderRecipeEd
                                           onGramsChange={methods.setGrams}/>
                     </section>
                 </section>
-                <RecipeItemData result={result} recipe={recipe}/>
+                <RecipeItemData bakerPercentage={result.ingredients.microNutrients} recipe={recipe}/>
                 <RecipeJson recipe={recipe}/>
             </DialogContent>
             <DialogActions>
@@ -46,11 +45,12 @@ const RenderRecipeEditDialogContent = ({recipe, result, methods}: RenderRecipeEd
 }
 
 export const ShowErrorDialogContent = ({status}: {status: UseRecipeItemEditResultStatus}) => {
-  return (<DialogContent dividers><RecipeContentLoader loading={status.loading} error={status.error}/></DialogContent>);
+  return (<DialogContent dividers><RecipeContentLoader loading={status.loading}/></DialogContent>);
 }
 
 export const RecipeEditDialog = () => {
-    const {status, recipe, result, methods} = useRecipeItemEdit();
+    const {status, recipe, result, methods} = useRecipeItemActions();
+    //console.log("DIAL", status, recipe, result, methods);
     // TODO: this edit is caused to run multiple times
     return (<Dialog open={status.isEdit}>
         {result && recipe && !status.loading && !status.error ? <RenderRecipeEditDialogContent recipe={recipe} result={result} methods={methods}/> : <ShowErrorDialogContent status={status}/>}

@@ -1,23 +1,15 @@
 import {useEffect, useState} from "react";
-import {BakerPercentageResult, recalculateBakerPercentage} from "../../../utils/BakerPercentageCalulation";
-import {splitStarterAndDough} from "../../../service/SourdoughStarter";
-import {RecipeIngredientsType, RecipeType} from "../../../types";
+import {recalculateBakerPercentage} from "../../../utils/BakerPercentageCalulation";
+import {splitStarterAndDough} from "../../SourdoughStarter";
+import {RecipeType} from "../../../types";
 import {AsyncResulError, AsyncStatus, useAsyncEffect} from "../../../utils/Async";
 import {newBlockingPromiseQueue} from "../../../utils/BlockingQueue";
-
-export type UseRecipeItemValues = {
-    recipe: {
-        microNutrients: BakerPercentageResult;
-    }
-    ingredients: {
-        ingredients: RecipeIngredientsType[];
-        microNutrients: BakerPercentageResult;
-    }
-}
+import {UseRecipeTypeResult} from "../types/UseRecipeTypeResult";
+import {useMessageSnackBar} from "../../../State";
 
 export type UseRecipeResultStatus = {
-    result?: UseRecipeItemValues | null;
-    error?: Error;
+    result?: UseRecipeTypeResult | null;
+    error: boolean;
     loading: boolean;
 };
 
@@ -26,9 +18,10 @@ const blockAndRunLater = (() => {
     return (callable: () => Promise<any>) => queue.blockAndRun(callable);
 })();
 export const useRecipeType = (recipe: RecipeType | null): UseRecipeResultStatus => {
-    const [result, setResult] = useState<UseRecipeResultStatus>({loading: true});
+    const [result, setResult] = useState<UseRecipeResultStatus>({loading: true, error: false});
+    const snackBar = useMessageSnackBar();
 
-    const recipeItems = useAsyncEffect<UseRecipeItemValues | null>(async () => blockAndRunLater(async () => {
+    const recipeItems = useAsyncEffect<UseRecipeTypeResult | null>(async () => blockAndRunLater(async () => {
         if (recipe === null) return null;
         const micronutrients = recalculateBakerPercentage(recipe.ingredients);
         const ingredients = await splitStarterAndDough(recipe.name, recipe.ingredients);
@@ -41,25 +34,26 @@ export const useRecipeType = (recipe: RecipeType | null): UseRecipeResultStatus 
                 ingredients: ingredients,
                 microNutrients: ingredientMicros
             }
-        } as UseRecipeItemValues;
+        } as UseRecipeTypeResult;
     }), [recipe])
 
     useEffect(() => {
         if (recipeItems.status === AsyncStatus.SUCCESS) {
             setResult({
                 loading: false,
+                error: false,
                 result: recipeItems.value
             });
         } else if (!result.result && recipeItems.waiting) {
             if (!result.loading) {
-                setResult({loading: true});
+                setResult({loading: true, error: false});
             }
         } else if (recipeItems.failed) {
-            console.error((recipeItems as AsyncResulError<Error>).error);
             setResult({
                 loading: false,
-                error: (recipeItems as AsyncResulError<Error>).error
+                error: true
             });
+            snackBar.error((recipeItems as AsyncResulError<Error>).error, `Error while resolving the recipe ${recipe?.name}`).translate().enqueue();
         }
         // eslint-disable-next-line
     }, [recipeItems])

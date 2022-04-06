@@ -1,9 +1,8 @@
-import {UseRecipeItemValues, useRecipeType} from "./UseRecipeType";
+import {useRecipeType} from "../../../service/ReciepeCallbacks";
 import {RecipeType} from "../../../types";
 import {IngredientsItems} from "../IngredientsItem";
 import {RenderBakingTimeAware} from "../RenderBakingTimeAware";
-import {MicroNutrients} from "./MicroNutrients";
-import {CardHeader} from "@mui/material";
+import {CardHeader, Typography} from "@mui/material";
 import {getJsonRecipeTypeLabel} from "../../../service/RecipeReader";
 import {RIconButton} from "../../common/RButton";
 import {RecipeEditIcon} from "../../common/Icons";
@@ -11,14 +10,21 @@ import {RecipeContentLoader} from "./RecipeLoader";
 import {useContext} from "react";
 import {EditRecipeContext, EditRecipeStateActionTypes} from "../../../State";
 import {useTranslation} from "../../../Translations";
+import {BakerPercentageResult} from "../../../utils/BakerPercentageCalulation";
+import {BakerPercentage} from "../BakerPercentage";
 
-export const RecipeItemData  = ({recipe, result}: {recipe: RecipeType, result: UseRecipeItemValues}) => {
+export type RecipeItemDataProps = {
+  recipe: RecipeType;
+  bakerPercentage: BakerPercentageResult;
+}
+
+export const RecipeItemData  = ({recipe, bakerPercentage}: RecipeItemDataProps) => {
   return (<>
     <section className="recipe">
-      <IngredientsItems ingredients={result.recipe.microNutrients.ingredients} recipe={recipe} />
+      <IngredientsItems ingredients={bakerPercentage.ingredients} recipe={recipe} />
     </section>
     <RenderBakingTimeAware value={recipe}/>
-    <MicroNutrients microNutrients={result.ingredients.microNutrients}/>
+    <Typography variant="body1" className="baker-percentage" component="div"><BakerPercentage microNutrientsResult={bakerPercentage.microNutrients}/></Typography>
   </>);
 }
 
@@ -41,11 +47,11 @@ const RecipeItemHeader = ({recipe}: RecipeItemHeaderProps) => {
 type RecipeItemDetailsProps = RecipeItemHeaderProps;
 
 export const RecipeItemDetails = ({recipe}: RecipeItemDetailsProps) => {
-  const {result, error, loading} = useRecipeType(recipe);
+  const {result, loading} = useRecipeType(recipe);
 
   return (<>
     <RecipeItemHeader recipe={recipe}/>
-    <RecipeContentLoader loading={loading} error={error}/>
-    { result ? <RecipeItemData recipe={recipe} result={result}/> : undefined }
+    <RecipeContentLoader loading={loading}/>
+    { result ? <RecipeItemData recipe={recipe} bakerPercentage={result.ingredients.microNutrients}/> : undefined }
    </>);
 }
