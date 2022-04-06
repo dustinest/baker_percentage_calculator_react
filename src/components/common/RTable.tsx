@@ -1,8 +1,6 @@
 import {TableCell, TableHead, TableRow} from "@mui/material";
-import {TranslatedLabel} from "./TranslatedLabel";
+import {TranslatedLabel} from "../../Translations";
 import {normalizeNumber} from "../../utils/Numbers";
-import {useTranslation} from "react-i18next";
-
 
 export const RTableHead = ({label}: {label: string}) => {
     return (<TableHead><TableRow><TableCell colSpan={3}><TranslatedLabel label={label}/></TableCell></TableRow></TableHead>)
@@ -17,14 +15,12 @@ type RenderTranslatableLabelProps = {
 }
 
 const RenderTranslatableLabel = ({label, grams, type, fat, ash}: RenderTranslatableLabelProps) => {
-    const translate = useTranslation();
-    return (<label>{
-        type === "egg" && typeof grams === "number" ?
-            <>{translate.t(label, {count: Math.round(grams / 64)})}</>:
-            fat && fat > 0 ? <>{translate.t(label, {count: fat})}</>:
-                ash && ash > 0 ? <>{translate.t(label, {count: ash})}</>:
-                    <>{translate.t(label)}</>
-    }</label>);
+    return (<>{
+        type === "egg" && typeof grams === "number" ? <TranslatedLabel label={label} count={Math.round(grams / 64)}/>:
+            fat && fat > 0 ? <TranslatedLabel label={label} count={fat}/>:
+                ash && ash > 0 ? <TranslatedLabel label={label} count={ash}/>:
+                  <TranslatedLabel label={label}/>
+    }</>);
 }
 
 type RTableRowProps = {

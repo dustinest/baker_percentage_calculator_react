@@ -1,11 +1,12 @@
-import {RecipesStateActions, RecipesStateActionTypes} from "../type/RecipesStateActions.d";
+// noinspection ES6PreferShortImport
+import {RecipesStateActions, RecipesStateActionTypes} from "./RecipesStateActions.d";
 import {RecipeType} from "../../types";
 
 export const updateRecipesReducer = (recipes: RecipeType[], action: RecipesStateActions): RecipeType[] => {
     switch (action.type) {
         case RecipesStateActionTypes.SET_RECIPES:
             return [...action.value];
-        case RecipesStateActionTypes.UPDATE_RECIPE:
+        case RecipesStateActionTypes.SAVE_RECIPE:
             const result:RecipeType[] = [];
             let updated = false;
             recipes.forEach((e) => {

@@ -4,7 +4,6 @@ import {RecipeItemData} from "./RecipeItemData";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import {InputValue} from "../../common/InputValue";
 import {RecipeCancelIcon, RecipeSaveIcon} from "../../common/Icons";
-import {useTranslation} from "react-i18next";
 import {RecipeContentLoader} from "./RecipeLoader";
 import {
   useRecipeItemEdit,
@@ -12,6 +11,7 @@ import {
 } from "./useRecipeItemEdit";
 import {RecipeType} from "../../../types";
 import {UseRecipeItemValues} from "./UseRecipeType";
+import {Translation, useTranslation} from "../../../Translations";
 
 type RenderRecipeEditDialogContentProps = {
   recipe: RecipeType;
@@ -24,8 +24,8 @@ const RenderRecipeEditDialogContent = ({recipe, result, methods}: RenderRecipeEd
     return (
         <>
             <DialogTitle id="customized-dialog-title">
-                <InputValue value={recipe.name} onChange={methods.setName} label={translation.t("Name")}/>
-                <InputValue value={recipe.amount} onChange={methods.setAmount} label={translation.t("Amount")}/>
+                <InputValue value={recipe.name} onChange={methods.setName} label={translation.translate("Name")}/>
+                <InputValue value={recipe.amount} onChange={methods.setAmount} label={translation.translate("Amount")}/>
             </DialogTitle>
             <DialogContent dividers>
                 <section className="edit">
@@ -38,8 +38,8 @@ const RenderRecipeEditDialogContent = ({recipe, result, methods}: RenderRecipeEd
                 <RecipeJson recipe={recipe}/>
             </DialogContent>
             <DialogActions>
-                <Button onClick={methods.cancel} startIcon={<RecipeCancelIcon/>}>{translation.t("Cancel")}</Button>
-                <Button onClick={methods.save} startIcon={<RecipeSaveIcon/>}>{translation.t("Save")}</Button>
+                <Button onClick={methods.cancel} startIcon={<RecipeCancelIcon/>}><Translation label="Cancel"/></Button>
+                <Button onClick={methods.save} startIcon={<RecipeSaveIcon/>}><Translation label="Save"/></Button>
             </DialogActions>
         </>
     );

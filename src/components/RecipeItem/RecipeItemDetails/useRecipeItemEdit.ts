@@ -1,8 +1,14 @@
 import {useContext, useEffect, useState} from "react";
 import {copyRecipeType, RecipeType} from "../../../types";
 import {UseRecipeItemValues, UseRecipeResultStatus, useRecipeType} from "./UseRecipeType";
-import {EditRecipeContext} from "../../../State/lib/EditRecipeProvider";
-import {EditRecipeStateActionTypes, RecipesContext, RecipesStateActionTypes, UpdateRecipesAction} from "../../../State";
+import {
+  EditRecipeContext,
+  EditRecipeStateActionTypes,
+  RecipesContext,
+  RecipesStateActionTypes,
+  UpdateRecipesAction,
+  useMessageSnackBar
+} from "../../../State";
 
 export type UseRecipeActions = {
   setGrams: (value: number, ingredientIndex: number, index: number) => Promise<void>;
@@ -93,20 +99,26 @@ export const useRecipeItemEdit = (): UseRecipeItemEditResult => {
   const { recipesDispatch } = useContext(RecipesContext);
   const [recipeTypeValue, {setGrams, setName, setAmount}, {result, error, loading}] = useRecipeItemData(editRecipe);
 
+  const snackBar = useMessageSnackBar();
+
   const onCancelAction = () => {
     if (!edit) return;
     editRecipeDispatch({
       type: EditRecipeStateActionTypes.CANCEL_EDIT_RECIPE
     });
+    snackBar.info("Recipe edit cancelled!").translate().enqueue();
   }
 
   const saveRecipe = () => {
     if (!edit) return;
     recipesDispatch({
-      type: RecipesStateActionTypes.UPDATE_RECIPE,
+      type: RecipesStateActionTypes.SAVE_RECIPE,
       value: recipeTypeValue
     } as UpdateRecipesAction);
-    onCancelAction();
+    snackBar.success("Recipe saved!").translate().enqueue();
+    editRecipeDispatch({
+      type: EditRecipeStateActionTypes.CANCEL_EDIT_RECIPE
+    });
   }
 
   useEffect(() => {

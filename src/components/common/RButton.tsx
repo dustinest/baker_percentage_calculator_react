@@ -1,7 +1,7 @@
 import {ReactNode} from "react";
 import {Button, ButtonGroup, IconButton, Theme} from "@mui/material";
-import {useTranslation} from "react-i18next";
 import {SxProps} from "@mui/system";
+import {Translation, useTranslation} from "../../Translations";
 
 type RButtonPropsIcon = { icon: ReactNode; };
 type RButtonPropsLabel = { label:string; };
@@ -14,17 +14,14 @@ type BaseProps = {
 
 type RButtonProps = BaseProps & RButtonPropsClick & (RButtonPropsIcon | RButtonPropsLabel);
 
-const useLabelTranslation = (label?: string): string | undefined => {
-    const translate = useTranslation();
-    return label ? translate.t(label) : undefined;
-}
-
 export const RIconButton = (props: BaseProps & RButtonPropsClick & RButtonPropsIcon & RButtonPropsLabel) => {
-    const label = useLabelTranslation((props as RButtonPropsLabel).label);
-    return (<IconButton className={props.className} aria-label={label} sx={props.sx}  onClick={props.onClick}>{props.icon}</IconButton >);
+    const translate = useTranslation();
+    const label = (props as RButtonPropsLabel).label;
+    return (<IconButton className={props.className} aria-label={label ? translate.translate(label) : undefined} sx={props.sx}  onClick={props.onClick}>{props.icon}</IconButton >);
 }
 
 export const RButton = (props: RButtonProps) => {
+    const label = (props as RButtonPropsLabel).label;
     return (
         <Button
             variant="contained"
@@ -32,7 +29,7 @@ export const RButton = (props: RButtonProps) => {
             sx={props.sx}
             className={props.className}
             onClick={(props as RButtonPropsClick).onClick}
-            startIcon={(props as RButtonPropsIcon).icon}>{useLabelTranslation((props as RButtonPropsLabel).label)}</Button>
+            startIcon={(props as RButtonPropsIcon).icon}>{label ? <Translation label={label}/> : undefined }</Button>
     );
 }
 
@@ -43,7 +40,7 @@ export type RButtonGroupProps = {
 
 export const RButtonGroup = (props: RButtonGroupProps) => {
     const translate = useTranslation();
-    return (<ButtonGroup variant="contained" aria-label={translate.t(props.label)}>{
+    return (<ButtonGroup variant="contained" aria-label={translate.translate(props.label)}>{
         props.actions.map((e, index) => <RButton {...e} key={index}/>)
     }</ButtonGroup>)
 }

@@ -9,7 +9,7 @@ import {
     AccordionSummary, CircularProgress,
     Typography
 } from "@mui/material";
-import {TranslatedLabel} from "../common/TranslatedLabel";
+import {TranslatedLabel} from "../../Translations";
 import {ExpandMoreIcon} from "../common/Icons";
 
 export const RecipeJson = ({recipe}: {recipe: RecipeType}) => {

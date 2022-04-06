@@ -1,7 +1,8 @@
 import {RecipeType} from "../../types";
-import {createContext, Dispatch, ReactNode, useMemo, useReducer} from "react";
-import {RecipeManagementStateActions} from "../type/EditRecipeStateAction";
-import {editRecipesReducer} from "./editRecipeReducer";
+import {createContext, Dispatch, ReactNode, useReducer} from "react";
+// noinspection ES6PreferShortImport
+import {RecipeManagementStateActions} from "./EditRecipeStateAction.d";
+import {updateEditRecipeReducer} from "./editRecipeReducer";
 
 type EditRecipeContextType = {
   editRecipe: null | RecipeType;
@@ -13,7 +14,7 @@ export const EditRecipeContext = createContext<EditRecipeContextType>({editRecip
 const combinedEditRecipeRecipesStateReducers = (
   editRecipe: null | RecipeType,
   action: RecipeManagementStateActions
-) => editRecipesReducer(editRecipe, action);
+) => updateEditRecipeReducer(editRecipe, action);
 
 export const EditRecipeProvider = ({ children }: { children: ReactNode }) => {
   const [editRecipe, editRecipeDispatch] = useReducer(combinedEditRecipeRecipesStateReducers, null);
@@ -27,12 +28,8 @@ export const EditRecipeProvider = ({ children }: { children: ReactNode }) => {
    */
   /*
    */
-  const recipeMemo = useMemo(() => ({
-    editRecipe, editRecipeDispatch
-  }), [editRecipe]);
-
   return (
-    <EditRecipeContext.Provider value={recipeMemo}>
+    <EditRecipeContext.Provider value={{ editRecipe, editRecipeDispatch }}>
       {children}
      </EditRecipeContext.Provider>
   );
@@ -43,7 +40,7 @@ export const EditRecipeConsumer = ({ children }: { children: (args: RecipeType |
     <EditRecipeContext.Consumer>
       {(context) => {
     if (context === undefined) {
-      throw new Error('CountConsumer must be used within a CountProvider')
+      throw new Error('EditRecipeConsumer must be used within a EditRecipeProvider')
     }
     return children(context.editRecipe)
   }}

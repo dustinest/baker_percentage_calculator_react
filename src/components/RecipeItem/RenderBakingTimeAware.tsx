@@ -1,7 +1,6 @@
 import {BakingAwareType, NumberIntervalType} from "../../types";
-import {TranslatedLabel} from "../common/TranslatedLabel";
+import {TranslatedLabel, Translation} from "../../Translations";
 import {Typography} from "@mui/material";
-import {useTranslation} from "react-i18next";
 
 export type RenderBakingTimeAwareProps = {
     value: BakingAwareType;
@@ -19,7 +18,6 @@ const NumberIntervalLabel = ({interval, suffix}: {interval: NumberIntervalType, 
 }
 
 export const RenderBakingTimeAware = ({value}: RenderBakingTimeAwareProps) => {
-    const translate = useTranslation();
     const innerTemperature:NumberIntervalType | null = value.innerTemperature;
     const description: null | string = value.description;
     return (
@@ -27,14 +25,14 @@ export const RenderBakingTimeAware = ({value}: RenderBakingTimeAwareProps) => {
             {
                 value.bakingTime.map((bakingTime, index) => (
                     <Typography variant="body1" key={index}>
-                        <TranslatedLabel label={bakingTime.steam ? translate.t("Steam") : translate.t("Bake")}/>
+                        <TranslatedLabel label={bakingTime.steam ? "Steam" : "Bake"}/>
                         {" "}
-                        <NumberIntervalLabel interval={bakingTime.time}/> {translate.t("minutes")} <NumberIntervalLabel interval={bakingTime.temperature}/>℃
+                        <NumberIntervalLabel interval={bakingTime.time}/> <Translation label={"minutes"}/> <NumberIntervalLabel interval={bakingTime.temperature}/>℃
                     </Typography>
                 ))
             }
             {
-                innerTemperature ? <Typography variant="body1">{translate.t("Inner temperature")} <NumberIntervalLabel interval={innerTemperature} suffix="℃"/></Typography> : undefined
+                innerTemperature ? <Typography variant="body1"><Translation label={"Inner temperature"}/> <NumberIntervalLabel interval={innerTemperature} suffix="℃"/></Typography> : undefined
             }
             {
                 description ? <Typography variant="body1">{description}</Typography> : undefined

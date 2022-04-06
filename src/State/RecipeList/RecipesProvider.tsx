@@ -1,5 +1,6 @@
-import {createContext, Dispatch, useReducer, ReactNode, useMemo} from "react";
-import {RecipesStateActions} from "../type/RecipesStateActions";
+import {createContext, Dispatch, useReducer, ReactNode} from "react";
+// noinspection ES6PreferShortImport
+import {RecipesStateActions} from "./RecipesStateActions.d";
 import {updateRecipesReducer} from "./recipesReducer";
 import {RecipeType} from "../../types";
 
@@ -32,14 +33,8 @@ export const RecipesProvider = ({ children }: { children: ReactNode }) => {
      */
     /*
      */
-    const recipesMemo = useMemo(() => ({
-        recipes, recipesDispatch
-    }), [recipes]);
-
     return (
-        <RecipesContext.Provider value={recipesMemo}>
-                {children}
-        </RecipesContext.Provider>
+        <RecipesContext.Provider value={{ recipes, recipesDispatch }}>{children}</RecipesContext.Provider>
     );
 };
 
@@ -48,7 +43,7 @@ export const RecipesConsumer = ({ children }: { children: (args: RecipeType[]) =
         <RecipesContext.Consumer>
             {(context) => {
                 if (context === undefined) {
-                    throw new Error('CountConsumer must be used within a CountProvider')
+                    throw new Error('RecipesConsumer must be used within a RecipesProvider')
                 }
                 return children(context.recipes)
             }}

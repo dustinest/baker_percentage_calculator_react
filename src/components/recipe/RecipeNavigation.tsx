@@ -1,27 +1,55 @@
 import './RecipeNavigation.css';
 import {Link, List, ListItemText, ListItemButton} from "@mui/material";
-import {RecipesConsumer} from "../../State";
+import {RecipesConsumer, useMessageSnackBar} from "../../State";
 import {MenuCollapsable} from "../containers/MenuCollapsable";
 import {getJsonRecipeTypeLabel} from "../../service/RecipeReader";
-import {useTranslation} from "react-i18next";
+import {useTranslation} from "../../Translations";
+import {useEffect, useState} from "react";
+import {RIconButton} from "../common/RButton";
+import {InfoIcon} from "../common/Icons";
 
+export const RenderInfoIcon = ({amount}: { amount: number }) => {
+  const snackBar = useMessageSnackBar();
+  const [message, setMessage] = useState<string>("");
 
+  useEffect(() => {
+    if (amount <= 0) {
+      setMessage(snackBar.info("No messages found!").translate().enqueue());
+    } else {
+      setMessage([
+        snackBar.success("snackbar.recipes").translate(amount).enqueue(),
+        snackBar.info("snackbar.print_pages").translate(Math.floor(amount / 2)).enqueue(100)
+      ].join(". "));
+    }
+  }, [amount])
+
+  const showRecipeSnackbar = () => {
+    snackBar.info(message).enqueue();
+  }
+  return (<RIconButton className="menu-trigger" onClick={showRecipeSnackbar} icon={<InfoIcon/>} label="Info" sx={{
+      position: 'fixed',
+      right: 0,
+      bottom: 0,
+    }}/>
+  )
+}
 export const RecipeNavigation = () => {
   const translation = useTranslation();
   return (
-      <RecipesConsumer>{(recipes) => (
-          <MenuCollapsable title={translation.t("snackbar.recipes", {count: recipes.length})}>
-            <List>{
-              recipes.map((recipe) => (
-                  <ListItemButton component={Link} href={`#${recipe.id}`} key={recipe.id}>
-                    <ListItemText primary={getJsonRecipeTypeLabel(recipe)}/>
-                  </ListItemButton>
-                  )
-              )
-            }
-            </List>
-          </MenuCollapsable>
-      )
-      }</RecipesConsumer>
+    <RecipesConsumer>{(recipes) => (<>
+      <RenderInfoIcon amount={recipes.length}/>
+      <MenuCollapsable title={translation.translatePlural("snackbar.recipes", recipes.length)}>
+        <List>{
+          recipes.map((recipe) => (
+              <ListItemButton component={Link} href={`#${recipe.id}`} key={recipe.id}>
+                <ListItemText primary={getJsonRecipeTypeLabel(recipe)}/>
+              </ListItemButton>
+            )
+          )
+        }
+        </List>
+      </MenuCollapsable>
+    </>)
+    }</RecipesConsumer>
   );
 }
