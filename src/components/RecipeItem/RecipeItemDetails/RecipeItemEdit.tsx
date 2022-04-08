@@ -93,6 +93,7 @@ export const RecipeEditDialog = () => {
 
   useEffect(() => {
     loadRecipeData(recipe).catch((error) => snackBar.error(error as Error, `Error while recalculating ${recipe?.name}`).translate().enqueue());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recipe])
 
 
