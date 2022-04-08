@@ -48,6 +48,7 @@ export const RecipeItemDetails = ({recipe}: RecipeItemDetailsProps) => {
     recalculateRecipeBakerPercentage(recipe).then(setBakerPercentage).catch((e: Error) => {
       snackBar.error(e, `Error while resolving the recipe ${recipe?.name}`).translate().enqueue();
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recipe]);
 
   return (<>
