@@ -14,7 +14,6 @@ import {
   recalculateIngredients,
   recalculateRecipeBakerPercentage,
   setRecipeAmount,
-  setRecipeIngredientGrams,
   setRecipeName
 } from "./RecipeItemEditService";
 
@@ -41,7 +40,7 @@ const RenderRecipeEditDialogContent = ({
 
   const setName = async (name: string) => onAction(setRecipeName(recipe, name), ActionType.update);
   const setAmount = async (amount: number) => onAction(setRecipeAmount(recipe, amount), ActionType.update);
-  const setGrams = async (ingredientsIndex: number, index: number, value: number) => onAction(setRecipeIngredientGrams(recipe, ingredientsIndex, index, value), ActionType.update);
+  //const setGrams = async (ingredientsIndex: number, index: number, value: number) => onAction(setRecipeIngredientGrams(recipe, ingredientsIndex, index, value), ActionType.update);
   const onSave = () => onAction(recipe, ActionType.save);
   const onCancel = () => onAction(recipe, ActionType.cancel);
 
@@ -54,8 +53,7 @@ const RenderRecipeEditDialogContent = ({
       <DialogContent dividers>
         <section className="edit">
           <section className="ingredients">
-            <IngredientsItems ingredients={ingredients} recipe={recipe}
-                              onGramsChange={setGrams}/>
+            <IngredientsItems ingredients={ingredients} recipe={recipe} change={{grams: true, onRecipeChange: (r) => onAction(r, ActionType.update)}}/>
           </section>
         </section>
         <RecipeItemData bakerPercentage={bakerPercentage} recipe={recipe}/>
@@ -74,6 +72,8 @@ export const ShowErrorDialogContent = ({status}: { status: boolean }) => {
 }
 
 export const RecipeEditDialog = () => {
+  const snackBar = useMessageSnackBar();
+
   const [recipe, saveRecipe, cancelRecipe] = useEditRecipeActions();
   const [recipeData, setRecipeData] = useState<{
     recipe: RecipeType,
@@ -95,7 +95,6 @@ export const RecipeEditDialog = () => {
     loadRecipeData(recipe).catch((error) => snackBar.error(error as Error, `Error while recalculating ${recipe?.name}`).translate().enqueue());
   }, [recipe])
 
-  const snackBar = useMessageSnackBar();
 
   const onAction = async (_recipe: RecipeType, _type: ActionType): Promise<void> => {
     switch (_type) {

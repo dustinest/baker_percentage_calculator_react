@@ -1,4 +1,10 @@
-import {copyRecipeType, RecipeIngredientsType, RecipeType} from "../../../types";
+import {
+  BakingTimeType,
+  copyBakingTimeType,
+  copyRecipeType,
+  RecipeIngredientsType,
+  RecipeType
+} from "../../../types";
 import {newBlockingPromiseQueue} from "../../../utils/BlockingQueue";
 import {
   BakerPercentageResult,
@@ -43,6 +49,16 @@ export const setRecipeName = (recipe: RecipeType, name: string): RecipeType => {
   return doWithCopy(recipe, (e) => e.name = name);
 };
 
+export const changeRecipeBakingTime = async(recipe: RecipeType, index: number, bakingTime: BakingTimeType) => {
+  if (
+    recipe.bakingTime[index].time.from === bakingTime.time.from &&
+    recipe.bakingTime[index].time.until === bakingTime.time.until &&
+    recipe.bakingTime[index].temperature.from === bakingTime.temperature.from &&
+    recipe.bakingTime[index].temperature.until === bakingTime.temperature.until &&
+    recipe.bakingTime[index].steam === bakingTime.steam) {
+    return doWithCopy(recipe, (e) => e.bakingTime[index] = copyBakingTimeType(bakingTime) );
+  }
+}
 
 export const blockAndRunRecipeLater = (() => {
   const queue = newBlockingPromiseQueue();
