@@ -68,7 +68,7 @@ const IngredientsItem = ({ingredients, recipe, onGramsChange, onPercentChange}: 
     )
 }
 
-type IngredientsItemsCallback =  (value: number, ingredientsIndex: number, index: number) => Promise<void>;
+type IngredientsItemsCallback =  (ingredientsIndex: number, index: number, value: number) => Promise<void>;
 type IngredientsItemsProps = {
     ingredients: RecipeIngredientsWithPercentType[];
     recipe: RecipeType,
@@ -81,8 +81,8 @@ export const IngredientsItems = ({ingredients, recipe, onGramsChange, onPercentC
             <IngredientsItem
                 ingredients={ingredients}
                 recipe={recipe}
-                onGramsChange={onGramsChange ? (value, _index) => onGramsChange(value, index, _index) : undefined}
-                onPercentChange={onPercentChange ? (value, _index) => onPercentChange(value, index, _index) : undefined}
+                onGramsChange={onGramsChange ? (value, _index) => onGramsChange(index, _index, value) : undefined}
+                onPercentChange={onPercentChange ? (value, _index) => onPercentChange(index, _index, value) : undefined}
                 key={`ingredients_${index}`}/>
         ))
     }</>)

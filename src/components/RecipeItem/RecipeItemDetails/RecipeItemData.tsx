@@ -1,4 +1,3 @@
-import {useRecipeType, UseRecipeTypeStatus} from "../../../service/ReciepeCallbacks";
 import {RecipeType} from "../../../types";
 import {IngredientsItems} from "../IngredientsItem";
 import {RenderBakingTimeAware} from "../RenderBakingTimeAware";
@@ -7,11 +6,12 @@ import {getJsonRecipeTypeLabel} from "../../../service/RecipeReader";
 import {RIconButton} from "../../common/RButton";
 import {RecipeEditIcon} from "../../common/Icons";
 import {RecipeContentLoader} from "./RecipeLoader";
-import {useContext} from "react";
-import {EditRecipeContext, EditRecipeStateActionTypes} from "../../../State";
+import {useMessageSnackBar, useSetEditRecipe} from "../../../State";
 import {useTranslation} from "../../../Translations";
 import {BakerPercentageResult} from "../../../utils/BakerPercentageCalulation";
 import {BakerPercentage} from "../BakerPercentage";
+import {useEffect, useState} from "react";
+import {recalculateRecipeBakerPercentage} from "./RecipeItemEditService";
 
 export type RecipeItemDataProps = {
   recipe: RecipeType;
@@ -33,25 +33,26 @@ type RecipeItemHeaderProps = {
 }
 
 const RecipeItemHeader = ({recipe}: RecipeItemHeaderProps) => {
-  const { editRecipeDispatch } = useContext(EditRecipeContext);
-  const editRecipe = () => {
-    editRecipeDispatch({
-      type: EditRecipeStateActionTypes.EDIT_RECIPE,
-      value: recipe
-    });
-  }
+  const setEditRecipe = useSetEditRecipe();
   const translation = useTranslation();
-  return (<CardHeader title={getJsonRecipeTypeLabel(recipe)} action={<RIconButton icon={<RecipeEditIcon />} label={translation.translate("Edit")}  onClick={editRecipe}/>}/>);
+  return (<CardHeader title={getJsonRecipeTypeLabel(recipe)} action={<RIconButton icon={<RecipeEditIcon />} label={translation.translate("Edit")}  onClick={() => setEditRecipe(recipe)}/>}/>);
 }
 
 type RecipeItemDetailsProps = RecipeItemHeaderProps;
 
 export const RecipeItemDetails = ({recipe}: RecipeItemDetailsProps) => {
-  const result = useRecipeType(recipe);
+  const [bakerPercentage, setBakerPercentage] = useState<BakerPercentageResult | null>(null);
+  const snackBar = useMessageSnackBar();
+
+  useEffect(() => {
+    recalculateRecipeBakerPercentage(recipe).then(setBakerPercentage).catch((e: Error) => {
+      snackBar.error(e, `Error while resolving the recipe ${recipe?.name}`).translate().enqueue();
+    });
+  }, [recipe]);
 
   return (<>
     <RecipeItemHeader recipe={recipe}/>
-    <RecipeContentLoader loading={result.status === UseRecipeTypeStatus.WAITING}/>
-    { result.status === UseRecipeTypeStatus.RESULT ? <RecipeItemData recipe={recipe} bakerPercentage={result.bakerPercentage}/> : undefined }
+    <RecipeContentLoader loading={bakerPercentage === null}/>
+    { bakerPercentage != null ? <RecipeItemData recipe={recipe} bakerPercentage={bakerPercentage}/> : undefined }
    </>);
 }
