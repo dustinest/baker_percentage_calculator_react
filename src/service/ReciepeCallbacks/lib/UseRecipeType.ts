@@ -1,58 +1,51 @@
 import {useEffect, useState} from "react";
-import {recalculateBakerPercentage} from "../../../utils/BakerPercentageCalulation";
+import {BakerPercentageResult, recalculateBakerPercentage} from "../../../utils/BakerPercentageCalulation";
 import {splitStarterAndDough} from "../../SourdoughStarter";
-import {RecipeType} from "../../../types";
 import {AsyncResulError, AsyncStatus, useAsyncEffect} from "../../../utils/Async";
 import {newBlockingPromiseQueue} from "../../../utils/BlockingQueue";
-import {UseRecipeTypeResult} from "../types/UseRecipeTypeResult";
+import {
+    CommonUseRecipeTypeResult,
+    UseRecipeTypeDone,
+    UseRecipeTypeError,
+    UseRecipeTypeResult,
+    UseRecipeTypeStatus, UseRecipeTypeWaiting
+} from "../types/UseRecipeTypeResult.d";
 import {useMessageSnackBar} from "../../../State";
+import {RecipeType} from "../../../types";
 
-export type UseRecipeResultStatus = {
-    result?: UseRecipeTypeResult | null;
-    error: boolean;
-    loading: boolean;
-};
+export type UseRecipeResult = {
+    bakerPercentage: BakerPercentageResult,
+} & UseRecipeTypeResult;
 
 const blockAndRunLater = (() => {
     const queue = newBlockingPromiseQueue();
     return (callable: () => Promise<any>) => queue.blockAndRun(callable);
 })();
-export const useRecipeType = (recipe: RecipeType | null): UseRecipeResultStatus => {
-    const [result, setResult] = useState<UseRecipeResultStatus>({loading: true, error: false});
+export const useRecipeType = (recipe: RecipeType | null): CommonUseRecipeTypeResult | UseRecipeResult => {
+    const [result, setResult] = useState<CommonUseRecipeTypeResult | UseRecipeResult>({status: UseRecipeTypeStatus.WAITING} as UseRecipeTypeWaiting);
     const snackBar = useMessageSnackBar();
 
-    const recipeItems = useAsyncEffect<UseRecipeTypeResult | null>(async () => blockAndRunLater(async () => {
-        if (recipe === null) return null;
-        const micronutrients = recalculateBakerPercentage(recipe.ingredients);
+    const recipeItems = useAsyncEffect<UseRecipeResult>(async () => blockAndRunLater(async () => {
+        if (recipe === null || recipe === undefined) return {status: UseRecipeTypeStatus.DONE} as UseRecipeTypeDone;
         const ingredients = await splitStarterAndDough(recipe.name, recipe.ingredients);
         const ingredientMicros = recalculateBakerPercentage(ingredients);
         return {
-            recipe: {
-                microNutrients: micronutrients
-            },
-            ingredients: {
-                ingredients: ingredients,
-                microNutrients: ingredientMicros
-            }
-        } as UseRecipeTypeResult;
+            status: UseRecipeTypeStatus.RESULT,
+            bakerPercentage: ingredientMicros
+        } as UseRecipeResult;
     }), [recipe])
 
     useEffect(() => {
-        if (recipeItems.status === AsyncStatus.SUCCESS) {
-            setResult({
-                loading: false,
-                error: false,
-                result: recipeItems.value
-            });
-        } else if (!result.result && recipeItems.waiting) {
-            if (!result.loading) {
-                setResult({loading: true, error: false});
+        if (recipeItems.status === AsyncStatus.SUCCESS && recipeItems) {
+            setResult(recipeItems.value);
+        } else if (result.status !== UseRecipeTypeStatus.RESULT && recipeItems.waiting) {
+            if (result.status !== UseRecipeTypeStatus.WAITING) {
+                setResult({ status: UseRecipeTypeStatus.WAITING } as UseRecipeTypeWaiting);
             }
         } else if (recipeItems.failed) {
-            setResult({
-                loading: false,
-                error: true
-            });
+            if (result.status !== UseRecipeTypeStatus.ERROR) {
+                setResult({ status: UseRecipeTypeStatus.ERROR } as UseRecipeTypeError);
+            }
             snackBar.error((recipeItems as AsyncResulError<Error>).error, `Error while resolving the recipe ${recipe?.name}`).translate().enqueue();
         }
         // eslint-disable-next-line

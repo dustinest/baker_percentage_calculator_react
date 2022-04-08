@@ -1,4 +1,4 @@
-import {useRecipeType} from "../../../service/ReciepeCallbacks";
+import {useRecipeType, UseRecipeTypeStatus} from "../../../service/ReciepeCallbacks";
 import {RecipeType} from "../../../types";
 import {IngredientsItems} from "../IngredientsItem";
 import {RenderBakingTimeAware} from "../RenderBakingTimeAware";
@@ -47,11 +47,11 @@ const RecipeItemHeader = ({recipe}: RecipeItemHeaderProps) => {
 type RecipeItemDetailsProps = RecipeItemHeaderProps;
 
 export const RecipeItemDetails = ({recipe}: RecipeItemDetailsProps) => {
-  const {result, loading} = useRecipeType(recipe);
+  const result = useRecipeType(recipe);
 
   return (<>
     <RecipeItemHeader recipe={recipe}/>
-    <RecipeContentLoader loading={loading}/>
-    { result ? <RecipeItemData recipe={recipe} bakerPercentage={result.ingredients.microNutrients}/> : undefined }
+    <RecipeContentLoader loading={result.status === UseRecipeTypeStatus.WAITING}/>
+    { result.status === UseRecipeTypeStatus.RESULT ? <RecipeItemData recipe={recipe} bakerPercentage={result.bakerPercentage}/> : undefined }
    </>);
 }

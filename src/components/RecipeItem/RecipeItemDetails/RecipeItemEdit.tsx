@@ -6,53 +6,50 @@ import {InputValue} from "../../common/InputValue";
 import {RecipeCancelIcon, RecipeSaveIcon} from "../../common/Icons";
 import {RecipeContentLoader} from "./RecipeLoader";
 import {
-  useRecipeItemActions,
-  UseRecipeItemEditResultActions, UseRecipeItemEditResultStatus, UseRecipeTypeResult
+    useRecipeItemActions, UseRecipeItemEditResult, UseRecipeTypeStatus,
 } from "../../../service/ReciepeCallbacks";
-import {RecipeType} from "../../../types";
 import {Translation, useTranslation} from "../../../Translations";
 
 type RenderRecipeEditDialogContentProps = {
-  recipe: RecipeType;
-  result: UseRecipeTypeResult;
-  methods: UseRecipeItemEditResultActions;
+  result: UseRecipeItemEditResult;
 };
 
-const RenderRecipeEditDialogContent = ({recipe, result, methods}: RenderRecipeEditDialogContentProps) => {
+const RenderRecipeEditDialogContent = ({result}: RenderRecipeEditDialogContentProps) => {
   const translation = useTranslation();
     return (
         <>
             <DialogTitle id="customized-dialog-title">
-                <InputValue value={recipe.name} onChange={methods.setName} label={translation.translate("Name")}/>
-                <InputValue value={recipe.amount} onChange={methods.setAmount} label={translation.translate("Amount")}/>
+                <InputValue value={result.recipe.name} onChange={result.setName} label={translation.translate("Name")}/>
+                <InputValue value={result.recipe.amount} onChange={result.setAmount} label={translation.translate("Amount")}/>
             </DialogTitle>
             <DialogContent dividers>
                 <section className="edit">
                     <section className="ingredients">
-                        <IngredientsItems ingredients={result.recipe.microNutrients.ingredients} recipe={recipe}
-                                          onGramsChange={methods.setGrams}/>
+                        <IngredientsItems ingredients={result.ingredients} recipe={result.recipe}
+                                          onGramsChange={result.setGrams}/>
                     </section>
                 </section>
-                <RecipeItemData bakerPercentage={result.ingredients.microNutrients} recipe={recipe}/>
-                <RecipeJson recipe={recipe}/>
+                <RecipeItemData bakerPercentage={result.bakerPercentage} recipe={result.recipe}/>
+                <RecipeJson recipe={result.recipe}/>
             </DialogContent>
             <DialogActions>
-                <Button onClick={methods.cancel} startIcon={<RecipeCancelIcon/>}><Translation label="Cancel"/></Button>
-                <Button onClick={methods.save} startIcon={<RecipeSaveIcon/>}><Translation label="Save"/></Button>
+                <Button onClick={result.cancel} startIcon={<RecipeCancelIcon/>}><Translation label="Cancel"/></Button>
+                <Button onClick={result.save} startIcon={<RecipeSaveIcon/>}><Translation label="Save"/></Button>
             </DialogActions>
         </>
     );
 }
 
-export const ShowErrorDialogContent = ({status}: {status: UseRecipeItemEditResultStatus}) => {
-  return (<DialogContent dividers><RecipeContentLoader loading={status.loading}/></DialogContent>);
+export const ShowErrorDialogContent = ({status}: {status: boolean}) => {
+  return (<DialogContent dividers><RecipeContentLoader loading={status}/></DialogContent>);
 }
 
 export const RecipeEditDialog = () => {
-    const {status, recipe, result, methods} = useRecipeItemActions();
+    const result = useRecipeItemActions();
+
     //console.log("DIAL", status, recipe, result, methods);
     // TODO: this edit is caused to run multiple times
-    return (<Dialog open={status.isEdit}>
-        {result && recipe && !status.loading && !status.error ? <RenderRecipeEditDialogContent recipe={recipe} result={result} methods={methods}/> : <ShowErrorDialogContent status={status}/>}
+    return (<Dialog open={result.isEdit}>
+        {result.status === UseRecipeTypeStatus.RESULT ? <RenderRecipeEditDialogContent result={result}/> : <ShowErrorDialogContent status={result.status === UseRecipeTypeStatus.WAITING}/>}
     </Dialog>);
 };

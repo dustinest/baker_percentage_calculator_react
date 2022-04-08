@@ -1,15 +1,13 @@
-import {BakerPercentageResult} from "../../../utils/BakerPercentageCalulation";
-import {RecipeIngredientsType} from "../../../types";
-
-export type UseRecipeTypeMicroNutrients = {
-  microNutrients: BakerPercentageResult;
+export enum UseRecipeTypeStatus {
+  ERROR = "ERROR",
+  WAITING = "WAITING",
+  DONE = "DONE",
+  RESULT = "RESULT"
 }
 
-export type UseRecipeTypeIngredients = {
-  ingredients: RecipeIngredientsType[];
-} & UseReceipeTypeMicroNutrients;
+export type UseRecipeTypeError = UseRecipeTypeResult<UseRecipeTypeStatus.ERROR>;
+export type UseRecipeTypeWaiting = UseRecipeTypeResult<UseRecipeTypeStatus.WAITING>;
+export type UseRecipeTypeDone = UseRecipeTypeResult<UseRecipeTypeStatus.DONE>;
+export type UseRecipeTypeResult  = UseRecipeTypeResult<UseRecipeTypeStatus.RESULT>;
 
-export type UseRecipeTypeResult = {
-  recipe: UseRecipeTypeMicroNutrients;
-  ingredients: UseRecipeTypeIngredients;
-}
+export type CommonUseRecipeTypeResult = UseRecipeTypeError | UseRecipeTypeWaiting | UseRecipeTypeDone;

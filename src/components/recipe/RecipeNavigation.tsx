@@ -13,6 +13,7 @@ export const RenderInfoIcon = ({amount}: { amount: number }) => {
   const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
+    if (!snackBar) return; // TODO: this might bite our asses
     if (amount <= 0) {
       setMessage(snackBar.info("No messages found!").translate().enqueue());
     } else {
@@ -21,6 +22,7 @@ export const RenderInfoIcon = ({amount}: { amount: number }) => {
         snackBar.info("snackbar.print_pages").translate(Math.floor(amount / 2)).enqueue(100)
       ].join(". "));
     }
+    // eslint-disable-next-line
   }, [amount])
 
   const showRecipeSnackbar = () => {

@@ -34,10 +34,10 @@ export const useMessageSnackBar = () => {
     }
   }
   const errorMessageProvider = (error: Error | string, message: string | undefined, variant: "error" | "warning") => {
-    if (variant == "warning" && message) console.warn(message, error);
-    else if (variant == "warning") console.warn(error);
-    if (variant == "error" && message) console.error(message, error);
-    else if (variant == "error") console.error(error);
+    if (variant === "warning" && message) console.warn(message, error);
+    else if (variant === "warning") console.warn(error);
+    if (variant === "error" && message) console.error(message, error);
+    else if (variant === "error") console.error(error);
     return messageProvider(typeof error === "string" ? error as string : message ? message : error ? (error as Error).message : "Unknown warning!", variant);
   }
   return {

@@ -15,7 +15,7 @@ interface Methods<T>{
 
 const BaseMethods:Methods<RecipeType> = {
   setAmount(recipe: RecipeType, amount: number): RecipeType {
-    if (recipe.amount == amount) return recipe;
+    if (recipe.amount === amount) return recipe;
     const value = Math.floor(amount * 10) / 10;
     if (amount <= 0) return recipe;
 

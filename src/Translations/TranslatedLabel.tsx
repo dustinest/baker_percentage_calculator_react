@@ -8,7 +8,7 @@ type TranslateProps = {
 export const Translation = ({label, count}: TranslateProps) => {
     return (<L18Translation>
         {
-            (t) => <>{count == undefined ? t(label) : t(label, {count})}</>
+            (t) => <>{count === undefined ? t(label) : t(label, {count})}</>
         }
     </L18Translation>);
 }
