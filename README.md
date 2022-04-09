@@ -1,6 +1,6 @@
 # App to convert pastry recipe to use sourdough starter
 
-The goal of this appp is to calculate any baking recipe to sourdough based on baker's percentages.
+The goal of this app is to calculate any baking recipe to sourdough based on baker's percentages.
 There are some hacks in code which might need some attention (IE starter for pancakes).
 
 Check [src/data/PredefinedRecipes.ts](src/data/PredefinedRecipes.ts) for predefined recipes.
@@ -37,6 +37,7 @@ Does not fail, as flour1 percentage will be `123 * (100 - 2 - 50) / 100`
 ## Material icons
 Project uses MUI https://mui.com/components
 Icons can be found at https://mui.com/components/material-icons/
+Breakpoints can be found at https://mui.com/material-ui/customization/breakpoints/
 
 # Setup
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

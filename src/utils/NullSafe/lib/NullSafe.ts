@@ -11,6 +11,9 @@ export const hasValue = <T>(value: T | undefined | null): value is T => value !=
  * Returns true if value is null or undefined otherwise false
  */
 export const hasNoValue = (value: any): boolean => value === null || value === undefined;
+export const hasNoValueOrEquals = <T>(val1: T | undefined | null, val2: T | undefined | null): boolean =>
+  ((hasNoValue(val1) && hasNoValue(val2)) || val1 === val2);
+
 
 type ProviderType<T> = () => T;
 

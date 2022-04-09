@@ -20,7 +20,7 @@ i18n.use(initReactI18next)
         interpolation: {
             escapeValue: false // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
         }
-    })
+    }).catch((error) => console.error("Error while reading the translations!", error));
 
 function App() {
   return (

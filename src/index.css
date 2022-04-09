@@ -17,6 +17,7 @@ table {
 
 td.amount, td.percent {
   text-align: right;
+  white-space: nowrap;
 }
 
 article {
@@ -31,12 +32,6 @@ section.edit {
   padding: 10pt 0;
   margin: 10pt 0;
 }
-
-
-ul.bakingTimes {
-  margin: 0.5em 0 0 0;
-}
-
 
 table th {
   font-size: 1em!important;

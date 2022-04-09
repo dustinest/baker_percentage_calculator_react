@@ -1,22 +1,18 @@
 import {RenderBakingTimeAware} from "./RenderBakingTimeAware";
-import {
-  IngredientWithPercentType,
-  RecipeIngredientsWithPercentType
-} from "../../utils/BakerPercentageCalulation";
+import {IngredientWithPercentType, RecipeIngredientsWithPercentType} from "../../utils/BakerPercentageCalulation";
 import {TableBody} from "@mui/material";
 import {RTableHead, RTableRow} from "../common/RTable";
 import {InputValue} from "../common/InputValue";
 import {NutritionType, RecipeType} from "../../types";
-import {setRecipeIngredientGrams} from "./RecipeItemDetails/RecipeItemEditService";
+import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../State";
 
 type BaseProps = {
   recipe: RecipeType,
   change?: {
     grams?: boolean,
     percentage?: boolean,
-    onRecipeChange: (recipe: RecipeType) => Promise<void>
   }
-}
+};
 
 
 type IngredientsItemProps = {
@@ -42,8 +38,19 @@ const mapIngredient = (ingredient: IngredientWithPercentType) => {
   return result;
 }
 
-const IngredientsItem = ({ingredients, recipe, index, change}: IngredientsItemProps) => {
-  const setGrams = async (subIndex: number, value: number) => change?.onRecipeChange(setRecipeIngredientGrams(recipe, index, subIndex, value));
+export const IngredientsItem = ({ingredients, recipe, index, change}: IngredientsItemProps) => {
+  const editRecipeDispatch = useEditRecipeContext();
+
+  const setGrams = async (subIndex: number, grams: number) => {
+    editRecipeDispatch({
+      type: EditRecipeStateActionTypes.SET_INGREDIENT_GRAM,
+      index: {
+        ingredients: index,
+        ingredient: subIndex
+      },
+      grams
+    });
+  }
   const setPercentage = () => {
     throw new Error("Not implemented!");
   };
