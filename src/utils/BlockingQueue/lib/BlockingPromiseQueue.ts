@@ -1,3 +1,4 @@
+// noinspection ES6PreferShortImport
 import {BlockingPromiseQueue} from "../type/BlockingPromiseQueue.d";
 
 const generateToken = (): string => {
