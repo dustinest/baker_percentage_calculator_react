@@ -12,8 +12,8 @@ type EditDescriptionProps = {
 }
 
 const canChange = (value1: string | null | undefined, value2: string | null | undefined):boolean => {
-  const hasValue1 = hasValue(value1) && value1.trim() != "";
-  const hasValue2 = hasValue(value2) && value2.trim() != "";
+  const hasValue1 = hasValue(value1) && value1.trim().length > 0;
+  const hasValue2 = hasValue(value2) && value2.trim().length > 0;
   return (!hasValue1 && !hasValue2) || (value1 === value2);
 }
 

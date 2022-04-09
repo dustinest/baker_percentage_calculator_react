@@ -11,5 +11,5 @@ export const copyBakingTimeType = (value: BakingTimeType): BakingTimeType =>
 export const bakingTimeEquals = (value1: BakingTimeType, value2: BakingTimeType) =>
   numberIntervalTypeEquals(value1.time, value2.time) &&
   numberIntervalTypeEquals(value1.temperature, value2.temperature) &&
-  value1.steam == value2.steam;
+  value1.steam === value2.steam;
 

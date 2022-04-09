@@ -123,7 +123,7 @@ export const EditRecipeReducerService = Object.freeze({
   },
   setDescription: (recipe: RecipeType | null, action: SetEditRecipeDescriptionStateAction) => {
     if (!recipe) return null;
-    const value = action.value === undefined || action.value === null || action.value.trim().length == 0 ? null : action.value;
+    const value = action.value === undefined || action.value === null || action.value.trim().length === 0 ? null : action.value;
     if (action.index === undefined || action.index === null) {
       if (hasNoValueOrEquals(recipe.description, action.value)) {
         return recipe;

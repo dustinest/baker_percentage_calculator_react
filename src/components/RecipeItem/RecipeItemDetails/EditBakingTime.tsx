@@ -19,7 +19,7 @@ const EditBakingTimeRow = ({bakingTime, index}: {bakingTime?: BakingTimeType, in
 
   const bakingTimeValue = useMemo<BakingTimeType>(() => {
     return bakingTime || DUMMY_BAKING_TIME;
-  }, [bakingTime, index])
+  }, [bakingTime])
 
   useEffect(() => {
     setValue(bakingTimeValue);
