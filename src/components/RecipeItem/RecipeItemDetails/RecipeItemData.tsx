@@ -18,7 +18,7 @@ export type RecipeItemDataProps = {
   bakerPercentage: BakerPercentageResult;
 }
 
-export const RecipeItemData  = ({recipe, bakerPercentage}: RecipeItemDataProps) => {
+const RecipeItemData  = ({recipe, bakerPercentage}: RecipeItemDataProps) => {
   return (<>
     <section className="recipe">
       <IngredientsItems ingredients={bakerPercentage.ingredients} recipe={recipe} />

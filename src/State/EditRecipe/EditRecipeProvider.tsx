@@ -51,6 +51,11 @@ export const EditRecipeConsumer = ({ children }: { children: (args: RecipeType |
 )
 }
 
+export const useEditRecipeContext = () => {
+  const {editRecipeDispatch} = useContext(EditRecipeContext);
+  return editRecipeDispatch;
+}
+
 export const useSetEditRecipe = (): (recipe: RecipeType) => void => {
   const { editRecipeDispatch } = useContext(EditRecipeContext);
 

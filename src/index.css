@@ -17,6 +17,7 @@ table {
 
 td.amount, td.percent {
   text-align: right;
+  white-space: nowrap;
 }
 
 article {

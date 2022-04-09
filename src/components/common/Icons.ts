@@ -8,6 +8,9 @@ import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
+
 export const MenuOpenIcon = StartOutlinedIcon;
 export const MenuCloseIcon = ChevronLeftOutlinedIcon;
 export const RecipeSaveIcon = PlaylistAddCheckOutlinedIcon;
@@ -16,3 +19,5 @@ export const RecipeEditIcon = EditOutlinedIcon;
 export const ExpandMoreIcon = ExpandMoreOutlinedIcon;
 export const CloseIcon = CloseOutlinedIcon;
 export const InfoIcon = InfoOutlinedIcon;
+export const DeleteICon = DeleteOutlineOutlinedIcon;
+export const DoneIcon = DoneOutlinedIcon;

@@ -7,11 +7,13 @@ export type RenderBakingTimeAwareProps = {
 }
 
 const NumberIntervalLabel = ({interval, suffix}: {interval: NumberIntervalType, suffix?: string}) => {
+    const from = Math.min(interval.from, interval.until);
+    const until = Math.max(interval.from, interval.until);
     return (
         <>
-            { interval.from === interval.until
-                ? (<>{interval.from}{suffix ? suffix : undefined}</>)
-                : (<>{interval.from}{suffix ? suffix : undefined} - {interval.until}{suffix ? suffix : undefined}</>)
+            { from === until
+                ? (<>{from}{suffix ? suffix : undefined}</>)
+                : (<>{from}{suffix ? suffix : undefined} - {until}{suffix ? suffix : undefined}</>)
             }
         </>
     )
@@ -27,7 +29,7 @@ export const RenderBakingTimeAware = ({value}: RenderBakingTimeAwareProps) => {
                     <Typography variant="body1" key={index}>
                         <TranslatedLabel label={bakingTime.steam ? "Steam" : "Bake"}/>
                         {" "}
-                        <NumberIntervalLabel interval={bakingTime.time}/> <Translation label={"minutes"}/> <NumberIntervalLabel interval={bakingTime.temperature}/>℃
+                        <NumberIntervalLabel interval={bakingTime.time}/> <Translation label="minutes"/> <NumberIntervalLabel interval={bakingTime.temperature}/>℃
                     </Typography>
                 ))
             }

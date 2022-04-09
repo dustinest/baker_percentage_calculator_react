@@ -53,6 +53,7 @@ export const TRANSLATIONS = {
         "Bake": "Küpseta",
         "Steam": "Auruta",
         "Inner temperature": "Sisetemperatuur",
+        "Description": "Kirjeldus",
         snackbar: {
             recipes_one: "üks retsept",
             recipes_other: "{{count}} retsepti",
