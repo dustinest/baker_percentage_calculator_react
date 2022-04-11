@@ -1,9 +1,8 @@
-import {useEffect} from "react";
 import {Table, TableBody, TableCell, TableRow, TextField} from "@mui/material";
 import {useTranslation} from "../../../Translations";
 import {useMessageSnackBar} from "../../../State";
 import {EditDoneButton} from "./EditDoneButton";
-import {useStringValueAndOriginal} from "./ValueAndOriginal";
+import {useStringInputValueTracking} from "../../../utils/UseValue";
 
 type EditDescriptionProps = {
   value?: string | null,
@@ -11,12 +10,8 @@ type EditDescriptionProps = {
 }
 
 export const EditDescription = ({value, onChange}: EditDescriptionProps) => {
-  const [description, isDescriptionSame, setDescription, resetDescription] = useStringValueAndOriginal(value);
+  const [description, isDescriptionSame, setDescription, resetDescription] = useStringInputValueTracking(value);
   const snackBar = useMessageSnackBar();
-
-  useEffect(() => {
-    resetDescription(value)
-  }, [value]);
 
   const onTextChange = () => {
     if (isDescriptionSame) return;
@@ -32,13 +27,13 @@ export const EditDescription = ({value, onChange}: EditDescriptionProps) => {
         <TableRow>
           <TableCell>
             <TextField
-              id="outlined-multiline-flexible" fullWidth
+              fullWidth
               label={translation.translate("Description")}
               multiline
               maxRows={4}
               value={description}
               onBlur={onTextChange}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={setDescription}
             />
           </TableCell>
           <TableCell>

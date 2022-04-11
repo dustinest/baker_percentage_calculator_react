@@ -2,12 +2,12 @@ import {RecipeType} from "../../../types";
 import {DialogTitle, Grid, TextField} from "@mui/material";
 import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
 import {memo} from "react";
-import {useNumberValueAndOriginal, useStringValueAndOriginal} from "./ValueAndOriginal";
 import {EditDoneButton} from "./EditDoneButton";
+import {useNumberInputValueTracking, useStringInputValueTracking} from "../../../utils/UseValue";
 
 export const EditRecipeDialogTitle = memo(({recipe}: {recipe: RecipeType}) => {
-  const [name, isSameName, setName, resetName] = useStringValueAndOriginal(recipe.name);
-  const [amount, isSameAmount, setAmount, resetAmount] = useNumberValueAndOriginal(recipe.amount);
+  const [name, isSameName, setName, resetName] = useStringInputValueTracking(recipe.name);
+  const [amount, isSameAmount, setAmount, resetAmount] = useNumberInputValueTracking(recipe.amount);
 
   const editRecipeDispatch = useEditRecipeContext();
   const onNameDone = async () => {
@@ -34,7 +34,7 @@ export const EditRecipeDialogTitle = memo(({recipe}: {recipe: RecipeType}) => {
             variant="standard"
             type="string"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={setName}
           />
           <EditDoneButton enabled={!isSameName && name.trim().length > 0} onChange={onNameDone}/>
         </Grid>
@@ -43,7 +43,7 @@ export const EditRecipeDialogTitle = memo(({recipe}: {recipe: RecipeType}) => {
             variant="standard"
             type="number"
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={setAmount}
           />
           <EditDoneButton enabled={!isSameAmount && amount > 0} onChange={onAmountDone}/>
         </Grid>

@@ -13,7 +13,7 @@ import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
 import {useTranslation} from "../../../Translations";
 import {memo} from "react";
 import {EditDoneButton} from "./EditDoneButton";
-import {useNumberValueAndOriginal, useStringValueAndOriginal } from "./ValueAndOriginal";
+import {useNumberInputValueTracking, useStringInputValueTracking} from "../../../utils/UseValue";
 
 type EditRecipeIngredientInnerProps = {
   ingredientName: string | null | undefined;
@@ -29,8 +29,8 @@ const EditRecipeIngredientInner = ({
                                      subIndex
                                    }: EditRecipeIngredientInnerProps) => {
   //const [name, isSameName, setName, resetName] = useStringValueAndOriginal(ingredientName);
-  const [name] = useStringValueAndOriginal(ingredientName);
-  const [grams, isSameGrams, setGrams, resetGrams] = useNumberValueAndOriginal(ingredientGrams);
+  const [name] = useStringInputValueTracking(ingredientName);
+  const [grams, isSameGrams, setGrams, resetGrams] = useNumberInputValueTracking(ingredientGrams);
 
   //console.log("render", name);
   const editRecipeDispatch = useEditRecipeContext();
@@ -54,7 +54,7 @@ const EditRecipeIngredientInner = ({
         <OutlinedInput
           type="number"
           value={grams}
-          onChange={(e) => setGrams(e.target.value)}
+          onChange={setGrams}
           endAdornment={<InputAdornment position="end">g</InputAdornment>}
         />
         <EditDoneButton enabled={!isSameGrams && grams > 0} onChange={onGramsDone}/>
@@ -65,7 +65,7 @@ const EditRecipeIngredientInner = ({
 
 const EditRecipeIngredients = ({ingredients, index}: { ingredients: RecipeIngredientsType; index: number; }) => {
   const translation = useTranslation();
-  const [name, isSameName, setName, resetName] = useStringValueAndOriginal(ingredients.name);
+  const [name, isSameName, setName, resetName] = useStringInputValueTracking(ingredients.name);
   const editRecipeDispatch = useEditRecipeContext();
   const onNameDone = () => {
     editRecipeDispatch({
@@ -82,7 +82,7 @@ const EditRecipeIngredients = ({ingredients, index}: { ingredients: RecipeIngred
           <TableCell colSpan={2}>
             <TextField variant="standard" type="string"
                        value={name}
-                       onChange={(e) => setName(e.target.value)}
+                       onChange={setName}
                        label={translation.translate("Ingredients title")}
             />
             <EditDoneButton enabled={!isSameName} onChange={onNameDone}/>

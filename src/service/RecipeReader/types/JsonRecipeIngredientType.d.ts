@@ -1,5 +1,5 @@
 import {GramsAmountType, PercentAmountType} from "../../../types";
-import {ExtraStandardIngredient, StandardIngredient, StandardIngredients} from "../../../Constant/Ingredient";
+import {ExtraStandardIngredient, StandardIngredients} from "../../../Constant/Ingredient";
 
 export type JsonStandardIngredientType = {
     type: keyof StandardIngredients;
