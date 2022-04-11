@@ -2,8 +2,8 @@ import {
   Card,
 } from "@mui/material";
 import "./RecipeItem.css";
-import {RecipeType} from "../../types";
-import {RecipeItemDetails} from "./RecipeItemDetails/RecipeItemData";
+import {RecipeType} from "../../../types";
+import {RecipeItemDetails} from "./RecipeItemData";
 
 type RecipeItemProps = {
   recipe: RecipeType;

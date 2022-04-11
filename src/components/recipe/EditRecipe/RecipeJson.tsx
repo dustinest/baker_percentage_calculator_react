@@ -1,6 +1,6 @@
-import {RecipeType} from "../../types";
+import {RecipeType} from "../../../types";
 import {useEffect, useState} from "react";
-import {recipeType2RecipeJson} from "../../service/RecipeReader";
+import {recipeType2RecipeJson} from "../../../service/RecipeReader";
 import './RecipeJson.css';
 
 import {
@@ -9,8 +9,8 @@ import {
     AccordionSummary, CircularProgress,
     Typography
 } from "@mui/material";
-import {TranslatedLabel} from "../../Translations";
-import {ExpandMoreIcon} from "../common/Icons";
+import {TranslatedLabel} from "../../../Translations";
+import {ExpandMoreIcon} from "../../common/Icons";
 
 export const RecipeJson = ({recipe}: {recipe: RecipeType}) => {
     const [isExpanded, setExpanded] = useState<boolean>(false);

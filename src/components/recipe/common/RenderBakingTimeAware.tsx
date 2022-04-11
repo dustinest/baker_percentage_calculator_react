@@ -1,5 +1,5 @@
-import {BakingAwareType, NumberIntervalType} from "../../types";
-import {TranslatedLabel, Translation} from "../../Translations";
+import {BakingAwareType, NumberIntervalType} from "../../../types/index";
+import {TranslatedLabel, Translation} from "../../../Translations";
 import {Typography} from "@mui/material";
 
 export type RenderBakingTimeAwareProps = {

@@ -5,25 +5,26 @@ import {InputAdornment, OutlinedInput, TextField} from "@mui/material";
 export type SuffixType = "g" | "%";
 
 
-const StandardInput = ({value, onChange, suffix, type, label}: {
+const StandardInput = ({value, onChange, suffix, type, label, className}: {
     value: string | number;
     type: "string" | "number";
     onChange: (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
     suffix?: SuffixType;
     label?: string;
+    className?: string;
 }
 ) => {
     return (<>{
             suffix ?
                 (<OutlinedInput
                     type={type}
-                    id="outlined-adornment-weight"
                     label={label}
                     value={value}
                     onChange={onChange}
+                    className={className}
                     endAdornment={<InputAdornment position="end">{suffix}</InputAdornment>}
                 />):
-                (<TextField id="standard-basic" variant="standard" type={type} value={value} onChange={onChange} label={label}/>)
+                (<TextField variant="standard" type={type} value={value} onChange={onChange} label={label} className={className}/>)
         }</>)
 }
 
@@ -33,9 +34,10 @@ type InputValueProps<T> = {
     timeout?: number;
     suffix?: SuffixType;
     label?: string;
+    className?: string;
 };
 
-export const InputValue = <T extends number | string, >({value, onChange, suffix, label, timeout = 100}: InputValueProps<T>) => {
+export const InputValue = <T extends number | string, >({value, onChange, suffix, label, className, timeout = 100}: InputValueProps<T>) => {
     const type: "string" | "number" = typeof value === "number" ? "number" : "string";
     const [valueUsed, setValueUsed] = useState<T | undefined>(undefined);
     const [timeoutValue, setTimeoutValue] = useState<NodeJS.Timeout | undefined>(undefined);
@@ -69,5 +71,5 @@ export const InputValue = <T extends number | string, >({value, onChange, suffix
         // eslint-disable-next-line
     }, [valueUsed]);
 
-    return (<>{valueUsed !== undefined ? <StandardInput type={type} value={valueUsed} onChange={(e) => setNormalizedValue(e.target.value as T)} suffix={suffix} label={label}/> : undefined}</>)
+    return (<>{valueUsed !== undefined ? <StandardInput className={className} type={type} value={valueUsed} onChange={(e) => setNormalizedValue(e.target.value as T)} suffix={suffix} label={label}/> : undefined}</>)
 }

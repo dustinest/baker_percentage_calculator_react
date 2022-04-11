@@ -1,17 +1,17 @@
 import {RecipeType} from "../../../types";
-import {IngredientsItems} from "../IngredientsItem";
-import {RenderBakingTimeAware} from "../RenderBakingTimeAware";
+import {IngredientsItems} from "../common/IngredientsItem";
+import {RenderBakingTimeAware} from "../common/RenderBakingTimeAware";
 import {CardHeader, Typography} from "@mui/material";
 import {getJsonRecipeTypeLabel} from "../../../service/RecipeReader";
 import {RIconButton} from "../../common/RButton";
 import {RecipeEditIcon} from "../../common/Icons";
-import {RecipeContentLoader} from "./RecipeLoader";
 import {useMessageSnackBar, useSetEditRecipe} from "../../../State";
 import {useTranslation} from "../../../Translations";
 import {BakerPercentageResult} from "../../../utils/BakerPercentageCalulation";
-import {BakerPercentage} from "../BakerPercentage";
+import {BakerPercentage} from "../common/BakerPercentage";
 import {useEffect, useState} from "react";
-import {recalculateRecipeBakerPercentage} from "./RecipeItemEditService";
+import {recalculateRecipeBakerPercentage} from "../common/RecipeItemEditService";
+import {RecipeContentLoader} from "../common/RecipeLoader";
 
 export type RecipeItemDataProps = {
   recipe: RecipeType;

@@ -1,4 +1,4 @@
-import {RecipeItem} from "../RecipeItem";
+import {RecipeItem} from "./RecipeItem";
 import {RecipesConsumer} from "../../State";
 
 export const RecipeList = () => {

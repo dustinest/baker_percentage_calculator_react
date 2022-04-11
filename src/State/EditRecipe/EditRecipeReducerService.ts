@@ -12,13 +12,13 @@ import {
   RemoveEditRecipeBakingTimeStateAction,
   SetEditRecipeAmountStateAction,
   SetEditRecipeBakingTimeStateAction, SetEditRecipeDescriptionStateAction,
-  SetEditRecipeIngredientGramsStateAction,
+  SetEditRecipeIngredientGramsStateAction, SetEditRecipeIngredientsNameStateAction,
   SetEditRecipeInnerTemperatureStateAction,
   SetEditRecipeNameStateAction
 } from "./EditRecipeStateAction.d";
-import {hasNoValueOrEquals} from "../../utils/NullSafe";
+import {hasNoValueOrEquals, hasValue} from "../../utils/NullSafe";
 
-interface Methods {
+type Methods = {
   setName: (recipe: RecipeType | null, action: SetEditRecipeNameStateAction) => RecipeType | null,
   setIngredientGram: (recipe: RecipeType | null, action: SetEditRecipeAmountStateAction) => RecipeType | null,
   setAmount: (recipe: RecipeType | null, action: SetEditRecipeIngredientGramsStateAction) => RecipeType | null,
@@ -26,6 +26,7 @@ interface Methods {
   removeBakingTime: (recipe: RecipeType | null, action: RemoveEditRecipeBakingTimeStateAction) => RecipeType | null,
   setInnerTemperature: (recipe: RecipeType | null, action: SetEditRecipeInnerTemperatureStateAction) => RecipeType | null,
   setDescription: (recipe: RecipeType | null, action: SetEditRecipeDescriptionStateAction) => RecipeType | null,
+  setIngredientsName: (recipe: RecipeType | null, action: SetEditRecipeIngredientsNameStateAction) => RecipeType | null,
 }
 
 const resolveActionGenericIndex = (index: ActionGenericIndex | number, callback1: (index: number) => RecipeType | null, callback2: (index: ActionGenericIndex) => RecipeType | null) => {
@@ -137,6 +138,16 @@ export const EditRecipeReducerService = Object.freeze({
     }
     const copy = copyRecipeType(recipe);
     recipe.ingredients[action.index].description = value;
+    return copy;
+  },
+  setIngredientsName: (recipe: RecipeType | null, action: SetEditRecipeIngredientsNameStateAction) => {
+    if (!recipe) return null;
+    const newName = hasValue(action.name) ? action.name.trim() : undefined;
+    if (recipe.ingredients[action.index].name === newName) {
+      return;
+    }
+    const copy = copyRecipeType(recipe);
+    copy.ingredients[action.index].name = newName;
     return copy;
   }
 } as Methods) as Methods;

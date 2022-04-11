@@ -27,6 +27,8 @@ export const updateEditRecipeReducer = (recipe: RecipeType | null, action: Recip
       return EditRecipeReducerService.setInnerTemperature(recipe, action);
     case EditRecipeStateActionTypes.SET_DESCRIPTION:
       return EditRecipeReducerService.setDescription(recipe, action);
+    case EditRecipeStateActionTypes.SET_INGREDIENTS_NAME:
+      return EditRecipeReducerService.setIngredientsName(recipe, action);
     case EditRecipeStateActionTypes.CANCEL_EDIT_RECIPE:
       return null;
   }

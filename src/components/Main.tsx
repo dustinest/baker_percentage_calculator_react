@@ -12,8 +12,8 @@ import {
   useMessageSnackBar,
 } from "../State";
 import {RecipeList} from "./recipe/RecipeList";
-import {RecipeEditDialog} from "./RecipeItem/RecipeItemDetails/RecipeItemEdit";
 import {useAsyncEffect} from "../utils/Async";
+import {EditRecipeDialog} from "./recipe/EditRecipe";
 
 const getDouble = (value: JsonRecipeType): JsonRecipeType => {
   return {
@@ -75,7 +75,7 @@ export const Main = () => {
           (
             <>
               <RecipeNavigation/>
-              <EditRecipeProvider><RecipeEditDialog/><RecipeList/></EditRecipeProvider>
+              <EditRecipeProvider><EditRecipeDialog/><RecipeList/></EditRecipeProvider>
             </>
           )
       }

@@ -1,17 +1,11 @@
 import {RenderBakingTimeAware} from "./RenderBakingTimeAware";
-import {IngredientWithPercentType, RecipeIngredientsWithPercentType} from "../../utils/BakerPercentageCalulation";
+import {IngredientWithPercentType, RecipeIngredientsWithPercentType} from "../../../utils/BakerPercentageCalulation";
 import {TableBody} from "@mui/material";
-import {RTableHead, RTableRow} from "../common/RTable";
-import {InputValue} from "../common/InputValue";
-import {NutritionType, RecipeType} from "../../types";
-import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../State";
+import {RTableHead, RTableRow} from "../../common/RTable";
+import {NutritionType, RecipeType} from "../../../types/index";
 
 type BaseProps = {
-  recipe: RecipeType,
-  change?: {
-    grams?: boolean,
-    percentage?: boolean,
-  }
+  recipe: RecipeType
 };
 
 
@@ -38,27 +32,12 @@ const mapIngredient = (ingredient: IngredientWithPercentType) => {
   return result;
 }
 
-export const IngredientsItem = ({ingredients, recipe, index, change}: IngredientsItemProps) => {
-  const editRecipeDispatch = useEditRecipeContext();
-
-  const setGrams = async (subIndex: number, grams: number) => {
-    editRecipeDispatch({
-      type: EditRecipeStateActionTypes.SET_INGREDIENT_GRAM,
-      index: {
-        ingredients: index,
-        ingredient: subIndex
-      },
-      grams
-    });
-  }
-  const setPercentage = () => {
-    throw new Error("Not implemented!");
-  };
+export const IngredientsItem = ({ingredients, recipe, index}: IngredientsItemProps) => {
+  const name = ingredients.name && ingredients.name !== recipe.name ? ingredients.name : index > 0 ? "Dough" : undefined;
   return (
     <>
       <table className="ingredients">
-        {ingredients.name && ingredients.name !== recipe.name ? (
-          <RTableHead label={ingredients.name || ""}/>) : undefined}
+          {name ? <RTableHead label={name}/> : undefined}
         <TableBody>
           {
             ingredients.ingredientWithPercent.map(mapIngredient).map((value, i) =>
@@ -69,17 +48,8 @@ export const IngredientsItem = ({ingredients, recipe, index, change}: Ingredient
                   type={value.type}
                   fat={value.fat}
                   ash={value.ash}
-                  grams={
-                    change?.grams ?
-                      <InputValue value={value.grams} onChange={(value) => setGrams(i, value)} suffix="g"/> :
-                      value.grams
-                  }
-                  percent={
-                    change?.percentage ?
-                      <InputValue value={value.percent} onChange={setPercentage}
-                                  suffix="%"/> :
-                      value.percent
-                  }
+                  grams={value.grams}
+                  percent={value.percent}
                 />
               )
             )}
@@ -94,12 +64,11 @@ type IngredientsItemsProps = {
   ingredients: RecipeIngredientsWithPercentType[];
 } & BaseProps;
 
-export const IngredientsItems = ({ingredients, recipe, change}: IngredientsItemsProps) => {
+export const IngredientsItems = ({ingredients, recipe}: IngredientsItemsProps) => {
   return (<>{
     ingredients.map((ingredients, index) => (
       <IngredientsItem
         index={index}
-        change={change}
         ingredients={ingredients}
         recipe={recipe}
         key={`ingredients_${index}`}/>

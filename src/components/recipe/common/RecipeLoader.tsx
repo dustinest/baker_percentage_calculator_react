@@ -1,6 +1,6 @@
 import {Skeleton} from "@mui/material";
 
-export const RecipeLoader = () => {
+const RecipeLoader = () => {
   return (
     <div className="recipe-loader">
       <Skeleton />

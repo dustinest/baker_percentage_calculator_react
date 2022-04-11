@@ -1,6 +1,6 @@
 import {NumberIntervalType, RecipeType} from "../../../types";
 import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
-import {Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
+import {Stack, Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
 import {TranslatedTableCell} from "../../../Translations";
 import {useEffect, useState} from "react";
 import {EditNumberInterval} from "../../common/EditNumberInterval";
@@ -36,17 +36,16 @@ export const EditInnerTemperature = ({recipe}: {recipe: RecipeType}) => {
       <TableHead>
         <TableRow>
           <TranslatedTableCell label={"Inner temperature"}/>
-          <TableCell/>
         </TableRow>
       </TableHead>
       <TableBody>
         <TableRow>
           <TableCell>
-            <EditNumberInterval interval={value} onChange={(from, until) => setInnerTemperature(from, until)}/>
+            <Stack direction="row">
+              <EditNumberInterval interval={value} onChange={(from, until) => setInnerTemperature(from, until)}/>
+              {recipe.innerTemperature ? <RIconButton onClick={removeTemperature} icon={<DeleteICon/>}/>: <RIconButton onClick={triggerChange} icon={<DoneIcon/>}/>}
+            </Stack>
           </TableCell>
-        <TableCell>
-          {recipe.innerTemperature ? <RIconButton onClick={removeTemperature} icon={<DeleteICon/>}/>: <RIconButton onClick={triggerChange} icon={<DoneIcon/>}/>}
-        </TableCell>
         </TableRow>
       </TableBody>
     </Table>

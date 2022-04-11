@@ -1,5 +1,7 @@
 import {NumberIntervalType} from "../../types";
 import {InputValue} from "./InputValue";
+import "./EditNumberInterval.css";
+import {Stack} from "@mui/material";
 
 type EditNumberIntervalProps = {
   interval: NumberIntervalType;
@@ -19,6 +21,13 @@ export const triggerUntil = (until: number, interval: NumberIntervalType, onChan
 
 export const EditNumberInterval = ({interval, suffix, onChange}: EditNumberIntervalProps) => {
   return (
-    <><InputValue value={interval.from} onChange={(value) => triggerFrom(value, interval, onChange)}/> - <InputValue value={interval.until} onChange={(value) => triggerUntil(value, interval, onChange)}/>{suffix ? suffix : undefined}</>
+    <>
+      <Stack direction="row">
+        <InputValue value={interval.from} onChange={(value) => triggerFrom(value, interval, onChange)} className="number-interval-input number-interval-from"/>
+        <label>-</label>
+        <InputValue value={interval.until} onChange={(value) => triggerUntil(value, interval, onChange)}  className="number-interval-input number-interval-until"/>
+        {suffix ? <label>{suffix}</label> : undefined}
+      </Stack>
+    </>
   );
 }
