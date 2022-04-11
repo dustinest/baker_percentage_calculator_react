@@ -12,8 +12,8 @@ describe("Test valueOf", () => {
   it.each([[], "", false, true, 0, 1, -1, "a"])(
     "Should return %s not default value",
     (v) => {
-      expect(valueOf(v, false)).toBe(v);
-      expect(valueOf(v, true)).toBe(v);
+      expect(valueOf(v, false)).toStrictEqual(v);
+      expect(valueOf(v, true)).toStrictEqual(v);
     }
   );
 
@@ -28,23 +28,30 @@ describe("Test valueOf", () => {
   it.each([[], "", false, true, 0, 1, -1, "a"])(
     "Should return %s not consumer",
     (v) => {
-      expect(valueOf(v, () => false)).toBe(v);
-      expect(valueOf(v, () => true)).toBe(v);
+      expect(valueOf(v, () => false)).toStrictEqual(v);
+      expect(valueOf(v, () => true)).toStrictEqual(v);
     }
   );
   // noinspection SpellCheckingInspection
   it.each([parseInt("abaasdas"), parseFloat("ASDADASDA")])(
     "Should return %s not consumer",
     (v) => {
-      expect(valueOf(v, () => 234)).toBe(234);
-      expect(valueOf(v, 234)).toBe(234);
+      expect(valueOf(v, () => 234)).toStrictEqual(234);
+      expect(valueOf(v, 234)).toStrictEqual(234);
     }
   );
-  it.each([parseInt("1.23"), parseFloat("1.23")])(
+  it.each([parseFloat("1.23")])(
     "Should return %s not consumer",
     (v) => {
-      expect(valueOf(v, () => 234)).toBe(1.23);
-      expect(valueOf(v, 234)).toBe(1.23);
+      expect(valueOf(v, () => 234)).toStrictEqual(1.23);
+      expect(valueOf(v, 234)).toStrictEqual(1.23);
+    }
+  );
+  it.each([parseInt("1")])(
+    "Should return %s not consumer",
+    (v) => {
+      expect(valueOf(v, () => 234)).toStrictEqual(1);
+      expect(valueOf(v, 234)).toStrictEqual(1);
     }
   );
 });
