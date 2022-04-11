@@ -22,6 +22,7 @@ export const TRANSLATIONS = {
         }
     },
     et: {
+        "Starter": "Juuretis",
         water: "vesi",
         Water: "Vesi",
         flour: "jahu",
@@ -41,7 +42,7 @@ export const TRANSLATIONS = {
         "Egg_other": "{{count}} muna",
         "egg": "muna",
         other: "teised",
-        Starter: "Juuretis",
+        "Sourdough starter": "Eeltaigen",
         Dough: "Taigen",
         "Durum flour": "Durumjahu",
         "Olive oil": "Oliivõli",

@@ -19,7 +19,7 @@ const calculateStarterFlour  = (value: DryAndLiquidCalculationResult): number =>
     return result > 10 ? 10 : result;
 }
 
-export const calculateStarter = async (ingredients: RecipeIngredientsType[]): Promise<StarterCalculationResult> => {
+export const calculateSourDoughStarter = async (ingredients: RecipeIngredientsType[]): Promise<StarterCalculationResult> => {
     const dryAndLiquidResult = await calculateDryAndLiquid(ingredients[0].ingredients.map(copyIngredientGramsType));
     const flour = Math.floor(dryAndLiquidResult.totals.flour);
     const water = Math.floor(dryAndLiquidResult.totals.water);

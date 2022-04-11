@@ -5,7 +5,8 @@ import {
     RecipeIngredientsType,
     NutritionType
 } from "../../types";
-import {calculateStarter, StarterIngredients} from "./FirstIngredientCalculator";
+import {calculateSourDoughStarter, StarterIngredients} from "./SourDoughStarterCalculator";
+import {sortRecipeIngredientsType} from "./IngredientsSort";
 
 const remapIngredient = (ingredient: IngredientGramsType, grams?: number): IngredientGramsType =>
   copyIngredientGramsType(grams !== undefined ? {...ingredient, ...{grams: grams}} : ingredient);
@@ -32,7 +33,7 @@ const calculate = (container: IngredientGramsType[], starterIngredients: Ingredi
 };
 
 export const splitStarterAndDough = async (recipeName: string, recipeIngredients: RecipeIngredientsType[]): Promise<RecipeIngredientsType[]> => {
-    const dryAndLiquid = await calculateStarter(recipeIngredients);
+    const dryAndLiquid = await calculateSourDoughStarter(recipeIngredients);
     if (dryAndLiquid === undefined) return [];
 
     const starterIngredients: IngredientGramsType[] = [
@@ -82,7 +83,7 @@ export const splitStarterAndDough = async (recipeName: string, recipeIngredients
             return;
         }
         result.push(copyRecipeIngredientsType({
-            name: "Eeltaigen",
+            name: "Sourdough starter",
             ingredients: starterIngredients,
             bakingTime: [],
             innerTemperature: null,
@@ -97,5 +98,5 @@ export const splitStarterAndDough = async (recipeName: string, recipeIngredients
         }))
         return;
     });
-    return result;
+    return sortRecipeIngredientsType(result);
 }
