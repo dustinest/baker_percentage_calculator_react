@@ -1,6 +1,6 @@
 import {RenderBakingTimeAware} from "./RenderBakingTimeAware";
 import {IngredientWithPercentType, RecipeIngredientsWithPercentType} from "../../../utils/BakerPercentageCalulation";
-import {TableBody} from "@mui/material";
+import {Table, TableBody} from "@mui/material";
 import {RTableHead, RTableRow} from "../../common/RTable";
 import {NutritionType, RecipeType} from "../../../types/index";
 
@@ -33,10 +33,10 @@ const mapIngredient = (ingredient: IngredientWithPercentType) => {
 }
 
 export const IngredientsItem = ({ingredients, recipe, index}: IngredientsItemProps) => {
-  const name = ingredients.name && ingredients.name !== recipe.name ? ingredients.name : index > 0 ? "Dough" : undefined;
+  const name = ingredients.name && ingredients.name !== recipe.name ? ingredients.name : index > 0 ? "ingredients.title.dough" : undefined;
   return (
     <>
-      <table className="ingredients">
+      <Table className="ingredients">
           {name ? <RTableHead label={name}/> : undefined}
         <TableBody>
           {
@@ -54,7 +54,7 @@ export const IngredientsItem = ({ingredients, recipe, index}: IngredientsItemPro
               )
             )}
         </TableBody>
-      </table>
+      </Table>
       <RenderBakingTimeAware value={ingredients}/>
     </>
   )

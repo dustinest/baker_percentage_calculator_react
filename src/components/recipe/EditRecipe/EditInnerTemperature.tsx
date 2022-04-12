@@ -35,7 +35,7 @@ export const EditInnerTemperature = ({recipe}: {recipe: RecipeType}) => {
   return (<Table>
       <TableHead>
         <TableRow>
-          <TranslatedTableCell label={"Inner temperature"}/>
+          <TranslatedTableCell label="edit.baking_instructions.inner_temperature"/>
         </TableRow>
       </TableHead>
       <TableBody>

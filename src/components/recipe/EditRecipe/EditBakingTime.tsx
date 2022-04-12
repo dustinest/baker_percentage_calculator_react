@@ -68,9 +68,9 @@ export const EditBakingTime = ({bakingTime}: {bakingTime: BakingTimeType[]}) => 
     <Table>
       <TableHead>
         <TableRow>
-          <TranslatedTableCell label={"Steam"}/>
-          <TranslatedTableCell label={"Time"}/>
-          <TranslatedTableCell label={"Temperature"}/>
+          <TranslatedTableCell label="edit.baking_instructions.steam"/>
+          <TranslatedTableCell label="edit.baking_instructions.time"/>
+          <TranslatedTableCell label="edit.baking_instructions.temperature"/>
           <TableCell/>
         </TableRow>
       </TableHead>

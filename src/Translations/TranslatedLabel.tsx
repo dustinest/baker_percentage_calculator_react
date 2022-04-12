@@ -1,23 +1,34 @@
 import { Translation as L18Translation } from 'react-i18next';
-import {TableCell} from "@mui/material";
+import {TableCell, Typography} from "@mui/material";
 
 type TranslateProps = {
     label: string;
+    args?: {[key: string]: string | number},
     count?: number;
 };
 
-export const Translation = ({label, count}: TranslateProps) => {
+export const Translation = ({label, count, args}: TranslateProps) => {
     return (<L18Translation>
         {
-            (t) => <>{count === undefined ? t(label) : t(label, {count})}</>
+            (t) => <>{
+                args === undefined && count === undefined ? t(label):
+                    args !== undefined && count !== undefined ? t(label, {...args, ...{count}}):
+                        args !== undefined ? t(label, args):
+                            count !== undefined ? t(label, {count})
+                                : `Undefined arguments for ${label}!`
+            }</>
         }
     </L18Translation>);
 }
 
-export const TranslatedLabel = ({label, count}: TranslateProps) => {
-    return (<label><Translation label={label} count={count}/></label>)
+export const TranslatedLabel = (props: TranslateProps) => {
+    return (<label><Translation {...props}/></label>)
 }
 
-export const TranslatedTableCell = ({label, count}: TranslateProps) => {
-    return (<TableCell><label><Translation label={label} count={count}/></label></TableCell>)
+export const TranslatedTypographyBody = (props: TranslateProps) => {
+    return (<Typography variant="body2"><Translation {...props}/></Typography>)
+}
+
+export const TranslatedTableCell = (props: TranslateProps) => {
+    return (<TableCell><label><Translation {...props}/></label></TableCell>)
 }

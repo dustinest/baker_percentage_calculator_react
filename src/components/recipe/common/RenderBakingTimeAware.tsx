@@ -1,44 +1,36 @@
 import {BakingAwareType, NumberIntervalType} from "../../../types/index";
-import {TranslatedLabel, Translation} from "../../../Translations";
-import {Typography} from "@mui/material";
+import {TranslatedTypographyBody} from "../../../Translations";
+import {Container, Typography} from "@mui/material";
 
 export type RenderBakingTimeAwareProps = {
     value: BakingAwareType;
 }
 
-const NumberIntervalLabel = ({interval, suffix}: {interval: NumberIntervalType, suffix?: string}) => {
-    const from = Math.min(interval.from, interval.until);
-    const until = Math.max(interval.from, interval.until);
-    return (
-        <>
-            { from === until
-                ? (<>{from}{suffix ? suffix : undefined}</>)
-                : (<>{from}{suffix ? suffix : undefined} - {until}{suffix ? suffix : undefined}</>)
-            }
-        </>
-    )
-}
+const getIntervalString = (interval: NumberIntervalType) => interval.from === interval.until ? `${interval.from}` : `${Math.min(interval.from, interval.until)} - ${Math.max(interval.from, interval.until)}`;
 
 export const RenderBakingTimeAware = ({value}: RenderBakingTimeAwareProps) => {
-    const innerTemperature:NumberIntervalType | null = value.innerTemperature;
-    const description: null | string = value.description;
     return (
         <>
-            {
-                value.bakingTime.map((bakingTime, index) => (
-                    <Typography variant="body1" key={index}>
-                        <TranslatedLabel label={bakingTime.steam ? "Steam" : "Bake"}/>
-                        {" "}
-                        <NumberIntervalLabel interval={bakingTime.time}/> <Translation label="minutes"/> <NumberIntervalLabel interval={bakingTime.temperature}/>℃
-                    </Typography>
-                ))
-            }
-            {
-                innerTemperature ? <Typography variant="body1"><Translation label={"Inner temperature"}/> <NumberIntervalLabel interval={innerTemperature} suffix="℃"/></Typography> : undefined
-            }
-            {
-                description ? <Typography variant="body1">{description}</Typography> : undefined
-            }
+            <Container component="section" className="baking-instructions">
+                {
+                    value.bakingTime.map((bakingTime, index) => (
+                            <TranslatedTypographyBody key={index}
+                                label={bakingTime.steam ? "baking_instructions.steam" : "baking_instructions.bake"}
+                                args={{
+                                    minutes: getIntervalString(bakingTime.time),
+                                    temperature: getIntervalString(bakingTime.temperature)
+                                }}/>
+                    ))
+                }
+                {
+                    value.innerTemperature ?
+                        <TranslatedTypographyBody label="baking_instructions.inner_temperature" args={{temperature: getIntervalString(value.innerTemperature)}}/>
+                        : undefined
+                }
+                {
+                    value.description ? <Typography variant="body1">{value.description}</Typography> : undefined
+                }
+            </Container>
         </>
     )
 }

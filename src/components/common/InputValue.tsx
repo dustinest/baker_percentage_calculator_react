@@ -1,6 +1,7 @@
 import {ChangeEvent, useEffect, useState} from "react";
 import {normalizeNumber} from "../../utils/Numbers";
 import {InputAdornment, OutlinedInput, TextField} from "@mui/material";
+import {useValueTimeoutAsync} from "../../utils/Async";
 
 export type SuffixType = "g" | "%";
 
@@ -37,17 +38,15 @@ type InputValueProps<T> = {
     className?: string;
 };
 
-export const InputValue = <T extends number | string, >({value, onChange, suffix, label, className, timeout = 100}: InputValueProps<T>) => {
+export const InputValue = <T extends number | string, >({value, onChange, suffix, label, className, timeout = 200}: InputValueProps<T>) => {
     const type: "string" | "number" = typeof value === "number" ? "number" : "string";
     const [valueUsed, setValueUsed] = useState<T | undefined>(undefined);
-    const [timeoutValue, setTimeoutValue] = useState<NodeJS.Timeout | undefined>(undefined);
 
-    const clearTimeoutValue = (newTimeout?: NodeJS.Timeout) => {
-        if (timeoutValue !== undefined) {
-            clearTimeout(timeoutValue);
+    useValueTimeoutAsync(async () => {
+        if (valueUsed !== undefined && valueUsed !== value) {
+            return onChange(valueUsed).catch(console.error);
         }
-        setTimeoutValue(newTimeout);
-    };
+    }, valueUsed, timeout)
 
     const setNormalizedValue = (val: T) => {
         const _value: T = type === "string" ? val : normalizeNumber(val as number) as T;
@@ -55,21 +54,10 @@ export const InputValue = <T extends number | string, >({value, onChange, suffix
             setValueUsed(_value as T);
         }
     }
-
     useEffect(() => {
         setNormalizedValue(value);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value]);
-
-    useEffect(() => {
-        clearTimeoutValue(setTimeout(() => {
-            if (valueUsed !== undefined && valueUsed !== value) {
-                if (valueUsed === value) return;
-                onChange(valueUsed).catch(console.error);
-            }
-        }, timeout));
-        // eslint-disable-next-line
-    }, [valueUsed]);
 
     return (<>{valueUsed !== undefined ? <StandardInput className={className} type={type} value={valueUsed} onChange={(e) => setNormalizedValue(e.target.value as T)} suffix={suffix} label={label}/> : undefined}</>)
 }

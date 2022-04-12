@@ -23,7 +23,7 @@ interface StandardIngredient {
   WHEAT_550_FLOUR: IngredientType
 }
 
-const createPredefined = (id: string, name: string, ...nutrients: (NutritionType | number)[]): IngredientType => {
+const createPredefined = (id: string, ...nutrients: (NutritionType | number)[]): IngredientType => {
   const _nutrients: NutrientPercentType[] = [];
   for (let i = 0; i < nutrients.length; i += 2) {
     _nutrients.push({
@@ -34,32 +34,32 @@ const createPredefined = (id: string, name: string, ...nutrients: (NutritionType
 
   return Object.freeze({
     id: id,
-    name: name,
+    name: `ingredient.predefined.${id}`,
     nutrients: Object.freeze(_nutrients)
   } as IngredientType);
 }
 
 export const StandardIngredients: { [Property in keyof StandardIngredient]: IngredientType } = Object.freeze({
-  SALT: createPredefined("salt", "Salt", NutritionType.salt, 100),
-  SUGAR: createPredefined("sugar", "Sugar", NutritionType.sugar, 100),
-  SUGAR_BROWN: createPredefined("sugar_brown", "Brown sugar", NutritionType.sugar, 100),
-  WATER: createPredefined("water", "Water", NutritionType.water, 100),
-  BUTTER: createPredefined("butter_82", "Butter", NutritionType.fat, 82, NutritionType.water, 18),
-  OIL: createPredefined("oil", "Õli", NutritionType.fat, 82, NutritionType.fat, 100),
-  MILK: createPredefined("milk_2_5", "Milk", NutritionType.fat, 2.8, NutritionType.water, 97.5),
-  EGG: createPredefined("egg", "Egg", NutritionType.egg, 100),
+  SALT: createPredefined("salt.generic", NutritionType.salt, 100),
+  SUGAR: createPredefined("sugar.generic", NutritionType.sugar, 100),
+  SUGAR_BROWN: createPredefined("sugar.brown", NutritionType.sugar, 100),
+  WATER: createPredefined("water.generic", NutritionType.water, 100),
+  BUTTER: createPredefined("butter.generic", NutritionType.fat, 82, NutritionType.water, 18),
+  OIL: createPredefined("oil.generic", NutritionType.fat, 82, NutritionType.fat, 100),
+  MILK: createPredefined("milk.generic", NutritionType.fat, 2.8, NutritionType.water, 97.5),
+  EGG: createPredefined("egg.generic", NutritionType.egg, 100),
 
-  CARDAMOM: createPredefined("cardamom", "Cardamom", NutritionType.spice, 100),
-  CINNAMON: createPredefined("cinnamon", "Cinnamon", NutritionType.spice, 100),
+  CARDAMOM: createPredefined("spice.cardamom", NutritionType.spice, 100),
+  CINNAMON: createPredefined("spice.cinnamon", NutritionType.spice, 100),
 
-  OLIVE_OIL: createPredefined("olive_oil", "Olive oil", NutritionType.fat, 100),
-  WHOLE_RYE_FLOUR: createPredefined("whole_grain_rye_flour", "Whole grain rye flour", NutritionType.flour, 100, NutritionType.whole_grain, 100),
-  WHOLE_WHEAT_FLOUR: createPredefined("whole_grain_wheat_flour", "Whole grain wheat flour", NutritionType.flour, 100, NutritionType.whole_grain, 100),
-  DURUM_WHEAT: createPredefined("durum_wheat_flour", "Durum flour", NutritionType.flour, 100, NutritionType.whole_grain, 100),
+  OLIVE_OIL: createPredefined("oil.olive", NutritionType.fat, 100),
+  WHOLE_RYE_FLOUR: createPredefined("flour.rye.whole_grain", NutritionType.flour, 100, NutritionType.whole_grain, 100),
+  WHOLE_WHEAT_FLOUR: createPredefined("flour.wheat.whole_grain", NutritionType.flour, 100, NutritionType.whole_grain, 100),
+  DURUM_WHEAT: createPredefined("flour.wheat.durum", NutritionType.flour, 100, NutritionType.whole_grain, 100),
 
-  WHOLE_RYE_MALT_FLOUR: createPredefined("rye_malt_flour", "Rye malt flour", NutritionType.flour, 100, NutritionType.whole_grain, 100),
-  WHEAT_405_FLOUR: createPredefined("wheat_flour_405", "Wheat flour", NutritionType.flour, 100, NutritionType.ash, 405),
-  WHEAT_550_FLOUR: createPredefined("wheat_flour_550", "Wheat flour", NutritionType.flour, 100, NutritionType.ash, 550)
+  WHOLE_RYE_MALT_FLOUR: createPredefined("flour.rye.malt", NutritionType.flour, 100, NutritionType.whole_grain, 100),
+  WHEAT_405_FLOUR: createPredefined("flour.wheat.generic", NutritionType.flour, 100, NutritionType.ash, 405),
+  WHEAT_550_FLOUR: createPredefined("flour.wheat.generic", NutritionType.flour, 100, NutritionType.ash, 550)
 });
 
 type StandardIngredientMethodsType = { [Property in keyof StandardIngredient]: (grams: number) => IngredientGramsType };

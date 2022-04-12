@@ -11,11 +11,10 @@ type RecipeItemProps = {
 
 export const RecipeItem = ({recipe}: RecipeItemProps) => {
   return (
-    <article id={recipe.id}>
       <Card
         sx={{maxWidth: 400, marginLeft: "auto", marginRight: "auto"}}
         variant="outlined" className="recipe">
         <RecipeItemDetails recipe={recipe}/>
       </Card>
-    </article>)
+    );
 };

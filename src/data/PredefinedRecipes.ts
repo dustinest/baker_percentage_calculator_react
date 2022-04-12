@@ -108,7 +108,7 @@ export const PREDEFINED_RECIPES = [
         name: "Pannkook",
         ingredients: [
             {
-                name: "Esimene päev",
+                name: "ingredients.title.day_one",
                 starter: true,
                 ingredients: [
                     { type: "WHEAT_405_FLOUR", grams: 362 },
@@ -118,7 +118,7 @@ export const PREDEFINED_RECIPES = [
 
             },
             {
-                name: "Teine päev",
+                name: "ingredients.title.day_two",
                 ingredients: [
                     { type: "BUTTER", grams: 50 },
                     { type: "SALT", grams: 7.5 },
@@ -158,7 +158,7 @@ export const PREDEFINED_RECIPES = [
                     { type: "BUTTER", grams: 75 },
                     { type: "SALT", grams: 5 },
                     { type: "SUGAR_BROWN", grams: 50 },
-                    { type: "CARDAMOM", grams: 1 },
+                    { type: "CARDAMOM", percent: 0.2 },
                 ]
 
             }
@@ -179,14 +179,14 @@ export const PREDEFINED_RECIPES = [
                     { type: "BUTTER", grams: 75 },
                     { type: "SALT", grams: 5 },
                     { type: "SUGAR_BROWN", grams: 50 },
-                    { type: "CARDAMOM", grams: 1 },
+                    { type: "CARDAMOM", percent: 0.2 },
                 ]
 
             },
             {
                 name: "Kaanelikiht",
                 ingredients: [
-                    { type: "CINNAMON", grams: 15.86 },
+                    { type: "CINNAMON", percent: 3.28 },
                     { type: "BUTTER", grams: 112 },
                     { type: "SALT", grams: 1 },
                     { type: "SUGAR", grams: 95 }

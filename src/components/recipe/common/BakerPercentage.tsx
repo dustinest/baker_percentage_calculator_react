@@ -1,5 +1,5 @@
 import {MicroNutrientsCalculationResult} from "../../../utils/MicroNutrientsCalculator";
-import {TableBody} from "@mui/material";
+import {Table, TableBody} from "@mui/material";
 import {RTableHead, RTableRow} from "../../common/RTable";
 import {hasValue} from "../../../utils/NullSafe";
 import {DISPLAYABLE_NUTRIENTS_TYPE_ARRAY, NutritionType} from "../../../types/index";
@@ -27,18 +27,18 @@ const RemapMicroNutrients = (microNutrientsResult: MicroNutrientsCalculationResu
 
 export const BakerPercentage = ({microNutrientsResult} : MicroNutrientsResultListParams) => {
     return (
-        <table className="baker-percentage">
-            <RTableHead label="Baker's percentage"/>
+        <Table className="baker-percentage">
+            <RTableHead label="ingredients.title.baker_percentage"/>
             <TableBody>
             {
                 RemapMicroNutrients(microNutrientsResult).map((value) => (
                     <RTableRow
                         key={value.type}
-                        label={value.type}
+                        label={`ingredient.predefined.${value.type}.generic`}
                         grams={value.grams}
                         percent={value.percent}/>
                 ))}
             </TableBody>
-        </table>
+        </Table>
     )
 }

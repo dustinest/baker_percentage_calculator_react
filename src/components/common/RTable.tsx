@@ -16,7 +16,7 @@ type RenderTranslatableLabelProps = {
 
 const RenderTranslatableLabel = ({label, grams, type, fat, ash}: RenderTranslatableLabelProps) => {
     return (<>{
-        type === "egg" && typeof grams === "number" ? <TranslatedLabel label={label} count={Math.round(grams / 64)}/>:
+        type === "egg.generic" && typeof grams === "number" ? <TranslatedLabel label={label} count={Math.round(grams / 64)}/>:
             fat && fat > 0 ? <TranslatedLabel label={label} count={fat}/>:
                 ash && ash > 0 ? <TranslatedLabel label={label} count={ash}/>:
                   <TranslatedLabel label={label}/>

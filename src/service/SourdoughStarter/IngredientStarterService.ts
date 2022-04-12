@@ -39,7 +39,7 @@ export const splitStarterAndDough = async (recipeName: string, recipeIngredients
     const starterIngredients: IngredientGramsType[] = [
         {
             id: "starter_from_fridge",
-            name: "Starter",
+            name: "ingredient.sourdough_starter.name",
             grams: dryAndLiquid?.starter.flour.fridge + dryAndLiquid?.starter.liquid.fridge,
             nutrients: [{type: NutritionType.water, percent: 50}, {type: NutritionType.flour, percent: 50}]
         } as IngredientGramsType
@@ -74,7 +74,7 @@ export const splitStarterAndDough = async (recipeName: string, recipeIngredients
             }).filter((o) => o !== undefined && o !== null);
 
             result.push(copyRecipeIngredientsType({
-                name: ingredients.name || "Dough",
+                name: ingredients.name || "ingredients.title.dough",
                 ingredients: _others.length > 0 ? [...toAdd, ..._others] : [...toAdd],
                 bakingTime: [],
                 innerTemperature: null,
@@ -83,14 +83,14 @@ export const splitStarterAndDough = async (recipeName: string, recipeIngredients
             return;
         }
         result.push(copyRecipeIngredientsType({
-            name: "Sourdough starter",
+            name: "ingredients.title.sourdough_starter_dough",
             ingredients: starterIngredients,
             bakingTime: [],
             innerTemperature: null,
             description: null
         }))
         result.push(copyRecipeIngredientsType({
-            name: ingredients.name || "Dough",
+            name: ingredients.name || "ingredients.title.dough",
             ingredients: nonStarter,
             bakingTime: ingredients.bakingTime,
             innerTemperature: ingredients.innerTemperature,

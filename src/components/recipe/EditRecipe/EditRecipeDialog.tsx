@@ -30,7 +30,7 @@ import {Translation} from "../../../Translations";
 import {recalculateRecipeBakerPercentage} from "../common/RecipeItemEditService";
 import {RecipeContentLoader} from "../common/RecipeLoader";
 import {EditRecipeDialogTitle} from "./EditRecipeDialogTitle";
-import {EditRecipeDialogIngredients} from "./EditRecipeDialogIngredients";
+import {EditRecipeIngredients} from "./EditRecipeDialogIngredients";
 
 
 const RenderRecipeEditDialogContent = ({recipe }: { recipe: RecipeType }) => {
@@ -45,7 +45,7 @@ const RenderRecipeEditDialogContent = ({recipe }: { recipe: RecipeType }) => {
 
   return (
     <>
-      <Paper elevation={4}>
+      <Paper elevation={0}>
         <Grid container spacing={2} wrap="wrap" className="edit-recipe-ingredients">
           <Grid item lg><EditBakingTime bakingTime={recipe.bakingTime}/></Grid>
           <Grid item md>
@@ -146,19 +146,21 @@ export const EditRecipeDialog = () => {
         <EditRecipeDialogTitle recipe={recipeToEdit}/>
         <DialogContent dividers>
           <Stack spacing={2} alignContent="center" justifyContent="center">
-            <Paper elevation={4}>
-              <Container maxWidth="lg">
-                <EditRecipeDialogIngredients recipe={recipeToEdit}/>
-              </Container>
-            </Paper>
-            {recipe ? <RenderRecipeEditDialogContent recipe={recipe}/> : undefined}
+            <Grid container spacing={2} wrap="wrap" className="edit-recipe-ingredients">
+              {recipeToEdit.ingredients.map((ingredients, index) => (
+                <Grid item md key={index}>
+                  <EditRecipeIngredients ingredients={ingredients} index={index}/>
+                </Grid>
+                ))}
+              {recipe ? <Grid item lg><RenderRecipeEditDialogContent recipe={recipe}/></Grid> : undefined}
+            </Grid>
             {recipe && bakerPercentage ?
               <RenderRecipeCalculationResult recipe={recipe} bakerPercentage={bakerPercentage}/> : undefined}
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onCancel} startIcon={<RecipeCancelIcon/>}><Translation label="Cancel"/></Button>
-          <Button onClick={onSave} startIcon={<RecipeSaveIcon/>}><Translation label="Save"/></Button>
+          <Button onClick={onCancel} startIcon={<RecipeCancelIcon/>}><Translation label="edit.cancel"/></Button>
+          <Button onClick={onSave} startIcon={<RecipeSaveIcon/>}><Translation label="edit.save"/></Button>
         </DialogActions>
       </>
     }

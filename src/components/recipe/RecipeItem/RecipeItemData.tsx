@@ -1,7 +1,7 @@
 import {RecipeType} from "../../../types";
 import {IngredientsItems} from "../common/IngredientsItem";
 import {RenderBakingTimeAware} from "../common/RenderBakingTimeAware";
-import {CardHeader, Typography} from "@mui/material";
+import {CardHeader, Container} from "@mui/material";
 import {getJsonRecipeTypeLabel} from "../../../service/RecipeReader";
 import {RIconButton} from "../../common/RButton";
 import {RecipeEditIcon} from "../../common/Icons";
@@ -20,11 +20,11 @@ export type RecipeItemDataProps = {
 
 const RecipeItemData  = ({recipe, bakerPercentage}: RecipeItemDataProps) => {
   return (<>
-    <section className="recipe">
+    <Container component="section" className="recipe">
       <IngredientsItems ingredients={bakerPercentage.ingredients} recipe={recipe} />
-    </section>
+    </Container>
     <RenderBakingTimeAware value={recipe}/>
-    <Typography variant="body1" className="baker-percentage" component="div"><BakerPercentage microNutrientsResult={bakerPercentage.microNutrients}/></Typography>
+    <Container component="section" className="baker-percentage"><BakerPercentage microNutrientsResult={bakerPercentage.microNutrients}/></Container>
   </>);
 }
 

@@ -1,4 +1,3 @@
-type TranslationValues = {[key: string]: (string | {[key: string]: string})};
 enum TranslationLanguage {
     en= "en",
     et = "et"
@@ -7,54 +6,185 @@ enum TranslationLanguage {
 // noinspection JSNonASCIINames,NonAsciiCharacters
 export const TRANSLATIONS = {
     en: {
-        "Esimene päev": "First day",
-        "Teine päev": "Second day",
-        Milk_other: "Milk ({{count}}% fats)",
-        "Wheat flour_other": "Wheat flour ({{count}} ash)",
-        Butter_other: "Butter ({{count}}% fats)",
-        "Egg_one": "{{count}} egg",
-        "Egg_other": "{{count}} eggs",
+        edit: {
+            save: "Save",
+            cancel: "Cancel",
+            description: {
+                generic: "Description"
+            },
+            ingredients: {
+                title: "Ingredients title"
+            },
+            baking_instructions: {
+                steam: "Steam",
+                time: "Time",
+                temperature: "Temperature",
+                inner_temperature: "Inner temperature",
+            }
+        },
+        baking_instructions: {
+            steam: "Steam {{minutes}} minutes {{temperature}}℃",
+            bake: "Bake {{minutes}} minutes {{temperature}}℃",
+            inner_temperature: "Inner temperature {{temperature}}℃"
+        },
+        ingredients: {
+            title: {
+                baker_percentage: "Baker's percentage",
+                day_one: "First day",
+                day_two: "Second day",
+                dough: "Dough",
+                sourdough_starter_dough: "Pre-dough"
+            }
+        },
+        ingredient: {
+            sourdough_starter: {
+                name: "Sourdough starter",
+            },
+            predefined: {
+                water: {
+                    generic: "Water"
+                },
+                salt: {
+                    generic: "Salt",
+                },
+                sugar: {
+                    generic: "Sugar",
+                    brown: "Brown sugar"
+                },
+                oil: {
+                    generic: "Oil",
+                    olive: "Olive oil"
+                },
+                milk: {
+                    generic: "Milk",
+                    generic_other: "Milk ({{count}}% fat)",
+                },
+                spice: {
+                    generic: "Spice",
+                    cardamom: "Cardamom",
+                    cinnamon: "Cinnamon",
+                },
+                flour: {
+                    generic: "Flour",
+                    rye: {
+                        generic: "Rye flour",
+                        whole_grain: "Whole grain rye flour",
+                        malt: "Rye malt flour"
+                    },
+                    wheat: {
+                        generic: "Wheat flour",
+                        generic_other: "Wheat flour ({{count}} ash)",
+                        whole_grain: "Whole grain wheat flour",
+                        durum: "Durum flour"
+                    }
+                },
+                butter: {
+                    generic: "Butter",
+                    generic_other: "Butter ({{count}}% fat)",
+                },
+                egg: {
+                    generic: "Egg",
+                    generic_one: "{{count}} egg",
+                    generic_other: "{{count}} eggs",
+                },
+                fat: {
+                    generic: "Fat"
+                }
+            }
+        },
         snackbar: {
             recipes_one: "one recipe",
             recipes_other: "{{count}} recipes",
             print_pages_one: "Print one double side page",
             print_pages_other: "Print {{count}} double side pages"
-        }
+        },
     },
     et: {
-        "Starter": "Juuretis",
-        water: "vesi",
-        Water: "Vesi",
-        flour: "jahu",
-        dry: "kuiv",
-        salt: "sool",
-        Salt: "Sool",
-        sugar: "suhkur",
-        Sugar: "Suhkur",
-        "Brown sugar": "Pruunsuhkur",
-        "Cardamom": "Kardemon",
-        Cinnamon: "Kaneel",
-        fat: "rasv",
-        Milk_other: "Piim ({{count}}%)",
-        "Wheat flour_other": "Nisujahu {{count}}",
-        Butter_other: "Või ({{count}}%)",
-        spice: "vürtsid",
-        "Egg_other": "{{count}} muna",
-        "egg": "muna",
-        other: "teised",
-        "Sourdough starter": "Eeltaigen",
-        Dough: "Taigen",
-        "Durum flour": "Durumjahu",
-        "Olive oil": "Oliivõli",
-        "Whole grain rye flour": "Täistera rukkijahu",
-        "Rye malt flour": "Rukkilinnase jahu",
-        "Recipe components": "Retsepti komponendid",
-        "Baker's percentage": "Pagari protsent",
-        "minutes": "minutit",
-        "Bake": "Küpseta",
-        "Steam": "Auruta",
-        "Inner temperature": "Sisetemperatuur",
-        "Description": "Kirjeldus",
+        edit: {
+            save: "Salvesta",
+            cancel: "Tühista",
+            description: {
+                generic: "Kirjeldus"
+            },
+            ingredients: {
+                title: "Nimetus"
+            },
+            baking_instructions: {
+                steam: "Auruta",
+                time: "Aeg",
+                temperature: "Temperatuur",
+                inner_temperature: "Sisetemperatuur",
+            }
+        },
+        baking_instructions: {
+            steam: "Auruta {{minutes}} minutit {{temperature}}℃",
+            bake: "Küpseta {{minutes}} minutit {{temperature}}℃",
+            inner_temperature: "Sisetemperatuur {{temperature}}℃"
+        },
+        ingredients: {
+            title: {
+                baker_percentage: "Pagari protsent",
+                day_one: "Esimene päev",
+                day_two: "Teine päev",
+                dough: "Taigen",
+                sourdough_starter_dough: "Eeltaigen"
+            }
+        },
+        ingredient: {
+            sourdough_starter: {
+                name: "Juuretis",
+            },
+            predefined: {
+                water: {
+                    generic: "Vesi"
+                },
+                salt: {
+                    generic: "Sool",
+                },
+                sugar: {
+                    generic: "Suhkur",
+                    brown: "Pruunsuhkur"
+                },
+                oil: {
+                    generic: "õli",
+                    olive: "Oliivõli"
+                },
+                milk: {
+                    generic: "Piim",
+                    generic_other: "Piim ({{count}}%)",
+                },
+                spice: {
+                    generic: "Vürts",
+                    cardamom: "Kardemon",
+                    cinnamon: "Kaneel",
+                },
+                flour: {
+                    generic: "Jahu",
+                    rye: {
+                        generic: "Rukkijahu",
+                        whole_grain: "Täistera rukkijahu",
+                        malt: "Rukkilinnase jahu"
+                    },
+                    wheat: {
+                        generic: "Nisujahu",
+                        generic_other: "Nisujahu {{count}}",
+                        whole_grain: "Täistera nisujahu",
+                        durum: "Durum jahu"
+                    }
+                },
+                butter: {
+                    generic: "Või",
+                    generic_other: "Või ({{count}}%)",
+                },
+                egg: {
+                    generic: "Muna",
+                    generic_other: "{{count}} muna",
+                },
+                fat: {
+                    generic: "Rasv"
+                }
+            }
+        },
         snackbar: {
             recipes_one: "üks retsept",
             recipes_other: "{{count}} retsepti",
@@ -62,4 +192,4 @@ export const TRANSLATIONS = {
             print_pages_other: "Prindid {{count}} kahepoolse lehte"
         }
     }
-} as {[key in TranslationLanguage]: TranslationValues}
+} as {[key in TranslationLanguage]: any}

@@ -1,0 +1,5 @@
+.recipe-amount input {
+    min-width: 3em;
+    max-width: 3em;
+    text-align: right;
+}
