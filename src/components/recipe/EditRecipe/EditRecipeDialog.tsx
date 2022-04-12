@@ -165,7 +165,7 @@ export const EditRecipeDialog = () => {
               {recipe ? <RenderRecipeEditDialogContent recipe={recipe}/> : undefined}
             </Grid>
             {recipe && bakerPercentage ?
-              <RenderRecipeCalculationResult recipe={recipe} bakerPercentage={bakerPercentage}/> : undefined}
+              <Paper elevation={4}><RenderRecipeCalculationResult recipe={recipe} bakerPercentage={bakerPercentage}/></Paper> : undefined}
           </Stack>
         </DialogContent>
         <DialogActions>
