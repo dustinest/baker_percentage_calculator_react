@@ -2,11 +2,11 @@ import './RecipeNavigation.css';
 import {Link, List, ListItemText, ListItemButton} from "@mui/material";
 import {RecipesConsumer, useMessageSnackBar} from "../../State";
 import {MenuCollapsable} from "../containers/MenuCollapsable";
-import {getJsonRecipeTypeLabel} from "../../service/RecipeReader";
 import {useTranslation} from "../../Translations";
 import {useEffect, useState} from "react";
 import {RIconButton} from "../common/RButton";
 import {InfoIcon} from "../common/Icons";
+import {RecipeName} from "../common/RecipeName";
 
 export const RenderInfoIcon = ({amount}: { amount: number }) => {
   const snackBar = useMessageSnackBar();
@@ -44,7 +44,7 @@ export const RecipeNavigation = () => {
         <List>{
           recipes.map((recipe) => (
               <ListItemButton component={Link} href={`#${recipe.id}`} key={recipe.id}>
-                <ListItemText primary={getJsonRecipeTypeLabel(recipe)}/>
+                <ListItemText><RecipeName recipe={recipe}/></ListItemText>
               </ListItemButton>
             )
           )

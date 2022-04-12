@@ -97,6 +97,8 @@ export const recipeType2RecipeJson = async (recipe: RecipeType):Promise<JsonReci
     if (recipe.bakingTime && recipe.bakingTime.length > 0) {
         result.bakingTime = recipe.bakingTime.map(recipeTypeBakingTime2JsonBakingTime);
     }
-    if (recipe.innerTemperature) result.innerTemperature = normalizeNumberIntervalType(recipe.innerTemperature);
+    if (recipe.innerTemperature) {
+        result.innerTemperature = normalizeNumberIntervalType(recipe.innerTemperature);
+    }
     return result;
 }

@@ -1,20 +1,12 @@
 import {JsonExtraStandardIngredientType, JsonRecipeType} from "../types";
-import {base64Encode} from "./Base64";
+import {base64Encode} from "../../../utils/Base64";
 
 export const resolveJsonRecipeTypeId = (value: JsonRecipeType): string => {
     if (value.id) return value.id;
-    return base64Encode(value.name, value.amount || 1);
+    return base64Encode("json", "ingredient", value.name, value.amount || 1);
 };
 
 export const resolveJsonExtraStandardIngredient = (ingredient: JsonExtraStandardIngredientType, grams: number) => {
     if (ingredient.id) return ingredient.id;
-    return base64Encode(ingredient.type.toString(), ingredient.name, grams);
-}
-
-export const getJsonRecipeTypeLabel = (value: { amount: number, name: string }): string => {
-    if (value.amount && value.amount > 1) {
-        return `${value.name} x ${value.amount}`;
-    } else {
-        return value.name;
-    }
+    return base64Encode("json", "ingredient", ingredient.type.toString(), ingredient.name, grams);
 }

@@ -2,7 +2,6 @@ import {RecipeType} from "../../../types";
 import {IngredientsItems} from "../common/IngredientsItem";
 import {RenderBakingTimeAware} from "../common/RenderBakingTimeAware";
 import {CardHeader, Container} from "@mui/material";
-import {getJsonRecipeTypeLabel} from "../../../service/RecipeReader";
 import {RIconButton} from "../../common/RButton";
 import {RecipeEditIcon} from "../../common/Icons";
 import {useMessageSnackBar, useSetEditRecipe} from "../../../State";
@@ -12,6 +11,7 @@ import {BakerPercentage} from "../common/BakerPercentage";
 import {useEffect, useState} from "react";
 import {recalculateRecipeBakerPercentage} from "../common/RecipeItemEditService";
 import {RecipeContentLoader} from "../common/RecipeLoader";
+import {RecipeName} from "../../common/RecipeName";
 
 export type RecipeItemDataProps = {
   recipe: RecipeType;
@@ -35,7 +35,7 @@ type RecipeItemHeaderProps = {
 const RecipeItemHeader = ({recipe}: RecipeItemHeaderProps) => {
   const setEditRecipe = useSetEditRecipe();
   const translation = useTranslation();
-  return (<CardHeader title={getJsonRecipeTypeLabel(recipe)} action={<RIconButton icon={<RecipeEditIcon />} label={translation.translate("Edit")}  onClick={() => setEditRecipe(recipe)}/>}/>);
+  return (<CardHeader title={<RecipeName recipe={recipe}/>} action={<RIconButton icon={<RecipeEditIcon />} label={translation.translate("Edit")}  onClick={() => setEditRecipe(recipe)}/>}/>);
 }
 
 type RecipeItemDetailsProps = RecipeItemHeaderProps;

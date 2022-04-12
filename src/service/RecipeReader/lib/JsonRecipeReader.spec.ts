@@ -22,7 +22,7 @@ describe("JsonRecipeType can be read", () => {
         );
         //console.log(result);
         //result.ingredients.forEach(console.log)
-        expect(result.id).toBe("WyJUw6Rpc3RlcmFsZWliIiwxXQ==");
+        expect(result.id).toBe("WyJqc29uIiwiaW5ncmVkaWVudCIsIlTDpGlzdGVyYWxlaWIiLDFd");
         expect(result.name).toBe("Täisteraleib");
         expect(result.bakingTime).toStrictEqual([
             { time: { from: 20, until: 20}, temperature: {from: 240, until: 240}, steam: false },
@@ -65,7 +65,7 @@ describe("JsonRecipeType can be read", () => {
         );
         //console.log(result);
         //result.ingredients.forEach(console.log)
-        expect(result.id).toBe("WyJUw6Rpc3RlcmFsZWliIiwxXQ==");
+        expect(result.id).toBe("WyJqc29uIiwiaW5ncmVkaWVudCIsIlTDpGlzdGVyYWxlaWIiLDFd");
         expect(result.name).toBe("Täisteraleib");
         expect(result.bakingTime).toStrictEqual([
             { time: { from: 20, until: 20}, temperature: {from: 240, until: 240}, steam: false },
@@ -111,7 +111,7 @@ describe("JsonRecipeType can be read", () => {
         );
         //console.log(result);
         //result.ingredients.forEach(console.log)
-        expect(result.id).toBe("WyJTYWkgc2VlbW5ldGVnYSIsMV0=");
+        expect(result.id).toBe("WyJqc29uIiwiaW5ncmVkaWVudCIsIlNhaSBzZWVtbmV0ZWdhIiwxXQ==");
         expect(result.name).toBe("Sai seemnetega");
         expect(result.bakingTime).toStrictEqual([
             { time: { from: 20, until: 20}, temperature: {from: 240, until: 240}, steam: true },
