@@ -1,6 +1,6 @@
-import {NumberIntervalType} from "../../types";
-import {InputValue} from "./InputValue";
-import "./EditNumberInterval.css";
+import {NumberIntervalType} from "../../../types";
+import {InputValue} from "../../common/InputValue";
+import "../../common/EditNumberInterval.css";
 import {Stack} from "@mui/material";
 
 type EditNumberIntervalProps = {

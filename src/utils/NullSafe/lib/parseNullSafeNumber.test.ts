@@ -29,7 +29,7 @@ describe("Test NullSafe.valueOfFloat", () => {
     expect(valueOfFloat("1.23", () => 456)).toStrictEqual(1.23);
     expect(valueOfFloat("123", () => 4.56)).toStrictEqual(123);
   })
-  it.only("When string with characters is provided", () => {
+  it("When string with characters is provided", () => {
     expect(valueOfFloat("a1.b23", 456)).toStrictEqual(1.23);
     expect(valueOfFloat("a1b23", 4.56)).toStrictEqual(123);
     expect(valueOfFloat("a1.2b3", () => 456)).toStrictEqual(1.23);

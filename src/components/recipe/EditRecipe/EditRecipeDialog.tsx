@@ -45,17 +45,23 @@ const RenderRecipeEditDialogContent = ({recipe }: { recipe: RecipeType }) => {
 
   return (
     <>
-      <Paper elevation={0}>
-        <Grid container spacing={2} wrap="wrap" className="edit-recipe-ingredients">
-          <Grid item lg><EditBakingTime bakingTime={recipe.bakingTime}/></Grid>
-          <Grid item md>
+      <Grid item lg>
+        <Paper elevation={2}>
+          <Container>
+            <EditBakingTime bakingTime={recipe.bakingTime}/>
+          </Container>
+        </Paper>
+      </Grid>
+      <Grid item md>
+        <Paper elevation={2}>
+          <Container>
             <Stack>
               <EditInnerTemperature recipe={recipe}/>
               <EditDescription value={recipe.description} onChange={setDescription}/>
             </Stack>
-          </Grid>
-        </Grid>
-      </Paper>
+          </Container>
+        </Paper>
+      </Grid>
     </>
   );
 }
@@ -148,11 +154,15 @@ export const EditRecipeDialog = () => {
           <Stack spacing={2} alignContent="center" justifyContent="center">
             <Grid container spacing={2} wrap="wrap" className="edit-recipe-ingredients">
               {recipeToEdit.ingredients.map((ingredients, index) => (
-                <Grid item md key={index}>
-                  <EditRecipeIngredients ingredients={ingredients} index={index}/>
+                <Grid item lg key={index}>
+                  <Paper elevation={2}>
+                    <Container>
+                      <EditRecipeIngredients ingredients={ingredients} index={index}/>
+                    </Container>
+                  </Paper>
                 </Grid>
                 ))}
-              {recipe ? <Grid item lg><RenderRecipeEditDialogContent recipe={recipe}/></Grid> : undefined}
+              {recipe ? <RenderRecipeEditDialogContent recipe={recipe}/> : undefined}
             </Grid>
             {recipe && bakerPercentage ?
               <RenderRecipeCalculationResult recipe={recipe} bakerPercentage={bakerPercentage}/> : undefined}

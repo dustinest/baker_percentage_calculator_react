@@ -1,6 +1,6 @@
 import {BakingTimeType} from "../../../types";
 import {Checkbox, Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
-import {EditNumberInterval} from "../../common/EditNumberInterval";
+import {EditNumberInterval} from "./EditNumberInterval";
 import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
 import {RIconButton} from "../../common/RButton";
 import {DeleteICon, DoneIcon} from "../../common/Icons";

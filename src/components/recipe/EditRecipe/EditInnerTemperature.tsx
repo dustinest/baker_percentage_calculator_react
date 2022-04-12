@@ -3,7 +3,7 @@ import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
 import {Stack, Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
 import {TranslatedTableCell} from "../../../Translations";
 import {useEffect, useState} from "react";
-import {EditNumberInterval} from "../../common/EditNumberInterval";
+import {EditNumberInterval} from "./EditNumberInterval";
 import {RIconButton} from "../../common/RButton";
 import {DeleteICon, DoneIcon} from "../../common/Icons";
 

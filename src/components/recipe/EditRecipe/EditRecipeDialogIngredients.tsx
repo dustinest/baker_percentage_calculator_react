@@ -15,6 +15,7 @@ import {TranslatedLabel, useTranslation} from "../../../Translations";
 import {EditDoneButton} from "./EditDoneButton";
 import {useNumberInputValueTracking, useStringInputValueTracking} from "../../../utils/UseValue";
 import "./EditRecipeDialogIngredients.css";
+import {useValueTimeoutAsync} from "../../../utils/Async";
 
 type EditRecipeIngredientInnerProps = {
     ingredientName: string | null | undefined;
@@ -35,9 +36,11 @@ const EditRecipeIngredientInner = ({
 
     //console.log("render", name);
     const editRecipeDispatch = useEditRecipeContext();
-    const onGramsDone = () => {
+    useValueTimeoutAsync(async () => {
+        if (isSameGrams || grams <= 0) {
+            return;
+        }
         const gramsValue = grams;
-        if (gramsValue <= 0) return;
         editRecipeDispatch({
             type: EditRecipeStateActionTypes.SET_INGREDIENT_GRAM,
             index: {
@@ -46,8 +49,10 @@ const EditRecipeIngredientInner = ({
             },
             grams: gramsValue
         });
-        resetGrams(grams);
-    }
+        resetGrams(gramsValue);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, grams)
+
     return (
         <TableRow>
             <TableCell><TranslatedLabel label={name}/></TableCell>
@@ -60,7 +65,6 @@ const EditRecipeIngredientInner = ({
                         onChange={setGrams}
                         endAdornment={<InputAdornment position="end">g</InputAdornment>}
                     />
-                    <EditDoneButton enabled={!isSameGrams && grams > 0} onChange={onGramsDone}/>
                 </Stack>
             </TableCell>
         </TableRow>
