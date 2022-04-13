@@ -13,7 +13,7 @@ import {
   Container,
   Dialog,
   DialogActions,
-  DialogContent,
+  DialogContent, DialogTitle,
   Grid,
   Paper,
   Stack
@@ -25,7 +25,7 @@ import {EditInnerTemperature} from "./EditInnerTemperature";
 import {EditDescription} from "./EditDescription";
 import {RenderBakingTimeAware} from "../common/RenderBakingTimeAware";
 import {RecipeJson} from "./RecipeJson";
-import {RecipeCancelIcon, RecipeSaveIcon} from "../../common/Icons";
+import {AddIcon, RecipeCancelIcon, RecipeSaveIcon} from "../../common/Icons";
 import {Translation} from "../../../Translations";
 import {recalculateRecipeBakerPercentage} from "../common/RecipeItemEditService";
 import {RecipeContentLoader} from "../common/RecipeLoader";
@@ -158,20 +158,28 @@ export const EditRecipeDialog = () => {
   const onCancel = () => {
     cancelRecipe();
   }
+  const editRecipeDispatch = useEditRecipeContext();
+  const addIngredients = () => {
+    editRecipeDispatch({
+      type: EditRecipeStateActionTypes.ADD_INGREDIENTS,
+    });
+  }
   return (<Dialog open={recipe !== null} fullScreen>
     {recipeToEdit == null ?
       <DialogContent dividers><RecipeContentLoader loading={true}/></DialogContent> :
       <>
-        <EditRecipeDialogTitle recipe={recipeToEdit}/>
+        <DialogTitle id="customized-dialog-title">
+          <Grid container alignItems="center">
+            <EditRecipeDialogTitle recipe={recipeToEdit}/>
+          </Grid>
+        </DialogTitle>
         <DialogContent dividers>
           <Stack spacing={2} alignContent="center" justifyContent="center">
             <Grid container spacing={2} wrap="wrap" className="edit-recipe-ingredients">
               {recipeToEdit.ingredients.map((ingredients, index) => (
-                <Grid item lg key={index}>
+                <Grid item xl key={index}>
                   <Paper elevation={2}>
-                    <Container>
                       <EditRecipeDialogIngredients ingredients={ingredients} index={index}/>
-                    </Container>
                   </Paper>
                 </Grid>
                 ))}
@@ -183,7 +191,8 @@ export const EditRecipeDialog = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={onCancel} startIcon={<RecipeCancelIcon/>}><Translation label="edit.cancel"/></Button>
-          <Button onClick={onSave} startIcon={<RecipeSaveIcon/>}><Translation label="edit.save"/></Button>
+          <Button onClick={addIngredients} disabled={recipeToEdit.ingredients.length > 0 && recipeToEdit.ingredients[recipeToEdit.ingredients.length - 1].ingredients.length === 0} startIcon={<AddIcon/>}><Translation label="edit.ingredients.add"/></Button>
+          <Button onClick={onSave} disabled={hasNoValue(recipeToEdit.name)} startIcon={<RecipeSaveIcon/>}><Translation label="edit.save"/></Button>
         </DialogActions>
       </>
     }

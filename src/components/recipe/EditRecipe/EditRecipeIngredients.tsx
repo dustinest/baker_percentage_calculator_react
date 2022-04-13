@@ -1,5 +1,6 @@
 import {IngredientGramsType} from "../../../types";
 import {
+  Button,
   InputAdornment, MenuItem,
   OutlinedInput, Select, SelectChangeEvent,
   Stack,
@@ -14,8 +15,9 @@ import {TranslatedLabel, Translation} from "../../../Translations";
 import "./EditRecipeIngredients.css";
 import {hasNoValue, hasValue} from "../../../utils/NullSafe";
 import {ReactNode, useEffect, useState} from "react";
-import {EditDoneButton} from "./EditDoneButton";
 import {getStandardIngredientMethodsGrams, StandardIngredientMethods} from "../../../Constant/Ingredient";
+import {AddIcon, DeleteICon} from "../../common/Icons";
+import {RIconButton} from "../../common/RButton";
 
 const EditRecipeIngredientTable = ({name, children}: {name: string, children: ReactNode;}) => {
   return (
@@ -61,8 +63,19 @@ const EditRecipeIngredient = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, grams)
 
+  const onDelete = () => {
+    editRecipeDispatch({
+      type: EditRecipeStateActionTypes.REMOVE_INGREDIENT,
+      index: {
+        ingredients: index,
+        ingredient: subIndex
+      },
+    });
+  }
+
   return (
     <EditRecipeIngredientTable name={name}>
+      <Stack direction="row">
         <OutlinedInput
           className="recipe-ingredient-amount"
           type="number"
@@ -70,6 +83,8 @@ const EditRecipeIngredient = ({
           onChange={setGrams}
           endAdornment={<InputAdornment position="end">g</InputAdornment>}
         />
+        <RIconButton onClick={onDelete} icon={<DeleteICon/>}/>
+      </Stack>
     </EditRecipeIngredientTable>
   )
 };
@@ -149,7 +164,7 @@ export const EditRecipeRemainingIngredients = ({ingredients, index}: EditRecipeR
             onChange={setGrams}
             endAdornment={<InputAdornment position="end">g</InputAdornment>}
           />
-          <EditDoneButton enabled={!isSameGrams && grams > 0} onChange={addNewItem}/>
+          <Button onClick={addNewItem} disabled={isSameGrams || grams <= 0}><AddIcon/></Button>
         </Stack>
       }
     </>

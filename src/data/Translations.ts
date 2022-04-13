@@ -13,7 +13,8 @@ export const TRANSLATIONS = {
                 generic: "Description"
             },
             ingredients: {
-                title: "Ingredients title"
+                title: "Ingredients title",
+                add: "Add new group"
             },
             baking_instructions: {
                 steam: "Steam",
@@ -107,7 +108,8 @@ export const TRANSLATIONS = {
                 generic: "Kirjeldus"
             },
             ingredients: {
-                title: "Nimetus"
+                title: "Nimetus",
+                add: "Lisa uus grupp"
             },
             baking_instructions: {
                 steam: "Auruta",

@@ -8,8 +8,8 @@ import {
 } from "../../types";
 // noinspection ES6PreferShortImport
 import {
-  ActionGenericIndex, ActionIngredientIndex, AddStandardEditRecipeIngredientStateAction,
-  RemoveEditRecipeBakingTimeStateAction,
+  AddStandardEditRecipeIngredientStateAction,
+  RemoveEditRecipeBakingTimeStateAction, RemoveRecipeIngredientStateAction,
   SetEditRecipeAmountStateAction,
   SetEditRecipeBakingTimeStateAction, SetEditRecipeDescriptionStateAction,
   SetEditRecipeIngredientGramsStateAction, SetEditRecipeIngredientsNameStateAction,
@@ -20,21 +20,23 @@ import {hasNoValueOrEquals, hasValue} from "../../utils/NullSafe";
 import {getStandardIngredientMethodsGrams} from "../../Constant/Ingredient";
 
 type Methods = {
-  setName: (recipe: RecipeType | null, action: SetEditRecipeNameStateAction) => RecipeType | null,
-  setIngredientGram: (recipe: RecipeType | null, action: SetEditRecipeIngredientGramsStateAction) => RecipeType | null,
-  setAmount: (recipe: RecipeType | null, action: SetEditRecipeAmountStateAction) => RecipeType | null,
-  setBakingTime: (recipe: RecipeType | null, action: SetEditRecipeBakingTimeStateAction) => RecipeType | null,
-  removeBakingTime: (recipe: RecipeType | null, action: RemoveEditRecipeBakingTimeStateAction) => RecipeType | null,
-  setInnerTemperature: (recipe: RecipeType | null, action: SetEditRecipeInnerTemperatureStateAction) => RecipeType | null,
-  setDescription: (recipe: RecipeType | null, action: SetEditRecipeDescriptionStateAction) => RecipeType | null,
-  setIngredientsName: (recipe: RecipeType | null, action: SetEditRecipeIngredientsNameStateAction) => RecipeType | null,
+  setName: (recipe: RecipeType | null, action: SetEditRecipeNameStateAction) => RecipeType | null;
+  setIngredientGram: (recipe: RecipeType | null, action: SetEditRecipeIngredientGramsStateAction) => RecipeType | null;
+  setAmount: (recipe: RecipeType | null, action: SetEditRecipeAmountStateAction) => RecipeType | null;
+  setBakingTime: (recipe: RecipeType | null, action: SetEditRecipeBakingTimeStateAction) => RecipeType | null;
+  removeBakingTime: (recipe: RecipeType | null, action: RemoveEditRecipeBakingTimeStateAction) => RecipeType | null;
+  setInnerTemperature: (recipe: RecipeType | null, action: SetEditRecipeInnerTemperatureStateAction) => RecipeType | null;
+  setDescription: (recipe: RecipeType | null, action: SetEditRecipeDescriptionStateAction) => RecipeType | null;
+  setIngredientsName: (recipe: RecipeType | null, action: SetEditRecipeIngredientsNameStateAction) => RecipeType | null;
+  removeIngredient: (recipe: RecipeType | null, action: RemoveRecipeIngredientStateAction) => RecipeType | null;
+  addIngredients: (recipe: RecipeType | null) => RecipeType | null;
 }
 
-const resolveActionGenericIndex = (index: ActionGenericIndex | number, callback1: (index: number) => RecipeType | null, callback2: (index: ActionGenericIndex) => RecipeType | null) => {
+const resolveActionGenericIndex = <T>(index: T | number, callback1: (index: number) => RecipeType | null, callback2: (index: T) => RecipeType | null) => {
   if (typeof index === "number") {
     return callback1(index as number);
   }
-  return callback2(index as ActionGenericIndex);
+  return callback2(index as T);
 }
 
 export const EditRecipeReducerService = Object.freeze({
@@ -46,8 +48,7 @@ export const EditRecipeReducerService = Object.freeze({
   },
   setIngredientGram: (recipe: RecipeType | null, action: SetEditRecipeIngredientGramsStateAction | AddStandardEditRecipeIngredientStateAction) => {
     if (!recipe) return recipe;
-    if (typeof action.index === "number") {
-      const index = action.index as number;
+    return resolveActionGenericIndex(action.index, (index) => {
       if (recipe.ingredients.length <= index) {
         throw new Error("Not managed: new ingredients should be added!");
       }
@@ -60,18 +61,38 @@ export const EditRecipeReducerService = Object.freeze({
       const copy = copyRecipeType(recipe);
       copy.ingredients[index].ingredients.push(item);
       return copy;
-    }
-    const index = action.index as ActionIngredientIndex;
-    if (recipe.ingredients.length <= index.ingredients) {
-      throw new Error("Not managed: new ingredients should be added!");
-    }
-    if (recipe.ingredients[index.ingredients].ingredients.length <= index.ingredient) {
-      throw new Error("Not managed: new ingredients to array should be added!");
-    }
-    if (recipe.ingredients[index.ingredients].ingredients[index.ingredient].grams === action.grams) return recipe;
-    const copy = copyRecipeType(recipe);
-    copy.ingredients[index.ingredients].ingredients[index.ingredient].grams = action.grams
-    return copy;
+    }, (index) => {
+      if (recipe.ingredients.length <= index.ingredients) {
+        throw new Error("Not managed: new ingredients should be added!");
+      }
+      if (recipe.ingredients[index.ingredients].ingredients.length <= index.ingredient) {
+        throw new Error("Not managed: new ingredients to array should be added!");
+      }
+      if (recipe.ingredients[index.ingredients].ingredients[index.ingredient].grams === action.grams) return recipe;
+      const copy = copyRecipeType(recipe);
+      copy.ingredients[index.ingredients].ingredients[index.ingredient].grams = action.grams
+      return copy;
+    });
+  },
+
+  removeIngredient: (recipe: RecipeType | null, action: RemoveRecipeIngredientStateAction) => {
+    if (!recipe) return recipe;
+    return resolveActionGenericIndex(action.index, (index) => {
+      if (recipe.ingredients.length <= index) {
+        throw new Error("Not managed: new ingredients should be added!");
+      }
+      return copyRecipeType({...recipe, ...{ingredients: recipe.ingredients.filter((_, i) => i !== index) }});
+    }, (index) => {
+      if (recipe.ingredients.length <= index.ingredients) {
+        throw new Error("Not managed: new ingredients should be added!");
+      }
+      if (recipe.ingredients[index.ingredients].ingredients.length <= index.ingredient) {
+        throw new Error("Not managed: new ingredients to array should be added!");
+      }
+      const copy = copyRecipeType(recipe);
+      copy.ingredients[index.ingredients].ingredients = copy.ingredients[index.ingredients].ingredients.filter((_, i) => i !== index.ingredient);
+      return copy;
+    });
   },
 
   setAmount: (recipe: RecipeType | null, action: SetEditRecipeAmountStateAction) => {
@@ -171,6 +192,17 @@ export const EditRecipeReducerService = Object.freeze({
     }
     const copy = copyRecipeType(recipe);
     copy.ingredients[action.index].name = newName;
+    return copy;
+  },
+  addIngredients: (recipe: RecipeType | null): RecipeType | null => {
+    if (!recipe) return null;
+    const copy = copyRecipeType(recipe);
+    copy.ingredients.push({
+      ingredients: [],
+      bakingTime: [],
+      innerTemperature: null,
+      description: null
+    });
     return copy;
   }
 } as Methods) as Methods;

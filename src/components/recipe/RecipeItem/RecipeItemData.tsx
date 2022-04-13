@@ -24,7 +24,8 @@ const RecipeItemData  = ({recipe, bakerPercentage}: RecipeItemDataProps) => {
       <IngredientsItems ingredients={bakerPercentage.ingredients} recipe={recipe} />
     </Container>
     <RenderBakingTimeAware value={recipe}/>
-    <Container component="section" className="baker-percentage"><BakerPercentage microNutrientsResult={bakerPercentage.microNutrients}/></Container>
+    {bakerPercentage.ingredients.length > 0
+      ? <Container component="section" className="baker-percentage"><BakerPercentage microNutrientsResult={bakerPercentage.microNutrients}/></Container> : undefined}
   </>);
 }
 

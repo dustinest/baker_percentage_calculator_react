@@ -29,6 +29,10 @@ export const updateEditRecipeReducer = (recipe: RecipeType | null, action: Recip
       return EditRecipeReducerService.setDescription(recipe, action);
     case EditRecipeStateActionTypes.SET_INGREDIENTS_NAME:
       return EditRecipeReducerService.setIngredientsName(recipe, action);
+    case EditRecipeStateActionTypes.REMOVE_INGREDIENT:
+      return EditRecipeReducerService.removeIngredient(recipe, action);
+    case EditRecipeStateActionTypes.ADD_INGREDIENTS:
+      return EditRecipeReducerService.addIngredients(recipe);
     case EditRecipeStateActionTypes.CANCEL_EDIT_RECIPE:
       return null;
   }

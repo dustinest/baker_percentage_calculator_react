@@ -27,7 +27,7 @@ export type DryAndLiquidIngredientResult = {
     }
 }
 
-export const calculateDryAndLiquidNutrition = (ingredient: IngredientGramsType): DryAndLiquidIngredientResult => {
+const calculateDryAndLiquidNutrition = (ingredient: IngredientGramsType): DryAndLiquidIngredientResult => {
     const flourAndWaterPercent = calculateFlourAndWaterPercent(ingredient.nutrients);
     return {
         flour: {
