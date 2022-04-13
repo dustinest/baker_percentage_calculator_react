@@ -18,7 +18,7 @@ export const updateRecipesReducer = (recipes: RecipeType[], action: RecipesState
                 }
             })
             if (!updated) {
-                result.push(action.value);
+                result.unshift(action.value);
             }
             return result;
     }

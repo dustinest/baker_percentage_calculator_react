@@ -14,7 +14,7 @@ export const EditRecipeDialogIngredients = ({
                                               ingredients,
                                               index
                                             }: { ingredients: RecipeIngredientsType; index: number; }) => {
-  const [expanded, setExpanded] = useState<boolean>(false);
+  const [expanded, setExpanded] = useState<boolean>(ingredients.ingredients.length === 0);
   const editRecipeDispatch = useEditRecipeContext();
 
   const onRemove = () => {

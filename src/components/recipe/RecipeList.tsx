@@ -4,7 +4,8 @@ import {Container} from "@mui/material";
 
 export const RecipeList = () => {
   return (
-    <RecipesConsumer>{(recipes) => (
+    <RecipesConsumer>
+      {(recipes) => (
       <div className="recipes">
         {recipes.map((recipe) => (
             <Container id={recipe.id} key={recipe.id} component="article" className="recipe-item">

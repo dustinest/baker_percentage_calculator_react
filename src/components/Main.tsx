@@ -14,6 +14,7 @@ import {
 import {RecipeList} from "./recipe/RecipeList";
 import {useAsyncEffect} from "../utils/Async";
 import {EditRecipeDialog} from "./recipe/EditRecipe";
+import {AddRecipeIcon} from "./AddRecipeIcon";
 
 const getDouble = (value: JsonRecipeType): JsonRecipeType => {
   return {
@@ -75,7 +76,11 @@ export const Main = () => {
           (
             <>
               <RecipeNavigation/>
-              <EditRecipeProvider><EditRecipeDialog/><RecipeList/></EditRecipeProvider>
+              <EditRecipeProvider>
+                <AddRecipeIcon/>
+                <EditRecipeDialog/>
+                <RecipeList/>
+              </EditRecipeProvider>
             </>
           )
       }

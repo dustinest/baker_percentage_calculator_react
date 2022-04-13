@@ -30,7 +30,7 @@ export const RenderInfoIcon = ({amount}: { amount: number }) => {
   }
   return (<RIconButton className="menu-trigger" onClick={showRecipeSnackbar} icon={<InfoIcon/>} label="Info" sx={{
       position: 'fixed',
-      right: 0,
+      left: 0,
       bottom: 0,
     }}/>
   )

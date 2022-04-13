@@ -31,7 +31,8 @@ import {recalculateRecipeBakerPercentage} from "../common/RecipeItemEditService"
 import {RecipeContentLoader} from "../common/RecipeLoader";
 import {EditRecipeDialogTitle} from "./EditRecipeDialogTitle";
 import {EditRecipeDialogIngredients} from "./EditRecipeDialogIngredients";
-import {hasNoValue} from "../../../utils/NullSafe";
+import {hasNoValue, hasValue} from "../../../utils/NullSafe";
+import {RECIPE_CONSTANTS} from "./RecipeConstants";
 
 
 const RenderRecipeEditDialogContent = ({recipe }: { recipe: RecipeType }) => {
@@ -117,6 +118,7 @@ export const EditRecipeDialog = () => {
 
   const [recipe, saveRecipe, cancelRecipe] = useEditRecipeActions();
   const [recipeToEdit, setRecipeToEdit] = useState<RecipeType | null>(null);
+  const [canSave, setCanSave] = useState<boolean>(false);
 
   const [bakerPercentage, setBakerPercentage] = useState<BakerPercentageResult | null>(null)
 
@@ -135,9 +137,14 @@ export const EditRecipeDialog = () => {
     }
     if (checkChange(recipe, recipeToEdit)) {
       setRecipeToEdit(copyRecipeType(recipe));
+      setCanSave(recipe.id !== RECIPE_CONSTANTS.NEW_RECIPE || (
+        hasValue(recipe.name) && recipe.name.trim().length > 0 &&
+        recipe.ingredients.length > 0 && recipe.ingredients[0].ingredients.length > 0
+      ))
       return;
     }
     if (recipe === null && recipeToEdit !== null) {
+      setCanSave(false);
       setRecipeToEdit(null);
     }
   }, [recipe, recipeToEdit]);
@@ -150,6 +157,9 @@ export const EditRecipeDialog = () => {
 
   const onSave = () => {
     if (recipe !== null) {
+      if (recipe.id === RECIPE_CONSTANTS.NEW_RECIPE) {
+        recipe.id = `new_${Date.now() + Math.random()}`;
+      }
       saveRecipe(recipe);
     } else {
       cancelRecipe();
@@ -192,7 +202,7 @@ export const EditRecipeDialog = () => {
         <DialogActions>
           <Button onClick={onCancel} startIcon={<RecipeCancelIcon/>}><Translation label="edit.cancel"/></Button>
           <Button onClick={addIngredients} disabled={recipeToEdit.ingredients.length > 0 && recipeToEdit.ingredients[recipeToEdit.ingredients.length - 1].ingredients.length === 0} startIcon={<AddIcon/>}><Translation label="edit.ingredients.add"/></Button>
-          <Button onClick={onSave} disabled={hasNoValue(recipeToEdit.name)} startIcon={<RecipeSaveIcon/>}><Translation label="edit.save"/></Button>
+          <Button onClick={onSave} disabled={!canSave} startIcon={<RecipeSaveIcon/>}><Translation label="edit.save"/></Button>
         </DialogActions>
       </>
     }
