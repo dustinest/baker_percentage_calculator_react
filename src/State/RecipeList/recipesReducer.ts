@@ -6,6 +6,9 @@ export const updateRecipesReducer = (recipes: RecipeType[], action: RecipesState
     switch (action.type) {
         case RecipesStateActionTypes.SET_RECIPES:
             return [...action.value];
+        case RecipesStateActionTypes.REMOVE_RECIPE: {
+            return [...recipes.filter((e) => e.id !== action.value.id)];
+        }
         case RecipesStateActionTypes.SAVE_RECIPE:
             const result:RecipeType[] = [];
             let updated = false;

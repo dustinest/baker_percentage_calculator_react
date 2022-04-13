@@ -1,17 +1,16 @@
 import {RecipeType} from "../../../types";
 import {IngredientsItems} from "../common/IngredientsItem";
 import {RenderBakingTimeAware} from "../common/RenderBakingTimeAware";
-import {CardHeader, Container} from "@mui/material";
-import {RIconButton} from "../../common/RButton";
-import {RecipeEditIcon} from "../../common/Icons";
-import {useMessageSnackBar, useSetEditRecipe} from "../../../State";
-import {useTranslation} from "../../../Translations";
+import {Button, ButtonGroup, CardHeader, Container} from "@mui/material";
+import {DeleteICon, RecipeEditIcon} from "../../common/Icons";
+import {RecipesContext, RecipesStateActionTypes, useMessageSnackBar, useSetEditRecipe} from "../../../State";
 import {BakerPercentageResult} from "../../../utils/BakerPercentageCalulation";
 import {BakerPercentage} from "../common/BakerPercentage";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {recalculateRecipeBakerPercentage} from "../common/RecipeItemEditService";
 import {RecipeContentLoader} from "../common/RecipeLoader";
 import {RecipeName} from "../../common/RecipeName";
+import "./RecipeItemData.css";
 
 export type RecipeItemDataProps = {
   recipe: RecipeType;
@@ -35,8 +34,19 @@ type RecipeItemHeaderProps = {
 
 const RecipeItemHeader = ({recipe}: RecipeItemHeaderProps) => {
   const setEditRecipe = useSetEditRecipe();
-  const translation = useTranslation();
-  return (<CardHeader title={<RecipeName recipe={recipe}/>} action={<RIconButton icon={<RecipeEditIcon />} label={translation.translate("Edit")}  onClick={() => setEditRecipe(recipe)}/>}/>);
+  const {recipesDispatch} = useContext(RecipesContext);
+  const onDeleteRecipe = () => {
+    recipesDispatch({
+      type: RecipesStateActionTypes.REMOVE_RECIPE,
+      value: recipe
+    });
+  }
+  return (<CardHeader className="recipe-header" title={<RecipeName recipe={recipe}/>} action={
+    <ButtonGroup variant="outlined" color="secondary">
+      <Button color="warning" onClick={onDeleteRecipe}><DeleteICon /></Button>
+      <Button color="success" onClick={() => setEditRecipe(recipe)}><RecipeEditIcon /></Button>
+    </ButtonGroup>
+  }/>);
 }
 
 type RecipeItemDetailsProps = RecipeItemHeaderProps;

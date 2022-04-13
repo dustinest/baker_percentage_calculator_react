@@ -1,5 +1,5 @@
 import {
-  Card,
+  Card, CardContent,
 } from "@mui/material";
 import "./RecipeItem.css";
 import {RecipeType} from "../../../types";
@@ -14,7 +14,7 @@ export const RecipeItem = ({recipe}: RecipeItemProps) => {
       <Card
         sx={{maxWidth: 400, marginLeft: "auto", marginRight: "auto"}}
         variant="outlined" className="recipe">
-        <RecipeItemDetails recipe={recipe}/>
+        <CardContent><RecipeItemDetails recipe={recipe}/></CardContent>
       </Card>
     );
 };

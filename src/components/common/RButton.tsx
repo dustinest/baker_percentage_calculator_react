@@ -1,5 +1,5 @@
 import {ReactNode} from "react";
-import {Button, ButtonGroup, IconButton, Theme} from "@mui/material";
+import {Button, IconButton, Theme} from "@mui/material";
 import {SxProps} from "@mui/system";
 import {Translation, useTranslation} from "../../Translations";
 
@@ -33,16 +33,4 @@ export const RButton = (props: RButtonProps) => {
             onClick={(props as RButtonPropsClick).onClick}
             startIcon={(props as RButtonPropsIcon).icon}>{label ? <Translation label={label}/> : undefined }</Button>
     );
-}
-
-export type RButtonGroupProps = {
-    label: string;
-    actions: RButtonProps[];
-}
-
-export const RButtonGroup = (props: RButtonGroupProps) => {
-    const translate = useTranslation();
-    return (<ButtonGroup variant="contained" aria-label={translate.translate(props.label)}>{
-        props.actions.map((e, index) => <RButton {...e} key={index}/>)
-    }</ButtonGroup>)
 }

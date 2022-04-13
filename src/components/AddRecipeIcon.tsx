@@ -11,7 +11,7 @@ export const AddRecipeIcon = () => {
     setEditRecipe({
       id: RECIPE_CONSTANTS.NEW_RECIPE,
       name: "New recipe",
-      amount: 0,
+      amount: 1,
       bakingTime: [],
       description: null,
       innerTemperature: null,
