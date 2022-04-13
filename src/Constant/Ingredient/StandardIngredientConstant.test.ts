@@ -31,7 +31,7 @@ describe("INGREDIENT_CONSTANT are defined", () => {
 describe("PREDEFINED_INGREDIENT are defined", () => {
   it ("Salt is OK", () => {
     const salt = StandardIngredientMethods.SALT(123);
-    expect(salt.id).toBe("salt.generic");
+    expect(salt.id).toBe("SALT_salt.generic");
     expect(salt.name).toBe("ingredient.predefined.salt.generic");
     expect(salt.nutrients.length).toBe(1);
     expect(salt.nutrients[0].type).toBe(NutritionType.salt);
@@ -41,7 +41,7 @@ describe("PREDEFINED_INGREDIENT are defined", () => {
 
   it ("butter_82 is OK", () => {
     const butter = StandardIngredientMethods.BUTTER(321);
-    expect(butter.id).toBe("butter.generic");
+    expect(butter.id).toBe("BUTTER_butter.generic");
     expect(butter.name).toBe("ingredient.predefined.butter.generic");
     expect(butter.nutrients.length).toBe(2);
     expect(butter.nutrients[0].type).toBe(NutritionType.fat);

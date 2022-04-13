@@ -30,7 +30,8 @@ import {Translation} from "../../../Translations";
 import {recalculateRecipeBakerPercentage} from "../common/RecipeItemEditService";
 import {RecipeContentLoader} from "../common/RecipeLoader";
 import {EditRecipeDialogTitle} from "./EditRecipeDialogTitle";
-import {EditRecipeIngredients} from "./EditRecipeDialogIngredients";
+import {EditRecipeDialogIngredients} from "./EditRecipeDialogIngredients";
+import {hasNoValue} from "../../../utils/NullSafe";
 
 
 const RenderRecipeEditDialogContent = ({recipe }: { recipe: RecipeType }) => {
@@ -98,6 +99,19 @@ export const RenderRecipeCalculationResult = ({
   </>)
 }
 
+const checkChange = (recipe: RecipeType | null, newRecipe: RecipeType | null): recipe is RecipeType => {
+  if (hasNoValue(recipe)) return false;
+  if (hasNoValue(newRecipe)) return true;
+  if (recipe.id !== newRecipe.id || recipe.amount !== newRecipe.amount) return true;
+  if (recipe.ingredients.length !== newRecipe.ingredients.length) return true;
+  for (let i = 0; i < recipe.ingredients.length; i++) {
+    if (recipe.ingredients[i].ingredients.length !== newRecipe.ingredients[i].ingredients.length) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export const EditRecipeDialog = () => {
   const snackBar = useMessageSnackBar();
 
@@ -119,7 +133,7 @@ export const EditRecipeDialog = () => {
     if (recipe === null && recipeToEdit === null) {
       return;
     }
-    if (recipe !== null && (recipeToEdit === null || recipe.id !== recipeToEdit.id || recipe.amount !== recipeToEdit.amount)) {
+    if (checkChange(recipe, recipeToEdit)) {
       setRecipeToEdit(copyRecipeType(recipe));
       return;
     }
@@ -144,7 +158,6 @@ export const EditRecipeDialog = () => {
   const onCancel = () => {
     cancelRecipe();
   }
-
   return (<Dialog open={recipe !== null} fullScreen>
     {recipeToEdit == null ?
       <DialogContent dividers><RecipeContentLoader loading={true}/></DialogContent> :
@@ -157,7 +170,7 @@ export const EditRecipeDialog = () => {
                 <Grid item lg key={index}>
                   <Paper elevation={2}>
                     <Container>
-                      <EditRecipeIngredients ingredients={ingredients} index={index}/>
+                      <EditRecipeDialogIngredients ingredients={ingredients} index={index}/>
                     </Container>
                   </Paper>
                 </Grid>

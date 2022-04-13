@@ -23,8 +23,11 @@ export type EditRecipesStateAction = EditRecipeStateActionWithValue<EditRecipeSt
 export type CancelEditRecipesStateAction = EditRecipeStateAction<EditRecipeStateActionTypes.CANCEL_EDIT_RECIPE>;
 export type SetEditRecipeNameStateAction = { name: string;  } & EditRecipeStateAction<EditRecipeStateActionTypes.SET_NAME>;
 export type SetEditRecipeIngredientsNameStateAction = { name?: string; index: number; } & EditRecipeStateAction<EditRecipeStateActionTypes.SET_INGREDIENTS_NAME>;
-export type SetEditRecipeAmountStateAction = { index: ActionIngredientIndex; grams: number;  } & EditRecipeStateAction<EditRecipeStateActionTypes.SET_AMOUNT>;
-export type SetEditRecipeIngredientGramsStateAction = { amount: number;  } & EditRecipeStateAction<EditRecipeStateActionTypes.SET_INGREDIENT_GRAM>;
+export type SetEditRecipeAmountStateAction = { amount: number;  } & EditRecipeStateAction<EditRecipeStateActionTypes.SET_AMOUNT>;
+
+export type SetEditRecipeIngredientGramsStateAction = { index: ActionIngredientIndex; grams: number;  } & EditRecipeStateAction<EditRecipeStateActionTypes.SET_INGREDIENT_GRAM>;
+export type AddStandardEditRecipeIngredientStateAction = { index: number; grams: number; item: string  } & EditRecipeStateAction<EditRecipeStateActionTypes.SET_INGREDIENT_GRAM>;
+
 export type SetEditRecipeBakingTimeStateAction = {
   index: ActionGenericIndex | number,
   time: NumberIntervalType;

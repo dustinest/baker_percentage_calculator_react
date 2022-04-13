@@ -16,7 +16,7 @@ export const ExtraStandardIngredientMethods: ExtraStandardIngredientMethodsType 
   Object.entries(ExtraStandardIngredients).reduce((obj, [key, value]) => {
     // @ts-ignore
     obj[key] = (id: string, name: string, grams: number, nutrients?: NutrientPercentType[]) => getCustomIngredient(
-      id, name, grams, nutrients ? [...value.nutrients, ...nutrients] : value.nutrients
+      id, name, grams, nutrients ? [...value.nutrients, ...nutrients] : value.nutrients, key
     );
     return obj;
   }, {} as ExtraStandardIngredientMethodsType)) as ExtraStandardIngredientMethodsType;

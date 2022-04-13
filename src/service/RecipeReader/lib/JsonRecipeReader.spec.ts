@@ -30,16 +30,16 @@ describe("JsonRecipeType can be read", () => {
         ]);
         expect(result.ingredients.length).toBe(1);
         expect(result.ingredients[0].ingredients.length).toBe(4);
-        expect(result.ingredients[0].ingredients[0].id).toBe("flour.rye.whole_grain");
+        expect(result.ingredients[0].ingredients[0].id).toBe("WHOLE_RYE_FLOUR_flour.rye.whole_grain");
         expect(result.ingredients[0].ingredients[0].grams).toBe(405);
 
-        expect(result.ingredients[0].ingredients[1].id).toBe("flour.rye.malt");
+        expect(result.ingredients[0].ingredients[1].id).toBe("WHOLE_RYE_MALT_FLOUR_flour.rye.malt");
         expect(result.ingredients[0].ingredients[1].grams).toBe(20);
 
-        expect(result.ingredients[0].ingredients[2].id).toBe("water.generic");
+        expect(result.ingredients[0].ingredients[2].id).toBe("WATER_water.generic");
         expect(result.ingredients[0].ingredients[2].grams).toBe(425);
 
-        expect(result.ingredients[0].ingredients[3].id).toBe("salt.generic");
+        expect(result.ingredients[0].ingredients[3].id).toBe("SALT_salt.generic");
         expect(result.ingredients[0].ingredients[3].grams).toBe(7.5);
 
     });
@@ -73,16 +73,16 @@ describe("JsonRecipeType can be read", () => {
         ]);
         expect(result.ingredients.length).toBe(1);
         expect(result.ingredients[0].ingredients.length).toBe(4);
-        expect(result.ingredients[0].ingredients[0].id).toBe("flour.rye.whole_grain");
+        expect(result.ingredients[0].ingredients[0].id).toBe("WHOLE_RYE_FLOUR_flour.rye.whole_grain");
         expect(result.ingredients[0].ingredients[0].grams).toBe(405);
 
-        expect(result.ingredients[0].ingredients[1].id).toBe("flour.rye.malt");
+        expect(result.ingredients[0].ingredients[1].id).toBe("WHOLE_RYE_MALT_FLOUR_flour.rye.malt");
         expect(result.ingredients[0].ingredients[1].grams).toBe(20);
 
-        expect(result.ingredients[0].ingredients[2].id).toBe("water.generic");
+        expect(result.ingredients[0].ingredients[2].id).toBe("WATER_water.generic");
         expect(result.ingredients[0].ingredients[2].grams).toBe(425);
 
-        expect(result.ingredients[0].ingredients[3].id).toBe("salt.generic");
+        expect(result.ingredients[0].ingredients[3].id).toBe("SALT_salt.generic");
         expect(result.ingredients[0].ingredients[3].grams).toBe(7.5);
 
     });

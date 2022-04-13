@@ -37,21 +37,20 @@ const recipeTypeBakingTime2JsonBakingTime = (bakingTime: BakingTimeType): JsonBa
     return result;
 }
 
-const INGREDIENT_CONSTANT_ID_MAP: { [key: string]: string } = Object.entries(StandardIngredients).reduce((obj,[key, type]) => {
-    obj[type.id] = key;
-    return obj;
-}, {} as { [key: string]: string });
 
 const normalizeIngredient = (ingredient: IngredientGramsType): JsonRecipeIngredientsIngredientType => {
-    if (INGREDIENT_CONSTANT_ID_MAP[ingredient.id]) {
+    // @ts-ignore
+    const type = ingredient.type ? StandardIngredients[ingredient.type] : undefined;
+    if (type) {
         return {
-            type: INGREDIENT_CONSTANT_ID_MAP[ingredient.id],
+            type: ingredient.type,
             grams: ingredient.grams
         } as JsonStandardIngredientTypeGramsType
     } else if (ingredient.nutrients.find(e => e.type === NutritionType.dry) &&
         resolveJsonExtraStandardIngredient(
           { type: "DRY", name: ingredient.name } as JsonExtraStandardIngredientType,
           ingredient.grams) === ingredient.id) {
+        console.log("GOTCHA!");
         const nutrients = ingredient.nutrients.filter(e => e.type !== NutritionType.dry);
         const result = {
             type: "DRY",
@@ -64,6 +63,7 @@ const normalizeIngredient = (ingredient: IngredientGramsType): JsonRecipeIngredi
         }
         return result;
     } else {
+        console.log("GOTCHA!");
         return {
             ...ingredient
         } as IngredientGramsType

@@ -10,7 +10,10 @@ import {
   IngredientType, NutrientPercentType,
   PercentAmountType
 } from "../../../types";
-import {ExtraStandardIngredientMethods, StandardIngredientMethods} from "../../../Constant/Ingredient";
+import {
+  ExtraStandardIngredientMethods,
+  getStandardIngredientMethodsGrams,
+} from "../../../Constant/Ingredient";
 import {resolveJsonExtraStandardIngredient} from "./JsonRecepyIdGenerator";
 
 type HasValueType <T> = {
@@ -44,10 +47,9 @@ const resolveIngredientByType = (resultTest: ResolveTestType, ingredient: JsonRe
     const id = resolveJsonExtraStandardIngredient(ingredient as JsonExtraStandardIngredientType, resultTest.grams.value);
     return extraMethod(id, resultTest.name.value, resultTest.grams.value);
   }
-  // @ts-ignore
-  const standardMethod = StandardIngredientMethods[resultTest.type.value];
+  const standardMethod = getStandardIngredientMethodsGrams(resultTest.type.value, resultTest.grams.value);
   if (standardMethod !== undefined) {
-    return standardMethod(resultTest.grams.value);
+    return standardMethod;
   }
   throw new Error(`Could not resolve type ${resultTest.type.value.toString()}`)
 }
@@ -70,6 +72,7 @@ export const resolveIngredient = (ingredient: JsonRecipeIngredientsIngredientTyp
   return [{
     id: resultTest.id.value,
     grams: resultTest.grams.value,
+    type: resultTest.type.value,
     nutrients: resultTest.nutrients.value,
     name: resultTest.name.value
   } as IngredientGramsType, resultTest]

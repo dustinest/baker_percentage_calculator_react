@@ -8,7 +8,7 @@ import {
 } from "../../types";
 // noinspection ES6PreferShortImport
 import {
-  ActionGenericIndex,
+  ActionGenericIndex, ActionIngredientIndex, AddStandardEditRecipeIngredientStateAction,
   RemoveEditRecipeBakingTimeStateAction,
   SetEditRecipeAmountStateAction,
   SetEditRecipeBakingTimeStateAction, SetEditRecipeDescriptionStateAction,
@@ -17,11 +17,12 @@ import {
   SetEditRecipeNameStateAction
 } from "./EditRecipeStateAction.d";
 import {hasNoValueOrEquals, hasValue} from "../../utils/NullSafe";
+import {getStandardIngredientMethodsGrams} from "../../Constant/Ingredient";
 
 type Methods = {
   setName: (recipe: RecipeType | null, action: SetEditRecipeNameStateAction) => RecipeType | null,
-  setIngredientGram: (recipe: RecipeType | null, action: SetEditRecipeAmountStateAction) => RecipeType | null,
-  setAmount: (recipe: RecipeType | null, action: SetEditRecipeIngredientGramsStateAction) => RecipeType | null,
+  setIngredientGram: (recipe: RecipeType | null, action: SetEditRecipeIngredientGramsStateAction) => RecipeType | null,
+  setAmount: (recipe: RecipeType | null, action: SetEditRecipeAmountStateAction) => RecipeType | null,
   setBakingTime: (recipe: RecipeType | null, action: SetEditRecipeBakingTimeStateAction) => RecipeType | null,
   removeBakingTime: (recipe: RecipeType | null, action: RemoveEditRecipeBakingTimeStateAction) => RecipeType | null,
   setInnerTemperature: (recipe: RecipeType | null, action: SetEditRecipeInnerTemperatureStateAction) => RecipeType | null,
@@ -43,15 +44,37 @@ export const EditRecipeReducerService = Object.freeze({
     copy.name = action.name;
     return copy;
   },
-  setIngredientGram: (recipe: RecipeType | null, action: SetEditRecipeAmountStateAction) => {
+  setIngredientGram: (recipe: RecipeType | null, action: SetEditRecipeIngredientGramsStateAction | AddStandardEditRecipeIngredientStateAction) => {
     if (!recipe) return recipe;
-    if (recipe.ingredients[action.index.ingredients].ingredients[action.index.ingredient].grams === action.grams) return recipe;
+    if (typeof action.index === "number") {
+      const index = action.index as number;
+      if (recipe.ingredients.length <= index) {
+        throw new Error("Not managed: new ingredients should be added!");
+      }
+      const type = (action as AddStandardEditRecipeIngredientStateAction).item;
+      if (!type) {
+        throw new Error("Type must be provided!");
+      }
+      const item = getStandardIngredientMethodsGrams(type, action.grams);
+      if (!item) throw new Error(`Could not find item for type ${type}!`)
+      const copy = copyRecipeType(recipe);
+      copy.ingredients[index].ingredients.push(item);
+      return copy;
+    }
+    const index = action.index as ActionIngredientIndex;
+    if (recipe.ingredients.length <= index.ingredients) {
+      throw new Error("Not managed: new ingredients should be added!");
+    }
+    if (recipe.ingredients[index.ingredients].ingredients.length <= index.ingredient) {
+      throw new Error("Not managed: new ingredients to array should be added!");
+    }
+    if (recipe.ingredients[index.ingredients].ingredients[index.ingredient].grams === action.grams) return recipe;
     const copy = copyRecipeType(recipe);
-    copy.ingredients[action.index.ingredients].ingredients[action.index.ingredient].grams = action.grams
+    copy.ingredients[index.ingredients].ingredients[index.ingredient].grams = action.grams
     return copy;
   },
 
-  setAmount: (recipe: RecipeType | null, action: SetEditRecipeIngredientGramsStateAction) => {
+  setAmount: (recipe: RecipeType | null, action: SetEditRecipeAmountStateAction) => {
     if (!recipe || action.amount <= 0 || recipe.amount === action.amount) return recipe;
     const value = Math.floor(action.amount * 10) / 10;
     if (value <= 0) return recipe;

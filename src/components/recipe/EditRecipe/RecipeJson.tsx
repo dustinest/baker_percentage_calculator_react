@@ -10,7 +10,7 @@ import {
     Typography
 } from "@mui/material";
 import {TranslatedLabel} from "../../../Translations";
-import {ExpandMoreIcon} from "../../common/Icons";
+import { ExpandMoreIcon } from "../../common/Icons";
 
 export const RecipeJson = ({recipe}: {recipe: RecipeType}) => {
     const [isExpanded, setExpanded] = useState<boolean>(false);
