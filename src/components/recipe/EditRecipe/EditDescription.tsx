@@ -1,8 +1,8 @@
 import {Table, TableBody, TableCell, TableRow, TextField} from "@mui/material";
 import {useTranslation} from "../../../Translations";
 import {useMessageSnackBar} from "../../../State";
-import {EditDoneButton} from "./EditDoneButton";
 import {useStringInputValueTracking} from "../../../utils/UseValue";
+import {DoneIconButton} from "../../../Constant/Buttons";
 
 type EditDescriptionProps = {
   value?: string | null,
@@ -37,7 +37,7 @@ export const EditDescription = ({value, onChange}: EditDescriptionProps) => {
             />
           </TableCell>
           <TableCell>
-            <EditDoneButton enabled={!isDescriptionSame} onChange={onTextChange}/>
+            <DoneIconButton disabled={isDescriptionSame} onChange={onTextChange}/>
           </TableCell>
         </TableRow>
       </TableBody>

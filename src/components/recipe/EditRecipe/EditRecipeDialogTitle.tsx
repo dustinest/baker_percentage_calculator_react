@@ -2,10 +2,10 @@ import {RecipeType} from "../../../types";
 import {Grid, TextField} from "@mui/material";
 import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
 import {memo} from "react";
-import {EditDoneButton} from "./EditDoneButton";
 import {useNumberInputValueTracking, useStringInputValueTracking} from "../../../utils/UseValue";
 import "./EditRecipeDialogTitle.css";
 import {useValueTimeoutAsync} from "../../../utils/Async";
+import {DoneIconButton} from "../../../Constant/Buttons";
 
 export const EditRecipeDialogTitle = memo(({recipe}: { recipe: RecipeType }) => {
   const [name, isSameName, setName, resetName] = useStringInputValueTracking(recipe.name);
@@ -44,7 +44,7 @@ export const EditRecipeDialogTitle = memo(({recipe}: { recipe: RecipeType }) => 
           value={name}
           onChange={setName}
         />
-        <EditDoneButton enabled={!isSameName && name.trim().length > 0} onChange={onNameDone}/>
+        <DoneIconButton disabled={isSameName || name.trim().length <= 0} onChange={onNameDone}/>
       </Grid>
       <Grid item xs>
         <TextField

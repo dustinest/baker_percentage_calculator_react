@@ -9,7 +9,6 @@ import {copyRecipeType, RecipeType} from "../../../types";
 import {BakerPercentageResult} from "../../../utils/BakerPercentageCalulation";
 import {
   Box,
-  Button,
   Container,
   Dialog,
   DialogActions,
@@ -25,14 +24,13 @@ import {EditInnerTemperature} from "./EditInnerTemperature";
 import {EditDescription} from "./EditDescription";
 import {RenderBakingTimeAware} from "../common/RenderBakingTimeAware";
 import {RecipeJson} from "./RecipeJson";
-import {AddIcon, RecipeCancelIcon, RecipeSaveIcon} from "../../common/Icons";
-import {Translation} from "../../../Translations";
 import {recalculateRecipeBakerPercentage} from "../common/RecipeItemEditService";
 import {RecipeContentLoader} from "../common/RecipeLoader";
 import {EditRecipeDialogTitle} from "./EditRecipeDialogTitle";
 import {EditRecipeDialogIngredients} from "./EditRecipeDialogIngredients";
 import {hasNoValue, hasValue} from "../../../utils/NullSafe";
 import {RECIPE_CONSTANTS} from "./RecipeConstants";
+import {TranslatedAddButton, TranslatedCancelButton, TranslatedSaveButton} from "../../../Constant/Buttons";
 
 
 const RenderRecipeEditDialogContent = ({recipe }: { recipe: RecipeType }) => {
@@ -200,9 +198,9 @@ export const EditRecipeDialog = () => {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onCancel} startIcon={<RecipeCancelIcon/>}><Translation label="edit.cancel"/></Button>
-          <Button onClick={addIngredients} disabled={recipeToEdit.ingredients.length > 0 && recipeToEdit.ingredients[recipeToEdit.ingredients.length - 1].ingredients.length === 0} startIcon={<AddIcon/>}><Translation label="edit.ingredients.add"/></Button>
-          <Button onClick={onSave} disabled={!canSave} startIcon={<RecipeSaveIcon/>}><Translation label="edit.save"/></Button>
+          <TranslatedCancelButton translation="edit.cancel" onClick={onCancel}/>
+          <TranslatedAddButton translation="edit.ingredients.add"  onClick={addIngredients} disabled={recipeToEdit.ingredients.length > 0 && recipeToEdit.ingredients[recipeToEdit.ingredients.length - 1].ingredients.length === 0}/>
+          <TranslatedSaveButton translation="edit.save" onClick={onSave} disabled={!canSave}/>
         </DialogActions>
       </>
     }

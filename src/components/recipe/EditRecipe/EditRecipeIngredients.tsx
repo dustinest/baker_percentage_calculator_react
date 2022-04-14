@@ -1,6 +1,5 @@
 import {IngredientGramsType} from "../../../types";
 import {
-  Button,
   InputAdornment, MenuItem,
   OutlinedInput, Select, SelectChangeEvent,
   Stack,
@@ -16,8 +15,7 @@ import "./EditRecipeIngredients.css";
 import {hasNoValue, hasValue} from "../../../utils/NullSafe";
 import {ReactNode, useEffect, useState} from "react";
 import {getStandardIngredientMethodsGrams, StandardIngredientMethods} from "../../../Constant/Ingredient";
-import {AddIcon, DeleteICon} from "../../common/Icons";
-import {RIconButton} from "../../common/RButton";
+import {AddButton, DeleteButton} from "../../../Constant/Buttons";
 
 const EditRecipeIngredientTable = ({name, children}: {name: string, children: ReactNode;}) => {
   return (
@@ -83,7 +81,7 @@ const EditRecipeIngredient = ({
           onChange={setGrams}
           endAdornment={<InputAdornment position="end">g</InputAdornment>}
         />
-        <RIconButton onClick={onDelete} icon={<DeleteICon/>}/>
+        <DeleteButton onClick={onDelete}/>
       </Stack>
     </EditRecipeIngredientTable>
   )
@@ -164,7 +162,7 @@ export const EditRecipeRemainingIngredients = ({ingredients, index}: EditRecipeR
             onChange={setGrams}
             endAdornment={<InputAdornment position="end">g</InputAdornment>}
           />
-          <Button onClick={addNewItem} disabled={isSameGrams || grams <= 0}><AddIcon/></Button>
+          <AddButton onClick={addNewItem} disabled={isSameGrams || grams <= 0}/>
         </Stack>
       }
     </>

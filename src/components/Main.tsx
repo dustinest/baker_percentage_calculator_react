@@ -11,12 +11,13 @@ import {
   RecipesStateActionTypes,
   useMessageSnackBar,
 } from "../State";
-import {RecipeList} from "./recipe/RecipeList";
+import {RecipeList, RecipePrintList} from "./recipe/RecipeList";
 import {useAsyncEffect} from "../utils/Async";
 import {EditRecipeDialog} from "./recipe/EditRecipe";
 import {AddRecipeIcon} from "./AddRecipeIcon";
+import {FloatingPrintCancelButton} from "../Constant/Buttons";
 
-const getDouble = (value: JsonRecipeType): JsonRecipeType => {
+const getDuplicateRecipe = (value: JsonRecipeType): JsonRecipeType => {
   return {
     ...value,
     ...{
@@ -44,7 +45,7 @@ const getDouble = (value: JsonRecipeType): JsonRecipeType => {
 
 const getRecipes = (): RecipeType[] => {
   return PREDEFINED_RECIPES
-    .reduce((current, value) => ([...current, ...[value, getDouble(value)]]), [] as JsonRecipeType[])
+    .reduce((current, value) => ([...current, ...[value, getDuplicateRecipe(value)]]), [] as JsonRecipeType[])
     //.map((e) => ({...e, ...{id: resolveJsonRecipeTypeId(e), label: getJsonRecipeTypeLabel(e, translate(e.name))}} as JsonRecipeTypeWithLabel))
     .map(readJsonRecipe);
 }
@@ -53,6 +54,7 @@ export const Main = () => {
   const snackBar = useMessageSnackBar();
   const {recipesDispatch} = useContext(RecipesContext);
   const [status, setStatus] = useState<{loading: boolean, amount: number}>({ loading: true, amount: 0 });
+  const [printPreview, setPrintPreview] = useState<boolean>(false);
 
   useAsyncEffect(async () => {
     setStatus({...status, ...{loading: true}});
@@ -73,16 +75,24 @@ export const Main = () => {
     <>
       {
         status.loading ? (<CircularProgress/>) :
-          (
-            <>
-              <RecipeNavigation/>
-              <EditRecipeProvider>
-                <AddRecipeIcon/>
-                <EditRecipeDialog/>
-                <RecipeList/>
-              </EditRecipeProvider>
+          printPreview  ?
+            (
+              <>
+                <FloatingPrintCancelButton onClick={() => setPrintPreview(false)}/>
+                <RecipePrintList/>
             </>
-          )
+            ) :
+            (
+                <>
+                  <RecipeNavigation onPrint={() => setPrintPreview(true)}>
+                    <EditRecipeProvider>
+                      <AddRecipeIcon/>
+                      <EditRecipeDialog/>
+                      <RecipeList/>
+                    </EditRecipeProvider>
+                  </RecipeNavigation>
+                </>
+            )
       }
     </>
   )

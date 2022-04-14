@@ -4,8 +4,7 @@ import {Stack, Table, TableBody, TableCell, TableHead, TableRow} from "@mui/mate
 import {TranslatedTableCell} from "../../../Translations";
 import {useEffect, useState} from "react";
 import {EditNumberInterval} from "./EditNumberInterval";
-import {RIconButton} from "../../common/RButton";
-import {DeleteICon, DoneIcon} from "../../common/Icons";
+import {DeleteIconButton, DoneIconButton} from "../../../Constant/Buttons";
 
 const DUMMY_INNER_TEMPERATURE = Object.freeze({ from: 1, until: 1 } as NumberIntervalType) as NumberIntervalType;
 
@@ -43,7 +42,7 @@ export const EditInnerTemperature = ({recipe}: {recipe: RecipeType}) => {
           <TableCell>
             <Stack direction="row">
               <EditNumberInterval interval={value} onChange={(from, until) => setInnerTemperature(from, until)}/>
-              {recipe.innerTemperature ? <RIconButton onClick={removeTemperature} icon={<DeleteICon/>}/>: <RIconButton onClick={triggerChange} icon={<DoneIcon/>}/>}
+              {recipe.innerTemperature ? <DeleteIconButton onClick={removeTemperature}/>: <DoneIconButton onClick={triggerChange}/>}
             </Stack>
           </TableCell>
         </TableRow>

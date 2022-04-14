@@ -12,7 +12,7 @@ type EditRecipeContextType = {
   editRecipeDispatch: Dispatch<RecipeManagementStateActions>;
 };
 
-const EditRecipeContext = createContext<EditRecipeContextType>({editRecipe: null, editRecipeDispatch: () => null } as EditRecipeContextType);
+export const EditRecipeContext = createContext<EditRecipeContextType>({editRecipe: null, editRecipeDispatch: () => null } as EditRecipeContextType);
 
 const combinedEditRecipeRecipesStateReducers = (
   editRecipe: null | RecipeType,

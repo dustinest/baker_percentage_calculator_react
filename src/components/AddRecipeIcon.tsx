@@ -1,8 +1,7 @@
 import {useSetEditRecipe} from "../State";
-import {AddIcon} from "./common/Icons";
-import {Fab, Box} from "@mui/material";
 import {RecipeType} from "../types";
 import {RECIPE_CONSTANTS} from "./recipe/EditRecipe";
+import {AddRecipeFloatingButton} from "../Constant/Buttons";
 
 
 export const AddRecipeIcon = () => {
@@ -24,13 +23,5 @@ export const AddRecipeIcon = () => {
       }]
     } as RecipeType);
   }
-  return (
-    <Box
-      className="menu-trigger"
-      sx={{
-      position: 'fixed',
-      right: 0,
-      bottom: 0,
-    }}><Fab variant="extended" color="primary" aria-label="add" onClick={addRecipe}><AddIcon/></Fab></Box>
-  )
+  return (<AddRecipeFloatingButton onClick={addRecipe}/>);
 };

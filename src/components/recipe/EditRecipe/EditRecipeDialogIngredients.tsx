@@ -1,14 +1,13 @@
 import {RecipeIngredientsType} from "../../../types";
 import {
-  Button,
   Card, CardActions, CardContent, Collapse,
 } from "@mui/material";
 import {useState} from "react";
 import {EditRecipeIngredientsName} from "./EditRecipeIngredientsName";
 import {EditRecipeIngredients, EditRecipeRemainingIngredients} from "./EditRecipeIngredients";
 import {ExpandMoreAction} from "../../common/ExpandMoreAction";
-import {DeleteICon} from "../../common/Icons";
 import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
+import {DeleteIconButton} from "../../../Constant/Buttons";
 
 export const EditRecipeDialogIngredients = ({
                                               ingredients,
@@ -30,7 +29,7 @@ export const EditRecipeDialogIngredients = ({
         <EditRecipeIngredients ingredients={ingredients.ingredients} index={index}/>
       </CardContent>
       <CardActions disableSpacing>
-        <Button onClick={onRemove} startIcon={<DeleteICon/>}/>
+        <DeleteIconButton onClick={onRemove}/>
         <ExpandMoreAction expanded={expanded} onChange={setExpanded}/>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>

@@ -1,5 +1,7 @@
 # App to convert pastry recipe to use sourdough starter
 
+Demo is running at https://juuretis.herokuapp.com/
+
 The goal of this app is to calculate any baking recipe to sourdough based on baker's percentages.
 There are some hacks in code which might need some attention (IE starter for pancakes).
 

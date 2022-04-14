@@ -2,10 +2,9 @@ import {BakingTimeType} from "../../../types";
 import {Checkbox, Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
 import {EditNumberInterval} from "./EditNumberInterval";
 import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
-import {RIconButton} from "../../common/RButton";
-import {DeleteICon, DoneIcon} from "../../common/Icons";
 import {TranslatedTableCell} from "../../../Translations";
 import {useEffect, useMemo, useState} from "react";
+import {DeleteIconButton, DoneIconButton} from "../../../Constant/Buttons";
 
 const DUMMY_BAKING_TIME = Object.freeze({
   time: {from: 1, until: 1},
@@ -57,7 +56,7 @@ const EditBakingTimeRow = ({bakingTime, index}: {bakingTime?: BakingTimeType, in
         <EditNumberInterval interval={value.temperature} onChange={(from, until) => setRecipeTemperature(from, until)}/>
       </TableCell>
       <TableCell>
-        {bakingTime ? <RIconButton onClick={removeBakingTime} icon={<DeleteICon/>}/>: <RIconButton onClick={triggerChange} icon={<DoneIcon/>}/>}
+        {bakingTime ? <DeleteIconButton onClick={removeBakingTime}/> : <DoneIconButton onClick={triggerChange}/> }
       </TableCell>
     </TableRow>
   )
