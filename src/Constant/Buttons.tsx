@@ -1,5 +1,5 @@
 import {
-  AddIcon, CloseIcon,
+  AddIcon, CheckAllCheckboxIcon, ClearAllCheckboxIcon, CloseIcon,
   DeleteIcon,
   DoneIcon,
   ExpandMoreIcon,
@@ -17,6 +17,9 @@ export const PrintIconButton = (props: IconButtonProps) => (<IconButtonInt {...p
 export const MenuCloseIconButton = (props: IconButtonProps) => (<IconButtonInt {...props}><MenuCloseIcon/></IconButtonInt>);
 export const DeleteIconButton = (props: IconButtonProps) => (<IconButtonInt color="warning" {...props}><DeleteIcon/></IconButtonInt>);
 export const DoneIconButton = (props: IconButtonProps) => (<IconButtonInt  color="success" {...props}><DoneIcon/></IconButtonInt>);
+
+export const CheckAllIconButton = (props: IconButtonProps) => (<IconButtonInt  color="success" {...props}><CheckAllCheckboxIcon/></IconButtonInt>);
+export const ClearAllIconButton = (props: IconButtonProps) => (<IconButtonInt  color="success" {...props}><ClearAllCheckboxIcon/></IconButtonInt>);
 
 type ExpandMoreProps = { expand: boolean; } & IconButtonProps;
 export const ExpandMoreIconButton = styled((props: ExpandMoreProps) => {

@@ -1,6 +1,7 @@
 import {RecipeItem} from "./RecipeItem";
 import {RecipesConsumer} from "../../State";
 import {Container, Grid} from "@mui/material";
+import {TranslatedLabel} from "../../Translations";
 
 export const RecipeList = () => {
   return (
@@ -22,6 +23,7 @@ export const RecipePrintList = () => {
     <RecipesConsumer>
       {(recipes) => (
         <div className="recipes">
+          {recipes.length === 0 ? <TranslatedLabel label="messages.no_recipes"/> : undefined}
           {recipes.map((recipe) => (
             <Container id={recipe.id} key={recipe.id} component="article" className="recipe-item">
               <RecipeItem isPrintPreview={true} recipe={recipe} />

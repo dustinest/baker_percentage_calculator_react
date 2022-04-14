@@ -1,18 +1,19 @@
 // noinspection ES6PreferShortImport
 import {RecipesStateActions, RecipesStateActionTypes} from "./RecipesStateActions.d";
 import {RecipeType} from "../../types";
+import {RecipeStateType} from "./RecipesProvider";
 
-export const updateRecipesReducer = (recipes: RecipeType[], action: RecipesStateActions): RecipeType[] => {
+export const updateRecipesReducer = (state: RecipeStateType, action: RecipesStateActions): RecipeStateType => {
     switch (action.type) {
         case RecipesStateActionTypes.SET_RECIPES:
-            return [...action.value];
+            return {recipes: action.value, recipesFilter: action.value.map(e => e.id)}
         case RecipesStateActionTypes.REMOVE_RECIPE: {
-            return [...recipes.filter((e) => e.id !== action.value.id)];
+            return {...state, ...{ recipes: state.recipes.filter((e) => e.id !== action.value.id)}}
         }
         case RecipesStateActionTypes.SAVE_RECIPE:
             const result:RecipeType[] = [];
             let updated = false;
-            recipes.forEach((e) => {
+            state.recipes.forEach((e) => {
                 if (e.id === action.value.id) {
                     result.push(action.value);
                     updated = true;
@@ -23,7 +24,9 @@ export const updateRecipesReducer = (recipes: RecipeType[], action: RecipesState
             if (!updated) {
                 result.unshift(action.value);
             }
-            return result;
+            return {...state, ...{ recipes: result}}
+        case RecipesStateActionTypes.UPDATE_FILTER:
+            return {...state, ...{recipesFilter: action.value}};
     }
-    return recipes;
+    return state;
 }

@@ -5,19 +5,19 @@ import {
   Drawer,
   Typography,
   Divider,
-  useTheme,
-  Box, CssBaseline, IconButton, Toolbar, ListItemButton, Link, ListItemText
+  Box, CssBaseline, IconButton, Toolbar, ListItem, FormControlLabel, Checkbox, ButtonGroup
 } from "@mui/material";
-import {ReactNode, useContext, useState} from "react";
+
+import {ChangeEvent, ReactNode, useContext, useState} from "react";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import {MenuCloseLeftIcon, MenuCloseRightIcon, MenuIcon} from "../../Constant/Icons";
-import {RecipesContext} from "../../State";
+import {MenuIcon} from "../../Constant/Icons";
+import {RecipesContext, RecipesStateActionTypes} from "../../State";
 import {RecipeName} from "../common/RecipeName";
 import {Translation} from "../../Translations";
-import {PrintIconButton} from "../../Constant/Buttons";
+import {CheckAllIconButton, ClearAllIconButton, DoneIconButton, PrintIconButton} from "../../Constant/Buttons";
+import {runLater} from "../../utils/Async";
 
 const drawerWidth = 240;
-
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
 }>(({ theme, open }) => ({
@@ -68,13 +68,32 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export const RecipeNavigation = ({children, onPrint}: {onPrint: () => void, children: ReactNode}) => {
-  const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const {recipeState, recipesDispatch} = useContext(RecipesContext);
+  const [selectedRecipes, setSelectedRecipes] = useState<string[]>(recipeState.recipesFilter);
 
   const handleDrawerOpen = () => setOpen(true);
-  const handleDrawerClose = () => setOpen(false);
+  const handleDrawerClose = () => {
+    setOpen(false);
+    runLater(() => {
+      recipesDispatch({
+        type: RecipesStateActionTypes.UPDATE_FILTER,
+        value: selectedRecipes
+      });
+    }).catch(console.error);
+  }
 
-  const {recipes} = useContext(RecipesContext);
+  const selectAll = () => setSelectedRecipes(recipeState.recipes.map(e => e.id));
+  const selectNone = () => setSelectedRecipes([]);
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>, id: string) => {
+    if (e.target.checked) {
+      setSelectedRecipes([...selectedRecipes, ...[id]]);
+    } else {
+      setSelectedRecipes(selectedRecipes.filter((e) => e !== id));
+    }
+  }
+
 
   return (
     <Box sx={{display: 'flex'}}>
@@ -91,7 +110,7 @@ export const RecipeNavigation = ({children, onPrint}: {onPrint: () => void, chil
             <MenuIcon/>
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            <Translation label="snackbar.recipes" count={recipes.length}/>
+            <Translation label="snackbar.recipes" count={recipeState.recipes.length}/>
           </Typography>
         </Toolbar>
       </AppBar>
@@ -110,19 +129,19 @@ export const RecipeNavigation = ({children, onPrint}: {onPrint: () => void, chil
       >
         <DrawerHeader>
           <PrintIconButton onClick={onPrint} edge="start" color="inherit"/>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <MenuCloseLeftIcon/> : <MenuCloseRightIcon/>}
-          </IconButton>
+          <ButtonGroup>
+            <CheckAllIconButton disabled={selectedRecipes.length === recipeState.recipes.length} onClick={selectAll}/>
+            <ClearAllIconButton disabled={selectedRecipes.length === 0} onClick={selectNone}/>
+          </ButtonGroup>
+            <DoneIconButton onClick={handleDrawerClose}/>
         </DrawerHeader>
         <Divider/>
         <List>
-          {recipes.map((recipe) => (
-                <ListItemButton component={Link} href={`#${recipe.id}`} key={recipe.id}>
-                  <ListItemText><RecipeName recipe={recipe}/></ListItemText>
-                </ListItemButton>
-              )
-            )
-          }
+          {recipeState.recipes.map((recipe) => (
+            <ListItem key={recipe.id}>
+              <FormControlLabel control={<Checkbox checked={selectedRecipes.includes(recipe.id)} onChange={(e) => onChange(e, recipe.id)} />} label={<RecipeName recipe={recipe}/>} />
+            </ListItem>
+          ))}
         </List>
       </Drawer>
       <Main open={open}>

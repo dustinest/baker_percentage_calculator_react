@@ -13,6 +13,9 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import PrintOutlinedIcon from '@mui/icons-material/PrintOutlined';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 
+import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
+import LibraryAddCheckOutlinedIcon from '@mui/icons-material/LibraryAddCheckOutlined';
+
 export const MenuOpenIcon = StartOutlinedIcon;
 export const MenuCloseIcon = ChevronLeftIcon;
 
@@ -29,3 +32,5 @@ export const DoneIcon = DoneOutlinedIcon;
 export const AddIcon = AddOutlinedIcon;
 export const PrintIcon = PrintOutlinedIcon;
 export const MenuIcon = MenuOutlinedIcon;
+export const ClearAllCheckboxIcon = IndeterminateCheckBoxOutlinedIcon;
+export const CheckAllCheckboxIcon = LibraryAddCheckOutlinedIcon;

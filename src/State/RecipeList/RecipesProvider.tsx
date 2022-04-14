@@ -4,25 +4,33 @@ import {RecipesStateActions} from "./RecipesStateActions.d";
 import {updateRecipesReducer} from "./recipesReducer";
 import {RecipeType} from "../../types";
 
-const initialRecipesState: RecipeType[] = []
+export type RecipeStateType = {
+    recipes: RecipeType[];
+    recipesFilter: string[];
+};
+
+const initialRecipesState:RecipeStateType = {
+    recipes: [],
+    recipesFilter: []
+}
 
 type RecipesContextType = {
-    recipes:  RecipeType[];
+    recipeState: RecipeStateType;
     recipesDispatch: Dispatch<RecipesStateActions>;
 };
 
-export const RecipesContext = createContext<RecipesContextType>({recipes: initialRecipesState, recipesDispatch: () => null } as RecipesContextType);
+export const RecipesContext = createContext<RecipesContextType>({recipeState: initialRecipesState, recipesDispatch: () => null } as RecipesContextType);
 
 const combinedRecipesStateReducers = (
-    recipes: RecipeType[],
+    recipeState: RecipeStateType,
     action: RecipesStateActions
-) => updateRecipesReducer(recipes, action);
+) => updateRecipesReducer(recipeState, action);
 
 
 
 
 export const RecipesProvider = ({ children }: { children: ReactNode }) => {
-    const [recipes, recipesDispatch] = useReducer(combinedRecipesStateReducers, initialRecipesState);
+    const [recipeState, recipesDispatch] = useReducer(combinedRecipesStateReducers, initialRecipesState);
     // Watches for any changes in the state and keeps the state update in sync
     //Refresh state on any action dispatched
     /*
@@ -34,7 +42,7 @@ export const RecipesProvider = ({ children }: { children: ReactNode }) => {
     /*
      */
     return (
-        <RecipesContext.Provider value={{ recipes, recipesDispatch }}>{children}</RecipesContext.Provider>
+        <RecipesContext.Provider value={{ recipeState, recipesDispatch }}>{children}</RecipesContext.Provider>
     );
 };
 
@@ -45,7 +53,11 @@ export const RecipesConsumer = ({ children }: { children: (args: RecipeType[]) =
                 if (context === undefined) {
                     throw new Error('RecipesConsumer must be used within a RecipesProvider')
                 }
-                return children(context.recipes)
+                const {recipes, recipesFilter} = context.recipeState;
+                return children(
+                  recipes.filter((r) => recipesFilter.includes(r.id)
+                  )
+                )
             }}
         </RecipesContext.Consumer>
     )

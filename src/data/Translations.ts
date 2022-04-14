@@ -93,6 +93,9 @@ export const TRANSLATIONS = {
                 }
             }
         },
+        messages: {
+            no_recipes: "No recipes!"
+        },
         snackbar: {
             recipes_one: "one recipe",
             recipes_other: "{{count}} recipes",
@@ -186,6 +189,9 @@ export const TRANSLATIONS = {
                     generic: "Rasv"
                 }
             }
+        },
+        messages: {
+            no_recipes: "Retsepte ei ole!"
         },
         snackbar: {
             recipes_one: "üks retsept",
