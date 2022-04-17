@@ -14,7 +14,9 @@ import {TranslatedLabel, Translation} from "../../../Translations";
 import "./EditRecipeIngredients.css";
 import {hasNoValue, hasValue} from "../../../utils/NullSafe";
 import {ReactNode, useEffect, useState} from "react";
-import {getStandardIngredientMethodsGrams, StandardIngredientMethods} from "../../../Constant/Ingredient";
+import {
+  StandardIngredientMethodGrams,
+} from "../../../Constant/Ingredient";
 import {AddButton, DeleteButton} from "../../../Constant/Buttons";
 
 const EditRecipeIngredientTable = ({name, children}: {name: string, children: ReactNode;}) => {
@@ -117,10 +119,7 @@ export const EditRecipeRemainingIngredients = ({ingredients, index}: EditRecipeR
   const [remaining, setRemaining] = useState<IngredientGramsType[]>( []);
   useEffect(() => {
     const existingValues: string[] = ingredients.map((e) => e.type as string).filter(hasValue);
-    const values = Object.keys(StandardIngredientMethods)
-      .filter((key) => !existingValues.includes(key))
-      .map((key) => getStandardIngredientMethodsGrams(key, 1))
-      .filter(hasValue)
+    const values = StandardIngredientMethodGrams.filter((key) => !existingValues.includes(key.type as string));
     setRemaining(values);
     setSelectedValue(values.length > 0 ? values[0].type as string : null);
   }, [ingredients])
@@ -143,7 +142,12 @@ export const EditRecipeRemainingIngredients = ({ingredients, index}: EditRecipeR
   return (
     <>
       { !selectedValue ? undefined :
-        <Stack direction="row">
+        <Stack
+          direction="row"
+          justifyContent="flex-start"
+          alignItems="center"
+          spacing={0.5}
+        >
           <Select
             labelId="select-ingredients"
             value={selectedValue}

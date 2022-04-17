@@ -1,8 +1,8 @@
 import {IngredientGramsType, NutrientPercentType, NutritionType, RecipeIngredientsType} from "../../types";
 
 const INGREDIENTS_TO_CALCULATE: string[] = [
-  NutritionType.water,
   NutritionType.flour,
+  NutritionType.water,
   NutritionType.fat,
   NutritionType.salt,
   NutritionType.sugar

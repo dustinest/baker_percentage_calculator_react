@@ -21,25 +21,6 @@ export const PREDEFINED_RECIPES = [
         ],
     },
     {
-        name: "Suurem leib",
-        bakingTime: [
-            { time: 25, temperature: 240, steam: true },
-            { time: 50, temperature: 240 }
-        ],
-        innerTemperature: {from: 88, until: 99},
-        ingredients: [
-            {
-                ingredients: [
-                    { type: "WHOLE_RYE_FLOUR", grams: 505 },
-                    { type: "WHOLE_RYE_MALT_FLOUR", grams: 40 },
-                    { type: "WATER", percent: 100 },
-                    { type: "SALT", percent: 1.76 }
-                ]
-
-            }
-        ],
-    },
-    {
         name: "Sai",
         description: "Kukkel küpseta 25 minutit 180℃",
         bakingTime: [

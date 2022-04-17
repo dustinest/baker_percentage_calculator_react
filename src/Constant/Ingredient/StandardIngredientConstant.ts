@@ -1,4 +1,6 @@
 import {copyIngredientGramsType, NutritionType, IngredientGramsType, IngredientType, NutrientPercentType} from "../../types";
+import {hasValue} from "../../utils/NullSafe";
+import { sortIngredientGramsType } from "../../service/SourdoughStarter/IngredientsSort";
 
 interface StandardIngredient {
   SALT: IngredientType,
@@ -66,13 +68,13 @@ type StandardIngredientMethodsType = { [Property in keyof StandardIngredient]: (
 
 
 // @ts-ignore
-export const StandardIngredientMethods: StandardIngredientMethodsType = Object.freeze(
+export const StandardIngredientMethods: Readonly<StandardIngredientMethodsType> = Object.freeze(
   Object.entries(StandardIngredients).reduce((obj, [key, value]) => {
     const id = `${key}_${value.id}`;
     // @ts-ignore
     obj[key] = (grams: number) => copyIngredientGramsType({...value, ...{grams}, ...{type: key, id: id}})
     return obj;
-  }, {})) as StandardIngredientMethodsType;
+  }, {}));
 
 export const getStandardIngredientMethodsGrams = (key: string, grams: number): IngredientGramsType | undefined => {
   // @ts-ignore
@@ -80,3 +82,7 @@ export const getStandardIngredientMethodsGrams = (key: string, grams: number): I
   if (!standardMethod) return undefined;
   return standardMethod(grams);
 }
+
+export const StandardIngredientMethodGrams:Readonly<IngredientGramsType[]> = Object.freeze(sortIngredientGramsType(Object.keys(StandardIngredientMethods)
+  .map((key) => getStandardIngredientMethodsGrams(key, 1))
+  .filter(hasValue)));

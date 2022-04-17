@@ -28,7 +28,7 @@ export const RenderBakingTimeAware = ({value}: RenderBakingTimeAwareProps) => {
                         : undefined
                 }
                 {
-                    value.description ? <Typography variant="body1">{value.description}</Typography> : undefined
+                    value.description ? <Typography variant="body2">{value.description}</Typography> : undefined
                 }
             </Container>
         </>

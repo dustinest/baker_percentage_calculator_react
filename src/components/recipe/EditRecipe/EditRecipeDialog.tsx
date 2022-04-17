@@ -12,9 +12,8 @@ import {
   Container,
   Dialog,
   DialogActions,
-  DialogContent, DialogTitle,
+  DialogContent, DialogTitle, Divider,
   Grid,
-  Paper,
   Stack
 } from "@mui/material";
 import {IngredientsItem} from "../common/IngredientsItem";
@@ -29,7 +28,7 @@ import {RecipeContentLoader} from "../common/RecipeLoader";
 import {EditRecipeDialogTitle} from "./EditRecipeDialogTitle";
 import {EditRecipeDialogIngredients} from "./EditRecipeDialogIngredients";
 import {hasNoValue, hasValue} from "../../../utils/NullSafe";
-import {RECIPE_CONSTANTS} from "./RecipeConstants";
+import {RECIPE_CONSTANTS} from "../../../State/RecipeConstants";
 import {TranslatedAddButton, TranslatedCancelButton, TranslatedSaveButton} from "../../../Constant/Buttons";
 
 
@@ -46,31 +45,28 @@ const RenderRecipeEditDialogContent = ({recipe }: { recipe: RecipeType }) => {
   return (
     <>
       <Grid item lg>
-        <Paper elevation={2}>
           <Container>
             <EditBakingTime bakingTime={recipe.bakingTime}/>
           </Container>
-        </Paper>
       </Grid>
       <Grid item md>
-        <Paper elevation={2}>
           <Container>
             <Stack>
               <EditInnerTemperature recipe={recipe}/>
               <EditDescription value={recipe.description} onChange={setDescription}/>
             </Stack>
           </Container>
-        </Paper>
       </Grid>
     </>
   );
 }
 
-export const RenderRecipeCalculationResult = ({
+const RenderRecipeCalculationResult = ({
                                                 recipe,
                                                 bakerPercentage
                                               }: { recipe: RecipeType, bakerPercentage: BakerPercentageResult }) => {
   return (<>
+    <Divider/>
     <Container maxWidth="xl">
       <Grid container spacing={2} wrap="wrap">
         {
@@ -94,7 +90,7 @@ export const RenderRecipeCalculationResult = ({
         <BakerPercentage microNutrientsResult={bakerPercentage.microNutrients}/>
       </Container>
     </Box>
-    <Container><RecipeJson recipe={recipe}/></Container>
+    { recipe.id !== RECIPE_CONSTANTS.NEW_RECIPE ? <Container><RecipeJson recipe={recipe}/></Container> : undefined }
   </>)
 }
 
@@ -126,7 +122,11 @@ export const EditRecipeDialog = () => {
       return;
     }
     const bakerPercentage = await recalculateRecipeBakerPercentage(_recipe);
-    setBakerPercentage(bakerPercentage);
+    if (bakerPercentage.ingredients.find(e => e.ingredients.find(i => i.grams > 0)))
+      setBakerPercentage(bakerPercentage);
+    else {
+      setBakerPercentage(null);
+    }
   };
 
   useEffect(() => {
@@ -177,24 +177,20 @@ export const EditRecipeDialog = () => {
       <DialogContent dividers><RecipeContentLoader loading={true}/></DialogContent> :
       <>
         <DialogTitle id="customized-dialog-title">
-          <Grid container alignItems="center">
-            <EditRecipeDialogTitle recipe={recipeToEdit}/>
-          </Grid>
+          <EditRecipeDialogTitle recipe={recipeToEdit}/>
         </DialogTitle>
         <DialogContent dividers>
           <Stack spacing={2} alignContent="center" justifyContent="center">
-            <Grid container spacing={2} wrap="wrap" className="edit-recipe-ingredients">
+            <Grid container spacing={0} wrap="wrap" className="edit-recipe-ingredients">
               {recipeToEdit.ingredients.map((ingredients, index) => (
                 <Grid item xl key={index}>
-                  <Paper elevation={2}>
-                      <EditRecipeDialogIngredients ingredients={ingredients} index={index}/>
-                  </Paper>
+                  <EditRecipeDialogIngredients ingredients={ingredients} index={index} recipe={recipeToEdit}/>
                 </Grid>
                 ))}
               {recipe ? <RenderRecipeEditDialogContent recipe={recipe}/> : undefined}
             </Grid>
             {recipe && bakerPercentage ?
-              <Paper elevation={4}><RenderRecipeCalculationResult recipe={recipe} bakerPercentage={bakerPercentage}/></Paper> : undefined}
+              <RenderRecipeCalculationResult recipe={recipe} bakerPercentage={bakerPercentage}/> : undefined}
           </Stack>
         </DialogContent>
         <DialogActions>

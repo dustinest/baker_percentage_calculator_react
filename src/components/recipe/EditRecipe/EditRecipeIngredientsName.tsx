@@ -26,7 +26,7 @@ export const EditRecipeIngredientsName = ({ingredients, index}: EditRecipeIngred
                  onChange={setName}
                  label={translation.translate("edit.ingredients.title")}
       />
-      <DoneIconButton disabled={isSameName} onChange={onNameDone}/>
+      <DoneIconButton disabled={isSameName} onClick={onNameDone}/>
     </Stack>
   )
 }

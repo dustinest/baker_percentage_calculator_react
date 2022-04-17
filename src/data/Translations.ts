@@ -6,7 +6,12 @@ enum TranslationLanguage {
 // noinspection JSNonASCIINames,NonAsciiCharacters
 export const TRANSLATIONS = {
     en: {
+        title_other: "{{count}} recipes",
+        title_one: "One recipe",
         edit: {
+            edit: "Change",
+            delete: "Delete",
+            copyOf: "Copy",
             save: "Save",
             cancel: "Cancel",
             description: {
@@ -104,7 +109,12 @@ export const TRANSLATIONS = {
         },
     },
     et: {
+        title_one: "üks retsept",
+        title_other: "{{count}} retsepti",
         edit: {
+            edit: "Muuda",
+            delete: "Kustuta",
+            copyOf: "Copy",
             save: "Salvesta",
             cancel: "Tühista",
             description: {
@@ -191,7 +201,7 @@ export const TRANSLATIONS = {
             }
         },
         messages: {
-            no_recipes: "Retsepte ei ole!"
+            no_recipes: "Retsepte ei ole valitud!"
         },
         snackbar: {
             recipes_one: "üks retsept",

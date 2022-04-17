@@ -8,3 +8,6 @@ export type RecipeType = {
     ingredients: RecipeIngredientsType[];
 } & BakingAwareType;
 
+export type RecipeTypeCopy = {
+    copyId: string;
+} & RecipeType;

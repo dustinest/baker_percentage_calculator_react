@@ -1,7 +1,4 @@
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeftOutlined';
-import ChevronRightIcon from '@mui/icons-material/ChevronRightOutlined';
-
-import StartOutlinedIcon from '@mui/icons-material/StartOutlined';
 import PlaylistAddCheckOutlinedIcon from '@mui/icons-material/PlaylistAddCheckOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
@@ -12,18 +9,18 @@ import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import PrintOutlinedIcon from '@mui/icons-material/PrintOutlined';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
-
 import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
 import LibraryAddCheckOutlinedIcon from '@mui/icons-material/LibraryAddCheckOutlined';
+import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
+import DifferenceOutlinedIcon from '@mui/icons-material/DifferenceOutlined';
 
-export const MenuOpenIcon = StartOutlinedIcon;
+import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
+import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
+
 export const MenuCloseIcon = ChevronLeftIcon;
 
-export const MenuCloseLeftIcon = ChevronLeftIcon;
-export const MenuCloseRightIcon = ChevronRightIcon;
-
 export const RecipeSaveIcon = PlaylistAddCheckOutlinedIcon;
-export const RecipeCancelIcon = CancelOutlinedIcon;
+export const CancelIcon = CancelOutlinedIcon;
 export const RecipeEditIcon = EditOutlinedIcon;
 export const ExpandMoreIcon = ExpandMoreOutlinedIcon;
 export const CloseIcon = CloseOutlinedIcon;
@@ -34,3 +31,8 @@ export const PrintIcon = PrintOutlinedIcon;
 export const MenuIcon = MenuOutlinedIcon;
 export const ClearAllCheckboxIcon = IndeterminateCheckBoxOutlinedIcon;
 export const CheckAllCheckboxIcon = LibraryAddCheckOutlinedIcon;
+export const MoreVertIcon = MoreVertOutlinedIcon;
+export const CopyOfIcon = DifferenceOutlinedIcon;
+
+export const CheckedIcon = CheckBoxOutlinedIcon;
+export const UnCheckedIcon = CheckBoxOutlineBlankOutlinedIcon;

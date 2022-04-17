@@ -1,4 +1,4 @@
-import {RecipeType} from "../../types";
+import {RecipeType, RecipeTypeCopy} from "../../types";
 import {createContext, Dispatch, ReactNode, useContext, useReducer} from "react";
 // noinspection ES6PreferShortImport
 import {EditRecipeStateActionTypes, RecipeManagementStateActions} from "./EditRecipeStateAction.d";
@@ -56,7 +56,7 @@ export const useEditRecipeContext = () => {
   return editRecipeDispatch;
 }
 
-export const useSetEditRecipe = (): (recipe: RecipeType) => void => {
+export const useSetEditRecipe = (): (recipe: RecipeType | RecipeTypeCopy) => void => {
   const { editRecipeDispatch } = useContext(EditRecipeContext);
 
   return (recipe: RecipeType) => {

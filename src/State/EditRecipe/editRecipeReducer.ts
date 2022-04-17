@@ -1,18 +1,20 @@
-import {copyRecipeType, RecipeType} from "../../types";
+import {RecipeType} from "../../types";
 // noinspection ES6PreferShortImport
 import {
   EditRecipeStateActionTypes,
   RecipeManagementStateActions,
 } from "./EditRecipeStateAction.d";
 import {EditRecipeReducerService} from "./EditRecipeReducerService";
-
-
-
+import {copyCopyOfAwareRecipe, isCopyOfRecipe} from "../CopyOfRecipeHelper";
 
 export const updateEditRecipeReducer = (recipe: RecipeType | null, action: RecipeManagementStateActions): RecipeType | null => {
   switch (action.type) {
     case EditRecipeStateActionTypes.EDIT_RECIPE:
-      return copyRecipeType(action.value);
+      const result = copyCopyOfAwareRecipe(action.value);
+      if (isCopyOfRecipe(result)) {
+        result.name = `${result.name} [copy]`
+      }
+      return result;
     case EditRecipeStateActionTypes.SET_NAME:
       return EditRecipeReducerService.setName(recipe, action);
     case EditRecipeStateActionTypes.SET_AMOUNT:

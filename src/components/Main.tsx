@@ -1,7 +1,6 @@
 import {PREDEFINED_RECIPES} from "../data/PredefinedRecipes";
-import {RecipeNavigation} from "./recipe/RecipeNavigation";
-import {JsonRecipeType} from "../service/RecipeReader/types";
-import {GramsAmountType, RecipeType} from "../types";
+import {RecipeNavigation} from "./RecipeNavigation";
+import {RecipeType} from "../types";
 import {CircularProgress} from "@mui/material";
 import {readJsonRecipe} from "../service/RecipeReader";
 import {useContext, useState} from "react";
@@ -16,7 +15,7 @@ import {useAsyncEffect} from "../utils/Async";
 import {EditRecipeDialog} from "./recipe/EditRecipe";
 import {AddRecipeIcon} from "./AddRecipeIcon";
 import {FloatingPrintCancelButton} from "../Constant/Buttons";
-
+/*
 const getDuplicateRecipe = (value: JsonRecipeType): JsonRecipeType => {
   return {
     ...value,
@@ -42,10 +41,10 @@ const getDuplicateRecipe = (value: JsonRecipeType): JsonRecipeType => {
     }
   } as JsonRecipeType;
 };
-
+*/
 const getRecipes = (): RecipeType[] => {
   return PREDEFINED_RECIPES
-    .reduce((current, value) => ([...current, ...[value, getDuplicateRecipe(value)]]), [] as JsonRecipeType[])
+    //.reduce((current, value) => ([...current, ...[value, getDuplicateRecipe(value)]]), [] as JsonRecipeType[])
     //.map((e) => ({...e, ...{id: resolveJsonRecipeTypeId(e), label: getJsonRecipeTypeLabel(e, translate(e.name))}} as JsonRecipeTypeWithLabel))
     .map(readJsonRecipe);
 }

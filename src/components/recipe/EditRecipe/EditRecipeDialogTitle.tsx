@@ -1,5 +1,5 @@
 import {RecipeType} from "../../../types";
-import {Grid, TextField} from "@mui/material";
+import {Stack, TextField} from "@mui/material";
 import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
 import {memo} from "react";
 import {useNumberInputValueTracking, useStringInputValueTracking} from "../../../utils/UseValue";
@@ -37,16 +37,26 @@ export const EditRecipeDialogTitle = memo(({recipe}: { recipe: RecipeType }) => 
 
 
   return (<>
-      <Grid item xs>
-        <TextField
-          variant="standard"
-          type="string"
-          value={name}
-          onChange={setName}
-        />
-        <DoneIconButton disabled={isSameName || name.trim().length <= 0} onChange={onNameDone}/>
-      </Grid>
-      <Grid item xs>
+      <Stack
+        direction="row"
+        justifyContent="flex-start"
+        alignItems="center"
+        spacing={2}
+      >
+        <Stack
+          direction="row"
+          justifyContent="flex-start"
+          alignItems="center"
+          spacing={0.5}
+        >
+          <TextField
+            variant="standard"
+            type="string"
+            value={name}
+            onChange={setName}
+          />
+          <DoneIconButton disabled={isSameName || name.trim().length <= 0} onClick={onNameDone}/>
+        </Stack>
         <TextField
           variant="standard"
           className="recipe-amount"
@@ -54,7 +64,7 @@ export const EditRecipeDialogTitle = memo(({recipe}: { recipe: RecipeType }) => 
           value={amount}
           onChange={setAmount}
         />
-      </Grid>
+      </Stack>
     </>
   );
 });

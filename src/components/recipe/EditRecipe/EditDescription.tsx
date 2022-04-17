@@ -1,4 +1,4 @@
-import {Table, TableBody, TableCell, TableRow, TextField} from "@mui/material";
+import {Stack, TextField} from "@mui/material";
 import {useTranslation} from "../../../Translations";
 import {useMessageSnackBar} from "../../../State";
 import {useStringInputValueTracking} from "../../../utils/UseValue";
@@ -22,25 +22,22 @@ export const EditDescription = ({value, onChange}: EditDescriptionProps) => {
   const translation = useTranslation();
 
   return (
-    <Table>
-      <TableBody>
-        <TableRow>
-          <TableCell>
-            <TextField
-              fullWidth
-              label={translation.translate("edit.description.generic")}
-              multiline
-              maxRows={4}
-              value={description}
-              onBlur={onTextChange}
-              onChange={setDescription}
-            />
-          </TableCell>
-          <TableCell>
-            <DoneIconButton disabled={isDescriptionSame} onChange={onTextChange}/>
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
+    <Stack
+      direction="row"
+      justifyContent="flex-start"
+      alignItems="center"
+      spacing={0.5}
+    >
+        <TextField
+          fullWidth
+          label={translation.translate("edit.description.generic")}
+          multiline
+          maxRows={4}
+          value={description}
+          onBlur={onTextChange}
+          onChange={setDescription}
+        />
+        <DoneIconButton disabled={isDescriptionSame} onClick={onTextChange}/>
+    </Stack>
   );
 }

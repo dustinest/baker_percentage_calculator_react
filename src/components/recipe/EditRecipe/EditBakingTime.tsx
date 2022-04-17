@@ -5,6 +5,7 @@ import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
 import {TranslatedTableCell} from "../../../Translations";
 import {useEffect, useMemo, useState} from "react";
 import {DeleteIconButton, DoneIconButton} from "../../../Constant/Buttons";
+import "./EditBakingTime.css";
 
 const DUMMY_BAKING_TIME = Object.freeze({
   time: {from: 1, until: 1},
@@ -46,13 +47,13 @@ const EditBakingTimeRow = ({bakingTime, index}: {bakingTime?: BakingTimeType, in
 
   return (
     <TableRow>
-      <TableCell>
+      <TableCell className="steam">
         <Checkbox checked={value.steam} onChange={(e) => setRecipeSteam(e.target.checked)}/>
       </TableCell>
-      <TableCell>
+      <TableCell className="time">
         <EditNumberInterval interval={value.time} onChange={(from, until) => setRecipeBakingTime(from, until)}/>
       </TableCell>
-      <TableCell>
+      <TableCell className="temperature">
         <EditNumberInterval interval={value.temperature} onChange={(from, until) => setRecipeTemperature(from, until)}/>
       </TableCell>
       <TableCell>
@@ -64,7 +65,7 @@ const EditBakingTimeRow = ({bakingTime, index}: {bakingTime?: BakingTimeType, in
 
 export const EditBakingTime = ({bakingTime}: {bakingTime: BakingTimeType[]}) => {
   return (
-    <Table>
+    <Table className="edit-baking-time">
       <TableHead>
         <TableRow>
           <TranslatedTableCell label="edit.baking_instructions.steam"/>

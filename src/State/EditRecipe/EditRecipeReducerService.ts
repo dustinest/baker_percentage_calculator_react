@@ -2,7 +2,6 @@ import {
   bakingTimeEquals,
   copyBakingTimeType,
   copyNumberIntervalType,
-  copyRecipeType,
   numberIntervalTypeEquals,
   RecipeType
 } from "../../types";
@@ -18,6 +17,7 @@ import {
 } from "./EditRecipeStateAction.d";
 import {hasNoValueOrEquals, hasValue} from "../../utils/NullSafe";
 import {getStandardIngredientMethodsGrams} from "../../Constant/Ingredient";
+import { copyCopyOfAwareRecipe } from "../CopyOfRecipeHelper";
 
 type Methods = {
   setName: (recipe: RecipeType | null, action: SetEditRecipeNameStateAction) => RecipeType | null;
@@ -42,7 +42,7 @@ const resolveActionGenericIndex = <T>(index: T | number, callback1: (index: numb
 export const EditRecipeReducerService = Object.freeze({
   setName: (recipe: RecipeType | null, action: SetEditRecipeNameStateAction) => {
     if (!recipe || recipe.name === action.name) return recipe;
-    const copy = copyRecipeType(recipe);
+    const copy = copyCopyOfAwareRecipe(recipe);
     copy.name = action.name;
     return copy;
   },
@@ -58,7 +58,7 @@ export const EditRecipeReducerService = Object.freeze({
       }
       const item = getStandardIngredientMethodsGrams(type, action.grams);
       if (!item) throw new Error(`Could not find item for type ${type}!`)
-      const copy = copyRecipeType(recipe);
+      const copy = copyCopyOfAwareRecipe(recipe);
       copy.ingredients[index].ingredients.push(item);
       return copy;
     }, (index) => {
@@ -69,7 +69,7 @@ export const EditRecipeReducerService = Object.freeze({
         throw new Error("Not managed: new ingredients to array should be added!");
       }
       if (recipe.ingredients[index.ingredients].ingredients[index.ingredient].grams === action.grams) return recipe;
-      const copy = copyRecipeType(recipe);
+      const copy = copyCopyOfAwareRecipe(recipe);
       copy.ingredients[index.ingredients].ingredients[index.ingredient].grams = action.grams
       return copy;
     });
@@ -81,7 +81,7 @@ export const EditRecipeReducerService = Object.freeze({
       if (recipe.ingredients.length <= index) {
         throw new Error("Not managed: new ingredients should be added!");
       }
-      return copyRecipeType({...recipe, ...{ingredients: recipe.ingredients.filter((_, i) => i !== index) }});
+      return copyCopyOfAwareRecipe({...recipe, ...{ingredients: recipe.ingredients.filter((_, i) => i !== index) }});
     }, (index) => {
       if (recipe.ingredients.length <= index.ingredients) {
         throw new Error("Not managed: new ingredients should be added!");
@@ -89,7 +89,7 @@ export const EditRecipeReducerService = Object.freeze({
       if (recipe.ingredients[index.ingredients].ingredients.length <= index.ingredient) {
         throw new Error("Not managed: new ingredients to array should be added!");
       }
-      const copy = copyRecipeType(recipe);
+      const copy = copyCopyOfAwareRecipe(recipe);
       copy.ingredients[index.ingredients].ingredients = copy.ingredients[index.ingredients].ingredients.filter((_, i) => i !== index.ingredient);
       return copy;
     });
@@ -100,7 +100,7 @@ export const EditRecipeReducerService = Object.freeze({
     const value = Math.floor(action.amount * 10) / 10;
     if (value <= 0) return recipe;
     const amountChange = value / recipe.amount;
-    const copy = copyRecipeType(recipe);
+    const copy = copyCopyOfAwareRecipe(recipe);
     copy.ingredients.forEach((e) => {
       e.ingredients.forEach((i) => {
         i.grams = i.grams * amountChange;
@@ -113,22 +113,22 @@ export const EditRecipeReducerService = Object.freeze({
     if (!recipe) return null;
     return resolveActionGenericIndex(action.index, (index) => {
       if (index >= recipe.bakingTime.length) {
-        const copy = copyRecipeType(recipe);
+        const copy = copyCopyOfAwareRecipe(recipe);
         copy.bakingTime.push(copyBakingTimeType(action));
         return copy;
       } else if (!bakingTimeEquals(recipe.bakingTime[index], action)) {
-        const copy = copyRecipeType(recipe);
+        const copy = copyCopyOfAwareRecipe(recipe);
         copy.bakingTime[index] = copyBakingTimeType(action);
         return copy;
       }
       return recipe;
     }, (index) => {
       if (index.index >= recipe.ingredients[index.ingredients].bakingTime.length) {
-        const copy = copyRecipeType(recipe);
+        const copy = copyCopyOfAwareRecipe(recipe);
         copy.ingredients[index.ingredients].bakingTime.push(copyBakingTimeType(action));
         return copy;
       } else if (!bakingTimeEquals(recipe.ingredients[index.ingredients].bakingTime[index.index], action)) {
-        const copy = copyRecipeType(recipe);
+        const copy = copyCopyOfAwareRecipe(recipe);
         recipe.ingredients[index.ingredients].bakingTime[index.index] = copyBakingTimeType(action);
         return copy;
       }
@@ -139,12 +139,12 @@ export const EditRecipeReducerService = Object.freeze({
     if (!recipe) return null;
     return resolveActionGenericIndex(action.index, (index) => {
       if (index >= recipe.bakingTime.length) return recipe;
-      const copy = copyRecipeType(recipe);
+      const copy = copyCopyOfAwareRecipe(recipe);
       copy.bakingTime = recipe.bakingTime.filter((e, i) => i !== index);
       return copy;
     }, (index) => {
       if (index.index >= recipe.ingredients[index.ingredients].bakingTime.length) return recipe;
-      const copy = copyRecipeType(recipe);
+      const copy = copyCopyOfAwareRecipe(recipe);
       recipe.ingredients[index.ingredients].bakingTime = recipe.ingredients[index.ingredients].bakingTime.filter((e, i) => i !== index.index);
       return copy;
     });
@@ -155,12 +155,12 @@ export const EditRecipeReducerService = Object.freeze({
       (!recipe.innerTemperature && !!action.temperature) ||
       (!!recipe.innerTemperature && !!action.temperature && !numberIntervalTypeEquals(recipe.innerTemperature, action.temperature))
     ) {
-      const copy = copyRecipeType(recipe);
+      const copy = copyCopyOfAwareRecipe(recipe);
       copy.innerTemperature = copyNumberIntervalType(action.temperature);
       return copy;
     }
     if (recipe.innerTemperature && !action.temperature) {
-      const copy = copyRecipeType(recipe);
+      const copy = copyCopyOfAwareRecipe(recipe);
       copy.innerTemperature = null;
       return copy;
     }
@@ -173,14 +173,14 @@ export const EditRecipeReducerService = Object.freeze({
       if (hasNoValueOrEquals(recipe.description, action.value)) {
         return recipe;
       }
-      const copy = copyRecipeType(recipe);
+      const copy = copyCopyOfAwareRecipe(recipe);
       copy.description = value;
       return copy;
     }
     if (hasNoValueOrEquals(recipe.ingredients[action.index].description, action.value)) {
       return recipe;
     }
-    const copy = copyRecipeType(recipe);
+    const copy = copyCopyOfAwareRecipe(recipe);
     recipe.ingredients[action.index].description = value;
     return copy;
   },
@@ -190,13 +190,13 @@ export const EditRecipeReducerService = Object.freeze({
     if (recipe.ingredients[action.index].name === newName) {
       return;
     }
-    const copy = copyRecipeType(recipe);
+    const copy = copyCopyOfAwareRecipe(recipe);
     copy.ingredients[action.index].name = newName;
     return copy;
   },
   addIngredients: (recipe: RecipeType | null): RecipeType | null => {
     if (!recipe) return null;
-    const copy = copyRecipeType(recipe);
+    const copy = copyCopyOfAwareRecipe(recipe);
     copy.ingredients.push({
       ingredients: [],
       bakingTime: [],
