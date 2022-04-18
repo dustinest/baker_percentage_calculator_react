@@ -201,6 +201,7 @@ export const PREDEFINED_RECIPES = [
     },
     {
         name: "Pikk sai",
+        amount: 2,
         ingredients: [
             {
                 ingredients: [

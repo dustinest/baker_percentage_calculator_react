@@ -19,7 +19,17 @@
   }
 }
 
+.item-text-baking-instructions, .item-text-inner-temperature, .item-text-totals {
+  white-space: nowrap;
+}
+
 @media print {
+  * {
+    font-size: 105%;
+  }
+  .MuiTypography-h5 {
+    font-size: 98%;
+  }
   body{
     background-color: #ffffff;
   }

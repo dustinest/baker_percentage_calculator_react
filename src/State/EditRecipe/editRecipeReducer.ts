@@ -5,16 +5,17 @@ import {
   RecipeManagementStateActions,
 } from "./EditRecipeStateAction.d";
 import {EditRecipeReducerService} from "./EditRecipeReducerService";
-import {copyCopyOfAwareRecipe, isCopyOfRecipe} from "../CopyOfRecipeHelper";
+import {copyCopyOfAwareRecipe} from "../CopyOfRecipeHelper";
 
 export const updateEditRecipeReducer = (recipe: RecipeType | null, action: RecipeManagementStateActions): RecipeType | null => {
   switch (action.type) {
     case EditRecipeStateActionTypes.EDIT_RECIPE:
-      const result = copyCopyOfAwareRecipe(action.value);
+      return copyCopyOfAwareRecipe(action.value);
+      /*
       if (isCopyOfRecipe(result)) {
-        result.name = `${result.name} [copy]`
+        result.amount = result.amount * 2;
       }
-      return result;
+       */
     case EditRecipeStateActionTypes.SET_NAME:
       return EditRecipeReducerService.setName(recipe, action);
     case EditRecipeStateActionTypes.SET_AMOUNT:

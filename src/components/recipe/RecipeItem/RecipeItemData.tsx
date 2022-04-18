@@ -9,7 +9,6 @@ import {
   ListItemText,
   Menu,
   MenuItem, Stack,
-  Typography
 } from "@mui/material";
 import {RecipesContext, RecipesStateActionTypes, useSetEditRecipe} from "../../../State";
 import {BakerPercentage} from "../common/BakerPercentage";
@@ -17,10 +16,11 @@ import {useContext, useState, MouseEvent} from "react";
 import {RecipeName} from "../../common/RecipeName";
 import "./RecipeItemData.css";
 import { MoreIconButton } from "../../../Constant/Buttons";
-import {TranslatedLabel, Translation} from "../../../Translations";
+import {Translation} from "../../../Translations";
 import {CopyOfIcon, DeleteIcon, RecipeEditIcon} from "../../../Constant/Icons";
 import {RECIPE_CONSTANTS} from "../EditRecipe";
 import {RecipeItemResult} from "./RecipeItemResult";
+import {ItemText} from "../common/ItemText";
 
 const roundToTen = (amount: number): number => {
   if (amount === 0) return amount;
@@ -38,24 +38,10 @@ export const TotalWeight = ({total, amount}: {total: number, amount: number}) =>
       divider={<Divider orientation="vertical" flexItem />}
       spacing={1.5}
     >
-      <Typography variant="body2" gutterBottom><TranslatedLabel label="ingredients.title.total_weight" count={weight}/></Typography>
-      {oneWeight > 0 ? <Typography variant="body2" gutterBottom><TranslatedLabel label="ingredients.title.total_weight_item" args={{ divider: amount, amount: oneWeight}}/></Typography> : undefined}
+      <ItemText className="totals"><Translation label="ingredients.title.total_weight" count={weight}/></ItemText>
+      {oneWeight > 0 ? <ItemText className="totals"><Translation label="ingredients.title.total_weight_item" args={{ divider: amount, amount: oneWeight}}/></ItemText> : undefined}
     </Stack>
   )
-}
-
-export type RecipeItemDataProps = {
-  recipe: RecipeItemResult;
-}
-const RecipeItemData  = ({recipe}: RecipeItemDataProps) => {
-  return (<>
-    <Container component="section" className="recipe">
-      <IngredientsItems ingredients={recipe.bakerPercentage.ingredients} recipe={recipe.recipe} />
-    </Container>
-    <RenderBakingTimeAware value={recipe.recipe}/>
-    {recipe.bakerPercentage.ingredients.length > 0
-      ? <Container component="section" className="baker-percentage"><BakerPercentage microNutrientsResult={recipe.bakerPercentage.microNutrients}/></Container> : undefined}
-  </>);
 }
 
 type RecipeItemHeaderProps = { recipe: RecipeType; }
@@ -123,6 +109,42 @@ const RecipeItemHeader = ({recipe}: RecipeItemHeaderProps) => {
   );
 }
 
+export type RecipeItemDataProps = {
+  recipe: RecipeItemResult;
+}
+const RecipeItemData  = ({recipe}: RecipeItemDataProps) => {
+  return (<>
+    <RenderBakingTimeAware value={recipe.recipe}/>
+    {recipe.bakerPercentage !== null && recipe.bakerPercentage.ingredients.length > 0
+      ? <Container component="section" className="baker-percentage"><BakerPercentage microNutrientsResult={recipe.bakerPercentage.microNutrients}/></Container> : undefined}
+    { recipe.totalWeight > 0 ? <TotalWeight total={recipe.totalWeight} amount={recipe.recipe.amount}/> : undefined }
+  </>);
+}
+
+const RecipeItemDataPrint  = ({recipe}: RecipeItemDataProps) => {
+  return (<>
+    <Stack
+      direction="row"
+      justifyContent="space-evenly"
+      alignItems="flex-end"
+      divider={<Divider orientation="vertical" flexItem />}
+      spacing={2}
+    >
+      {recipe.bakerPercentage !== null && recipe.bakerPercentage.ingredients.length > 0
+        ? <Container component="section" className="baker-percentage"><BakerPercentage microNutrientsResult={recipe.bakerPercentage.microNutrients}/></Container> : undefined}
+      <Stack direction="column"
+             justifyContent="flex-start"
+             alignItems="center"
+             divider={<Divider orientation="horizontal" flexItem />}
+             spacing={2}
+      >
+        <RenderBakingTimeAware value={recipe.recipe}/>
+        { recipe.totalWeight > 0 ? <TotalWeight total={recipe.totalWeight} amount={recipe.recipe.amount}/> : undefined }
+      </Stack>
+    </Stack>
+  </>);
+}
+
 type RecipeItemDetailsProps = {
   isPrintPreview: boolean;
   recipe: RecipeItemResult;
@@ -131,7 +153,7 @@ type RecipeItemDetailsProps = {
 export const RecipeItemDetails = ({recipe, isPrintPreview}: RecipeItemDetailsProps) => {
   return (<>
     { isPrintPreview ? <CardHeader className="recipe-header recipe-header-print" title={<RecipeName recipe={recipe.recipe}/>}/> : <RecipeItemHeader recipe={recipe.recipe}/> }
-    { recipe.bakerPercentage != null ? <RecipeItemData recipe={recipe}/> : undefined }
-    { recipe.totalWeight > 0 ? <TotalWeight total={recipe.totalWeight} amount={recipe.recipe.amount}/> : undefined }
+    { recipe.bakerPercentage != null ? <Container component="section" className="recipe"><IngredientsItems ingredients={recipe.bakerPercentage.ingredients} recipe={recipe.recipe} /></Container> : undefined}
+    { isPrintPreview ? <RecipeItemDataPrint recipe={recipe}/> : <RecipeItemData recipe={recipe}/> }
    </>);
 }

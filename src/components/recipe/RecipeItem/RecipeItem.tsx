@@ -13,7 +13,7 @@ type RecipeItemProps = {
 export const RecipeItem = (props: RecipeItemProps) => {
   return (
       <Card
-        sx={{maxWidth: 400, marginLeft: "auto", marginRight: "auto"}}
+        sx={{maxWidth: props.isPrintPreview ? 600 : 400, marginLeft: "auto", marginRight: "auto"}}
         variant="outlined" className="recipe">
         <CardContent><RecipeItemDetails {...props}/></CardContent>
       </Card>
