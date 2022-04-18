@@ -2,6 +2,11 @@ import {calculateDryAndLiquid} from "./calculateDryAndLiquid";
 import {NutritionType, copyIngredientGramsType, RecipeIngredientsType, IngredientGramsType} from "../../types";
 
 const STARTER_FLOUR_PERCENTAGE = 0.02; // 2 % should be a starter ( 4 / 200, which means water + flour * 4 / 100)
+const calculateStarterFlour = (amount: number) => {
+    const result = Math.floor(amount * STARTER_FLOUR_PERCENTAGE);
+    if (result > 11) return 11;
+    return result;
+};
 
 export interface StarterIngredients {
     fridge: number,
@@ -28,7 +33,7 @@ export const calculateSourDoughStarter = async (ingredients: RecipeIngredientsTy
     const water = Math.floor(dryAndLiquidResult.totals.water);
     const liquid = Math.floor(dryAndLiquidResult.totals.liquid);
 
-    const flourFromFridge = Math.floor(dryAndLiquidResult.totals.flour * STARTER_FLOUR_PERCENTAGE);
+    const flourFromFridge = calculateStarterFlour(dryAndLiquidResult.totals.flour);
     const result: StarterCalculationResult = {
         starter: {
             flour: {

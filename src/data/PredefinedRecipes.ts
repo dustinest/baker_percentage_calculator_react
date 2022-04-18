@@ -31,9 +31,9 @@ export const PREDEFINED_RECIPES = [
         ingredients: [
             {
                 ingredients: [
-                    { type: "WHEAT_405_FLOUR", grams: 463 },
+                    { type: "WHEAT_405_FLOUR", grams: 462 },
                     { type: "WATER", percent: 82 },
-                    { type: "SALT", percent: 1.76 }
+                    { type: "SALT", percent: 1.62 }
                 ]
 
             }
@@ -49,11 +49,11 @@ export const PREDEFINED_RECIPES = [
         ingredients: [
             {
                 ingredients: [
-                    { type: "WHEAT_405_FLOUR", grams: 463 },
-                    { type: "DRY", name: "Kaerahelbed", percent: 2.16 },
-                    { type: "DRY", name: "Seemned", percent: 2.59 },
+                    { type: "WHEAT_405_FLOUR", grams: 462 },
+                    { type: "DRY", name: "Kaerahelbed", grams: 10 },
+                    { type: "DRY", name: "Seemned", grams: 12 },
                     { type: "WATER", percent: 82 },
-                    { type: "SALT", percent: 1.76 }
+                    { type: "SALT", percent: 1.55 }
                 ]
 
             }
@@ -71,9 +71,9 @@ export const PREDEFINED_RECIPES = [
                     { type: "WHEAT_550_FLOUR", grams: 500 },
                     { type: "WATER", grams: 140 },
                     { type: "MILK", grams: 140 },
-                    { type: "SUGAR", grams: 55 },
+                    { type: "SUGAR", percent: 11 },
                     { type: "BUTTER", grams: 40 },
-                    { type: "SALT", grams: 12 }
+                    { type: "SALT", percent: 2.4 }
                 ]
 
             },
