@@ -127,7 +127,7 @@ export const TRANSLATIONS = {
             },
             edit: "Muuda",
             delete: "Kustuta",
-            copyOf: "Copy",
+            copyOf: "Kopeeri",
             save: "Salvesta",
             cancel: "Tühista",
             description: {
