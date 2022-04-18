@@ -7,6 +7,7 @@ export enum EditRecipeStateActionTypes {
   SET_AMOUNT,
   SET_INGREDIENT_GRAM,
   REMOVE_INGREDIENT,
+  USE_INGREDIENT_IN_STARTER,
   SET_INGREDIENTS_NAME,
   ADD_INGREDIENTS,
   SET_BAKING_TIME,
@@ -30,6 +31,8 @@ export type SetEditRecipeAmountStateAction = { amount: number;  } & EditRecipeSt
 export type RemoveRecipeIngredientStateAction = { index: ActionIngredientIndex | number; } & EditRecipeStateAction<EditRecipeStateActionTypes.REMOVE_INGREDIENT>;
 export type SetEditRecipeIngredientGramsStateAction = { index: ActionIngredientIndex; grams: number;  } & EditRecipeStateAction<EditRecipeStateActionTypes.SET_INGREDIENT_GRAM>;
 export type AddStandardEditRecipeIngredientStateAction = { index: number; grams: number; item: string  } & EditRecipeStateAction<EditRecipeStateActionTypes.SET_INGREDIENT_GRAM>;
+
+export type UseIngredientInStarterAction = { index: number; value: boolean;  } & EditRecipeStateAction<EditRecipeStateActionTypes.USE_INGREDIENT_IN_STARTER>;
 
 export type SetEditRecipeBakingTimeStateAction = {
   index: ActionGenericIndex | number,
@@ -60,4 +63,5 @@ export type RecipeManagementStateActions =
   SetEditRecipeBakingTimeStateAction |
   RemoveEditRecipeBakingTimeStateAction |
   SetEditRecipeInnerTemperatureStateAction |
-  SetEditRecipeIngredientsNameStateAction;
+  SetEditRecipeIngredientsNameStateAction |
+  UseIngredientInStarterAction;

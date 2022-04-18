@@ -5,7 +5,7 @@ import {
   ExpandMoreIcon,
   MenuIcon,
   PrintIcon,
-  CancelIcon, RecipeSaveIcon, MoreVertIcon
+  CancelIcon, RecipeSaveIcon, MoreVertIcon, InfoIcon
 } from "./Icons";
 import {Box, Button, ButtonProps, Fab, IconButton, IconButtonProps, styled} from "@mui/material";
 import {Translation} from "../Translations";
@@ -17,6 +17,7 @@ export const MenuIconButton = (props: IconButtonProps) => (<IconButtonInt {...pr
 export const DeleteIconButton = (props: IconButtonProps) => (<IconButtonInt color="warning" {...props}><DeleteIcon/></IconButtonInt>);
 export const DoneIconButton = (props: IconButtonProps) => (<IconButtonInt  color="success" {...props}><DoneIcon/></IconButtonInt>);
 export const MoreIconButton = (props: IconButtonProps) => (<IconButtonInt {...props}><MoreVertIcon/></IconButtonInt>);
+export const InfoIconButton = (props: IconButtonProps) => (<IconButtonInt {...props}><InfoIcon/></IconButtonInt>);
 
 type ExpandMoreProps = { expand: boolean; } & IconButtonProps;
 export const ExpandMoreIconButton = styled((props: ExpandMoreProps) => {

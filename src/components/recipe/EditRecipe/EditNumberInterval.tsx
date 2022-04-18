@@ -7,6 +7,7 @@ type EditNumberIntervalProps = {
   interval: NumberIntervalType;
   onChange: (from: number, until: number) => Promise<void>;
   suffix?: string;
+  className?: string;
 }
 
 export const triggerFrom = (from: number, interval: NumberIntervalType, onChange: (from: number, until: number) => Promise<void> ): Promise<void> => {
@@ -19,7 +20,7 @@ export const triggerUntil = (until: number, interval: NumberIntervalType, onChan
   return onChange(from, until);
 }
 
-export const EditNumberInterval = ({interval, suffix, onChange}: EditNumberIntervalProps) => {
+export const EditNumberInterval = ({interval, suffix, onChange, className}: EditNumberIntervalProps) => {
   return (
     <>
       <Stack direction="row"
@@ -27,6 +28,7 @@ export const EditNumberInterval = ({interval, suffix, onChange}: EditNumberInter
              alignItems="center"
              spacing={0.5}
              divider={<span>-</span>}
+             className={className}
       >
         <InputValue value={interval.from} onChange={(value) => triggerFrom(value, interval, onChange)} className="number-interval-input number-interval-from"/>
         <InputValue value={interval.until} onChange={(value) => triggerUntil(value, interval, onChange)}  className="number-interval-input number-interval-until"/>

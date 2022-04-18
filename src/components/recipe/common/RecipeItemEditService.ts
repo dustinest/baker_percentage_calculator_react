@@ -19,7 +19,7 @@ const recalculatePercentage = async (ingredients: RecipeIngredientsType[]): Prom
 }
 
 export const recalculateRecipeBakerPercentage = async (recipe: RecipeType): Promise<BakerPercentageResult> => {
-  return blockAndRunRecipeLater(recipe,(e) => splitStarterAndDough(e.name, e.ingredients)).then(recalculatePercentage);
+  return blockAndRunRecipeLater(recipe,(e) => splitStarterAndDough(e.ingredients)).then(recalculatePercentage);
 }
 
 export const recalculateIngredients = async (recipe: RecipeType): Promise<BakerPercentageResult> => {

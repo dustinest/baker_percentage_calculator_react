@@ -14,6 +14,10 @@ export const TRANSLATIONS = {
             copyOf: "Copy",
             save: "Save",
             cancel: "Cancel",
+            enforce_starter: {
+                button: "Use all in pre-dough",
+                legend: "All flour and liquid is used in pre-dough calculation"
+            },
             description: {
                 generic: "Description"
             },
@@ -115,6 +119,10 @@ export const TRANSLATIONS = {
         title_one: "üks retsept",
         title_other: "{{count}} retsepti",
         edit: {
+            enforce_starter: {
+                button: "Kõik on eeltaigen",
+                legend: "Kogu jahu ja vedelikku kasutatakse juuretise arvutamisel. Seda on vaja juhul, kui soovid vedelamat eeltainast"
+            },
             edit: "Muuda",
             delete: "Kustuta",
             copyOf: "Copy",
@@ -128,7 +136,7 @@ export const TRANSLATIONS = {
                 add: "Lisa uus grupp"
             },
             baking_instructions: {
-                steam: "Auruta",
+                steam: "Aur",
                 time: "Aeg",
                 temperature: "Temperatuur",
                 inner_temperature: "Sisetemperatuur",

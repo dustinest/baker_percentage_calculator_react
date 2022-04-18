@@ -1,14 +1,55 @@
 import {RecipeIngredientsType, RecipeType} from "../../../types";
 import {
-  Card, CardActions, CardContent, Collapse,
+  Alert,
+  Card, CardActions, CardContent, Checkbox, Collapse, FormControlLabel, Popover
 } from "@mui/material";
-import {useEffect, useState} from "react";
+import {useEffect, useState, MouseEvent} from "react";
 import {EditRecipeIngredientsName} from "./EditRecipeIngredientsName";
 import {EditRecipeIngredients, EditRecipeRemainingIngredients} from "./EditRecipeIngredients";
 import {ExpandMoreAction} from "../../common/ExpandMoreAction";
 import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
-import {DeleteIconButton} from "../../../Constant/Buttons";
+import {DeleteIconButton, InfoIconButton} from "../../../Constant/Buttons";
 import {RECIPE_CONSTANTS} from "../../../State/RecipeConstants";
+import {useTranslation} from "../../../Translations";
+
+const EnforceStarter = ({ingredients, index}: {ingredients: RecipeIngredientsType, index: number}) => {
+  const translate = useTranslation();
+  const [isStarter, setIsStarter] = useState<boolean>(ingredients.starter === true);
+  const [popOverButton, setPopOverButton] = useState<HTMLButtonElement | null>(null);
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => setPopOverButton(event.currentTarget);
+
+  const editRecipeDispatch = useEditRecipeContext();
+
+  const onCheckBoxChange = (newValue: boolean) => {
+    setIsStarter(newValue);
+    editRecipeDispatch({
+      type: EditRecipeStateActionTypes.USE_INGREDIENT_IN_STARTER,
+      index,
+      value: newValue
+    });
+  }
+
+  return (
+    <>
+      <Popover
+        open={popOverButton !== null}
+        anchorEl={popOverButton}
+        onClose={() => setPopOverButton(null)}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+        <Alert severity="info">{translate.translate("edit.enforce_starter.legend")}</Alert>
+      </Popover>
+        <FormControlLabel
+          control={<Checkbox
+            checked={isStarter}
+            onChange={(e) => onCheckBoxChange(e.target.checked)}/>} label={translate.translate("edit.enforce_starter.button")}/>
+      <InfoIconButton onClick={handleClick}/>
+    </>
+  )
+}
 
 type EditRecipeDialogIngredientsProps = {
   ingredients: RecipeIngredientsType;
@@ -54,6 +95,7 @@ export const EditRecipeDialogIngredients = ({
       <CardContent>
         <EditRecipeIngredientsName ingredients={ingredients} index={index}/>
         <EditRecipeIngredients ingredients={ingredients.ingredients} index={index}/>
+        {index === 0 ? <EnforceStarter ingredients={ingredients} index={index}/> : undefined}
       </CardContent>
       {canDelete || canDeExpand ? <CardActions disableSpacing>
         {canDelete ? <DeleteIconButton onClick={onRemove}/> : undefined }

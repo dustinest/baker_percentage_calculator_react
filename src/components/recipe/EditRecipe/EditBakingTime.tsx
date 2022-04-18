@@ -1,8 +1,8 @@
 import {BakingTimeType} from "../../../types";
-import {Checkbox, Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
+import {Checkbox, Divider, Stack, Typography} from "@mui/material";
 import {EditNumberInterval} from "./EditNumberInterval";
 import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
-import {TranslatedTableCell} from "../../../Translations";
+import {TranslatedLabel} from "../../../Translations";
 import {useEffect, useMemo, useState} from "react";
 import {DeleteIconButton, DoneIconButton} from "../../../Constant/Buttons";
 import "./EditBakingTime.css";
@@ -46,40 +46,45 @@ const EditBakingTimeRow = ({bakingTime, index}: {bakingTime?: BakingTimeType, in
     editRecipeDispatch({type: EditRecipeStateActionTypes.REMOVE_BAKING_TIME, index});
 
   return (
-    <TableRow>
-      <TableCell className="steam">
-        <Checkbox checked={value.steam} onChange={(e) => setRecipeSteam(e.target.checked)}/>
-      </TableCell>
-      <TableCell className="time">
-        <EditNumberInterval interval={value.time} onChange={(from, until) => setRecipeBakingTime(from, until)}/>
-      </TableCell>
-      <TableCell className="temperature">
-        <EditNumberInterval interval={value.temperature} onChange={(from, until) => setRecipeTemperature(from, until)}/>
-      </TableCell>
-      <TableCell>
-        {bakingTime ? <DeleteIconButton onClick={removeBakingTime}/> : <DoneIconButton onClick={triggerChange}/> }
-      </TableCell>
-    </TableRow>
+    <Stack
+      direction="row"
+      justifyContent="flex-start"
+      alignItems="center"
+      spacing={1.5}
+      divider={<Divider orientation="vertical" flexItem />}
+    >
+      <Checkbox checked={value.steam} onChange={(e) => setRecipeSteam(e.target.checked)}/>
+      <EditNumberInterval className="time" interval={value.time} onChange={(from, until) => setRecipeBakingTime(from, until)}/>
+      <EditNumberInterval className="temperature" interval={value.temperature} onChange={(from, until) => setRecipeTemperature(from, until)}/>
+      {bakingTime ? <DeleteIconButton onClick={removeBakingTime}/> : <DoneIconButton onClick={triggerChange}/> }
+    </Stack>
   )
 }
 
 export const EditBakingTime = ({bakingTime}: {bakingTime: BakingTimeType[]}) => {
   return (
-    <Table className="edit-baking-time">
-      <TableHead>
-        <TableRow>
-          <TranslatedTableCell label="edit.baking_instructions.steam"/>
-          <TranslatedTableCell label="edit.baking_instructions.time"/>
-          <TranslatedTableCell label="edit.baking_instructions.temperature"/>
-          <TableCell/>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {bakingTime.map((bakingTime, index) => (
-          <EditBakingTimeRow key={index} bakingTime={bakingTime} index={index}/>
-        ))}
-        <EditBakingTimeRow index={bakingTime.length} key={`new_baking-${bakingTime.length}`}/>
-      </TableBody>
-    </Table>
+    <Stack
+      direction="column"
+      justifyContent="flex-start"
+      alignItems="center"
+      spacing={1}
+      className="edit-baking-time"
+    >
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="baseline"
+        spacing={1}
+        divider={<span>,</span>}
+      >
+        <Typography variant="body1" gutterBottom><TranslatedLabel label="edit.baking_instructions.steam"/></Typography>
+        <Typography variant="body1" gutterBottom><TranslatedLabel label="edit.baking_instructions.time"/></Typography>
+        <Typography variant="body1" gutterBottom><TranslatedLabel label="edit.baking_instructions.temperature"/></Typography>
+      </Stack>
+      {bakingTime.map((bakingTime, index) => (
+        <EditBakingTimeRow key={index} bakingTime={bakingTime} index={index}/>
+      ))}
+      <EditBakingTimeRow index={bakingTime.length} key={`new_baking-${bakingTime.length}`}/>
+    </Stack>
   )
 }

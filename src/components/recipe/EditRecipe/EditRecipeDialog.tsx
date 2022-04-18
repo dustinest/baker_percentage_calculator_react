@@ -45,9 +45,7 @@ const RenderRecipeEditDialogContent = ({recipe }: { recipe: RecipeType }) => {
   return (
     <>
       <Grid item lg>
-          <Container>
-            <EditBakingTime bakingTime={recipe.bakingTime}/>
-          </Container>
+        <EditBakingTime bakingTime={recipe.bakingTime}/>
       </Grid>
       <Grid item md>
           <Container>
@@ -181,12 +179,15 @@ export const EditRecipeDialog = () => {
         </DialogTitle>
         <DialogContent dividers>
           <Stack spacing={2} alignContent="center" justifyContent="center">
-            <Grid container spacing={0} wrap="wrap" className="edit-recipe-ingredients">
+            <Grid container spacing={2} wrap="wrap" className="edit-recipe-ingredients">
               {recipeToEdit.ingredients.map((ingredients, index) => (
                 <Grid item xl key={index}>
                   <EditRecipeDialogIngredients ingredients={ingredients} index={index} recipe={recipeToEdit}/>
                 </Grid>
                 ))}
+            </Grid>
+            <TranslatedAddButton translation="edit.ingredients.add"  onClick={addIngredients} disabled={recipeToEdit.ingredients.length > 0 && recipeToEdit.ingredients[recipeToEdit.ingredients.length - 1].ingredients.length === 0}/>
+            <Grid container spacing={0} wrap="wrap" className="edit-recipe-ingredients">
               {recipe ? <RenderRecipeEditDialogContent recipe={recipe}/> : undefined}
             </Grid>
             {recipe && bakerPercentage ?
@@ -195,7 +196,6 @@ export const EditRecipeDialog = () => {
         </DialogContent>
         <DialogActions>
           <TranslatedCancelButton translation="edit.cancel" onClick={onCancel}/>
-          <TranslatedAddButton translation="edit.ingredients.add"  onClick={addIngredients} disabled={recipeToEdit.ingredients.length > 0 && recipeToEdit.ingredients[recipeToEdit.ingredients.length - 1].ingredients.length === 0}/>
           <TranslatedSaveButton translation="edit.save" onClick={onSave} disabled={!canSave}/>
         </DialogActions>
       </>

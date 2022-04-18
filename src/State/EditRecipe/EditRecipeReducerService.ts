@@ -13,7 +13,7 @@ import {
   SetEditRecipeBakingTimeStateAction, SetEditRecipeDescriptionStateAction,
   SetEditRecipeIngredientGramsStateAction, SetEditRecipeIngredientsNameStateAction,
   SetEditRecipeInnerTemperatureStateAction,
-  SetEditRecipeNameStateAction
+  SetEditRecipeNameStateAction, UseIngredientInStarterAction
 } from "./EditRecipeStateAction.d";
 import {hasNoValueOrEquals, hasValue} from "../../utils/NullSafe";
 import {getStandardIngredientMethodsGrams} from "../../Constant/Ingredient";
@@ -30,6 +30,7 @@ type Methods = {
   setIngredientsName: (recipe: RecipeType | null, action: SetEditRecipeIngredientsNameStateAction) => RecipeType | null;
   removeIngredient: (recipe: RecipeType | null, action: RemoveRecipeIngredientStateAction) => RecipeType | null;
   addIngredients: (recipe: RecipeType | null) => RecipeType | null;
+  setUseIngredientsInStarter: (recipe: RecipeType | null, action: UseIngredientInStarterAction) => RecipeType | null;
 }
 
 const resolveActionGenericIndex = <T>(index: T | number, callback1: (index: number) => RecipeType | null, callback2: (index: T) => RecipeType | null) => {
@@ -203,6 +204,12 @@ export const EditRecipeReducerService = Object.freeze({
       innerTemperature: null,
       description: null
     });
+    return copy;
+  },
+  setUseIngredientsInStarter: (recipe: RecipeType | null, action: UseIngredientInStarterAction): RecipeType | null => {
+    if (!recipe) return null;
+    const copy = copyCopyOfAwareRecipe(recipe);
+    copy.ingredients[action.index].starter = action.value;
     return copy;
   }
 } as Methods) as Methods;

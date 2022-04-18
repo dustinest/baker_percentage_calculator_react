@@ -8,10 +8,6 @@
     max-width: 4em;
 }
 
-.edit-baking-time th {
-    text-align: center;
-}
-
 @media (max-width:600px)  {
     .edit-baking-time .time input[type=number] {
         min-width: 1.5em;

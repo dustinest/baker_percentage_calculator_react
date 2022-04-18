@@ -32,7 +32,7 @@ const calculate = (container: IngredientGramsType[], starterIngredients: Ingredi
     });
 };
 
-export const splitStarterAndDough = async (recipeName: string, recipeIngredients: RecipeIngredientsType[]): Promise<RecipeIngredientsType[]> => {
+export const splitStarterAndDough = async (recipeIngredients: RecipeIngredientsType[]): Promise<RecipeIngredientsType[]> => {
     const dryAndLiquid = await calculateSourDoughStarter(recipeIngredients);
     if (dryAndLiquid === null) return [];
 
