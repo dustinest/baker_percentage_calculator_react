@@ -3,14 +3,13 @@ import {
     JsonRecipeType
 } from "../types";
 import {
-    BakingTimeType,
+    BakingTimeType, DRY_NUTRIENTS,
     IngredientGramsType,
     NumberIntervalType,
     RecipeIngredientsType,
     RecipeType
 } from "../../../types";
 import {resolveJsonRecipeTypeId} from "./JsonRecepyIdGenerator";
-import {calculateFlourAndWaterPercent} from "../../DryAndLiquidCalculator/FlourAndWaterCalculation";
 import {resolveIngredient, ResolveTestType} from "./JsonRecipeReaderMethods";
 
 const resolveNumberIntervalType = (value: NumberIntervalType | number): NumberIntervalType => {
@@ -52,7 +51,7 @@ export const readJsonRecipe = (recipe: JsonRecipeType): RecipeType => {
     const toBeCalculated = {
         flour: {
             amount: 0,
-            percent: 0,
+            percent: 100,
         },
         percent: [] as [IngredientGramsType, ResolveTestType][]
     };
@@ -69,17 +68,20 @@ export const readJsonRecipe = (recipe: JsonRecipeType): RecipeType => {
 
         ingredients.ingredients.map(resolveIngredient).forEach(([ingredient, resolveTest]) => {
             recipeIngredientsType.ingredients.push(ingredient);
-            const flourAndWater = calculateFlourAndWaterPercent(ingredient.nutrients);
-            if (flourAndWater.flour <= 0) {
+            const dryPercentage = ingredient.nutrients
+              .filter((ingredient) => DRY_NUTRIENTS.includes(ingredient.type))
+              .reduce((value, ingredient) => value + ingredient.percent, 0);
+
+            if (dryPercentage <= 0) {
                 if (!resolveTest.grams.has) {
                     toBeCalculated.percent.push([ingredient, resolveTest]);
                 }
                 return;
             }
             if (resolveTest.grams.has) {
-                toBeCalculated.flour.amount += resolveTest.grams.value * flourAndWater.flour / 100;
+                toBeCalculated.flour.amount += resolveTest.grams.value * dryPercentage / 100;
             } else if (resolveTest.percent.has) {
-                toBeCalculated.flour.percent += resolveTest.percent.value * 100 / flourAndWater.flour;
+                toBeCalculated.flour.percent -= resolveTest.percent.value * 100 / dryPercentage;
                 toBeCalculated.percent.push([ingredient, resolveTest])
             } else {
                 throw new Error(`Unresolved item- no amount nor percent ${JSON.stringify(resolveTest)!}`);
@@ -93,10 +95,10 @@ export const readJsonRecipe = (recipe: JsonRecipeType): RecipeType => {
     if (toBeCalculated.flour.amount === 0) {
         throw new Error("There is no flour amount defined!")
     }
-    if (100 -  toBeCalculated.flour.percent <= 0) {
+    if (toBeCalculated.flour.percent <= 0) {
         throw new Error(`Total flour percent in recipe ${result.name} is over 100% and not correct!`)
     }
-    const totalFlourAmount = 100 *  toBeCalculated.flour.amount / (100 -  toBeCalculated.flour.percent);
+    const totalFlourAmount = 100 *  toBeCalculated.flour.amount / toBeCalculated.flour.percent;
     toBeCalculated.percent.forEach(([ingredient, resolveTest]) => {
         ingredient.grams = Math.round(resolveTest.percent.value * totalFlourAmount / 10) / 10;
     });

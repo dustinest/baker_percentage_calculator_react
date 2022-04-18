@@ -1,6 +1,12 @@
-import {copyIngredientGramsType, NutritionType, IngredientGramsType, IngredientType, NutrientPercentType} from "../../types";
+import {
+  copyIngredientGramsType,
+  IngredientGramsType,
+  IngredientType,
+  NutrientPercentType,
+  NutritionType
+} from "../../types";
 import {hasValue} from "../../utils/NullSafe";
-import { sortIngredientGramsType } from "../../service/SourdoughStarter/IngredientsSort";
+import {SORT_INGREDIENTS} from "../../service/SourdoughStarter/IngredientsSort";
 
 interface StandardIngredient {
   SALT: IngredientType,
@@ -27,11 +33,22 @@ interface StandardIngredient {
 
 const createPredefined = (id: string, ...nutrients: (NutritionType | number)[]): IngredientType => {
   const _nutrients: NutrientPercentType[] = [];
+  const defined = {
+    flour: 0,
+    dry: 0
+  }
   for (let i = 0; i < nutrients.length; i += 2) {
-    _nutrients.push({
+    const type = {
       type: nutrients[i] as NutritionType,
       percent: nutrients[i + 1] as number
-    } as NutrientPercentType);
+    } as NutrientPercentType;
+    if (type.type === NutritionType.flour) {
+      defined.flour += type.percent;
+    }
+    if (type.type === NutritionType.dry) {
+      defined.dry += type.percent;
+    }
+    _nutrients.push(type);
   }
 
   return Object.freeze({
@@ -83,6 +100,6 @@ export const getStandardIngredientMethodsGrams = (key: string, grams: number): I
   return standardMethod(grams);
 }
 
-export const StandardIngredientMethodGrams:Readonly<IngredientGramsType[]> = Object.freeze(sortIngredientGramsType(Object.keys(StandardIngredientMethods)
+export const StandardIngredientMethodGrams:Readonly<IngredientGramsType[]> = Object.freeze(SORT_INGREDIENTS.add(Object.keys(StandardIngredientMethods)
   .map((key) => getStandardIngredientMethodsGrams(key, 1))
   .filter(hasValue)));

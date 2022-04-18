@@ -6,7 +6,7 @@ import {
     NutritionType
 } from "../../types";
 import {calculateSourDoughStarter, StarterIngredients} from "./SourDoughStarterCalculator";
-import {sortRecipeIngredientsType} from "./IngredientsSort";
+import {SORT_INGREDIENTS} from "./IngredientsSort";
 
 const remapIngredient = (ingredient: IngredientGramsType, grams?: number): IngredientGramsType =>
   copyIngredientGramsType(grams !== undefined ? {...ingredient, ...{grams: grams}} : ingredient);
@@ -46,7 +46,7 @@ export const splitStarterAndDough = async (recipeName: string, recipeIngredients
     ];
     const leftovers: IngredientGramsType[] = [];
 
-    calculate(dryAndLiquid.ingredients.dry, starterIngredients, leftovers, dryAndLiquid?.starter.flour);
+    calculate(dryAndLiquid.ingredients.flour, starterIngredients, leftovers, dryAndLiquid?.starter.flour);
     calculate(dryAndLiquid.ingredients.liquid, starterIngredients, leftovers, dryAndLiquid?.starter.liquid);
 
     const result: RecipeIngredientsType[] = [];
@@ -98,5 +98,5 @@ export const splitStarterAndDough = async (recipeName: string, recipeIngredients
         }))
         return;
     });
-    return sortRecipeIngredientsType(result);
+    return SORT_INGREDIENTS.ingredients(result);
 }

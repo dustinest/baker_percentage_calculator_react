@@ -1,5 +1,7 @@
-import {calculateDryAndLiquid, DryAndLiquidCalculationResult} from "../DryAndLiquidCalculator/DryAndLiquidCalculator";
-import {NutritionType, copyIngredientGramsType, RecipeIngredientsType} from "../../types";
+import {calculateDryAndLiquid} from "./calculateDryAndLiquid";
+import {NutritionType, copyIngredientGramsType, RecipeIngredientsType, IngredientGramsType} from "../../types";
+
+const STARTER_FLOUR_PERCENTAGE = 0.02; // 2 % should be a starter ( 4 / 200, which means water + flour * 4 / 100)
 
 export interface StarterIngredients {
     fridge: number,
@@ -11,13 +13,13 @@ export type StarterCalculationResult = {
     starter: {
         flour: StarterIngredients,
         liquid: StarterIngredients;
-    }
-} & DryAndLiquidCalculationResult;
-
-const calculateStarterFlour  = (value: DryAndLiquidCalculationResult): number => {
-    const result = Math.floor(value.totals.flour * 4 / 200);
-    return result > 10 ? 10 : result;
-}
+    },
+    ingredients: {
+        flour: IngredientGramsType[];
+        liquid: IngredientGramsType[];
+        other: IngredientGramsType[];
+    },
+};
 
 export const calculateSourDoughStarter = async (ingredients: RecipeIngredientsType[]): Promise<StarterCalculationResult | null> => {
     if (ingredients.length === 0) return null;
@@ -25,47 +27,43 @@ export const calculateSourDoughStarter = async (ingredients: RecipeIngredientsTy
     const flour = Math.floor(dryAndLiquidResult.totals.flour);
     const water = Math.floor(dryAndLiquidResult.totals.water);
     const liquid = Math.floor(dryAndLiquidResult.totals.liquid);
-    const flourFromFridge = calculateStarterFlour(dryAndLiquidResult);
+
+    const flourFromFridge = Math.floor(dryAndLiquidResult.totals.flour * STARTER_FLOUR_PERCENTAGE);
     const result: StarterCalculationResult = {
-        ...dryAndLiquidResult,
-        ...{
-            totals: {
-                flour,
-                water,
-                liquid
+        starter: {
+            flour: {
+                isFixed: ingredients[0].starter === true,
+                fridge: flourFromFridge,
+                amount: 0
+            },
+            liquid: {
+                isFixed: ingredients[0].starter === true,
+                fridge: flourFromFridge,
+                amount: 0
             }
         },
-        ...{
-            starter: {
-                flour: {
-                    isFixed: ingredients[0].starter === true,
-                    fridge: flourFromFridge,
-                    amount: 0
-                },
-                liquid: {
-                    isFixed: ingredients[0].starter === true,
-                    fridge: flourFromFridge,
-                    amount: 0
-                }
-            }
-        }
+        ingredients: {
+            flour: dryAndLiquidResult.ingredients.flour,
+            liquid: dryAndLiquidResult.ingredients.liquid,
+            other: dryAndLiquidResult.ingredients.other
+        },
     };
 
-    if (result.totals.liquid * 100 / result.totals.flour < 30) {
-        result.starter.flour.amount = Math.floor(result.totals.liquid);
-    } else if (result.totals.water * 100 / result.totals.flour > 10 && result.totals.water * 100 / result.totals.flour < 40) {
-        result.starter.flour.amount = Math.floor(result.totals.water);
+    if (liquid * 100 / flour < 30) {
+        result.starter.flour.amount = Math.floor(liquid);
+    } else if (water * 100 / flour > 10 && water * 100 / flour < 40) {
+        result.starter.flour.amount = Math.floor(water);
     } else {
-        result.starter.flour.amount = Math.floor(result.totals.flour * 26 / 100);
+        result.starter.flour.amount = Math.floor(flour * 26 / 100);
     }
     result.starter.flour.amount -= result.starter.flour.fridge;
 
     result.starter.liquid.amount = result.starter.flour.amount;
 
-    if (result.ingredients.dry.find(e => e.nutrients.find(n => n.type === NutritionType.whole_grain) !== undefined) !== undefined) {
+    if (dryAndLiquidResult.ingredients.flour.find((flourIngredeint) => flourIngredeint.nutrients.find((nutrient) => nutrient.type === NutritionType.whole_grain) !== undefined) !== undefined) {
         // when the flour is whole grain
-        result.starter.flour.amount = Math.floor(result.totals.flour * 50 / 100);
-        result.starter.liquid.amount = Math.floor(result.totals.liquid * 62 / 100);
+        result.starter.flour.amount = Math.floor(flour * 50 / 100);
+        result.starter.liquid.amount = Math.floor(liquid * 62 / 100);
     }
     return result;
 }

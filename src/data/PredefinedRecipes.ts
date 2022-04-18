@@ -50,9 +50,9 @@ export const PREDEFINED_RECIPES = [
             {
                 ingredients: [
                     { type: "WHEAT_405_FLOUR", grams: 463 },
-                    { type: "DRY", name: "Kaerahelbed", grams: 10 },
-                    { type: "DRY", name: "Seemned", grams: 12 },
-                    { type: "WATER", grams: 463 },
+                    { type: "DRY", name: "Kaerahelbed", percent: 2.16 },
+                    { type: "DRY", name: "Seemned", percent: 2.59 },
+                    { type: "WATER", percent: 82 },
                     { type: "SALT", percent: 1.76 }
                 ]
 

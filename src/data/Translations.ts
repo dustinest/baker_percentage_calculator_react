@@ -95,6 +95,9 @@ export const TRANSLATIONS = {
                 },
                 fat: {
                     generic: "Fat"
+                },
+                dry: {
+                    generic: "Dry"
                 }
             }
         },
@@ -197,6 +200,9 @@ export const TRANSLATIONS = {
                 },
                 fat: {
                     generic: "Rasv"
+                },
+                dry: {
+                    generic: "Kuiv"
                 }
             }
         },
