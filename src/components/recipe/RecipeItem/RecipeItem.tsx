@@ -2,11 +2,11 @@ import {
   Card, CardContent,
 } from "@mui/material";
 import "./RecipeItem.css";
-import {RecipeType} from "../../../types";
 import {RecipeItemDetails} from "./RecipeItemData";
+import {RecipeItemResult} from "./RecipeItemResult";
 
 type RecipeItemProps = {
-  recipe: RecipeType;
+  recipe: RecipeItemResult;
   isPrintPreview: boolean;
 }
 

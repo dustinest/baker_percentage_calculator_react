@@ -16,7 +16,7 @@ export type RecipeIngredientsWithPercentType = {
 
 export type BakerPercentageResult = {
     microNutrients: MicroNutrientsCalculationResult;
-    ingredients: RecipeIngredientsWithPercentType[]
+    ingredients: RecipeIngredientsWithPercentType[];
 }
 
 export const recalculateBakerPercentage = (ingredients: RecipeIngredientsType[]): BakerPercentageResult => {

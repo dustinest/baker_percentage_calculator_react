@@ -43,7 +43,9 @@ export const TRANSLATIONS = {
                 day_one: "First day",
                 day_two: "Second day",
                 dough: "Dough",
-                sourdough_starter_dough: "Pre-dough"
+                sourdough_starter_dough: "Pre-dough",
+                total_weight: "Total weight: {{count}} g",
+                total_weight_item: "1 / {{divider}} = {{amount}} g"
             }
         },
         ingredient: {
@@ -153,7 +155,9 @@ export const TRANSLATIONS = {
                 day_one: "Esimene päev",
                 day_two: "Teine päev",
                 dough: "Taigen",
-                sourdough_starter_dough: "Eeltaigen"
+                sourdough_starter_dough: "Eeltaigen",
+                total_weight: "Kokku: {{count}} g",
+                total_weight_item: "1 / {{divider}} = {{amount}} g"
             }
         },
         ingredient: {

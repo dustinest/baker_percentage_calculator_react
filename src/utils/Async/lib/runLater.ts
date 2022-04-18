@@ -33,3 +33,9 @@ export const iterateLater = <T>(list: T[], runnable: (value: T, index: number) =
     };
     return new Promise<void>((resolve, reject) => _iterate(resolve, reject) );
 }
+
+export const iterateAsync = async <T>(list: T[], runnable: (value: T, index: number) => Promise<void>): Promise<void> => {
+    for (let i = 0; i < list.length; i++) {
+        await runnable(list[i], i);
+    }
+}
