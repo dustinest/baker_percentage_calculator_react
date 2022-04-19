@@ -4,19 +4,16 @@ import {Alert, Box, CircularProgress, CircularProgressProps, Container, Typograp
 import {TranslatedLabel} from "../../Translations";
 import {ReactNode, useContext, useEffect, useState} from "react";
 import {RecipeItemResult} from "./RecipeItem/RecipeItemResult";
-import {AsyncStatus, iterateAsync, useAsyncEffect} from "../../utils/Async";
-import {recalculateRecipeBakerPercentage} from "./common/RecipeItemEditService";
-import {RecipeType} from "../../types";
+import {AsyncStatus,useAsyncEffect} from "../../utils/Async";
 import {GridContainer, GridItem} from "../common/GridContainer";
+import {getRecipesBakerPercentage} from "./common/useBakerPercentage";
 
 const NoRecipesError = () => {
   return (<Alert severity="warning"><TranslatedLabel label="messages.no_recipes"/></Alert>);
 }
 
 type PropsStatus = {
-  total: number;
-  index: number;
-  percent: number;
+  progress: number;
   label: string;
 }
 
@@ -25,7 +22,7 @@ const CircularProgressWithLabel = (props: CircularProgressProps & { status: Prop
     <>
       {  props.status ?
     <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-      <CircularProgress variant="determinate" {...props} value={props.status.percent}/>
+      <CircularProgress variant="determinate" {...props} value={props.status.progress}/>
       <Box
         sx={{
           top: 0,
@@ -42,7 +39,7 @@ const CircularProgressWithLabel = (props: CircularProgressProps & { status: Prop
           variant="caption"
           component="div"
           color="text.secondary"
-        >{`${Math.round(props.status.percent)}%`}</Typography>
+        >{`${Math.round(props.status.progress)}%`}</Typography>
       </Box>
     </Box>
         : undefined
@@ -51,9 +48,7 @@ const CircularProgressWithLabel = (props: CircularProgressProps & { status: Prop
   );
 }
 
-const calculateTotalWeight = async (recipe: RecipeType): Promise<number> => {
-  return recipe.ingredients.flatMap((ingredients) => ingredients.ingredients).map((ingredient) => ingredient.grams).reduce((total, value) => total + value, 0);
-}
+
 
 const RecipeListContainer = ({children}: {children: (args: RecipeItemResult[]) => ReactNode }) => {
   const {recipeState} = useContext(RecipesContext);
@@ -61,29 +56,15 @@ const RecipeListContainer = ({children}: {children: (args: RecipeItemResult[]) =
   const [recipeLoader, setRecipeLoader] = useState<PropsStatus | null>(null);
   const snackBar = useMessageSnackBar();
   const recipesResult = useAsyncEffect(async () => {
-    const result: RecipeItemResult[] = [];
-    const recipes = recipeState.recipes.filter((r) => recipeState.recipesFilter.includes(r.id));
-    await iterateAsync(recipes, async(recipe, index) => {
-      setRecipeLoader({
-        index,
-        total: recipes.length,
-        label: recipe.name,
-        percent: index > 0 ? Math.round(index * 100 / recipes.length) : 0
-      });
-      const bakerPercentage = await recalculateRecipeBakerPercentage(recipe);
-      result.push({
-        recipe: recipe,
-        bakerPercentage,
-        totalWeight: await calculateTotalWeight(recipe)
-      });
-    });
-    setRecipeLoader({
-      index: recipes.length,
-      total: recipes.length,
-      label: "done",
-      percent: 100
-    });
-    return result;
+    return getRecipesBakerPercentage(
+      recipeState.recipes.filter((r) => recipeState.recipesFilter.includes(r.id)),
+      (recipe, progress) => {
+        setRecipeLoader({
+          label: recipe.name,
+          progress
+        });
+      }
+    );
   }, [recipeState]);
   useEffect(() => {
     if (recipesResult.status === AsyncStatus.SUCCESS) {
