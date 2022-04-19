@@ -120,6 +120,10 @@
   "actions": {
     "save": "Save",
     "change": "Change",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "print": "Print"
+  },
+  "language": {
+    "en": "English"
   }
 }

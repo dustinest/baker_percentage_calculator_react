@@ -18,7 +18,7 @@ i18n.use(initReactI18next)
           }
         },
         lng: "et",
-        fallbackLng: "en",
+        fallbackLng: ["en", "et"],
         interpolation: {
             escapeValue: false // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
         }

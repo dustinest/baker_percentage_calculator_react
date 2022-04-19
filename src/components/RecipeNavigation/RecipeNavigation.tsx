@@ -11,7 +11,7 @@ import {
   Drawer,
   styled,
   Badge,
-  ListItemText, ListItemButton, ListItemIcon
+  ListItemText, ListItemButton, ListItemIcon, MenuItem
 } from "@mui/material";
 
 import {ReactNode, useState} from "react";
@@ -21,8 +21,8 @@ import {
   CheckAllButton,
   ClearAllButton,
   DoneButton,
-  MenuIconButton,
-  PrintIconButton
+  MenuIconButton, TranslatedLanguageIconButton,
+  TranslatedPrintIconButton
 } from "../../Constant/Buttons";
 import {RecipeType} from "../../types";
 import {DrawerHeader} from "./wrapper/DrawerHeader";
@@ -31,6 +31,9 @@ import {MainNavigationMainContainer} from "./wrapper/MainNavigationMainContainer
 import {useRecipeMenuState} from "./useRecipeMenuState";
 import {useElementClientHeight} from "../common/useElementClientHeight";
 import {CheckedIcon, UnCheckedIcon} from "../../Constant/Icons";
+import i18next from "i18next";
+import {CommonMenuButton} from "../common/CommonMenu";
+import {useMessageSnackBar} from "../../State";
 
 const NAVIGATION_WIDTH = 260;
 
@@ -73,6 +76,7 @@ export const RecipeNavigation = ({children, onPrint}: {onPrint: () => void, chil
   };
   */
 
+
   const handleDrawerClose = () => {
     setIsOpen(false);
     actions.submit();
@@ -80,6 +84,13 @@ export const RecipeNavigation = ({children, onPrint}: {onPrint: () => void, chil
 
   const [menuHeight, setMenuElement] = useElementClientHeight();
   const [contentHeight, setHeaderElement] = useElementClientHeight();
+
+  const snackBar = useMessageSnackBar();
+  const onLangaugeChange = (language: string) => {
+    i18next.changeLanguage(language, (error) => {
+      if (error) snackBar.error(error).enqueue();
+    }).catch(error => snackBar.error(error).enqueue());
+  }
 
   return (
     <Box sx={{display: 'flex'}}>
@@ -97,7 +108,16 @@ export const RecipeNavigation = ({children, onPrint}: {onPrint: () => void, chil
               {recipeStatus.selectedRecipe ? <RecipeName recipe={recipeStatus.selectedRecipe}/> : <Translation label="title" count={recipeStatus.defaultSelected}/>}
             </Typography>
           </Box>
-          {isOpen ? undefined : <PrintIconButton onClick={onPrint} edge="start" color="inherit"/> }
+          {isOpen ? undefined :
+            <>
+              <CommonMenuButton>
+                { i18next.languages.map((lang) =>
+                  <MenuItem key={lang}  selected={lang === i18next.language}><TranslatedLanguageIconButton onClick={() => onLangaugeChange(lang)} translation={`language.${lang}`}/></MenuItem>
+                )}
+                <MenuItem><TranslatedPrintIconButton onClick={onPrint}/></MenuItem>
+              </CommonMenuButton>
+            </>
+          }
         </Toolbar>
       </NavigationAppBar>
       <Drawer

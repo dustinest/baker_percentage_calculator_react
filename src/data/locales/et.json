@@ -119,6 +119,10 @@
   "actions": {
     "save": "Salvesta",
     "change": "Muuda",
-    "cancel": "Tühista"
+    "cancel": "Tühista",
+    "print": "Trüki"
+  },
+  "language": {
+    "et": "Eesti"
   }
 }
