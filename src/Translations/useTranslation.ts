@@ -1,20 +1,20 @@
 import {useTranslation as translationProvider} from "react-i18next";
+import {hasValue} from "../utils/NullSafe";
 
 export const useTranslation = () => {
   const translate = translationProvider();
-  return {
-    translate: (translation: string) => {
-      return translate.t(translation);
-    },
-    withValues: (translation: string, args: {[key: string]: string | number}) => {
-      return translate.t(translation, args);
-    },
-    translatePlural: (translation: string, amount?: number | undefined) => {
-      if (amount !== undefined) {
-        return translate.t(translation, {count: amount});
-      } else {
-        return translate.t(translation);
+  return (label: string, ...args: (string | number | undefined | null)[]): string => {
+    const props: { [key: string]: number | string } = {};
+    for (let i = 0; i < args.length; i+=1) {
+      const key = args[i];
+      const value = args[i+1];
+      if (!hasValue(key) || typeof key !== "string") {
+        throw new Error("The type of key must be string!");
+      }
+      if (hasValue(value)) {
+        props[key] = value;
       }
     }
+    return translate.t(label, props);
   }
 }

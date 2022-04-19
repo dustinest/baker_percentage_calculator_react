@@ -40,12 +40,12 @@ const EnforceStarter = ({ingredients, index}: {ingredients: RecipeIngredientsTyp
           horizontal: 'left',
         }}
       >
-        <Alert severity="info">{translate.translate("edit.enforce_starter.legend")}</Alert>
+        <Alert severity="info">{translate("edit.enforce_starter.legend")}</Alert>
       </Popover>
         <FormControlLabel
           control={<Checkbox
             checked={isStarter}
-            onChange={(e) => onCheckBoxChange(e.target.checked)}/>} label={translate.translate("edit.enforce_starter.button")}/>
+            onChange={(e) => onCheckBoxChange(e.target.checked)}/>} label={translate("edit.enforce_starter.button")}/>
       <InfoIconButton onClick={handleClick}/>
     </>
   )

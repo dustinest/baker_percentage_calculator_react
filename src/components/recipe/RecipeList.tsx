@@ -1,13 +1,13 @@
 import {RecipeItem} from "./RecipeItem";
 import {RecipesContext} from "../../State";
 import {Alert, Container} from "@mui/material";
-import {TranslatedLabel} from "../../Translations";
+import {Translation} from "../../Translations";
 import {ReactNode, useContext} from "react";
 import {GridContainer, GridItem} from "../common/GridContainer";
 import {BakerPercentageAwareRecipe} from "./common/BakerPercentageAwareRecipe";
 
 const NoRecipesError = () => {
-  return (<Alert severity="warning"><TranslatedLabel label="messages.no_recipes"/></Alert>);
+  return (<Alert severity="warning"><Translation label="messages.no_recipes"/></Alert>);
 }
 
 const RecipeListContainer = ({children}: {children: (args: BakerPercentageAwareRecipe[]) => ReactNode }) => {

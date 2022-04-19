@@ -26,7 +26,7 @@ export const EditDescription = ({value, onChange}: EditDescriptionProps) => {
     <HorizontalActionStack>
         <TextField
           fullWidth
-          label={translation.translate("edit.description.generic")}
+          label={translation("edit.description.generic")}
           multiline
           maxRows={4}
           value={description}

@@ -2,7 +2,7 @@ import {BakingTimeType} from "../../../types";
 import {Checkbox, Divider, Typography} from "@mui/material";
 import {EditNumberInterval} from "./EditNumberInterval";
 import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
-import {TranslatedLabel} from "../../../Translations";
+import {Translation} from "../../../Translations";
 import {useEffect, useMemo, useState} from "react";
 import {DeleteIconButton, DoneIconButton} from "../../../Constant/Buttons";
 import "./EditBakingTime.css";
@@ -71,9 +71,9 @@ export const EditBakingTime = ({bakingTime}: {bakingTime: BakingTimeType[]}) => 
         spacing={1}
         divider={<span>,</span>}
       >
-        <Typography variant="body1" gutterBottom><TranslatedLabel label="edit.baking_instructions.steam"/></Typography>
-        <Typography variant="body1" gutterBottom><TranslatedLabel label="edit.baking_instructions.time"/></Typography>
-        <Typography variant="body1" gutterBottom><TranslatedLabel label="edit.baking_instructions.temperature"/></Typography>
+        <Typography variant="body1" gutterBottom><Translation label="edit.baking_instructions.steam"/></Typography>
+        <Typography variant="body1" gutterBottom><Translation label="edit.baking_instructions.time"/></Typography>
+        <Typography variant="body1" gutterBottom><Translation label="edit.baking_instructions.temperature"/></Typography>
       </HorizontalActionStack>
       {bakingTime.map((bakingTime, index) => (
         <EditBakingTimeRow key={index} bakingTime={bakingTime} index={index}/>

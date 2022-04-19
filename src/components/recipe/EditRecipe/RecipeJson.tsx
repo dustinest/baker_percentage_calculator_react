@@ -9,7 +9,7 @@ import {
     AccordionSummary, CircularProgress,
     Typography
 } from "@mui/material";
-import {TranslatedLabel} from "../../../Translations";
+import {Translation} from "../../../Translations";
 import { ExpandMoreIcon } from "../../../Constant/Icons";
 
 export const RecipeJson = ({recipe}: {recipe: RecipeType}) => {
@@ -33,7 +33,7 @@ export const RecipeJson = ({recipe}: {recipe: RecipeType}) => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
             >
-                <Typography><TranslatedLabel label="JSON"/></Typography>
+                <Typography><Translation label="JSON"/></Typography>
             </AccordionSummary>
             <AccordionDetails>
                 {isExpanded && recipeJson ? <pre>{recipeJson}</pre> : <CircularProgress />}

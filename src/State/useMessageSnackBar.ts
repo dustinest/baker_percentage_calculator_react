@@ -25,7 +25,7 @@ export const useMessageSnackBar = () => {
       translate: (amount?: number) => {
         return {
           enqueue: (when?: number) => {
-            const translatedMessage = amount !== undefined ? translation.translatePlural(message, amount) : translation.translate(message);
+            const translatedMessage = translation(message, "count", amount);
             enqueue(translatedMessage, variant, when);
             return translatedMessage;
           },

@@ -1,2 +1,2 @@
-export * from "./TranslatedLabel";
+export * from "./Translation";
 export * from "./useTranslation";

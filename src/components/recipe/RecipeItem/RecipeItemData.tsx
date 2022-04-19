@@ -25,7 +25,7 @@ export const TotalWeight = ({total, amount}: {total: number, amount: number}) =>
             spacing={1.5}
           >
             <ItemText className="totals"><Translation label="ingredients.title.total_weight" count={weight}/></ItemText>
-            {oneWeight > 0 ? <ItemText className="totals"><Translation label="ingredients.title.total_weight_item" args={{ divider: amount, amount: oneWeight}}/></ItemText> : undefined}
+            {oneWeight > 0 ? <ItemText className="totals"><Translation label="ingredients.title.total_weight_item" divider={amount} amount={oneWeight}/></ItemText> : undefined}
           </HorizontalActionStack>
       }
     </>

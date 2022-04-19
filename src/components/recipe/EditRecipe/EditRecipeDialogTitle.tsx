@@ -51,8 +51,8 @@ const EditAmount = ({recipe}: { recipe: RecipeType }) => {
       <Dialog open={edit} onClose={onClose}>
         <DialogTitle sx={{m: 0, p: 2}}>
           <Tabs value={tabValue} onChange={handleTabsChange}>
-            <Tab label={translation.translate("edit.amount.tab.change")}/>
-            <Tab label={translation.translate("edit.amount.tab.calculate")}/>
+            <Tab label={translation("edit.amount.tab.change")}/>
+            <Tab label={translation("edit.amount.tab.calculate")}/>
           </Tabs>
         </DialogTitle>
         <DialogContent dividers>

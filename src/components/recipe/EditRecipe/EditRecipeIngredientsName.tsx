@@ -25,7 +25,7 @@ export const EditRecipeIngredientsName = ({ingredients, index}: EditRecipeIngred
       <TextField variant="standard" type="string"
                  value={name}
                  onChange={setName}
-                 label={translation.translate("edit.ingredients.title")}
+                 label={translation("edit.ingredients.title")}
       />
       <DoneIconButton disabled={isSameName} onClick={onNameDone}/>
     </HorizontalActionStack>

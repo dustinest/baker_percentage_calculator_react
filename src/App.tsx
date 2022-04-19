@@ -3,17 +3,19 @@ import './App.css';
 import {Main} from "./components/Main";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import {TRANSLATIONS} from "./data/Translations";
+
+import en from './data/locales/en.json'
+import et from './data/locales/et.json'
 
 i18n.use(initReactI18next)
     .init({
         resources: {
-            en: {
-                translation: TRANSLATIONS.en
-            },
-            et: {
-                translation: TRANSLATIONS.et
-            }
+          en: {
+            translation: en
+          },
+          et: {
+            translation: et
+          }
         },
         lng: "et",
         fallbackLng: "en",

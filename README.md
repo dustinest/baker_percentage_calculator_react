@@ -44,8 +44,8 @@ Breakpoints can be found at https://mui.com/material-ui/customization/breakpoint
 # Setup
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-node >= 16.14.2
-npm >= 8.52
+- node >= 16.14.2
+- npm >= 8.52
 
 
 ## Available Scripts

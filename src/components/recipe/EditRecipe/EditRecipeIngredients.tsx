@@ -9,7 +9,7 @@ import {
 import {useNumberInputValueTracking, useStringInputValueTracking} from "../../../utils/UseValue";
 import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
 import {useValueTimeoutAsync} from "../../../utils/Async";
-import {TranslatedLabel, Translation} from "../../../Translations";
+import {Translation} from "../../../Translations";
 import "./EditRecipeIngredients.css";
 import {hasNoValue, hasValue} from "../../../utils/NullSafe";
 import {ReactNode, useEffect, useState} from "react";
@@ -22,7 +22,7 @@ import {HorizontalActionStack} from "../../common/CommonStack";
 const EditRecipeIngredientTable = ({name, children}: {name: string, children: ReactNode;}) => {
   return (
     <TableRow>
-      <TableCell><TranslatedLabel label={name}/></TableCell>
+      <TableCell><Translation label={name}/></TableCell>
       <TableCell>{children}</TableCell>
     </TableRow>
   )

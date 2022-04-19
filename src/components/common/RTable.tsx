@@ -1,9 +1,10 @@
 import {TableCell, TableHead, TableRow} from "@mui/material";
-import {TranslatedLabel} from "../../Translations";
+import {Translation} from "../../Translations";
 import {normalizeNumber} from "../../utils/Numbers";
+import {hasValue} from "../../utils/NullSafe";
 
 export const RTableHead = ({label}: {label: string}) => {
-    return (<TableHead><TableRow><TableCell colSpan={3}><TranslatedLabel label={label}/></TableCell></TableRow></TableHead>)
+    return (<TableHead><TableRow><TableCell colSpan={3}><Translation label={label}/></TableCell></TableRow></TableHead>)
 }
 
 type RenderTranslatableLabelProps = {
@@ -13,14 +14,21 @@ type RenderTranslatableLabelProps = {
     fat?:number,
     ash?:number
 }
-
-const RenderTranslatableLabel = ({label, grams, type, fat, ash}: RenderTranslatableLabelProps) => {
-    return (<>{
-        type === "egg.generic" && typeof grams === "number" ? <TranslatedLabel label={label} count={Math.round(grams / 64)}/>:
-            fat && fat > 0 ? <TranslatedLabel label={label} count={fat}/>:
-                ash && ash > 0 ? <TranslatedLabel label={label} count={ash}/>:
-                  <TranslatedLabel label={label}/>
-    }</>);
+const getPropsCount = ({grams, type, fat, ash}: RenderTranslatableLabelProps) => {
+    if (hasValue(grams) && (type === "EGG_egg.generic" || type === "egg.generic") && typeof grams === "number") {
+        return grams > 0 ? Math.round(grams / 64) : 0;
+    }
+    if (hasValue(fat) && fat > 0) {
+        return fat;
+    }
+    if (hasValue(ash) && ash > 0) {
+        return ash;
+    }
+    return null;
+}
+const RenderTranslatableLabel = (props: RenderTranslatableLabelProps) => {
+    const count = getPropsCount(props);
+    return (<Translation count={count} label={props.label}/>);
 }
 
 type RTableRowProps = {
