@@ -6,6 +6,9 @@ import {updateEditRecipeReducer} from "./editRecipeReducer";
 import {RecipesContext} from "../RecipeList/RecipesProvider";
 // noinspection ES6PreferShortImport
 import {RecipesStateActionTypes, UpdateRecipesAction} from "../RecipeList/RecipesStateActions.d";
+import {
+  getBakerPercentageAwareRecipe
+} from "../../components/recipe/common/BakerPercentageAwareRecipe";
 
 type EditRecipeContextType = {
   editRecipe: null | RecipeType;
@@ -82,10 +85,11 @@ export const useEditRecipeActions = (): [RecipeType | null, (recipe: RecipeType)
     });
   };
 
-  const saveRecipeAction = (recipe: RecipeType) => {
+  const saveRecipeAction = async (recipe: RecipeType) => {
+    const value = await getBakerPercentageAwareRecipe(recipe);
     recipesDispatch({
       type: RecipesStateActionTypes.SAVE_RECIPE,
-      value: recipe
+      value
     } as UpdateRecipesAction);
     cancelRecipeAction();
   };

@@ -1,11 +1,10 @@
 import {RecipeType} from "../../../types";
 import {BakerPercentageResult} from "../../../utils/BakerPercentageCalulation";
 import {useEffect, useState} from "react";
-import {AsyncStatus, iterateAsync, useAsyncEffect} from "../../../utils/Async";
+import {AsyncStatus, useAsyncEffect} from "../../../utils/Async";
 import {hasValue} from "../../../utils/NullSafe";
-import {recalculateRecipeBakerPercentage} from "./RecipeItemEditService";
+import {recalculateRecipeBakerPercentage} from "../common/RecipeItemEditService";
 import {useMessageSnackBar} from "../../../State";
-import {RecipeItemResult} from "../RecipeItem/RecipeItemResult";
 
 type UseBakerPercentageResultNoValue = {
   hasValue: false;
@@ -28,7 +27,6 @@ const getRecipePercentage = async (recipe: RecipeType | null | undefined): Promi
     }
   }
   return staticUseBakerPercentageResultNoValue;
-
 }
 
 export const useBakerPercentage = (recipe: RecipeType | null | undefined): UseBakerPercentageResult => {
@@ -49,26 +47,4 @@ export const useBakerPercentage = (recipe: RecipeType | null | undefined): UseBa
   }, [result])
 
   return data;
-}
-
-const calculateTotalWeight = async (recipe: RecipeType): Promise<number> => {
-  return recipe.ingredients.flatMap((ingredients) => ingredients.ingredients).map((ingredient) => ingredient.grams).reduce((total, value) => total + value, 0);
-}
-export const getRecipesBakerPercentage = async (recipes: RecipeType[], callBack: (item: RecipeType, progress: number) => void): Promise<RecipeItemResult[]> => {
-  const result: RecipeItemResult[] = [];
-  let progress = 0;
-  await iterateAsync(recipes, async(recipe, index) => {
-    const _progress = index > 0 ? Math.round(index * 100 / recipes.length) : 0;
-    if (progress !== _progress) {
-      progress = _progress;
-      callBack(recipe, progress);
-    }
-    const bakerPercentage = await recalculateRecipeBakerPercentage(recipe);
-    result.push({
-      recipe: recipe,
-      bakerPercentage,
-      totalWeight: await calculateTotalWeight(recipe)
-    });
-  });
-  return result;
 }

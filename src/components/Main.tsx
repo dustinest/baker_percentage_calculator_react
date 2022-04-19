@@ -3,18 +3,14 @@ import {RecipeNavigation} from "./RecipeNavigation";
 import {RecipeType} from "../types";
 import {CircularProgress} from "@mui/material";
 import {readJsonRecipe} from "../service/RecipeReader";
-import {useContext, useState} from "react";
-import {
-  EditRecipeProvider,
-  RecipesContext,
-  RecipesStateActionTypes,
-  useMessageSnackBar,
-} from "../State";
+import {useContext, useEffect, useState} from "react";
+import {EditRecipeProvider, RecipesContext, RecipesStateActionTypes, useMessageSnackBar,} from "../State";
 import {RecipeList, RecipePrintList} from "./recipe/RecipeList";
-import {useAsyncEffect} from "../utils/Async";
+import {AsyncStatus, runLater, useAsyncEffect} from "../utils/Async";
 import {EditRecipeDialog} from "./recipe/EditRecipe";
 import {AddRecipeIcon} from "./AddRecipeIcon";
 import {FloatingPrintCancelButton} from "../Constant/Buttons";
+import {BakerPercentageAwareRecipe, getBakerPercentageAwareRecipe} from "./recipe/common/BakerPercentageAwareRecipe";
 /*
 const getDuplicateRecipe = (value: JsonRecipeType): JsonRecipeType => {
   return {
@@ -51,24 +47,39 @@ const getRecipes = (): RecipeType[] => {
 
 export const Main = () => {
   const snackBar = useMessageSnackBar();
-  const {recipesDispatch} = useContext(RecipesContext);
+  const {recipeState, recipesDispatch} = useContext(RecipesContext);
   const [status, setStatus] = useState<{loading: boolean, amount: number}>({ loading: true, amount: 0 });
   const [printPreview, setPrintPreview] = useState<boolean>(false);
 
-  useAsyncEffect(async () => {
-    setStatus({...status, ...{loading: true}});
-    try {
-      const result = getRecipes();
+  const result = useAsyncEffect<BakerPercentageAwareRecipe[]>(async () => {
+    const recipes = getRecipes();
+    const result: BakerPercentageAwareRecipe[] = [];
+    for (let i = 0; i < recipes.length; i++) {
+      const bakerPercentage = await getBakerPercentageAwareRecipe(recipes[i]);
+      result.push(bakerPercentage);
+    }
+    return result;
+  }, []);
+
+  useEffect(() => {
+    if (result.status === AsyncStatus.ERROR) {
+      snackBar.error(result.error, "Error while reading the snackbar!").translate().enqueue();
+    } else if (result.status === AsyncStatus.SUCCESS) {
       recipesDispatch({
         type: RecipesStateActionTypes.SET_RECIPES,
-        value: result
+        value: result.value
       });
-      setStatus({ loading: false, amount: result.length });
-    } catch (error) {
-      snackBar.error(error as Error, "Error while reading the snackbar!").translate().enqueue();
-      setStatus({...status, ...{loading: false}});
+      setStatus({ loading: false, amount: result.value.length });
+    } else {
+      setStatus({...status, ...{loading: true}});
     }
-  }, [recipesDispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [result])
+
+  useEffect(() => {
+    if (recipeState.recipes.length > 0 && printPreview && !status.loading) runLater(async () => window.print(), 1000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [printPreview, status, recipeState]);
 
   return (
     <>

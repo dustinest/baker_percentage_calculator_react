@@ -1,10 +1,10 @@
-import {RecipeItemResult} from "./RecipeItemResult";
 import {RenderBakingTimeAware} from "../common/RenderBakingTimeAware";
 import {Container, Divider} from "@mui/material";
 import {BakerPercentage} from "../common/BakerPercentage";
 import {ItemText} from "../common/ItemText";
 import {Translation} from "../../../Translations";
 import {HorizontalActionStack, VerticalStack} from "../../common/CommonStack";
+import {BakerPercentageAwareRecipe} from "../common/BakerPercentageAwareRecipe";
 
 const roundToTen = (amount: number): number => {
   if (amount === 0) return amount;
@@ -39,7 +39,7 @@ const BakerPercentageContainer = ({recipe}: RecipeItemDataProps) => {
   </>);
 }
 
-type RecipeItemDataProps = { recipe: RecipeItemResult; }
+type RecipeItemDataProps = { recipe: BakerPercentageAwareRecipe; }
 const RecipeItemDataPrint  = ({recipe}: RecipeItemDataProps) => {
   return (<>
     <HorizontalActionStack
@@ -54,20 +54,20 @@ const RecipeItemDataPrint  = ({recipe}: RecipeItemDataProps) => {
              divider={<Divider orientation="horizontal" flexItem />}
              spacing={2}
       >
-        <RenderBakingTimeAware value={recipe.recipe}/>
-        <TotalWeight total={recipe.totalWeight} amount={recipe.recipe.amount}/>
+        <RenderBakingTimeAware value={recipe}/>
+        <TotalWeight total={recipe.totalWeight} amount={recipe.amount}/>
       </VerticalStack>
     </HorizontalActionStack>
   </>);
 }
 const RecipeItemDataList  = ({recipe}: RecipeItemDataProps) => {
   return (<>
-    <RenderBakingTimeAware value={recipe.recipe}/>
+    <RenderBakingTimeAware value={recipe}/>
     <BakerPercentageContainer recipe={recipe}/>
-    <TotalWeight total={recipe.totalWeight} amount={recipe.recipe.amount}/>
+    <TotalWeight total={recipe.totalWeight} amount={recipe.amount}/>
   </>);
 }
 
-export const RecipeItemData  = ({recipe, isPrintPreview}: {recipe: RecipeItemResult; isPrintPreview: boolean;}) => {
+export const RecipeItemData  = ({recipe, isPrintPreview}: {recipe: BakerPercentageAwareRecipe; isPrintPreview: boolean;}) => {
   return (<>{ isPrintPreview ? <RecipeItemDataPrint recipe={recipe}/> : <RecipeItemDataList recipe={recipe}/>} </>);
 }

@@ -23,7 +23,7 @@ import {EditRecipeDialogIngredients} from "./EditRecipeDialogIngredients";
 import {hasNoValue, hasValue} from "../../../utils/NullSafe";
 import {RECIPE_CONSTANTS} from "../../../State/RecipeConstants";
 import {TranslatedAddIconButton, TranslatedCancelButton, TranslatedSaveButton} from "../../../Constant/Buttons";
-import {useBakerPercentage} from "../common/useBakerPercentage";
+import {useBakerPercentage} from "./useBakerPercentage";
 import {GridContainer, GridItem} from "../../common/GridContainer";
 import {VerticalStack} from "../../common/CommonStack";
 

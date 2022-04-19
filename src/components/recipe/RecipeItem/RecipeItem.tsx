@@ -3,19 +3,19 @@ import {
   Card,
 } from "@mui/material";
 import "./RecipeItemData.css";
-import {RecipeItemResult} from "./RecipeItemResult";
 import {RecipeHeader} from "./RecipeItemHeader";
 import {RecipeItemData} from "./RecipeItemData";
+import {BakerPercentageAwareRecipe} from "../common/BakerPercentageAwareRecipe";
 
 type RecipeItemDetailsProps = {
   isPrintPreview: boolean;
-  recipe: RecipeItemResult;
+  recipe: BakerPercentageAwareRecipe;
 };
 
 export const RecipeItem = ({isPrintPreview, recipe}: RecipeItemDetailsProps) => {
   return (<Card variant="outlined" className="recipe">
-    <RecipeHeader recipe={recipe.recipe} isPrintPreview={isPrintPreview}/>
-    {recipe.bakerPercentage != null ? <IngredientsItems ingredients={recipe.bakerPercentage.ingredients} recipe={recipe.recipe}/> : undefined}
+    <RecipeHeader recipe={recipe} isPrintPreview={isPrintPreview}/>
+    {recipe.bakerPercentage != null ? <IngredientsItems ingredients={recipe.bakerPercentage.ingredients} recipe={recipe}/> : undefined}
     <RecipeItemData recipe={recipe} isPrintPreview={isPrintPreview}/>
   </Card>);
 }
