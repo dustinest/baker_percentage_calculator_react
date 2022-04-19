@@ -1,9 +1,10 @@
 import {RecipeIngredientsType} from "../../../types";
-import {Stack, TextField} from "@mui/material";
+import {TextField} from "@mui/material";
 import {useTranslation} from "../../../Translations";
 import {useStringInputValueTracking} from "../../../utils/UseValue";
 import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
 import {DoneIconButton} from "../../../Constant/Buttons";
+import {HorizontalActionStack} from "../../common/CommonStack";
 
 type EditRecipeIngredientsNameProps = { ingredients: RecipeIngredientsType; index: number };
 export const EditRecipeIngredientsName = ({ingredients, index}: EditRecipeIngredientsNameProps) => {
@@ -20,13 +21,13 @@ export const EditRecipeIngredientsName = ({ingredients, index}: EditRecipeIngred
   }
 
   return (
-    <Stack direction="row">
+    <HorizontalActionStack justifyContent="center">
       <TextField variant="standard" type="string"
                  value={name}
                  onChange={setName}
                  label={translation.translate("edit.ingredients.title")}
       />
       <DoneIconButton disabled={isSameName} onClick={onNameDone}/>
-    </Stack>
+    </HorizontalActionStack>
   )
 }

@@ -1,8 +1,9 @@
-import {Stack, TextField} from "@mui/material";
+import {TextField} from "@mui/material";
 import {useTranslation} from "../../../Translations";
 import {useMessageSnackBar} from "../../../State";
 import {useStringInputValueTracking} from "../../../utils/UseValue";
 import {DoneIconButton} from "../../../Constant/Buttons";
+import {HorizontalActionStack} from "../../common/CommonStack";
 
 type EditDescriptionProps = {
   value?: string | null,
@@ -22,12 +23,7 @@ export const EditDescription = ({value, onChange}: EditDescriptionProps) => {
   const translation = useTranslation();
 
   return (
-    <Stack
-      direction="row"
-      justifyContent="flex-start"
-      alignItems="center"
-      spacing={0.5}
-    >
+    <HorizontalActionStack>
         <TextField
           fullWidth
           label={translation.translate("edit.description.generic")}
@@ -38,6 +34,6 @@ export const EditDescription = ({value, onChange}: EditDescriptionProps) => {
           onChange={setDescription}
         />
         <DoneIconButton disabled={isDescriptionSame} onClick={onTextChange}/>
-    </Stack>
+    </HorizontalActionStack>
   );
 }

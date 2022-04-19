@@ -12,8 +12,6 @@ export const TRANSLATIONS = {
             edit: "Change",
             delete: "Delete",
             copyOf: "Copy",
-            save: "Save",
-            cancel: "Cancel",
             enforce_starter: {
                 button: "Use all in pre-dough",
                 legend: "All flour and liquid is used in pre-dough calculation"
@@ -30,6 +28,16 @@ export const TRANSLATIONS = {
                 time: "Time",
                 temperature: "Temperature",
                 inner_temperature: "Inner temperature",
+            },
+            amount: {
+                button: "Amount: {{count}}",
+                tab: {
+                    calculate: "Calculate",
+                    change: "Change"
+                },
+                title: "Recipe amount",
+                calculate: "Calculate ingredients amount",
+                change: "Change ingredients amount number"
             }
         },
         baking_instructions: {
@@ -116,6 +124,11 @@ export const TRANSLATIONS = {
             print_pages_one: "Print one double side page",
             print_pages_other: "Print {{count}} double side pages"
         },
+        actions: {
+            save: "Save",
+            change: "Change",
+            cancel: "Cancel",
+        }
     },
     et: {
         title_one: "üks retsept",
@@ -128,8 +141,6 @@ export const TRANSLATIONS = {
             edit: "Muuda",
             delete: "Kustuta",
             copyOf: "Kopeeri",
-            save: "Salvesta",
-            cancel: "Tühista",
             description: {
                 generic: "Kirjeldus"
             },
@@ -138,10 +149,20 @@ export const TRANSLATIONS = {
                 add: "Lisa uus grupp"
             },
             baking_instructions: {
-                steam: "Aur",
+                steam: "Auruta",
                 time: "Aeg",
                 temperature: "Temperatuur",
                 inner_temperature: "Sisetemperatuur",
+            },
+            amount: {
+                button: "Kogus: {{count}}",
+                tab: {
+                    calculate: "Arvuta",
+                    change: "Muuda"
+                },
+                title: "Retsepti kogus",
+                calculate: "Kalkuleeri kogus",
+                change: "Muuda koguse number"
             }
         },
         baking_instructions: {
@@ -226,6 +247,11 @@ export const TRANSLATIONS = {
             recipes_other: "{{count}} retsepti",
             print_pages_one: "Prindid ühe kahepoolse lehe",
             print_pages_other: "Prindid {{count}} kahepoolse lehte"
+        },
+        actions: {
+            save: "Salvesta",
+            change: "Muuda",
+            cancel: "Tühista",
         }
     }
 } as {[key in TranslationLanguage]: any}

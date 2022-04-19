@@ -1,11 +1,12 @@
 import {BakingTimeType} from "../../../types";
-import {Checkbox, Divider, Stack, Typography} from "@mui/material";
+import {Checkbox, Divider, Typography} from "@mui/material";
 import {EditNumberInterval} from "./EditNumberInterval";
 import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
 import {TranslatedLabel} from "../../../Translations";
 import {useEffect, useMemo, useState} from "react";
 import {DeleteIconButton, DoneIconButton} from "../../../Constant/Buttons";
 import "./EditBakingTime.css";
+import {HorizontalActionStack, VerticalStack} from "../../common/CommonStack";
 
 const DUMMY_BAKING_TIME = Object.freeze({
   time: {from: 1, until: 1},
@@ -46,32 +47,25 @@ const EditBakingTimeRow = ({bakingTime, index}: {bakingTime?: BakingTimeType, in
     editRecipeDispatch({type: EditRecipeStateActionTypes.REMOVE_BAKING_TIME, index});
 
   return (
-    <Stack
-      direction="row"
-      justifyContent="flex-start"
-      alignItems="center"
-      spacing={1.5}
-      divider={<Divider orientation="vertical" flexItem />}
-    >
-      <Checkbox checked={value.steam} onChange={(e) => setRecipeSteam(e.target.checked)}/>
-      <EditNumberInterval className="time" interval={value.time} onChange={(from, until) => setRecipeBakingTime(from, until)}/>
-      <EditNumberInterval className="temperature" interval={value.temperature} onChange={(from, until) => setRecipeTemperature(from, until)}/>
+    <HorizontalActionStack spacing={1}>
+      <HorizontalActionStack spacing={0}>
+        <Checkbox checked={value.steam} onChange={(e) => setRecipeSteam(e.target.checked)}/>
+        <HorizontalActionStack spacing={1} divider={<Divider orientation="vertical" flexItem />}>
+          <EditNumberInterval className="time" interval={value.time} onChange={(from, until) => setRecipeBakingTime(from, until)}/>
+          <EditNumberInterval className="temperature" interval={value.temperature} onChange={(from, until) => setRecipeTemperature(from, until)}/>
+        </HorizontalActionStack>
+      </HorizontalActionStack>
       {bakingTime ? <DeleteIconButton onClick={removeBakingTime}/> : <DoneIconButton onClick={triggerChange}/> }
-    </Stack>
+    </HorizontalActionStack>
   )
 }
 
 export const EditBakingTime = ({bakingTime}: {bakingTime: BakingTimeType[]}) => {
   return (
-    <Stack
-      direction="column"
-      justifyContent="flex-start"
-      alignItems="center"
-      spacing={1}
+    <VerticalStack
       className="edit-baking-time"
     >
-      <Stack
-        direction="row"
+      <HorizontalActionStack
         justifyContent="space-between"
         alignItems="baseline"
         spacing={1}
@@ -80,11 +74,11 @@ export const EditBakingTime = ({bakingTime}: {bakingTime: BakingTimeType[]}) => 
         <Typography variant="body1" gutterBottom><TranslatedLabel label="edit.baking_instructions.steam"/></Typography>
         <Typography variant="body1" gutterBottom><TranslatedLabel label="edit.baking_instructions.time"/></Typography>
         <Typography variant="body1" gutterBottom><TranslatedLabel label="edit.baking_instructions.temperature"/></Typography>
-      </Stack>
+      </HorizontalActionStack>
       {bakingTime.map((bakingTime, index) => (
         <EditBakingTimeRow key={index} bakingTime={bakingTime} index={index}/>
       ))}
       <EditBakingTimeRow index={bakingTime.length} key={`new_baking-${bakingTime.length}`}/>
-    </Stack>
+    </VerticalStack>
   )
 }

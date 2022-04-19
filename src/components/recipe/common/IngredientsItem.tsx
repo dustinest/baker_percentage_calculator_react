@@ -1,6 +1,6 @@
 import {RenderBakingTimeAware} from "./RenderBakingTimeAware";
 import {IngredientWithPercentType, RecipeIngredientsWithPercentType} from "../../../utils/BakerPercentageCalulation";
-import {Table, TableBody} from "@mui/material";
+import {Container, Table, TableBody} from "@mui/material";
 import {RTableHead, RTableRow} from "../../common/RTable";
 import {NutritionType, RecipeType} from "../../../types/index";
 
@@ -65,7 +65,7 @@ type IngredientsItemsProps = {
 } & BaseProps;
 
 export const IngredientsItems = ({ingredients, recipe}: IngredientsItemsProps) => {
-  return (<>{
+  return (<Container component="section" className="recipe">{
     ingredients.map((ingredients, index) => (
       <IngredientsItem
         index={index}
@@ -73,5 +73,5 @@ export const IngredientsItems = ({ingredients, recipe}: IngredientsItemsProps) =
         recipe={recipe}
         key={`ingredients_${index}`}/>
     ))
-  }</>)
+  }</Container>)
 }

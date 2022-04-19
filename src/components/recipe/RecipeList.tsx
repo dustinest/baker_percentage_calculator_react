@@ -1,12 +1,13 @@
 import {RecipeItem} from "./RecipeItem";
 import {RecipesContext, useMessageSnackBar} from "../../State";
-import {Alert, Box, CircularProgress, CircularProgressProps, Container, Grid, Typography} from "@mui/material";
+import {Alert, Box, CircularProgress, CircularProgressProps, Container, Typography} from "@mui/material";
 import {TranslatedLabel} from "../../Translations";
 import {ReactNode, useContext, useEffect, useState} from "react";
 import {RecipeItemResult} from "./RecipeItem/RecipeItemResult";
 import {AsyncStatus, iterateAsync, useAsyncEffect} from "../../utils/Async";
 import {recalculateRecipeBakerPercentage} from "./common/RecipeItemEditService";
 import {RecipeType} from "../../types";
+import {GridContainer, GridItem} from "../common/GridContainer";
 
 const NoRecipesError = () => {
   return (<Alert severity="warning"><TranslatedLabel label="messages.no_recipes"/></Alert>);
@@ -103,14 +104,14 @@ export const RecipeList = () => {
   return (
     <RecipeListContainer>
       {(recipes) => (
-        <Grid container spacing={1} wrap="wrap" className="recipes">
-          {recipes.length === 0 ? <Grid item><NoRecipesError/></Grid> : undefined}
+        <GridContainer className="recipes">
+          {recipes.length === 0 ? <GridItem><NoRecipesError/></GridItem> : undefined}
           {recipes.map((recipe) => (
-            <Grid item sm key={recipe.recipe.id}  id={recipe.recipe.id} className="recipe-item">
+            <GridItem key={recipe.recipe.id}  id={recipe.recipe.id} className="recipe-item">
               <RecipeItem isPrintPreview={false} recipe={recipe} />
-            </Grid>
+            </GridItem>
           ))}
-        </Grid>
+        </GridContainer>
     )}</RecipeListContainer>
   );
 }

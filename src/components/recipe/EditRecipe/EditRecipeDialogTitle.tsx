@@ -1,17 +1,85 @@
 import {RecipeType} from "../../../types";
-import {Stack, TextField} from "@mui/material";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Tab,
+  Tabs,
+  TextField
+} from "@mui/material";
 import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
-import {memo} from "react";
 import {useNumberInputValueTracking, useStringInputValueTracking} from "../../../utils/UseValue";
 import "./EditRecipeDialogTitle.css";
-import {useValueTimeoutAsync} from "../../../utils/Async";
-import {DoneIconButton} from "../../../Constant/Buttons";
+import {
+  DoneIconButton, EditLabelIconButton, TranslatedCancelButton, TranslatedChangeButton
+} from "../../../Constant/Buttons";
+import {HorizontalActionStack} from "../../common/CommonStack";
+import {useState, SyntheticEvent, useEffect} from "react";
+import {Translation, useTranslation} from "../../../Translations";
 
-export const EditRecipeDialogTitle = memo(({recipe}: { recipe: RecipeType }) => {
-  const [name, isSameName, setName, resetName] = useStringInputValueTracking(recipe.name);
+const EditAmount = ({recipe}: { recipe: RecipeType }) => {
   const [amount, isSameAmount, setAmount, resetAmount] = useNumberInputValueTracking(recipe.amount);
+  const editRecipeDispatch = useEditRecipeContext();
+  const [tabValue, setTabValue] = useState(0);
+  const [edit, setEdit] = useState<boolean>(false);
 
+  const translation = useTranslation();
+  const sendChange = () => {
+    if (isSameAmount || amount <= 0) {
+      return;
+    }
+    setEdit(false);
+    editRecipeDispatch({
+      type: EditRecipeStateActionTypes.SET_AMOUNT,
+      calculate: tabValue === 1,
+      amount
+    });
+  }
 
+  useEffect(() => {
+    if (edit) resetAmount(recipe.amount);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [edit, recipe])
+
+  const handleTabsChange = (event: SyntheticEvent, newValue: number) => setTabValue(newValue);
+  const onClose = () => setEdit(false);
+
+  return (
+    <>
+      <Dialog open={edit} onClose={onClose}>
+        <DialogTitle sx={{m: 0, p: 2}}>
+          <Tabs value={tabValue} onChange={handleTabsChange}>
+            <Tab label={translation.translate("edit.amount.tab.change")}/>
+            <Tab label={translation.translate("edit.amount.tab.calculate")}/>
+          </Tabs>
+        </DialogTitle>
+        <DialogContent dividers>
+          <DialogContentText>
+            <Translation label={tabValue !== 0 ? "edit.amount.calculate" : "edit.amount.change"}/>
+          </DialogContentText>
+          <HorizontalActionStack justifyContent="center">
+            <TextField
+              variant="standard"
+              className="recipe-amount"
+              type="number"
+              value={amount}
+              onChange={setAmount}
+            />
+          </HorizontalActionStack>
+        </DialogContent>
+        <DialogActions>
+          <TranslatedCancelButton onClick={onClose}/>
+          <TranslatedChangeButton onClick={sendChange} disabled={isSameAmount || amount <= 0}/>
+        </DialogActions>
+      </Dialog>
+      <EditLabelIconButton onClick={() => setEdit(true)}><Translation label={"edit.amount.button"} count={recipe.amount}/></EditLabelIconButton>
+    </>);
+}
+
+export const EditName = ({recipe}: { recipe: RecipeType }) => {
+  const [name, isSameName, setName, resetName] = useStringInputValueTracking(recipe.name);
   const editRecipeDispatch = useEditRecipeContext();
   const onNameDone = async () => {
     const cachedName = name;
@@ -21,50 +89,25 @@ export const EditRecipeDialogTitle = memo(({recipe}: { recipe: RecipeType }) => 
     });
     resetName(cachedName);
   }
-
-  useValueTimeoutAsync(async () => {
-    if (isSameAmount || amount <= 0) {
-      return;
-    }
-    const cachedAmount = amount;
-    editRecipeDispatch({
-      type: EditRecipeStateActionTypes.SET_AMOUNT,
-      amount: cachedAmount
-    });
-    resetAmount(cachedAmount);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, amount)
-
-
-  return (<>
-      <Stack
-        direction="row"
-        justifyContent="flex-start"
-        alignItems="center"
-        spacing={2}
-      >
-        <Stack
-          direction="row"
-          justifyContent="flex-start"
-          alignItems="center"
-          spacing={0.5}
-        >
-          <TextField
-            variant="standard"
-            type="string"
-            value={name}
-            onChange={setName}
-          />
-          <DoneIconButton disabled={isSameName || name.trim().length <= 0} onClick={onNameDone}/>
-        </Stack>
-        <TextField
-          variant="standard"
-          className="recipe-amount"
-          type="number"
-          value={amount}
-          onChange={setAmount}
-        />
-      </Stack>
-    </>
+  return (
+    <HorizontalActionStack>
+      <TextField
+        variant="standard"
+        type="string"
+        value={name}
+        onChange={setName}
+      />
+      <DoneIconButton disabled={isSameName || name.trim().length <= 0} onClick={onNameDone}/>
+    </HorizontalActionStack>
   );
-});
+};
+
+
+export const EditRecipeDialogTitle = ({recipe}: { recipe: RecipeType }) => {
+  return (
+    <HorizontalActionStack spacing={2} justifyContent="center">
+      <EditName recipe={recipe}/>
+      <EditAmount recipe={recipe}/>
+    </HorizontalActionStack>
+  );
+};

@@ -2,7 +2,6 @@ import {IngredientGramsType} from "../../../types";
 import {
   InputAdornment, MenuItem,
   OutlinedInput, Select, SelectChangeEvent,
-  Stack,
   Table, TableBody,
   TableCell,
   TableRow
@@ -18,6 +17,7 @@ import {
   StandardIngredientMethodGrams,
 } from "../../../Constant/Ingredient";
 import {AddButton, DeleteButton} from "../../../Constant/Buttons";
+import {HorizontalActionStack} from "../../common/CommonStack";
 
 const EditRecipeIngredientTable = ({name, children}: {name: string, children: ReactNode;}) => {
   return (
@@ -75,7 +75,7 @@ const EditRecipeIngredient = ({
 
   return (
     <EditRecipeIngredientTable name={name}>
-      <Stack direction="row">
+      <HorizontalActionStack>
         <OutlinedInput
           className="recipe-ingredient-amount"
           type="number"
@@ -84,7 +84,7 @@ const EditRecipeIngredient = ({
           endAdornment={<InputAdornment position="end">g</InputAdornment>}
         />
         <DeleteButton onClick={onDelete}/>
-      </Stack>
+      </HorizontalActionStack>
     </EditRecipeIngredientTable>
   )
 };
@@ -142,12 +142,7 @@ export const EditRecipeRemainingIngredients = ({ingredients, index}: EditRecipeR
   return (
     <>
       { !selectedValue ? undefined :
-        <Stack
-          direction="row"
-          justifyContent="flex-start"
-          alignItems="center"
-          spacing={0.5}
-        >
+        <HorizontalActionStack>
           <Select
             labelId="select-ingredients"
             value={selectedValue}
@@ -167,7 +162,7 @@ export const EditRecipeRemainingIngredients = ({ingredients, index}: EditRecipeR
             endAdornment={<InputAdornment position="end">g</InputAdornment>}
           />
           <AddButton onClick={addNewItem} disabled={isSameGrams || grams <= 0}/>
-        </Stack>
+        </HorizontalActionStack>
       }
     </>
   )

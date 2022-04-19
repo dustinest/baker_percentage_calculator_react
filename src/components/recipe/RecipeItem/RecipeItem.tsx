@@ -1,21 +1,21 @@
+import {IngredientsItems} from "../common/IngredientsItem";
 import {
-  Card, CardContent,
+  Card,
 } from "@mui/material";
-import "./RecipeItem.css";
-import {RecipeItemDetails} from "./RecipeItemData";
+import "./RecipeItemData.css";
 import {RecipeItemResult} from "./RecipeItemResult";
+import {RecipeHeader} from "./RecipeItemHeader";
+import {RecipeItemData} from "./RecipeItemData";
 
-type RecipeItemProps = {
-  recipe: RecipeItemResult;
+type RecipeItemDetailsProps = {
   isPrintPreview: boolean;
-}
-
-export const RecipeItem = (props: RecipeItemProps) => {
-  return (
-      <Card
-        sx={{maxWidth: props.isPrintPreview ? 600 : 400, marginLeft: "auto", marginRight: "auto"}}
-        variant="outlined" className="recipe">
-        <CardContent><RecipeItemDetails {...props}/></CardContent>
-      </Card>
-    );
+  recipe: RecipeItemResult;
 };
+
+export const RecipeItem = ({isPrintPreview, recipe}: RecipeItemDetailsProps) => {
+  return (<Card variant="outlined" className="recipe">
+    <RecipeHeader recipe={recipe.recipe} isPrintPreview={isPrintPreview}/>
+    {recipe.bakerPercentage != null ? <IngredientsItems ingredients={recipe.bakerPercentage.ingredients} recipe={recipe.recipe}/> : undefined}
+    <RecipeItemData recipe={recipe} isPrintPreview={isPrintPreview}/>
+  </Card>);
+}

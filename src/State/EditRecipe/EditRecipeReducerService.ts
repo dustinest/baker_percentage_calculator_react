@@ -97,18 +97,26 @@ export const EditRecipeReducerService = Object.freeze({
   },
 
   setAmount: (recipe: RecipeType | null, action: SetEditRecipeAmountStateAction) => {
-    if (!recipe || action.amount <= 0 || recipe.amount === action.amount) return recipe;
-    const value = Math.floor(action.amount * 10) / 10;
-    if (value <= 0) return recipe;
-    const amountChange = value / recipe.amount;
-    const copy = copyCopyOfAwareRecipe(recipe);
-    copy.ingredients.forEach((e) => {
-      e.ingredients.forEach((i) => {
-        i.grams = i.grams * amountChange;
-      })
-    });
-    copy.amount = value;
-    return copy;
+    if (!recipe || action.amount <= 0) return recipe;
+    if (action.calculate) {
+      const amountChange = action.amount / recipe.amount;
+      const copy = copyCopyOfAwareRecipe(recipe);
+      copy.ingredients.forEach((e) => {
+        e.ingredients.forEach((i) => {
+          i.grams = i.grams * amountChange;
+        })
+      });
+      const value = Math.floor(action.amount * 10) / 10;
+      copy.amount = value <= 0 ? 1 : value;
+      return copy;
+    } else if (!action.calculate) {
+      const value = Math.floor(action.amount * 10) / 10;
+      if (value <= 0 || recipe.amount === value) return recipe;
+      const copy = copyCopyOfAwareRecipe(recipe);
+      copy.amount = value;
+      return copy;
+    }
+    return recipe;
   },
   setBakingTime: (recipe: RecipeType | null, action: SetEditRecipeBakingTimeStateAction) => {
     if (!recipe) return null;

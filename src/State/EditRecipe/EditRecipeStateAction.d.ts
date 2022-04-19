@@ -26,7 +26,7 @@ export type EditRecipesStateAction = EditRecipeStateActionWithValue<EditRecipeSt
 export type CancelEditRecipesStateAction = EditRecipeStateAction<EditRecipeStateActionTypes.CANCEL_EDIT_RECIPE>;
 export type SetEditRecipeNameStateAction = { name: string;  } & EditRecipeStateAction<EditRecipeStateActionTypes.SET_NAME>;
 export type SetEditRecipeIngredientsNameStateAction = { name?: string; index: number; } & EditRecipeStateAction<EditRecipeStateActionTypes.SET_INGREDIENTS_NAME>;
-export type SetEditRecipeAmountStateAction = { amount: number;  } & EditRecipeStateAction<EditRecipeStateActionTypes.SET_AMOUNT>;
+export type SetEditRecipeAmountStateAction = { amount: number; calculate: boolean  } & EditRecipeStateAction<EditRecipeStateActionTypes.SET_AMOUNT>;
 
 export type RemoveRecipeIngredientStateAction = { index: ActionIngredientIndex | number; } & EditRecipeStateAction<EditRecipeStateActionTypes.REMOVE_INGREDIENT>;
 export type SetEditRecipeIngredientGramsStateAction = { index: ActionIngredientIndex; grams: number;  } & EditRecipeStateAction<EditRecipeStateActionTypes.SET_INGREDIENT_GRAM>;

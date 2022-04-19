@@ -5,7 +5,7 @@ import {
   ExpandMoreIcon,
   MenuIcon,
   PrintIcon,
-  CancelIcon, RecipeSaveIcon, MoreVertIcon, InfoIcon
+  MoreVertIcon, InfoIcon, EditIcon
 } from "./Icons";
 import {Box, Button, ButtonProps, Fab, IconButton, IconButtonProps, styled} from "@mui/material";
 import {Translation} from "../Translations";
@@ -19,8 +19,7 @@ export const DoneIconButton = (props: IconButtonProps) => (<IconButtonInt  color
 export const MoreIconButton = (props: IconButtonProps) => (<IconButtonInt {...props}><MoreVertIcon/></IconButtonInt>);
 export const InfoIconButton = (props: IconButtonProps) => (<IconButtonInt {...props}><InfoIcon/></IconButtonInt>);
 
-type ExpandMoreProps = { expand: boolean; } & IconButtonProps;
-export const ExpandMoreIconButton = styled((props: ExpandMoreProps) => {
+export const ExpandMoreIconButton = styled((props: { expand: boolean; } & IconButtonProps) => {
   const {expand, ...other} = props;
   return <IconButton {...other} ><ExpandMoreIcon/></IconButton>;
 })(({theme, expand}) => ({
@@ -33,15 +32,16 @@ export const ExpandMoreIconButton = styled((props: ExpandMoreProps) => {
 
 const ButtonInt = (props: ButtonProps) => (<Button {...props}/>);
 
-type TranslatedButtonProps = { translation: string } & ButtonProps;
-
-const TranslatedButton = (props: TranslatedButtonProps) => {
+const TranslatedButton = (props: { translation: string } & ButtonProps) => {
   const {translation, ...others} = props;
   return <ButtonInt {...others}><Translation label={translation}/></ButtonInt>
 }
-export const TranslatedSaveButton = (props: TranslatedButtonProps) => (<TranslatedButton color="success" startIcon={<RecipeSaveIcon/>} {...props}/>);
-export const TranslatedCancelButton = (props: TranslatedButtonProps) => (<TranslatedButton color="secondary" startIcon={<CancelIcon/>} {...props}/>);
-export const TranslatedAddButton = (props: TranslatedButtonProps) => (<TranslatedButton color="secondary" startIcon={<AddIcon/>} {...props}/>);
+export const TranslatedSaveButton = (props: ButtonProps) => (<TranslatedButton color="success" translation="actions.save" {...props}/>);
+export const TranslatedCancelButton = (props: ButtonProps) => (<TranslatedButton color="secondary" translation="actions.cancel" {...props}/>);
+export const TranslatedChangeButton = (props: ButtonProps) => (<TranslatedButton color="secondary" translation="actions.change" {...props}/>);
+export const EditLabelIconButton = (props: ButtonProps) => (<ButtonInt color="success" {...props} endIcon={<EditIcon/>}/>);
+
+export const TranslatedAddIconButton = (props: { translation: string } & ButtonProps) => (<TranslatedButton color="secondary" startIcon={<AddIcon/>} {...props}/>);
 
 export const AddButton = (props: ButtonProps) => (<ButtonInt color="success" {...props}><AddIcon/></ButtonInt>);
 export const DeleteButton = (props: ButtonProps) => (<ButtonInt color="warning" {...props}><DeleteIcon/></ButtonInt>);

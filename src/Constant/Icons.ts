@@ -1,6 +1,3 @@
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeftOutlined';
-import PlaylistAddCheckOutlinedIcon from '@mui/icons-material/PlaylistAddCheckOutlined';
-import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
@@ -17,11 +14,7 @@ import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlin
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
-export const MenuCloseIcon = ChevronLeftIcon;
-
-export const RecipeSaveIcon = PlaylistAddCheckOutlinedIcon;
-export const CancelIcon = CancelOutlinedIcon;
-export const RecipeEditIcon = EditOutlinedIcon;
+export const EditIcon = EditOutlinedIcon;
 export const ExpandMoreIcon = ExpandMoreOutlinedIcon;
 export const CloseIcon = CloseOutlinedIcon;
 export const DeleteIcon = DeleteOutlineOutlinedIcon;
