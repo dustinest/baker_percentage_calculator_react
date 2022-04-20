@@ -4,8 +4,8 @@ import {Main} from "./components/Main";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-import ee from './static/locales/ee.json'
 import gb from './static/locales/gb.json'
+import ee from './static/locales/ee.json'
 
 i18n.use(initReactI18next)
     .init({
