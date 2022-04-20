@@ -20,7 +20,7 @@ export const useRecipeName = (name: string) => {
     }
   }, [translation, key, label])
 
-  return translation(name);
+  return label;
 }
 
 export const RecipeName = ({recipe}: {recipe: RecipeType}) => {
