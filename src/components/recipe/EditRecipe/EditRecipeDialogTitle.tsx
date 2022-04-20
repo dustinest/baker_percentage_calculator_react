@@ -9,7 +9,7 @@ import {
   Tabs,
   TextField
 } from "@mui/material";
-import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
+import {EditRecipeStateActionTypes} from "../../../State";
 import {useNumberInputValueTracking, useStringInputValueTracking} from "../../../utils/UseValue";
 import "./EditRecipeDialogTitle.css";
 import {
@@ -18,6 +18,7 @@ import {
 import {HorizontalActionStack} from "../../common/CommonStack";
 import {useState, SyntheticEvent, useEffect} from "react";
 import {Translation, useTranslation} from "../../../Translations";
+import {useEditRecipeContext} from "../../../service/RecipeEditService";
 
 const EditAmount = ({recipe}: { recipe: RecipeType }) => {
   const [amount, isSameAmount, setAmount, resetAmount] = useNumberInputValueTracking(recipe.amount);

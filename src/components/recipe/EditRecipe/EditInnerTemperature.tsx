@@ -1,11 +1,12 @@
 import {NumberIntervalType, RecipeType} from "../../../types";
-import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
+import {EditRecipeStateActionTypes} from "../../../State";
 import {Typography} from "@mui/material";
 import {Translation} from "../../../Translations";
 import {useEffect, useState} from "react";
 import {EditNumberInterval} from "./EditNumberInterval";
 import {DeleteIconButton, DoneIconButton} from "../../../Constant/Buttons";
 import {HorizontalActionStack, LabelAwareStack} from "../../common/CommonStack";
+import {useEditRecipeContext} from "../../../service/RecipeEditService";
 
 const DUMMY_INNER_TEMPERATURE = Object.freeze({from: 1, until: 1} as NumberIntervalType) as NumberIntervalType;
 

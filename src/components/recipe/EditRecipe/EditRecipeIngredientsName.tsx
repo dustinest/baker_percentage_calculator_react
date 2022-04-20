@@ -2,9 +2,10 @@ import {RecipeIngredientsType} from "../../../types";
 import {TextField} from "@mui/material";
 import {useTranslation} from "../../../Translations";
 import {useStringInputValueTracking} from "../../../utils/UseValue";
-import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
+import {EditRecipeStateActionTypes} from "../../../State";
 import {DoneIconButton} from "../../../Constant/Buttons";
 import {HorizontalActionStack} from "../../common/CommonStack";
+import {useEditRecipeContext} from "../../../service/RecipeEditService";
 
 type EditRecipeIngredientsNameProps = { ingredients: RecipeIngredientsType; index: number };
 export const EditRecipeIngredientsName = ({ingredients, index}: EditRecipeIngredientsNameProps) => {

@@ -7,7 +7,7 @@ import {
   TableRow
 } from "@mui/material";
 import {useNumberInputValueTracking, useStringInputValueTracking} from "../../../utils/UseValue";
-import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
+import {EditRecipeStateActionTypes} from "../../../State";
 import {useValueTimeoutAsync} from "../../../utils/Async";
 import {Translation} from "../../../Translations";
 import "./EditRecipeIngredients.css";
@@ -18,6 +18,7 @@ import {
 } from "../../../Constant/Ingredient";
 import {AddButton, DeleteButton} from "../../../Constant/Buttons";
 import {HorizontalActionStack} from "../../common/CommonStack";
+import {useEditRecipeContext} from "../../../service/RecipeEditService";
 
 const EditRecipeIngredientTable = ({name, children}: {name: string, children: ReactNode;}) => {
   return (

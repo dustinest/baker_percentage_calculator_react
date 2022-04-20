@@ -7,10 +7,11 @@ import {useEffect, useState, MouseEvent} from "react";
 import {EditRecipeIngredientsName} from "./EditRecipeIngredientsName";
 import {EditRecipeIngredients, EditRecipeRemainingIngredients} from "./EditRecipeIngredients";
 import {ExpandMoreAction} from "../../common/ExpandMoreAction";
-import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
+import {EditRecipeStateActionTypes} from "../../../State";
 import {DeleteIconButton, InfoIconButton} from "../../../Constant/Buttons";
 import {RECIPE_CONSTANTS} from "../../../State/RecipeConstants";
 import {useTranslation} from "../../../Translations";
+import {useEditRecipeContext} from "../../../service/RecipeEditService";
 
 const EnforceStarter = ({ingredients, index}: {ingredients: RecipeIngredientsType, index: number}) => {
   const translate = useTranslation();

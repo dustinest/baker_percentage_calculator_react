@@ -1,12 +1,13 @@
 import {BakingTimeType} from "../../../types";
 import {Checkbox, Divider, Typography} from "@mui/material";
 import {EditNumberInterval} from "./EditNumberInterval";
-import {EditRecipeStateActionTypes, useEditRecipeContext} from "../../../State";
+import {EditRecipeStateActionTypes} from "../../../State";
 import {Translation} from "../../../Translations";
 import {useEffect, useMemo, useState} from "react";
 import {DeleteIconButton, DoneIconButton} from "../../../Constant/Buttons";
 import "./EditBakingTime.css";
 import {HorizontalActionStack, VerticalStack} from "../../common/CommonStack";
+import {useEditRecipeContext} from "../../../service/RecipeEditService";
 
 const DUMMY_BAKING_TIME = Object.freeze({
   time: {from: 1, until: 1},

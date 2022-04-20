@@ -1,6 +1,6 @@
 // noinspection ES6PreferShortImport
 import {RecipesStateActions, RecipesStateActionTypes} from "./RecipesStateActions.d";
-import {copyRecipeType, RecipeType} from "../../types";
+import {RecipeType} from "../../types";
 import {RecipeStateType} from "./RecipesProvider";
 import {isCopyOfRecipe} from "../CopyOfRecipeHelper";
 
@@ -25,7 +25,7 @@ export const updateRecipesReducer = (state: RecipeStateType, action: RecipesStat
                     result.push(e);
                 }
                 if (e.id === copyId) {
-                    result.push(copyRecipeType(action.value));
+                    result.push(action.value);
                     updated = true;
                 }
             })

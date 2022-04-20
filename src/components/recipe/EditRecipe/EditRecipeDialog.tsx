@@ -1,7 +1,5 @@
 import {
   EditRecipeStateActionTypes,
-  useEditRecipeActions,
-  useEditRecipeContext,
 } from "../../../State";
 import {useEffect, useState} from "react";
 import {copyRecipeType, RecipeType} from "../../../types";
@@ -26,10 +24,11 @@ import {TranslatedAddIconButton, TranslatedCancelButton, TranslatedSaveButton} f
 import {useBakerPercentage} from "./useBakerPercentage";
 import {GridContainer, GridItem} from "../../common/GridContainer";
 import {VerticalStack} from "../../common/CommonStack";
+import {useEditRecipeContext, useRecipeEditService} from "../../../service/RecipeEditService";
 
 const RenderRecipeCalculationResult = () => {
-  const [recipe] = useEditRecipeActions();
-  const {hasValue, recipeResult, bakerPercentage} = useBakerPercentage(recipe);
+  const {editedRecipe} = useRecipeEditService();
+  const {hasValue, recipeResult, bakerPercentage} = useBakerPercentage(editedRecipe);
   return (<>
     {!hasValue ? undefined :
       <>
@@ -75,44 +74,31 @@ const checkChange = (recipe: RecipeType | null, newRecipe: RecipeType | null | u
 }
 
 export const EditRecipeDialog = () => {
-  const [recipe, saveRecipe, cancelRecipe] = useEditRecipeActions();
+  const {editedRecipe, editRecipeMethods} =  useRecipeEditService();
   const [data, setData] = useState<{edit: RecipeType, original: RecipeType} | null>();
   const [canSave, setCanSave] = useState<boolean>(false);
 
   useEffect(() => {
-    if (recipe === null) {
+    if (editedRecipe === null) {
       if (data != null) {
         setCanSave(false);
         setData(null);
       }
       return;
     }
-    if (!checkChange(recipe, data?.edit)) {
+    if (!checkChange(editedRecipe, data?.edit)) {
       return;
     }
     setData({
-      edit: copyRecipeType(recipe),
-      original: recipe
+      edit: copyRecipeType(editedRecipe),
+      original: editedRecipe
     });
-    setCanSave(recipe.id !== RECIPE_CONSTANTS.NEW_RECIPE || (
-      hasValue(recipe.name) && recipe.name.trim().length > 0 &&
-      recipe.ingredients.length > 0 && recipe.ingredients[0].ingredients.length > 0
+    setCanSave(editedRecipe.id !== RECIPE_CONSTANTS.NEW_RECIPE || (
+      hasValue(editedRecipe.name) && editedRecipe.name.trim().length > 0 &&
+      editedRecipe.ingredients.length > 0 && editedRecipe.ingredients[0].ingredients.length > 0
     ));
-  }, [recipe, data]);
+  }, [editedRecipe, data]);
 
-  const onSave = () => {
-    if (recipe !== null) {
-      if (recipe.id === RECIPE_CONSTANTS.NEW_RECIPE) {
-        recipe.id = `new_${Date.now() + Math.random()}`;
-      }
-      saveRecipe(recipe);
-    } else {
-      cancelRecipe();
-    }
-  }
-  const onCancel = () => {
-    cancelRecipe();
-  }
   const editRecipeDispatch = useEditRecipeContext();
   const addIngredients = () => {
     editRecipeDispatch({
@@ -126,7 +112,7 @@ export const EditRecipeDialog = () => {
     });
   }
 
-  return (<Dialog open={recipe !== null} fullScreen>
+  return (<Dialog open={editedRecipe !== null} fullScreen>
     {data == null ?
       <DialogContent dividers><RecipeContentLoader loading={true}/></DialogContent> :
       <>
@@ -160,8 +146,8 @@ export const EditRecipeDialog = () => {
           </VerticalStack>
         </DialogContent>
         <DialogActions>
-          <TranslatedCancelButton onClick={onCancel}/>
-          <TranslatedSaveButton onClick={onSave} disabled={!canSave}/>
+          <TranslatedCancelButton onClick={editRecipeMethods.cancel}/>
+          <TranslatedSaveButton onClick={editRecipeMethods.save} disabled={!canSave}/>
         </DialogActions>
       </>
     }

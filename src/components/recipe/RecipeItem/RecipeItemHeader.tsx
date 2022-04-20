@@ -1,15 +1,15 @@
 import {useContext} from "react";
-import {RecipesContext, RecipesStateActionTypes, useSetEditRecipe} from "../../../State";
-import {RECIPE_CONSTANTS} from "../../../State/RecipeConstants";
-import {RecipeType, RecipeTypeCopy} from "../../../types";
+import {RecipesContext, RecipesStateActionTypes} from "../../../State";
+import {RecipeType} from "../../../types";
 import {CardHeader, ListItemIcon, ListItemText, MenuItem} from "@mui/material";
 import {RecipeName} from "../../common/RecipeName";
 import {CopyOfIcon, DeleteIcon, EditIcon} from "../../../Constant/Icons";
 import {Translation} from "../../../Translations";
 import {CommonMenuButton} from "../../common/CommonMenu";
+import {useRecipeEditService} from "../../../service/RecipeEditService";
 
 const RecipeItemHeaderList = ({recipe}: {recipe: RecipeType}) => {
-  const setEditRecipe = useSetEditRecipe();
+  const {editRecipeMethods} =  useRecipeEditService();
   const {recipesDispatch} = useContext(RecipesContext);
   const onDeleteRecipe = () => {
     recipesDispatch({
@@ -18,11 +18,11 @@ const RecipeItemHeaderList = ({recipe}: {recipe: RecipeType}) => {
     });
   }
   const onEditRecipe = () => {
-    setEditRecipe(recipe);
+    editRecipeMethods.edit(recipe);
   }
 
   const copyRecipe = () => {
-    setEditRecipe({...recipe, ...{id: RECIPE_CONSTANTS.NEW_RECIPE, copyId: recipe.id}} as RecipeTypeCopy);
+    editRecipeMethods.editCopy(recipe);
   }
 
   return (
