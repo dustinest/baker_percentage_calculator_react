@@ -4,21 +4,21 @@ import {Main} from "./components/Main";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-import en from './data/locales/en.json'
-import et from './data/locales/et.json'
+import ee from './static/locales/ee.json'
+import gb from './static/locales/gb.json'
 
 i18n.use(initReactI18next)
     .init({
         resources: {
-          en: {
-            translation: en
+          gb: {
+            translation: gb
           },
-          et: {
-            translation: et
+          ee: {
+            translation: ee
           }
         },
-        lng: "et",
-        fallbackLng: ["en", "et"],
+        lng: "ee",
+        fallbackLng: ["gb", "ee"],
         interpolation: {
             escapeValue: false // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
         }

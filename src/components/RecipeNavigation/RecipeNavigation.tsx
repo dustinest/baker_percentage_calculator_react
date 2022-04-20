@@ -1,17 +1,20 @@
 import './RecipeNavigation.css';
 import {
-  List,
-  Typography,
-  ListItem,
-  ButtonGroup,
-  Box,
-  Divider,
-  CssBaseline,
-  Toolbar,
-  Drawer,
-  styled,
   Badge,
-  ListItemText, ListItemButton, ListItemIcon, MenuItem
+  Box,
+  ButtonGroup,
+  CssBaseline,
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  MenuItem,
+  styled,
+  Toolbar,
+  Typography
 } from "@mui/material";
 
 import {ReactNode, useState} from "react";
@@ -21,8 +24,7 @@ import {
   CheckAllButton,
   ClearAllButton,
   DoneButton,
-  MenuIconButton, TranslatedLanguageIconButton,
-  TranslatedPrintIconButton
+  MenuIconButton
 } from "../../Constant/Buttons";
 import {RecipeType} from "../../types";
 import {DrawerHeader} from "./wrapper/DrawerHeader";
@@ -30,10 +32,11 @@ import {NavigationAppBar} from "./wrapper/NavigationAppBar";
 import {MainNavigationMainContainer} from "./wrapper/MainNavigationMainContainer";
 import {useRecipeMenuState} from "./useRecipeMenuState";
 import {useElementClientHeight} from "../common/useElementClientHeight";
-import {CheckedIcon, UnCheckedIcon} from "../../Constant/Icons";
+import {CheckedIcon, PrintIcon, UnCheckedIcon} from "../../Constant/Icons";
 import i18next from "i18next";
 import {CommonMenuButton} from "../common/CommonMenu";
 import {useMessageSnackBar} from "../../State";
+import {FLAGS} from "../../static/lib";
 
 const NAVIGATION_WIDTH = 260;
 
@@ -65,17 +68,9 @@ const RecipesList = styled('div')<{top: number}>(({  top }) => ({
 
 export const RecipeNavigation = ({children, onPrint}: {onPrint: () => void, children: ReactNode}) => {
   const [recipes, actions, recipeStatus] = useRecipeMenuState();
-
   const [isOpen, setIsOpen] = useState(false);
-
   const handleDrawerOpen = () => setIsOpen(true);
-  /*
-  const handleDrawerCancel = () => {
-    actions.cancel();
-    setIsOpen(false);
-  };
-  */
-
+  const snackBar = useMessageSnackBar();
 
   const handleDrawerClose = () => {
     setIsOpen(false);
@@ -85,7 +80,6 @@ export const RecipeNavigation = ({children, onPrint}: {onPrint: () => void, chil
   const [menuHeight, setMenuElement] = useElementClientHeight();
   const [contentHeight, setHeaderElement] = useElementClientHeight();
 
-  const snackBar = useMessageSnackBar();
   const onLangaugeChange = (language: string) => {
     i18next.changeLanguage(language, (error) => {
       if (error) snackBar.error(error).enqueue();
@@ -111,10 +105,17 @@ export const RecipeNavigation = ({children, onPrint}: {onPrint: () => void, chil
           {isOpen ? undefined :
             <>
               <CommonMenuButton>
-                { i18next.languages.map((lang) =>
-                  <MenuItem key={lang}  selected={lang === i18next.language}><TranslatedLanguageIconButton onClick={() => onLangaugeChange(lang)} translation={`language.${lang}`}/></MenuItem>
+                { FLAGS.map(({key, label, value}) =>
+                  <MenuItem key={key}  selected={key === i18next.language}  onClick={() => onLangaugeChange(key)}>
+                    <ListItemIcon><img src={value} width={20} alt={label}/></ListItemIcon>
+                    <ListItemText>{label}</ListItemText>
+                  </MenuItem>
                 )}
-                <MenuItem><TranslatedPrintIconButton onClick={onPrint}/></MenuItem>
+                <Divider variant="middle" />
+                <MenuItem onClick={onPrint}>
+                  <ListItemIcon><PrintIcon/></ListItemIcon>
+                  <ListItemText><Translation label="actions.print"/></ListItemText>
+                </MenuItem>
               </CommonMenuButton>
             </>
           }
