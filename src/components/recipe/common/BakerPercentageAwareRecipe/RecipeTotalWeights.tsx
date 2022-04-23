@@ -26,7 +26,7 @@ const RenderPortionItem = ({amount, portion}: {amount: number, portion: RecipePo
 const RenderTotalAmount = ({portions, label, amount}: { portions: RecipePortion[], label: string, amount:number }) => {
   return (<>
       <HorizontalActionStack justifyContent="center" alignItems="baseline"
-                             spacing={0.5}>
+                             spacing={0}>
         <ItemText><Translation label={label}/></ItemText>
         <HorizontalActionStack justifyContent="center" alignItems="baseline"
                                divider={<Divider orientation="vertical" flexItem/>}
@@ -76,6 +76,7 @@ export const RecipeGrandTotal = ({recipe}: { recipe: BakerPercentageAwareRecipe 
 
     return result;
   }, [recipe.totalWeight, recipe.amount, recipe.bakerPercentage]);
+
   if (hasValue(values.grand_total) && values.totals.length > 0 && values.horizontalValues > 1) {
     return (
       <Table>
@@ -85,28 +86,18 @@ export const RecipeGrandTotal = ({recipe}: { recipe: BakerPercentageAwareRecipe 
         </TableBody>
       </Table>
     )
-  } else if (hasValue(values.grand_total) && values.totals.length > 0) {
+  } else {
       return (<VerticalStack
           divider={<Divider orientation="horizontal" flexItem/>}
-          spacing={1}
+          spacing={0.5}
         >
-          <HorizontalActionStack justifyContent="center" alignItems="baseline"
-                                 divider={<Divider orientation="vertical" flexItem/>}
-                                 spacing={1}>
+        {values.totals.length > 0 ?
+          <HorizontalActionStack justifyContent="center" alignItems="baseline" divider={<Divider orientation="vertical" flexItem/>} spacing={0.5}>
             {values.totals.map(({id, ...others}) => <RenderTotalAmount key={id} {...others} amount={recipe.amount}/>)}
           </HorizontalActionStack>
-          <RenderTotalAmount {...values.grand_total} amount={recipe.amount}/>
+          : undefined }
+        {values.grand_total ? <RenderTotalAmount {...values.grand_total} amount={recipe.amount}/> : undefined }
         </VerticalStack>
       )
-  } else if (values.horizontalValues > 0 && hasValue(values.grand_total)) {
-    return (<RenderTotalAmount {...values.grand_total} amount={recipe.amount}/>);
-  } else if (values.totals.length > 0) {
-    return (<VerticalStack justifyContent="center" alignItems="baseline"
-                                   divider={<Divider orientation="vertical" flexItem/>}
-                                   spacing={1.5}>
-      {values.totals.map(({id, ...others}) => <RenderTotalAmount key={id} {...others} amount={recipe.amount}/>)}
-    </VerticalStack>);
-  } else {
-    return <></>
   }
 }
