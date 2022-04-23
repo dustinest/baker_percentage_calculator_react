@@ -48,12 +48,7 @@
   "totals": {
     "total": "Kokku",
     "dought": "Tainas",
-    "other": "Teised",
-
-    "total_weight": "Kokku: {{count}} g",
-    "total_weight_others": "Teised",
-    "total_weight_name": "{{name}}: {{count}} g",
-    "total_weight_item": "1 / {{divider}} = {{amount}} g"
+    "other": "Teised"
   },
   "ingredient": {
     "sourdough_starter": {
@@ -138,5 +133,6 @@
     "Plaadikook": "Plaadikook",
     "Pikk sai": "Pikk sai",
     "Moskva saiakesed": "Moskva saiakesed"
-  }
+  },
+  "Kihistamiseks": "Kihistamiseks"
 }
