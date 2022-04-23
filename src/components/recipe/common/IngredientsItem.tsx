@@ -1,5 +1,5 @@
 import {RenderBakingTimeAware} from "./RenderBakingTimeAware";
-import {IngredientWithPercentType, RecipeIngredientsWithPercentType} from "../../../utils/BakerPercentageCalulation";
+import {IngredientWithPercentType, RecipeIngredientsWithPercentType} from "../../../service/BakerPercentage";
 import {Container, Table, TableBody} from "@mui/material";
 import {RTableHead, RTableRow} from "../../common/RTable";
 import {NutritionType, RecipeType} from "../../../types/index";

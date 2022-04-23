@@ -11,11 +11,9 @@ const ExtraStandardIngredients: ExtraStandardIngredient = Object.freeze({
 
 type ExtraStandardIngredientMethodsType = { [Property in keyof ExtraStandardIngredient]: (id: string, name: string, grams: number, nutrients?: NutrientPercentType[]) => IngredientGramsType };
 
-// @ts-ignore
 export const ExtraStandardIngredientMethods: ExtraStandardIngredientMethodsType = Object.freeze(
   Object.entries(ExtraStandardIngredients).reduce((obj, [key, value]) => {
-    // @ts-ignore
-    obj[key] = (id: string, name: string, grams: number, nutrients?: NutrientPercentType[]) => getCustomIngredient(
+    obj[key as keyof ExtraStandardIngredient] = (id: string, name: string, grams: number, nutrients?: NutrientPercentType[]) => getCustomIngredient(
       id, name, grams, nutrients ? [...value.nutrients, ...nutrients] : value.nutrients, key
     );
     return obj;

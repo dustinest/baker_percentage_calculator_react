@@ -1,16 +1,30 @@
 import {RecipeType} from "../../../../types";
 import {recalculateRecipeBakerPercentage} from "../RecipeItemEditService";
 // noinspection ES6PreferShortImport
-import {BakerPercentageAwareRecipe} from "./BakerPercentageAwareRecipe.d";
+import {BakerPercentageAwareRecipe, TotalWeights} from "./BakerPercentageAwareRecipe.d";
+import {BakerPercentageResult} from "../../../../service/BakerPercentage";
 
-const calculateTotalWeight = async (recipe: RecipeType): Promise<number> => {
-  return recipe.ingredients.flatMap((ingredients) => ingredients.ingredients).map((ingredient) => ingredient.grams).reduce((total, value) => total + value, 0);
+const calculateTotalWeights = async (bakerPercentage: BakerPercentageResult): Promise<TotalWeights> => {
+  return bakerPercentage.ingredients.reduce((result, ingredients, index) => {
+    const total = ingredients.ingredients.map(e => e.grams).reduce((total, grams) => total + grams, 0);
+    if (index <= 1) {
+      result.dough += total;
+    } else {
+      result.others += total;
+    }
+    result.total += total;
+    return result;
+  }, {dough: 0, others: 0, total: 0} as TotalWeights);
 }
+
 export const getBakerPercentageAwareRecipe = async (recipe: RecipeType): Promise<BakerPercentageAwareRecipe> => {
   const bakerPercentage = await recalculateRecipeBakerPercentage(recipe);
-  const totalWeight = await calculateTotalWeight(recipe);
+  const totalWeight = await calculateTotalWeights(bakerPercentage);
   return {
     ...recipe,
-    ...{bakerPercentage, totalWeight}
+    ...{
+      bakerPercentage,
+      totalWeight
+    }
   } as BakerPercentageAwareRecipe
 }

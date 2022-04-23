@@ -1,5 +1,5 @@
 import {RecipeType} from "../../../types";
-import {BakerPercentageResult} from "../../../utils/BakerPercentageCalulation";
+import {BakerPercentageResult} from "../../../service/BakerPercentage";
 import {useEffect, useState} from "react";
 import {AsyncStatus, useAsyncEffect} from "../../../utils/Async";
 import {hasValue} from "../../../utils/NullSafe";

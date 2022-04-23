@@ -41,11 +41,11 @@
   "ingredients": {
     "title": {
       "baker_percentage": "Baker's percentage",
-      "day_one": "First day",
-      "day_two": "Second day",
       "dough": "Dough",
       "sourdough_starter_dough": "Pre-dough",
-      "total_weight": "Total weight: {{count}} g",
+      "total_weight": "Total: {{count}} g",
+      "total_weight_others": "Others",
+      "total_weight_name": "{{name}}: {{count}} g",
       "total_weight_item": "1 / {{divider}} = {{amount}} g"
     }
   },

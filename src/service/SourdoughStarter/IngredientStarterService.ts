@@ -7,6 +7,7 @@ import {
 } from "../../types";
 import {calculateSourDoughStarter, StarterIngredients} from "./SourDoughStarterCalculator";
 import {SORT_INGREDIENTS} from "./IngredientsSort";
+import {hasValue} from "../../utils/NullSafe";
 
 const remapIngredient = (ingredient: IngredientGramsType, grams?: number): IngredientGramsType =>
   copyIngredientGramsType(grams !== undefined ? {...ingredient, ...{grams: grams}} : ingredient);
@@ -33,7 +34,8 @@ const calculate = (container: IngredientGramsType[], starterIngredients: Ingredi
 };
 
 export const splitStarterAndDough = async (recipeIngredients: RecipeIngredientsType[]): Promise<RecipeIngredientsType[]> => {
-    const dryAndLiquid = await calculateSourDoughStarter(recipeIngredients);
+    if (recipeIngredients.length === 0) return [];
+    const dryAndLiquid = await calculateSourDoughStarter(recipeIngredients[0]);
     if (dryAndLiquid === null) return [];
 
     const starterIngredients: IngredientGramsType[] = [
@@ -59,9 +61,8 @@ export const splitStarterAndDough = async (recipeIngredients: RecipeIngredientsT
         dryAndLiquid.ingredients.other.forEach((e) => {
             if (Math.floor(e.grams) > 0) nonStarter.push(remapIngredient(e));
         })
-        if (dryAndLiquid.starter.flour.isFixed) { // check the pancakes
+        if (ingredients.starter) { //all ingredients belong to the starter
             const toAdd: IngredientGramsType[] = starterIngredients.filter((e) => !nonStarter.find(o => o.id === e.id));
-            // @ts-ignore
             const _others: IngredientGramsType[] = ingredients.ingredients.map((o) => {
                 const _toAdd = toAdd.find(e => e.id === o.id);
                 if (_toAdd) {
@@ -71,10 +72,10 @@ export const splitStarterAndDough = async (recipeIngredients: RecipeIngredientsT
                 const item = starterIngredients.find(e => e.id === o.id);
                 if (!item) return remapIngredient(o);
                 return remapIngredient(o, o.grams - dryAndLiquid?.starter.flour.fridge);
-            }).filter((o) => o !== undefined && o !== null);
+            }).filter(hasValue);
 
             result.push(copyRecipeIngredientsType({
-                name: ingredients.name || "ingredients.title.dough",
+                name: ingredients.name || "ingredients.title.sourdough_starter_dough",
                 ingredients: _others.length > 0 ? [...toAdd, ..._others] : [...toAdd],
                 bakingTime: [],
                 innerTemperature: null,

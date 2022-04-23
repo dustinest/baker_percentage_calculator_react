@@ -11,6 +11,7 @@ import {
   PercentAmountType
 } from "../../../types";
 import {
+  ExtraStandardIngredient,
   ExtraStandardIngredientMethods,
   getStandardIngredientMethodsGrams,
 } from "../../../Constant/Ingredient";
@@ -40,8 +41,7 @@ const resolveValue = <T>(value: T | undefined | null, defaultValue: T): HasValue
 
 const resolveIngredientByType = (resultTest: ResolveTestType, ingredient: JsonRecipeIngredientsIngredientType): IngredientGramsType | null => {
   if (!resultTest.type.has) return null;
-  // @ts-ignore
-  const extraMethod = ExtraStandardIngredientMethods[resultTest.type.value];
+  const extraMethod = ExtraStandardIngredientMethods[resultTest.type.value as keyof ExtraStandardIngredient];
   if (extraMethod !== undefined) {
     if (!resultTest.name.has) throw new Error(`.name property for type ${resultTest.name.value} must be defined!`);
     const id = resolveJsonExtraStandardIngredient(ingredient as JsonExtraStandardIngredientType, resultTest.grams.value);
@@ -67,7 +67,6 @@ export const resolveIngredient = (ingredient: JsonRecipeIngredientsIngredientTyp
   if (resultTest.type.has) {
     const result = resolveIngredientByType(resultTest, ingredient);
     if (result !== null) return [result, resultTest];
-    // @ts-ignore
   }
   return [{
     id: resultTest.id.value,

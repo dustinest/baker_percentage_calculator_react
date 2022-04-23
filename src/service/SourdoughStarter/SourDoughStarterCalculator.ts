@@ -10,8 +10,7 @@ const calculateStarterFlour = (amount: number) => {
 
 export interface StarterIngredients {
     fridge: number,
-    amount: number,
-    isFixed: boolean
+    amount: number
 }
 
 export type StarterCalculationResult = {
@@ -26,9 +25,8 @@ export type StarterCalculationResult = {
     },
 };
 
-export const calculateSourDoughStarter = async (ingredients: RecipeIngredientsType[]): Promise<StarterCalculationResult | null> => {
-    if (ingredients.length === 0) return null;
-    const dryAndLiquidResult = await calculateDryAndLiquid(ingredients[0].ingredients.map(copyIngredientGramsType));
+export const calculateSourDoughStarter = async (ingredients: RecipeIngredientsType): Promise<StarterCalculationResult> => {
+    const dryAndLiquidResult = await calculateDryAndLiquid(ingredients.ingredients.map(copyIngredientGramsType));
     const flour = Math.floor(dryAndLiquidResult.totals.flour);
     const water = Math.floor(dryAndLiquidResult.totals.water);
     const liquid = Math.floor(dryAndLiquidResult.totals.liquid);
@@ -37,12 +35,10 @@ export const calculateSourDoughStarter = async (ingredients: RecipeIngredientsTy
     const result: StarterCalculationResult = {
         starter: {
             flour: {
-                isFixed: ingredients[0].starter === true,
                 fridge: flourFromFridge,
                 amount: 0
             },
             liquid: {
-                isFixed: ingredients[0].starter === true,
                 fridge: flourFromFridge,
                 amount: 0
             }
@@ -65,7 +61,7 @@ export const calculateSourDoughStarter = async (ingredients: RecipeIngredientsTy
 
     result.starter.liquid.amount = result.starter.flour.amount;
 
-    if (dryAndLiquidResult.ingredients.flour.find((flourIngredeint) => flourIngredeint.nutrients.find((nutrient) => nutrient.type === NutritionType.whole_grain) !== undefined) !== undefined) {
+    if (dryAndLiquidResult.ingredients.flour.find((flour) => flour.nutrients.find((nutrient) => nutrient.type === NutritionType.whole_grain) !== undefined) !== undefined) {
         // when the flour is whole grain
         result.starter.flour.amount = Math.floor(flour * 50 / 100);
         result.starter.liquid.amount = Math.floor(liquid * 62 / 100);

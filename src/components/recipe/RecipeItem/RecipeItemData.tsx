@@ -1,36 +1,8 @@
 import {RenderBakingTimeAware} from "../common/RenderBakingTimeAware";
 import {Container, Divider} from "@mui/material";
 import {BakerPercentage} from "../common/BakerPercentage";
-import {ItemText} from "../common/ItemText";
-import {Translation} from "../../../Translations";
 import {HorizontalActionStack, VerticalStack} from "../../common/CommonStack";
-import {BakerPercentageAwareRecipe} from "../common/BakerPercentageAwareRecipe";
-
-const roundToTen = (amount: number): number => {
-  if (amount === 0) return amount;
-  return Math.round(amount * 10) / 10;
-}
-
-export const TotalWeight = ({total, amount}: {total: number, amount: number}) => {
-  const weight = roundToTen(total);
-  const oneWeight = amount > 1 ? roundToTen(total / amount): 0;
-  return (
-    <>
-      {
-        weight <= 0 ? undefined :
-          <HorizontalActionStack
-            justifyContent="center"
-            alignItems="baseline"
-            divider={<Divider orientation="vertical" flexItem />}
-            spacing={1.5}
-          >
-            <ItemText className="totals"><Translation label="ingredients.title.total_weight" count={weight}/></ItemText>
-            {oneWeight > 0 ? <ItemText className="totals"><Translation label="ingredients.title.total_weight_item" divider={amount} amount={oneWeight}/></ItemText> : undefined}
-          </HorizontalActionStack>
-      }
-    </>
-  )
-}
+import {BakerPercentageAwareRecipe, RecipeGrandTotal} from "../common/BakerPercentageAwareRecipe";
 
 const BakerPercentageContainer = ({recipe}: RecipeItemDataProps) => {
   return (<>
@@ -55,7 +27,7 @@ const RecipeItemDataPrint  = ({recipe}: RecipeItemDataProps) => {
              spacing={2}
       >
         <RenderBakingTimeAware value={recipe}/>
-        <TotalWeight total={recipe.totalWeight} amount={recipe.amount}/>
+        <RecipeGrandTotal recipe={recipe}/>
       </VerticalStack>
     </HorizontalActionStack>
   </>);
@@ -64,7 +36,7 @@ const RecipeItemDataList  = ({recipe}: RecipeItemDataProps) => {
   return (<>
     <RenderBakingTimeAware value={recipe}/>
     <BakerPercentageContainer recipe={recipe}/>
-    <TotalWeight total={recipe.totalWeight} amount={recipe.amount}/>
+    <RecipeGrandTotal recipe={recipe}/>
   </>);
 }
 

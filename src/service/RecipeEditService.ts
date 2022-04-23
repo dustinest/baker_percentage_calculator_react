@@ -6,10 +6,11 @@ import {
   RecipesStateActionTypes,
   UpdateRecipesAction
 } from "../State";
-import {copyRecipeType, RecipeType, RecipeTypeCopy} from "../types";
+import {RecipeType, RecipeTypeCopy} from "../types";
 import {RECIPE_CONSTANTS} from "../State/RecipeConstants";
 import {getBakerPercentageAwareRecipe} from "../components/recipe/common/BakerPercentageAwareRecipe";
 import {hasValue} from "../utils/NullSafe";
+import {copyCopyOfAwareRecipe} from "../State/CopyOfRecipeHelper";
 
 interface RecipeEditMethods {
   edit: (recipe: RecipeType) => void;
@@ -30,9 +31,9 @@ export const useRecipeEditService = (): {editedRecipe: RecipeType | null, editRe
 
   const getRecipeToSave = (recipe: RecipeType) => {
     if (recipe.id === RECIPE_CONSTANTS.NEW_RECIPE) {
-      return copyRecipeType({...recipe, ...{id: `new_${Date.now() + Math.random()}`}});
+      return copyCopyOfAwareRecipe({...recipe, ...{id: `new_${Date.now() + Math.random()}`}});
     }
-    return copyRecipeType(recipe);
+    return copyCopyOfAwareRecipe(recipe);
   }
 
   const doEditRecipe = (recipe: RecipeType) => {

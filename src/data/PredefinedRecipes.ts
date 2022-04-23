@@ -89,7 +89,6 @@ export const PREDEFINED_RECIPES = [
         name: "Pannkook",
         ingredients: [
             {
-                name: "ingredients.title.day_one",
                 starter: true,
                 ingredients: [
                     { type: "WHEAT_405_FLOUR", grams: 362 },
@@ -99,7 +98,6 @@ export const PREDEFINED_RECIPES = [
 
             },
             {
-                name: "ingredients.title.day_two",
                 ingredients: [
                     { type: "BUTTER", grams: 50 },
                     { type: "SALT", grams: 7.5 },

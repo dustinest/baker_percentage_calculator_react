@@ -13,10 +13,11 @@ import {
     JsonRecipeIngredientsIngredientType,
     JsonRecipeIngredientsType,
     JsonRecipeType,
-    JsonStandardIngredientTypeGramsType
+    JsonStandardIngredientTypeGramsType, JsonStandardIngredientTypePercentType
 } from "../types";
 import {resolveJsonExtraStandardIngredient, resolveJsonRecipeTypeId} from "./JsonRecepyIdGenerator";
 import {StandardIngredients} from "../../../Constant/Ingredient";
+import {FindHighestDryResult, findHighestDryResult} from "./IngredientsHighestDryResult";
 
 const normalizeNumberIntervalType = (time: NumberIntervalType): NumberIntervalType | number  => {
     if (time.from === time.until) return time.from;
@@ -37,11 +38,21 @@ const recipeTypeBakingTime2JsonBakingTime = (bakingTime: BakingTimeType): JsonBa
     return result;
 }
 
+const getPercentage = (ingredient: IngredientGramsType, highestDry: FindHighestDryResult) => {
+    return Math.round(ingredient.grams * 10000 / highestDry.total) / 100;
+}
 
-const normalizeIngredient = (ingredient: IngredientGramsType): JsonRecipeIngredientsIngredientType => {
+const normalizeIngredient = (ingredient: IngredientGramsType, highestDry: FindHighestDryResult | null): JsonRecipeIngredientsIngredientType => {
     // @ts-ignore
     const type = ingredient.type ? StandardIngredients[ingredient.type] : undefined;
     if (type) {
+        if (highestDry) {
+            return {
+                type: ingredient.type,
+                percent: getPercentage(ingredient, highestDry)
+            } as JsonStandardIngredientTypePercentType;
+        }
+        console.log("WAATAAFAAAK");
         return {
             type: ingredient.type,
             grams: ingredient.grams
@@ -50,30 +61,34 @@ const normalizeIngredient = (ingredient: IngredientGramsType): JsonRecipeIngredi
         resolveJsonExtraStandardIngredient(
           { type: "DRY", name: ingredient.name } as JsonExtraStandardIngredientType,
           ingredient.grams) === ingredient.id) {
-        console.log("GOTCHA!");
+
         const nutrients = ingredient.nutrients.filter(e => e.type !== NutritionType.dry);
-        const result = {
+        if (nutrients && nutrients.length > 0) {
+            return {
+                type: "DRY",
+                name: ingredient.name,
+                grams: ingredient.grams,
+                nutrients
+            } as IngredientGramsType;
+        }
+        return {
             type: "DRY",
             name: ingredient.name,
             grams: ingredient.grams
         } as JsonExtraStandardIngredientGrams;
-        if (nutrients && nutrients.length > 0) {
-            // @ts-ignore
-            result.nutrients = nutrients;
-        }
-        return result;
     } else {
-        console.log("GOTCHA!");
         return {
             ...ingredient
         } as IngredientGramsType
     }
 };
 
-const normalizeIngredients = (ingredients: RecipeIngredientsType): JsonRecipeIngredientsType => {
+const normalizeIngredients = (ingredients: RecipeIngredientsType, ingredientsIndex: number, highestDry: FindHighestDryResult | null): JsonRecipeIngredientsType => {
     //const id = generateJsonRecipeTypeId(recipe.name, recipe.amount);
     const result = {
-        ingredients: ingredients.ingredients.map(normalizeIngredient)
+        ingredients: ingredients.ingredients.map((ingredient, index) => normalizeIngredient(
+          ingredient, highestDry !== null && (highestDry.ingredients !== ingredientsIndex || highestDry.ingredient !== index) ? highestDry : null
+        ))
     } as JsonRecipeIngredientsType;
 
     if (ingredients.name) { result.name = ingredients.name; }
@@ -85,9 +100,11 @@ const normalizeIngredients = (ingredients: RecipeIngredientsType): JsonRecipeIng
 }
 
 export const recipeType2RecipeJson = async (recipe: RecipeType):Promise<JsonRecipeType> => {
+    const highestDry = await findHighestDryResult(recipe.ingredients);
+
     const result: JsonRecipeType = {
         name: recipe.name,
-        ingredients: recipe.ingredients.map(normalizeIngredients)
+        ingredients: recipe.ingredients.map((ingredients, index) => normalizeIngredients( ingredients, index, highestDry ))
     };
     if (recipe.amount > 0) { result.amount = recipe.amount; }
     const id = resolveJsonRecipeTypeId(result);

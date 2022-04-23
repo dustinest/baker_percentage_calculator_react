@@ -1,5 +1,9 @@
 import {NutritionType} from "../../types/NutritionType";
-import {StandardIngredientMethods, StandardIngredients} from "./StandardIngredientConstant";
+import {
+  getStandardIngredientMethodsGrams,
+  StandardIngredientMethods,
+  StandardIngredients
+} from "./StandardIngredientConstant";
 
 describe("INGREDIENT_CONSTANT are defined", () => {
   //console.log(StandardIngredientMethods);
@@ -51,3 +55,22 @@ describe("PREDEFINED_INGREDIENT are defined", () => {
     expect(butter.grams).toBe(321);
   });
 });
+
+describe("getStandardIngredientMethodsGrams works", () => {
+  it ("Salt is OK", () => {
+    const salt = getStandardIngredientMethodsGrams("SALT", 123);
+    expect(salt?.id).toBe("SALT_salt.generic");
+    expect(salt?.name).toBe("ingredient.predefined.salt.generic");
+    expect(salt?.nutrients.length).toBe(1);
+    expect(salt?.nutrients[0].type).toBe(NutritionType.salt);
+    expect(salt?.nutrients[0].percent).toBe(100);
+    expect(salt?.grams).toBe(123);
+  });
+
+  it ("Salt is not found", () => {
+    const salt = getStandardIngredientMethodsGrams("salt", 123);
+    expect(salt).toBeUndefined();
+  });
+});
+
+

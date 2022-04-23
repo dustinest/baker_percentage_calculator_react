@@ -5,11 +5,11 @@ export const useTranslation = () => {
   const translate = translationProvider();
   return (label: string, ...args: (string | number | undefined | null)[]): string => {
     const props: { [key: string]: number | string } = {};
-    for (let i = 0; i < args.length; i+=1) {
+    for (let i = 0; i < args.length; i+=2) {
       const key = args[i];
       const value = args[i+1];
       if (!hasValue(key) || typeof key !== "string") {
-        throw new Error("The type of key must be string!");
+        throw new Error(`The type of key at ${i} must be string!`);
       }
       if (hasValue(value)) {
         props[key] = value;

@@ -6,7 +6,7 @@ import {newBlockingPromiseQueue} from "../../../utils/BlockingQueue";
 import {
   BakerPercentageResult,
   recalculateBakerPercentage
-} from "../../../utils/BakerPercentageCalulation";
+} from "../../../service/BakerPercentage";
 import {splitStarterAndDough} from "../../../service/SourdoughStarter";
 
 export const blockAndRunRecipeLater = (() => {
@@ -20,8 +20,4 @@ const recalculatePercentage = async (ingredients: RecipeIngredientsType[]): Prom
 
 export const recalculateRecipeBakerPercentage = async (recipe: RecipeType): Promise<BakerPercentageResult> => {
   return blockAndRunRecipeLater(recipe,(e) => splitStarterAndDough(e.ingredients)).then(recalculatePercentage);
-}
-
-export const recalculateIngredients = async (recipe: RecipeType): Promise<BakerPercentageResult> => {
-  return recalculatePercentage(recipe.ingredients);
 }

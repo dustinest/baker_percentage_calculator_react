@@ -41,13 +41,19 @@
   "ingredients": {
     "title": {
       "baker_percentage": "Pagari protsent",
-      "day_one": "Esimene päev",
-      "day_two": "Teine päev",
       "dough": "Taigen",
-      "sourdough_starter_dough": "Eeltaigen",
-      "total_weight": "Kokku: {{count}} g",
-      "total_weight_item": "1 / {{divider}} = {{amount}} g"
+      "sourdough_starter_dough": "Eeltaigen"
     }
+  },
+  "totals": {
+    "total": "Kokku",
+    "dought": "Tainas",
+    "other": "Teised",
+
+    "total_weight": "Kokku: {{count}} g",
+    "total_weight_others": "Teised",
+    "total_weight_name": "{{name}}: {{count}} g",
+    "total_weight_item": "1 / {{divider}} = {{amount}} g"
   },
   "ingredient": {
     "sourdough_starter": {

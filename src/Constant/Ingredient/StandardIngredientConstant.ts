@@ -84,18 +84,15 @@ export const StandardIngredients: { [Property in keyof StandardIngredient]: Ingr
 type StandardIngredientMethodsType = { [Property in keyof StandardIngredient]: (grams: number) => IngredientGramsType };
 
 
-// @ts-ignore
-export const StandardIngredientMethods: Readonly<StandardIngredientMethodsType> = Object.freeze(
+export const StandardIngredientMethods: StandardIngredientMethodsType = Object.freeze(
   Object.entries(StandardIngredients).reduce((obj, [key, value]) => {
     const id = `${key}_${value.id}`;
-    // @ts-ignore
-    obj[key] = (grams: number) => copyIngredientGramsType({...value, ...{grams}, ...{type: key, id: id}})
+    obj[key as keyof StandardIngredient] = (grams: number) => copyIngredientGramsType({...value, ...{grams}, ...{type: key, id: id}})
     return obj;
-  }, {}));
+  }, {} as StandardIngredientMethodsType)) as StandardIngredientMethodsType;
 
 export const getStandardIngredientMethodsGrams = (key: string, grams: number): IngredientGramsType | undefined => {
-  // @ts-ignore
-  const standardMethod = StandardIngredientMethods[key];
+  const standardMethod = StandardIngredientMethods[key as keyof StandardIngredient];
   if (!standardMethod) return undefined;
   return standardMethod(grams);
 }
