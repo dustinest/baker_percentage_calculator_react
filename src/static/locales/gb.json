@@ -9,7 +9,7 @@
     "copyOf": "Copy",
     "enforce_starter": {
       "button": "Use all in pre-dough",
-      "legend": "All flour and liquid is used in pre-dough calculation"
+      "legend": "As the pre-dough algorithm tries to find specific amount but you would like to use all ingredients in it then it might need help to indicate that everything in this list belongs to the pre-dough."
     },
     "description": {
       "generic": "Description"

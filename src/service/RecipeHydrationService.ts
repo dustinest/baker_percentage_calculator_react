@@ -1,5 +1,5 @@
 import {DRY_NUTRIENTS, IngredientGramsType, NutritionType} from "../types";
-type RecipeHydration = {
+export type RecipeHydration = {
   dry: number,
   water: number,
   hydration: number

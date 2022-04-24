@@ -5,7 +5,7 @@
     "hydration": "Vedelik",
     "enforce_starter": {
       "button": "Kõik on eeltaigen",
-      "legend": "Kogu jahu ja vedelikku kasutatakse juuretise arvutamisel. Seda on vaja juhul, kui soovid vedelamat eeltainast"
+      "legend": "Kuna vaikimisi püütakse leida retseptist vajalik kogus vedelikku, siis mõningatel juhtudel on vaja algoritmi aidata ning öelda, et kõik, mis siin retseptis on, kuulub eeltaignasse."
     },
     "edit": "Muuda",
     "delete": "Kustuta",

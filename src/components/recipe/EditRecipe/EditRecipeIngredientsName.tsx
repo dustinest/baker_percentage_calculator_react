@@ -1,6 +1,6 @@
 import {RecipeIngredientsType} from "../../../types";
 import {ButtonGroup, Input} from "@mui/material";
-import {useTranslation} from "../../../Translations";
+import {Translation, useTranslation} from "../../../Translations";
 import {useStringInputValueTracking} from "../../../utils/UseValue";
 import {EditRecipeStateActionTypes} from "../../../State";
 import {DoneButton} from "../../../Constant/Buttons";
@@ -21,7 +21,7 @@ export const EditRecipeIngredientsName = ({ingredients, index}: EditRecipeIngred
     resetName(name);
   }
 
-  return (<>{index === 0 ? undefined :
+  return (<>{index === 0 ? <Translation label="ingredients.title.dough"/> :
     <LabelAwareStack justifyContent="center">
       <Input type="string"
              sx={{width: "20ch"}}
