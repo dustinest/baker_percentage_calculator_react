@@ -70,7 +70,7 @@ export const readJsonRecipe = (recipe: JsonRecipeType): RecipeType => {
             recipeIngredientsType.ingredients.push(ingredient);
             const dryPercentage = ingredient.nutrients
               .filter((ingredient) => DRY_NUTRIENTS.includes(ingredient.type))
-              .reduce((value, ingredient) => value + ingredient.percent, 0);
+              .reduce((value, ingredient) => Math.max(value, ingredient.percent), 0);
 
             if (dryPercentage <= 0) {
                 if (!resolveTest.grams.has) {

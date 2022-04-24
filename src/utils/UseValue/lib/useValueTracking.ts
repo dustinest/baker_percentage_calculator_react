@@ -32,7 +32,7 @@ export const useValueTracking = <
       setOriginal(parsedValue);
     }
   }
-  return [value, hasNoValueOrEquals(value, original), setNewValue, resetValues];
+  return [value, hasNoValueOrEquals(value, original), setNewValue, resetValues, original];
 }
 
 export const useStringValueTracking = (value: string | null |undefined) =>

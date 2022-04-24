@@ -1,7 +1,7 @@
 import {RecipeIngredientsType, RecipeType} from "../../../types";
 import {
   Alert,
-  Card, CardActions, CardContent, Checkbox, Collapse, FormControlLabel, Popover
+  Card, CardActions, CardContent, CardHeader, Checkbox, Collapse, FormControlLabel, Popover
 } from "@mui/material";
 import {useEffect, useState, MouseEvent} from "react";
 import {EditRecipeIngredientsName} from "./EditRecipeIngredientsName";
@@ -93,8 +93,8 @@ export const EditRecipeDialogIngredients = ({
   }
   return (
     <Card>
+      <CardHeader title={ <EditRecipeIngredientsName ingredients={ingredients} index={index}/> }/>
       <CardContent>
-        <EditRecipeIngredientsName ingredients={ingredients} index={index}/>
         <EditRecipeIngredients ingredients={ingredients.ingredients} index={index}/>
         {index === 0 ? <EnforceStarter ingredients={ingredients} index={index}/> : undefined}
       </CardContent>

@@ -2,8 +2,10 @@
   "title_other": "{{count}} recipes",
   "title_one": "One recipe",
   "edit": {
+    "hydration": "Hydration",
     "edit": "Change",
     "delete": "Delete",
+    "reset": "Reset",
     "copyOf": "Copy",
     "enforce_starter": {
       "button": "Use all in pre-dough",
@@ -106,7 +108,7 @@
   },
   "totals": {
     "total": "Total",
-    "dought": "Dough",
+    "dough": "Dough",
     "other": "Others"
   },
   "messages": {

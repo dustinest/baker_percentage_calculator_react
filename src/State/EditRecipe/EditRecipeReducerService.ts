@@ -18,6 +18,7 @@ import {
 import {hasNoValueOrEquals, hasValue} from "../../utils/NullSafe";
 import {getStandardIngredientMethodsGrams} from "../../Constant/Ingredient";
 import { copyCopyOfAwareRecipe } from "../CopyOfRecipeHelper";
+import {resolveActionGenericIndex} from "./resolveActionGenericIndex";
 
 type Methods = {
   setName: (recipe: RecipeType | null, action: SetEditRecipeNameStateAction) => RecipeType | null;
@@ -31,13 +32,6 @@ type Methods = {
   removeIngredient: (recipe: RecipeType | null, action: RemoveRecipeIngredientStateAction) => RecipeType | null;
   addIngredients: (recipe: RecipeType | null) => RecipeType | null;
   setUseIngredientsInStarter: (recipe: RecipeType | null, action: UseIngredientInStarterAction) => RecipeType | null;
-}
-
-const resolveActionGenericIndex = <T>(index: T | number, callback1: (index: number) => RecipeType | null, callback2: (index: T) => RecipeType | null) => {
-  if (typeof index === "number") {
-    return callback1(index as number);
-  }
-  return callback2(index as T);
 }
 
 export const EditRecipeReducerService = Object.freeze({

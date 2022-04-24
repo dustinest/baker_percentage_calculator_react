@@ -13,4 +13,4 @@ export type UseValueTrackingResult<
   ValueType extends any = any,
   SetterType = ValueType,
   ResetType = SetterType
-  > = [ValueType, boolean, (value: SetterType) => void, (value?: ResetType) => void];
+  > = [ValueType, boolean, (value: SetterType) => void, (value?: ResetType) => void, ValueType];

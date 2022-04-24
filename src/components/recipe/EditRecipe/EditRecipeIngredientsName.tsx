@@ -1,10 +1,10 @@
 import {RecipeIngredientsType} from "../../../types";
-import {TextField} from "@mui/material";
+import {ButtonGroup, Input} from "@mui/material";
 import {useTranslation} from "../../../Translations";
 import {useStringInputValueTracking} from "../../../utils/UseValue";
 import {EditRecipeStateActionTypes} from "../../../State";
-import {DoneIconButton} from "../../../Constant/Buttons";
-import {HorizontalActionStack} from "../../common/CommonStack";
+import {DoneButton} from "../../../Constant/Buttons";
+import {LabelAwareStack} from "../../common/CommonStack";
 import {useEditRecipeContext} from "../../../service/RecipeEditService";
 
 type EditRecipeIngredientsNameProps = { ingredients: RecipeIngredientsType; index: number };
@@ -21,14 +21,17 @@ export const EditRecipeIngredientsName = ({ingredients, index}: EditRecipeIngred
     resetName(name);
   }
 
-  return (
-    <HorizontalActionStack justifyContent="center">
-      <TextField variant="standard" type="string"
-                 value={name}
-                 onChange={setName}
-                 label={translation("edit.ingredients.title")}
+  return (<>{index === 0 ? undefined :
+    <LabelAwareStack justifyContent="center">
+      <Input type="string"
+             sx={{width: "20ch"}}
+             value={name}
+             onChange={setName}
+             placeholder={translation("edit.ingredients.title")}
       />
-      <DoneIconButton disabled={isSameName} onClick={onNameDone}/>
-    </HorizontalActionStack>
-  )
+      <ButtonGroup size="small">
+        <DoneButton disabled={isSameName} onClick={onNameDone}/>
+      </ButtonGroup>
+    </LabelAwareStack>
+  }</>)
 }

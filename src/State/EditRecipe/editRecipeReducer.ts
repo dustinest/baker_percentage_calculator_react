@@ -6,6 +6,7 @@ import {
 } from "./EditRecipeStateAction.d";
 import {EditRecipeReducerService} from "./EditRecipeReducerService";
 import {copyCopyOfAwareRecipe} from "../CopyOfRecipeHelper";
+import {editRecipeHydrationReducerService} from "./editRecipeHydrationReducerService";
 
 export const updateEditRecipeReducer = (recipe: RecipeType | null, action: RecipeManagementStateActions): RecipeType | null => {
   switch (action.type) {
@@ -38,6 +39,8 @@ export const updateEditRecipeReducer = (recipe: RecipeType | null, action: Recip
       return EditRecipeReducerService.addIngredients(recipe);
     case EditRecipeStateActionTypes.USE_INGREDIENT_IN_STARTER:
       return EditRecipeReducerService.setUseIngredientsInStarter(recipe, action);
+    case EditRecipeStateActionTypes.SET_HYDRATION:
+      return editRecipeHydrationReducerService(recipe, action);
     case EditRecipeStateActionTypes.CANCEL_EDIT_RECIPE:
       return null;
   }

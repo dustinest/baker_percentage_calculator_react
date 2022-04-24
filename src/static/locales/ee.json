@@ -2,12 +2,14 @@
   "title_one": "üks retsept",
   "title_other": "{{count}} retsepti",
   "edit": {
+    "hydration": "Vedelik",
     "enforce_starter": {
       "button": "Kõik on eeltaigen",
       "legend": "Kogu jahu ja vedelikku kasutatakse juuretise arvutamisel. Seda on vaja juhul, kui soovid vedelamat eeltainast"
     },
     "edit": "Muuda",
     "delete": "Kustuta",
+    "reset": "Lähtesta",
     "copyOf": "Kopeeri",
     "description": {
       "generic": "Kirjeldus"
@@ -47,7 +49,7 @@
   },
   "totals": {
     "total": "Kokku",
-    "dought": "Tainas",
+    "dough": "Tainas",
     "other": "Teised"
   },
   "ingredient": {

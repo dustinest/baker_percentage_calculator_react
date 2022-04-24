@@ -1,24 +1,27 @@
 import {IngredientGramsType} from "../../../types";
 import {
-  InputAdornment, MenuItem,
-  OutlinedInput, Select, SelectChangeEvent,
-  Table, TableBody,
+  InputAdornment,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  SelectChangeEvent,
+  Table,
+  TableBody,
   TableCell,
   TableRow
 } from "@mui/material";
-import {useNumberInputValueTracking, useStringInputValueTracking} from "../../../utils/UseValue";
+import {useNumberInputValueTracking} from "../../../utils/UseValue";
 import {EditRecipeStateActionTypes} from "../../../State";
-import {useValueTimeoutAsync} from "../../../utils/Async";
 import {Translation} from "../../../Translations";
 import "./EditRecipeIngredients.css";
 import {hasNoValue, hasValue} from "../../../utils/NullSafe";
 import {ReactNode, useEffect, useState} from "react";
-import {
-  StandardIngredientMethodGrams,
-} from "../../../Constant/Ingredient";
-import {AddButton, DeleteButton} from "../../../Constant/Buttons";
+import {StandardIngredientMethodGrams,} from "../../../Constant/Ingredient";
+import {AddButton} from "../../../Constant/Buttons";
 import {HorizontalActionStack} from "../../common/CommonStack";
 import {useEditRecipeContext} from "../../../service/RecipeEditService";
+import {EditInputTimeoutNumber} from "./EditInputTimeoutNumber";
+import {EditRecipeHydration} from "./EditRecipeHydration";
 
 const EditRecipeIngredientTable = ({name, children}: {name: string, children: ReactNode;}) => {
   return (
@@ -41,29 +44,17 @@ const EditRecipeIngredient = ({
                                 index,
                                 subIndex
                               }: EditRecipeIngredientProps) => {
-  //const [name, isSameName, setName, resetName] = useStringValueAndOriginal(ingredientName);
-  const [name] = useStringInputValueTracking(ingredientName);
-  const [grams, isSameGrams, setGrams, resetGrams] = useNumberInputValueTracking(ingredientGrams);
-
-  //console.log("render", name);
   const editRecipeDispatch = useEditRecipeContext();
-  useValueTimeoutAsync(async () => {
-    if (isSameGrams || grams <= 0) {
-      return;
-    }
-    const gramsValue = grams;
+  const onSave = (value: number) => {
     editRecipeDispatch({
       type: EditRecipeStateActionTypes.SET_INGREDIENT_GRAM,
       index: {
         ingredients: index,
         ingredient: subIndex
       },
-      grams: gramsValue
+      grams: value
     });
-    resetGrams(gramsValue);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, grams)
-
+  }
   const onDelete = () => {
     editRecipeDispatch({
       type: EditRecipeStateActionTypes.REMOVE_INGREDIENT,
@@ -73,23 +64,12 @@ const EditRecipeIngredient = ({
       },
     });
   }
-
   return (
-    <EditRecipeIngredientTable name={name}>
-      <HorizontalActionStack>
-        <OutlinedInput
-          className="recipe-ingredient-amount"
-          type="number"
-          value={grams}
-          onChange={setGrams}
-          endAdornment={<InputAdornment position="end">g</InputAdornment>}
-        />
-        <DeleteButton onClick={onDelete}/>
-      </HorizontalActionStack>
+    <EditRecipeIngredientTable name={ingredientName}>
+      <EditInputTimeoutNumber  value={ingredientGrams} onSave={onSave} onDelete={onDelete} endAdornment="g"/>
     </EditRecipeIngredientTable>
   )
 };
-
 
 type EditRecipeIngredientsProps = {
   ingredients: IngredientGramsType[];
@@ -107,6 +87,7 @@ export const EditRecipeIngredients = ({ingredients, index}: EditRecipeIngredient
                                   subIndex={subIndex} key={`exising_${ingredient.id}`}/>
           ))
         }
+        <EditRecipeHydration ingredients={ingredients} index={index}/>
       </TableBody>
     </Table>)
 };
