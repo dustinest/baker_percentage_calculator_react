@@ -1,5 +1,5 @@
 import {useNumberInputValueTracking} from "../../../utils/UseValue";
-import {KeyboardEvent} from "react";
+import {KeyboardEvent, ReactNode} from "react";
 import {HorizontalActionStack, LabelAwareStack} from "../../common/CommonStack";
 import {
   ButtonGroup,
@@ -19,9 +19,10 @@ type EditInputTimeoutNumberProps = {
   onSave: (value: number) => void;
   onDelete?: () => void;
   endAdornment?: string;
+  additionalMenu?: ReactNode;
 }
 
-export const EditInputTimeoutNumber = ({value, onSave, onDelete, endAdornment}: EditInputTimeoutNumberProps) => {
+export const EditInputTimeoutNumber = ({value, onSave, onDelete, endAdornment, additionalMenu}: EditInputTimeoutNumberProps) => {
   const [editValue, isSameValue, setValue, resetValue, originalValue] = useNumberInputValueTracking(value);
 
   const onSetValue = () => {
@@ -57,6 +58,7 @@ export const EditInputTimeoutNumber = ({value, onSave, onDelete, endAdornment}: 
           <HorizontalActionStack>
             <DoneIconButton disabled={isSameValue} onClick={onSetValue}/>
             <CommonMenuButton>
+              {additionalMenu}
               <MenuItem onClick={onResetValue} disabled={isSameValue}>
                 <ListItemIcon><ResetIcon fontSize="small"/></ListItemIcon>
                 <ListItemText><Translation label="edit.reset"/></ListItemText>

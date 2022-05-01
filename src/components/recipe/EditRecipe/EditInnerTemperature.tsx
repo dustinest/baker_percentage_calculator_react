@@ -1,12 +1,11 @@
 import {NumberIntervalType, RecipeType} from "../../../types";
-import {EditRecipeStateActionTypes} from "../../../State";
+import {EditRecipeContext, EditRecipeStateActionTypes} from "../../../State";
 import {Typography} from "@mui/material";
 import {Translation} from "../../../Translations";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {EditNumberInterval} from "./EditNumberInterval";
 import {DeleteIconButton, DoneIconButton} from "../../../Constant/Buttons";
 import {HorizontalActionStack, LabelAwareStack} from "../../common/CommonStack";
-import {useEditRecipeContext} from "../../../service/RecipeEditService";
 
 const DUMMY_INNER_TEMPERATURE = Object.freeze({from: 1, until: 1} as NumberIntervalType) as NumberIntervalType;
 
@@ -16,7 +15,7 @@ export const EditInnerTemperature = ({recipe}: { recipe: RecipeType }) => {
     setValue(recipe.innerTemperature || DUMMY_INNER_TEMPERATURE);
   }, [recipe])
 
-  const editRecipeDispatch = useEditRecipeContext();
+  const {editRecipeDispatch} = useContext(EditRecipeContext);
 
   const dispatchChange = (valueToSet: NumberIntervalType) => {
     editRecipeDispatch({type: EditRecipeStateActionTypes.SET_INNER_TEMPERATURE, temperature: valueToSet});

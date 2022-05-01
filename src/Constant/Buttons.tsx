@@ -4,7 +4,7 @@ import {
   DoneIcon,
   ExpandMoreIcon,
   MenuIcon,
-  MoreVertIcon, InfoIcon, EditIcon, ResetIcon
+  MoreVertIcon, InfoIcon, EditIcon, ResetIcon, WeightIcon, PercentIcon, PercentGlobalIcon
 } from "./Icons";
 import {Box, Button, ButtonProps, Fab, IconButton, IconButtonProps, styled} from "@mui/material";
 import {Translation} from "../Translations";
@@ -16,6 +16,11 @@ export const DeleteIconButton = (props: IconButtonProps) => (<IconButtonInt colo
 export const DoneIconButton = (props: IconButtonProps) => (<IconButtonInt  color="success" {...props}><DoneIcon/></IconButtonInt>);
 export const MoreIconButton = (props: IconButtonProps) => (<IconButtonInt {...props}><MoreVertIcon/></IconButtonInt>);
 export const InfoIconButton = (props: IconButtonProps) => (<IconButtonInt {...props}><InfoIcon/></IconButtonInt>);
+
+export const WeightIconButton = (props: IconButtonProps) => (<IconButtonInt {...props}><WeightIcon fontSize="small"/></IconButtonInt>);
+export const PercentIconButton = (props: IconButtonProps) => (<IconButtonInt {...props}><PercentIcon fontSize="small"/></IconButtonInt>);
+export const PercentIconGlobalButton = (props: IconButtonProps) => (<IconButtonInt {...props}><PercentGlobalIcon fontSize="small"/></IconButtonInt>);
+
 
 export const ExpandMoreIconButton = styled((props: { expand: boolean; } & IconButtonProps) => {
   const {expand, ...other} = props;
@@ -48,7 +53,6 @@ export const ResetButton = (props: ButtonProps) => (<ButtonInt  color="warning" 
 
 export const CheckAllButton = (props: ButtonProps) => (<ButtonInt  color="success" {...props}><CheckAllCheckboxIcon/></ButtonInt>);
 export const ClearAllButton = (props: ButtonProps) => (<ButtonInt  color="success" {...props}><ClearAllCheckboxIcon/></ButtonInt>);
-
 
 export const AddRecipeFloatingButton = ({onClick}: {onClick: () => void}) => (
   <Box

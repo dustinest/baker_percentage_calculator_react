@@ -1,14 +1,7 @@
-import {
-  EditRecipeStateActionTypes,
-} from "../../../State";
-import {useEffect, useState} from "react";
+import {EditRecipeContext, EditRecipeStateActionTypes,} from "../../../State";
+import {useContext, useEffect, useState} from "react";
 import {copyRecipeType, RecipeType} from "../../../types";
-import {
-  Container,
-  Dialog,
-  DialogActions,
-  DialogContent, DialogTitle, Divider,
-} from "@mui/material";
+import {Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider,} from "@mui/material";
 import {IngredientsItem} from "../common/IngredientsItem";
 import {BakerPercentage} from "../common/BakerPercentage";
 import {EditBakingTime} from "./EditBakingTime";
@@ -24,7 +17,7 @@ import {TranslatedAddIconButton, TranslatedCancelButton, TranslatedSaveButton} f
 import {useBakerPercentage} from "./useBakerPercentage";
 import {GridContainer, GridItem} from "../../common/GridContainer";
 import {VerticalStack} from "../../common/CommonStack";
-import {useEditRecipeContext, useRecipeEditService} from "../../../service/RecipeEditService";
+import {useRecipeEditService} from "../../../service/RecipeEditService";
 
 const RenderRecipeCalculationResult = () => {
   const {editedRecipe} = useRecipeEditService();
@@ -99,7 +92,7 @@ export const EditRecipeDialog = () => {
     ));
   }, [editedRecipe, data]);
 
-  const editRecipeDispatch = useEditRecipeContext();
+  const {editRecipeDispatch} = useContext(EditRecipeContext);
   const addIngredients = () => {
     editRecipeDispatch({
       type: EditRecipeStateActionTypes.ADD_INGREDIENTS,

@@ -1,6 +1,8 @@
 import {IngredientGramsType} from "../../../types";
 import {
   InputAdornment,
+  ListItemIcon,
+  ListItemText,
   MenuItem,
   OutlinedInput,
   Select,
@@ -11,50 +13,109 @@ import {
   TableRow
 } from "@mui/material";
 import {useNumberInputValueTracking} from "../../../utils/UseValue";
-import {EditRecipeStateActionTypes} from "../../../State";
+import {EditRecipeContext, EditRecipeStateActionTypes} from "../../../State";
 import {Translation} from "../../../Translations";
 import "./EditRecipeIngredients.css";
 import {hasNoValue, hasValue} from "../../../utils/NullSafe";
-import {ReactNode, useEffect, useState} from "react";
+import {ReactNode, Reducer, useContext, useEffect, useMemo, useReducer, useState} from "react";
 import {StandardIngredientMethodGrams,} from "../../../Constant/Ingredient";
 import {AddButton} from "../../../Constant/Buttons";
 import {HorizontalActionStack} from "../../common/CommonStack";
-import {useEditRecipeContext} from "../../../service/RecipeEditService";
 import {EditInputTimeoutNumber} from "./EditInputTimeoutNumber";
 import {EditRecipeHydration} from "./EditRecipeHydration";
+import {getIngredientsHydration, RecipeHydration} from "../../../service/RecipeHydrationService";
+import {PercentGlobalIcon, PercentIcon, WeightIcon} from "../../../Constant/Icons";
 
-const EditRecipeIngredientTable = ({name, children}: {name: string, children: ReactNode;}) => {
+type EditMode = "weight" | "percent" | "global_percent" | null;
+
+type EditRecipeIngredientRowProps = {
+  name: string;
+  children: ReactNode;
+};
+
+const EditRecipeIngredientRow = ({name, children}: EditRecipeIngredientRowProps) => {
   return (
     <TableRow>
-      <TableCell><Translation label={name}/></TableCell>
+      <TableCell>
+        <Translation label={name}/>
+      </TableCell>
       <TableCell>{children}</TableCell>
     </TableRow>
   )
 }
 
 type EditRecipeIngredientProps = {
+  hydration: RecipeHydration;
   ingredientName: string;
   ingredientGrams: number;
   index: number;
   subIndex: number;
 };
+
+type ReducedState = {
+  availableMode: EditMode[];
+  mode: EditMode;
+  endAdornment: "g" | "%";
+  value: number;
+  dry: number;
+  valueToSave?: number;
+}
+type IngredientModeAction = {
+  action: EditMode;
+}
+type IngredientSaveAction = {
+  action: "save";
+  value: number;
+}
+
 const EditRecipeIngredient = ({
+                                hydration,
                                 ingredientName,
                                 ingredientGrams,
                                 index,
                                 subIndex
                               }: EditRecipeIngredientProps) => {
-  const editRecipeDispatch = useEditRecipeContext();
-  const onSave = (value: number) => {
+  const [ingredientValue, setIngredientValue] = useReducer<Reducer<ReducedState, IngredientModeAction | IngredientSaveAction>>(
+    (state, action) => {
+      if (action.action === "weight") {
+        return { mode: "weight", endAdornment: "g", value: ingredientGrams, dry: hydration.dry, availableMode: state.availableMode }
+      } else if (action.action === "percent") {
+        const newValue = Math.round(ingredientGrams * 10000 / hydration.dry) / 100;
+        return  {mode: "percent", endAdornment: "%", value: newValue, dry: hydration.dry, availableMode: state.availableMode }
+      }
+      if (action.action === "save") {
+        if (state.mode === "weight" || state.mode === null) {
+          return {...state, ...{valueToSave: action.value}};
+        } else {
+          const weightValue = Math.round(state.dry * action.value) / 100;
+          return {...state, ...{valueToSave: weightValue}};
+        }
+      }
+      return state;
+    },
+    {
+      availableMode: hydration.dry > 0 ? ["weight", "percent" /*, "global_percent"*/] : [], // global_percent is not implemented above
+      mode: hydration.dry > 0 ? "weight" : null,
+      endAdornment: "g",
+      dry: hydration.dry,
+      value: ingredientGrams
+    }
+  );
+  const {editRecipeDispatch} = useContext(EditRecipeContext);
+
+  useEffect(() => {
+    if (hasNoValue(ingredientValue.valueToSave)) return;
     editRecipeDispatch({
       type: EditRecipeStateActionTypes.SET_INGREDIENT_GRAM,
       index: {
         ingredients: index,
         ingredient: subIndex
       },
-      grams: value
+      grams: ingredientValue.valueToSave
     });
-  }
+    setIngredientValue({action: "weight"} as IngredientModeAction);
+  }, [ingredientValue, editRecipeDispatch, index, subIndex])
+
   const onDelete = () => {
     editRecipeDispatch({
       type: EditRecipeStateActionTypes.REMOVE_INGREDIENT,
@@ -65,9 +126,21 @@ const EditRecipeIngredient = ({
     });
   }
   return (
-    <EditRecipeIngredientTable name={ingredientName}>
-      <EditInputTimeoutNumber  value={ingredientGrams} onSave={onSave} onDelete={onDelete} endAdornment="g"/>
-    </EditRecipeIngredientTable>
+    <EditRecipeIngredientRow name={ingredientName}>
+      <EditInputTimeoutNumber  value={ingredientValue.value} onSave={(value) => setIngredientValue({action: "save", value})} onDelete={onDelete} endAdornment={ingredientValue.endAdornment} additionalMenu={
+          ingredientValue.availableMode.map((modeValue) =>
+            (<MenuItem key={modeValue} onClick={() => setIngredientValue({action: modeValue} as IngredientModeAction)} disabled={modeValue === ingredientValue.mode}>
+              <ListItemIcon>{
+                modeValue === "weight" ? <WeightIcon fontSize="small"/>:
+                modeValue === "percent" ? <PercentIcon fontSize="small"/>:
+                modeValue === "global_percent" ? <PercentGlobalIcon fontSize="small"/>:
+                undefined
+              }</ListItemIcon>
+              <ListItemText><Translation label={`edit.mode.${modeValue}`}/></ListItemText>
+            </MenuItem>)
+          )
+      }/>
+    </EditRecipeIngredientRow>
   )
 };
 
@@ -76,6 +149,7 @@ type EditRecipeIngredientsProps = {
   index: number;
 }
 export const EditRecipeIngredients = ({ingredients, index}: EditRecipeIngredientsProps) => {
+  const hydration = useMemo(() => getIngredientsHydration(ingredients), [ingredients]);
   return (
     <Table>
       <TableBody>
@@ -83,11 +157,12 @@ export const EditRecipeIngredients = ({ingredients, index}: EditRecipeIngredient
         {
           ingredients.map((ingredient, subIndex) => (
             <EditRecipeIngredient ingredientName={ingredient.name} ingredientGrams={ingredient.grams}
+                                  hydration={hydration}
                                   index={index}
                                   subIndex={subIndex} key={`exising_${ingredient.id}`}/>
           ))
         }
-        <EditRecipeHydration ingredients={ingredients} index={index}/>
+        <EditRecipeHydration hydration={hydration} index={index}/>
       </TableBody>
     </Table>)
 };
@@ -107,7 +182,7 @@ export const EditRecipeRemainingIngredients = ({ingredients, index}: EditRecipeR
   }, [ingredients])
 
   const [grams, isSameGrams, setGrams, resetGrams] = useNumberInputValueTracking(0);
-  const editRecipeDispatch = useEditRecipeContext();
+  const {editRecipeDispatch} = useContext(EditRecipeContext);
   const addNewItem = () => {
     if (isSameGrams || grams <= 0 || hasNoValue(selectedValue)) {
       return;

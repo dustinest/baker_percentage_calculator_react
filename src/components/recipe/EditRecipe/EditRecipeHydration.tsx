@@ -1,20 +1,21 @@
-import {IngredientGramsType} from "../../../types";
-import {useMemo} from "react";
 import {EditInputTimeoutNumber} from "./EditInputTimeoutNumber";
-import {EditRecipeStateActionTypes, SetEditRecipeIngredientHydrationStateAction} from "../../../State";
-import {useEditRecipeContext} from "../../../service/RecipeEditService";
-import {getIngredientsHydration} from "../../../service/RecipeHydrationService";
+import {
+  EditRecipeContext,
+  EditRecipeStateActionTypes,
+  SetEditRecipeIngredientHydrationStateAction
+} from "../../../State";
+import {RecipeHydration} from "../../../service/RecipeHydrationService";
 import {Translation} from "../../../Translations";
 import {TableCell, TableRow} from "@mui/material";
+import {useContext} from "react";
 
 type EditRecipeHydrationProps = {
-  ingredients: IngredientGramsType[];
+  hydration: RecipeHydration;
   index: number;
 }
-export const EditRecipeHydration = ({ingredients, index}: EditRecipeHydrationProps) => {
-  const hydration = useMemo(() => getIngredientsHydration(ingredients), [ingredients]);
+export const EditRecipeHydration = ({hydration, index}: EditRecipeHydrationProps) => {
 
-  const editRecipeDispatch = useEditRecipeContext();
+  const {editRecipeDispatch} = useContext(EditRecipeContext);
   const onSave = (value: number) => {
     editRecipeDispatch({
       type: EditRecipeStateActionTypes.SET_HYDRATION,

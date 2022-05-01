@@ -1,13 +1,12 @@
 import {BakingTimeType} from "../../../types";
 import {Checkbox, Divider, Typography} from "@mui/material";
 import {EditNumberInterval} from "./EditNumberInterval";
-import {EditRecipeStateActionTypes} from "../../../State";
+import {EditRecipeContext, EditRecipeStateActionTypes} from "../../../State";
 import {Translation} from "../../../Translations";
-import {useEffect, useMemo, useState} from "react";
+import {useContext, useEffect, useMemo, useState} from "react";
 import {DeleteIconButton, DoneIconButton} from "../../../Constant/Buttons";
 import "./EditBakingTime.css";
 import {HorizontalActionStack, VerticalStack} from "../../common/CommonStack";
-import {useEditRecipeContext} from "../../../service/RecipeEditService";
 
 const DUMMY_BAKING_TIME = Object.freeze({
   time: {from: 1, until: 1},
@@ -16,7 +15,7 @@ const DUMMY_BAKING_TIME = Object.freeze({
 } as BakingTimeType) as BakingTimeType;
 
 const EditBakingTimeRow = ({bakingTime, index}: {bakingTime?: BakingTimeType, index: number}) => {
-  const editRecipeDispatch = useEditRecipeContext();
+  const {editRecipeDispatch} = useContext(EditRecipeContext);
   const [value, setValue] = useState<BakingTimeType>(DUMMY_BAKING_TIME);
 
   const bakingTimeValue = useMemo<BakingTimeType>(() => {

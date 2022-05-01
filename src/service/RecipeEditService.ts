@@ -20,11 +20,6 @@ interface RecipeEditMethods {
   cancel: () => void;
 }
 
-export const useEditRecipeContext = () => {
-  const {editRecipeDispatch} = useContext(EditRecipeContext);
-  return editRecipeDispatch;
-}
-
 export const useRecipeEditService = (): {editedRecipe: RecipeType | null, editRecipeMethods: RecipeEditMethods} => {
   const {editRecipe, editRecipeDispatch} = useContext(EditRecipeContext);
   const {recipesDispatch} = useContext(RecipesContext);

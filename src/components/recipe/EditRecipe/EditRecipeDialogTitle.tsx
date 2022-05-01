@@ -9,20 +9,22 @@ import {
   Tabs,
   TextField
 } from "@mui/material";
-import {EditRecipeStateActionTypes} from "../../../State";
+import {EditRecipeContext, EditRecipeStateActionTypes} from "../../../State";
 import {useNumberInputValueTracking, useStringInputValueTracking} from "../../../utils/UseValue";
 import "./EditRecipeDialogTitle.css";
 import {
-  DoneIconButton, EditLabelIconButton, TranslatedCancelButton, TranslatedChangeButton
+  DoneIconButton,
+  EditLabelIconButton,
+  TranslatedCancelButton,
+  TranslatedChangeButton
 } from "../../../Constant/Buttons";
 import {HorizontalActionStack} from "../../common/CommonStack";
-import {useState, SyntheticEvent, useEffect} from "react";
+import {SyntheticEvent, useContext, useEffect, useState} from "react";
 import {Translation, useTranslation} from "../../../Translations";
-import {useEditRecipeContext} from "../../../service/RecipeEditService";
 
 const EditAmount = ({recipe}: { recipe: RecipeType }) => {
   const [amount, isSameAmount, setAmount, resetAmount] = useNumberInputValueTracking(recipe.amount);
-  const editRecipeDispatch = useEditRecipeContext();
+  const {editRecipeDispatch} = useContext(EditRecipeContext);
   const [tabValue, setTabValue] = useState(0);
   const [edit, setEdit] = useState<boolean>(false);
 
@@ -81,7 +83,7 @@ const EditAmount = ({recipe}: { recipe: RecipeType }) => {
 
 export const EditName = ({recipe}: { recipe: RecipeType }) => {
   const [name, isSameName, setName, resetName] = useStringInputValueTracking(recipe.name);
-  const editRecipeDispatch = useEditRecipeContext();
+  const {editRecipeDispatch} = useContext(EditRecipeContext);
   const onNameDone = async () => {
     const cachedName = name;
     editRecipeDispatch({

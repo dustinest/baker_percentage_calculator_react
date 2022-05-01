@@ -33,6 +33,10 @@
       "title": "Retsepti kogus",
       "calculate": "Kalkuleeri kogus",
       "change": "Muuda koguse number"
+    },
+    "mode": {
+      "weight": "Muuda kaalu",
+      "percent": "Protsenti kuivainete suhtes"
     }
   },
   "baking_instructions": {

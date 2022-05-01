@@ -13,15 +13,14 @@ import {
   MenuItem,
   Popover
 } from "@mui/material";
-import {useEffect, useState, MouseEvent, useMemo} from "react";
+import {MouseEvent, useContext, useEffect, useMemo, useState} from "react";
 import {EditRecipeIngredientsName} from "./EditRecipeIngredientsName";
 import {EditRecipeIngredients, EditRecipeRemainingIngredients} from "./EditRecipeIngredients";
 import {ExpandMoreAction} from "../../common/ExpandMoreAction";
-import {EditRecipeStateActionTypes} from "../../../State";
+import {EditRecipeContext, EditRecipeStateActionTypes} from "../../../State";
 import {InfoIconButton} from "../../../Constant/Buttons";
 import {RECIPE_CONSTANTS} from "../../../State/RecipeConstants";
 import {Translation, useTranslation} from "../../../Translations";
-import {useEditRecipeContext} from "../../../service/RecipeEditService";
 import {CommonMenuButton} from "../../common/CommonMenu";
 import {DeleteIcon} from "../../../Constant/Icons";
 
@@ -31,7 +30,7 @@ const EnforceStarter = ({ingredients, index}: {ingredients: RecipeIngredientsTyp
   const [popOverButton, setPopOverButton] = useState<HTMLButtonElement | null>(null);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => setPopOverButton(event.currentTarget);
 
-  const editRecipeDispatch = useEditRecipeContext();
+  const {editRecipeDispatch} = useContext(EditRecipeContext);
 
   const onCheckBoxChange = (newValue: boolean) => {
     setIsStarter(newValue);
@@ -97,7 +96,7 @@ export const EditRecipeDialogIngredients = ({
     setExpanded(privileges.expand.is)
   }, [privileges.expand.is]);
 
-  const editRecipeDispatch = useEditRecipeContext();
+  const {editRecipeDispatch} = useContext(EditRecipeContext);
 
   const onRemove = () => {
     editRecipeDispatch({

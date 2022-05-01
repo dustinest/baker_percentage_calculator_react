@@ -14,6 +14,9 @@ import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlin
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import SettingsBackupRestoreOutlinedIcon from '@mui/icons-material/SettingsBackupRestoreOutlined';
+import ScaleOutlinedIcon from '@mui/icons-material/ScaleOutlined';
+import PercentOutlinedIcon from '@mui/icons-material/PercentOutlined';
+import EmojiSymbolsOutlinedIcon from '@mui/icons-material/EmojiSymbolsOutlined';
 
 export const EditIcon = EditOutlinedIcon;
 export const ExpandMoreIcon = ExpandMoreOutlinedIcon;
@@ -32,3 +35,6 @@ export const CheckedIcon = CheckBoxOutlinedIcon;
 export const UnCheckedIcon = CheckBoxOutlineBlankOutlinedIcon;
 export const InfoIcon = InfoOutlinedIcon;
 export const ResetIcon = SettingsBackupRestoreOutlinedIcon;
+export const WeightIcon = ScaleOutlinedIcon;
+export const PercentIcon = PercentOutlinedIcon;
+export const PercentGlobalIcon = EmojiSymbolsOutlinedIcon;

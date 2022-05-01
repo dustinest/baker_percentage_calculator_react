@@ -33,6 +33,10 @@
       "title": "Recipe amount",
       "calculate": "Calculate ingredients amount",
       "change": "Change ingredients amount number"
+    },
+    "mode": {
+      "weight": "Change weight",
+      "percent": "Percent based on dry ingredients"
     }
   },
   "baking_instructions": {
