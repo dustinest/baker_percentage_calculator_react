@@ -1,42 +1,26 @@
 export enum AsyncStatus {
-    IDLE= "idle",
+    IDLE = "idle",
     LOADING = "loading",
     SUCCESS = "success",
     ERROR = "error",
     CANCELLED = "cancelled"
 }
 
-interface AsyncStatusResultStatus<S extends AsyncStatus> { status: S; }
+type BaseAsyncStatusResult<S extends AsyncStatus> = { status: S; }
 
-export interface AsyncResultIdle extends AsyncStatusResultStatus<AsyncStatus.IDLE> {
-    success: false;
-    waiting: true;
-    failed: false;
-}
-export interface AsyncResultLoading extends AsyncStatusResultStatus<AsyncStatus.LOADING> {
+export type AsyncResultIdle = BaseAsyncStatusResult<AsyncStatus.IDLE>;
+export type AsyncResultLoading = {
     cancel: () => void;
-    success: false;
-    waiting: true;
-    failed: false;
-}
-export interface AsyncResulSuccess<ValueType> extends AsyncStatusResultStatus<AsyncStatus.SUCCESS> {
+} & BaseAsyncStatusResult<AsyncStatus.LOADING>;
+export type AsyncResulSuccess<ValueType> = {
     value: ValueType;
-    success: true;
-    waiting: false;
-    failed: false;
-}
-export interface AsyncResulError<ErrorType> extends AsyncStatusResultStatus<AsyncStatus.ERROR> {
-    error: ErrorType;
-    success: false;
-    waiting: false;
-    failed: true;
-}
+} &  BaseAsyncStatusResult<AsyncStatus.SUCCESS>;
 
-export interface AsyncResulCancelled extends AsyncStatusResultStatus<AsyncStatus.CANCELLED> {
-    success: false;
-    waiting: false;
-    failed: true;
-}
+export type AsyncResulError<ErrorType> = {
+    error: ErrorType;
+} & BaseAsyncStatusResult<AsyncStatus.ERROR>
+
+export type AsyncResulCancelled = BaseAsyncStatusResult<AsyncStatus.CANCELLED>;
 
 export type AsyncStatusResult<ValueType extends any = any, ErrorType extends any = Error> =
     AsyncResultIdle |
@@ -45,3 +29,9 @@ export type AsyncStatusResult<ValueType extends any = any, ErrorType extends any
     AsyncResulError<ErrorType> |
     AsyncResulCancelled;
 
+export type ConfigurationProps = {
+    idleAsLoading?: boolean; // skips idle part and does return idle as loading
+}
+export type TimeoutAsyncConfigurationProps = {
+    milliseconds?: number;
+} & ConfigurationProps;

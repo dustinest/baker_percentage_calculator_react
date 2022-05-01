@@ -89,6 +89,8 @@ export const EditRecipeDialogIngredients = ({
         can: hasOtherIngredients
       }
     }
+    // To mute ingredients check. We do need it!
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ingredients, recipe, index]);
 
   useEffect(() => {

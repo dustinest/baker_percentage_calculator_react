@@ -6,3 +6,4 @@ export * from "./lib/useLatest";
 
 export * from "./lib/runLater";
 export * from "./lib/useTimeoutAsync";
+export * from "./lib/useTimeoutAsyncEffect";

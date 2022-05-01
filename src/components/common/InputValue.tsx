@@ -1,7 +1,7 @@
 import {ChangeEvent, useEffect, useState} from "react";
 import {normalizeNumber} from "../../utils/Numbers";
 import {InputAdornment, OutlinedInput, TextField} from "@mui/material";
-import {useValueTimeoutAsync} from "../../utils/Async";
+import {useTimeoutAsyncEffect} from "../../utils/Async";
 
 export type SuffixType = "g" | "%";
 
@@ -42,11 +42,11 @@ export const InputValue = <T extends number | string, >({value, onChange, suffix
     const type: "string" | "number" = typeof value === "number" ? "number" : "string";
     const [valueUsed, setValueUsed] = useState<T | undefined>(undefined);
 
-    useValueTimeoutAsync(async () => {
+    useTimeoutAsyncEffect(async () => {
         if (valueUsed !== undefined && valueUsed !== value) {
             return onChange(valueUsed).catch(console.error);
         }
-    }, valueUsed, timeout)
+    }, [valueUsed], {milliseconds: timeout })
 
     const setNormalizedValue = (val: T) => {
         const _value: T = type === "string" ? val : normalizeNumber(val as number) as T;

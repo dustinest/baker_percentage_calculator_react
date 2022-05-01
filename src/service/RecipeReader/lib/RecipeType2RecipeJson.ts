@@ -52,7 +52,6 @@ const normalizeIngredient = (ingredient: IngredientGramsType, highestDry: FindHi
                 percent: getPercentage(ingredient, highestDry)
             } as JsonStandardIngredientTypePercentType;
         }
-        console.log("WAATAAFAAAK");
         return {
             type: ingredient.type,
             grams: ingredient.grams

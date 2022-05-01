@@ -1,50 +1,63 @@
-import {DependencyList, useEffect, useState} from "react";
-import {useAsync} from "../index";
+import {Reducer, useReducer, useState} from "react";
+import {
+  AsyncStatusResult,
+  TimeoutAsyncConfigurationProps,
+  useAsync,
+} from "../index";
+
+const DEFAULT_PROPS = Object.freeze({milliseconds: 200, idleAsLoading: false}) as TimeoutAsyncConfigurationProps;
+
+enum UseTimeoutMethods {
+  PROPS,
+  CANCEL
+}
+
+type AsyncTimeoutMethodCancel = {
+  method: UseTimeoutMethods.CANCEL;
+}
+type AsyncTimeoutMethodProps <Args extends any[] = any[]> = {
+  method: UseTimeoutMethods.PROPS;
+  props: Args;
+};
+
+type AsyncTimeoutProps<Args extends any[] = any[]> = AsyncTimeoutMethodCancel | AsyncTimeoutMethodProps<Args>;
 
 export const useTimeoutAsync = <
-    ValueType extends any = any,
-    ErrorType extends any = Error
-    >(
-        asyncCallback: () => Promise<ValueType>,
-        dependencies: DependencyList,
-        milliseconds: number = 200
-) => {
-    const [timeoutValue, setTimeoutValue] = useState<NodeJS.Timeout | null>(null);
-    const doClearTimeout = () => {
-        if (timeoutValue === null) return;
+  ValueType extends any = any,
+  ErrorType extends any = Error,
+  Args extends any[] = any[]
+  >
+(asyncCallback: (...args: Args) => Promise<ValueType>, properties?: TimeoutAsyncConfigurationProps) : [AsyncStatusResult<ValueType, ErrorType>, ((...args: Args) => Promise<void>) & { cancel: () => void }] =>
+{
+  const {milliseconds, ...props} = properties ? {...DEFAULT_PROPS, ...properties} : DEFAULT_PROPS;
+  const [asyncState, setAsyncState] = useAsync<ValueType, ErrorType, Args>(asyncCallback, props)
+  // noinspection JSUnusedLocalSymbols
+  const timeoutStatus = useReducer<Reducer<NodeJS.Timeout | null, AsyncTimeoutProps<Args>>>(
+    (previous, action) => {
+      if (previous !== null) {
         try {
-            clearTimeout(timeoutValue);
-        } catch {
-            // ignore;
-        }
-        setTimeoutValue(null);
-    }
-    const [state, callback] = useAsync<ValueType, ErrorType>(async () => {
-        doClearTimeout();
-        return new Promise<ValueType>((resolve, reject) => {
-            const timeout = setTimeout(() => asyncCallback()
-                    .then(resolve)
-                    .catch(reject)
-                    .finally(doClearTimeout)
-                , milliseconds)
-            setTimeoutValue(timeout);
-        });
-    });
-    // Runs the callback each time deps change
-    useEffect(() => {
-        callback();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, dependencies)
+          clearTimeout(previous);
+        } catch (e) {} // ignore errors
+      }
+      if (action.method === UseTimeoutMethods.PROPS) {
+        return setTimeout(() => setAsyncState(...action.props), milliseconds)
+      } else {
+        setAsyncState.cancel();
+      }
+      return null;
+    },
+    null
+  );
 
-    return state
-};
+  const [callback] = useState<((...args: Args) => Promise<void>) & { cancel: () => void }>(() => {
+    return Object.assign(
+      async (...args: Args) => timeoutStatus[1]({method: UseTimeoutMethods.PROPS, props: args}),
+      {
+        cancel: () => timeoutStatus[1]({method: UseTimeoutMethods.CANCEL})
+      }
+    ) as ((...args: Args) => Promise<void>) & { cancel: () => void };
+  });
 
-export const useValueTimeoutAsync = <ValueType extends any = any>(asyncCallback: (changedValue: ValueType) => Promise<void>, value: ValueType, milliseconds?: number,) => {
-    const [cachedValue, setCachedValue] = useState<ValueType>(value);
-    return useTimeoutAsync(async () => {
-        if (value !== cachedValue) {
-            setCachedValue(value);
-            asyncCallback(value).catch(console.error);
-        }
-    }, [value, cachedValue], milliseconds || 200);
-};
+
+  return [asyncState, callback];
+}

@@ -2,7 +2,7 @@ import {NutritionType} from "../../types";
 import {changeHydration} from "./editRecipeHydrationReducerService";
 import {getIngredientsHydration} from "../../service/RecipeHydrationService";
 
-describe("Canging hydration works", () => {
+describe("Changing hydration works", () => {
   it.each([
     [100, 100, 100, 100],
     [100, 100, 12, 12],
