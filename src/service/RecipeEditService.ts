@@ -9,7 +9,7 @@ import {
 import {RecipeType, RecipeTypeCopy} from "../types";
 import {RECIPE_CONSTANTS} from "../State/RecipeConstants";
 import {getBakerPercentageAwareRecipe} from "../components/recipe/common/BakerPercentageAwareRecipe";
-import {hasValue} from "../utils/NullSafe";
+import {hasValue} from "typescript-nullsafe";
 import {copyCopyOfAwareRecipe} from "../State/CopyOfRecipeHelper";
 
 interface RecipeEditMethods {

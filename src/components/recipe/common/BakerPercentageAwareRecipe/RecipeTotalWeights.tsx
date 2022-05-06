@@ -5,7 +5,7 @@ import {ItemText} from "../ItemText";
 import {Translation} from "../../../../Translations";
 import {getRecipePortions, RecipePortion} from "./RecipePortionsCalculator";
 import {useMemo} from "react";
-import {hasValue} from "../../../../utils/NullSafe";
+import {hasValue} from "typescript-nullsafe";
 
 type RecipeTotal = {
   id: string;

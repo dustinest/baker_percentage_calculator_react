@@ -1,5 +1,5 @@
 import {useTranslation as translationProvider} from "react-i18next";
-import {hasValue} from "../utils/NullSafe";
+import {hasValue} from "typescript-nullsafe";
 
 export const useTranslation = () => {
   const translate = translationProvider();

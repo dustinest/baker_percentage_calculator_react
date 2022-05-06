@@ -1,5 +1,5 @@
 import {ChangeEvent, useEffect, useState} from "react";
-import {hasNoValueOrEquals, hasValue, valueOf, valueOfFloat} from "../../NullSafe";
+import {hasNoValueOrEquals, hasValue, valueOf, valueOfFloat} from "typescript-nullsafe";
 import {UseValueTrackingParams, UseValueTrackingResult} from "../type/UseValueTrackingParams";
 
 export const useValueTracking = <

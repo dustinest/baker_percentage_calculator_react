@@ -5,7 +5,7 @@ import {
   NutrientPercentType,
   NutritionType
 } from "../../types";
-import {hasValue} from "../../utils/NullSafe";
+import {hasValue} from "typescript-nullsafe";
 import {SORT_INGREDIENTS} from "../../service/SourdoughStarter/IngredientsSort";
 
 interface StandardIngredient {

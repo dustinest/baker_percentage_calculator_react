@@ -1,4 +1,4 @@
-import {hasValue} from "../../../utils/NullSafe";
+import {hasValue} from "typescript-nullsafe";
 import {
   JsonExtraStandardIngredientType,
   JsonRecipeIngredientsIngredientType,

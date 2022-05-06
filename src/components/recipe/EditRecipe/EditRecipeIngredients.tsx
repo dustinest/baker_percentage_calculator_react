@@ -16,7 +16,7 @@ import {useNumberInputValueTracking} from "../../../utils/UseValue";
 import {EditRecipeContext, EditRecipeStateActionTypes} from "../../../State";
 import {Translation} from "../../../Translations";
 import "./EditRecipeIngredients.css";
-import {hasNoValue, hasValue} from "../../../utils/NullSafe";
+import {hasNoValue, hasValue} from "typescript-nullsafe";
 import {ReactNode, Reducer, useContext, useEffect, useMemo, useReducer, useState} from "react";
 import {StandardIngredientMethodGrams,} from "../../../Constant/Ingredient";
 import {AddButton} from "../../../Constant/Buttons";

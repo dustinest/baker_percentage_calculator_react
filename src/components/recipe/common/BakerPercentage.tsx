@@ -1,8 +1,8 @@
 import {Table, TableBody} from "@mui/material";
 import {RTableHead, RTableRow} from "../../common/RTable";
-import {hasValue} from "../../../utils/NullSafe";
 import {DISPLAYABLE_NUTRIENTS_TYPE_ARRAY} from "../../../types/index";
 import {MicroNutrientsResultType} from "../../../service/BakerPercentage";
+import {hasValue} from "typescript-nullsafe";
 
 type MicroNutrientsResultListParams = {
   microNutrientsResult: MicroNutrientsResultType;

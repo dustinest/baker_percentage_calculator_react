@@ -1,6 +1,6 @@
 // noinspection ES6PreferShortImport
 import {TranslationMap} from "./TranslationMap.d";
-import {hasValue} from "../utils/NullSafe";
+import {hasValue} from "typescript-nullsafe";
 
 type ReduceTranslationMapResult = { [key: string]: number | string };
 

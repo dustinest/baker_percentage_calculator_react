@@ -1,8 +1,8 @@
 import { Translation as L18Translation } from 'react-i18next';
-import {hasNoValue} from "../utils/NullSafe";
 // noinspection ES6PreferShortImport
 import {TranslationMap} from "./TranslationMap.d";
 import {reduceTranslationMap} from "./reduceTranslationMap";
+import {hasNoValue} from "typescript-nullsafe";
 
 type TranslationPropsAny = Omit<TranslationMap, "label">
 type TranslateProps = TranslationPropsAny & { label: string; };

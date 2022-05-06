@@ -7,7 +7,7 @@ import {
 } from "../../types";
 import {calculateSourDoughStarter, StarterIngredients} from "./SourDoughStarterCalculator";
 import {SORT_INGREDIENTS} from "./IngredientsSort";
-import {hasValue} from "../../utils/NullSafe";
+import {hasValue} from "typescript-nullsafe";
 
 const remapIngredient = (ingredient: IngredientGramsType, grams?: number): IngredientGramsType =>
   copyIngredientGramsType(grams !== undefined ? {...ingredient, ...{grams: grams}} : ingredient);

@@ -1,7 +1,7 @@
 import {TableCell, TableHead, TableRow} from "@mui/material";
 import {Translation} from "../../Translations";
 import {normalizeNumber} from "../../utils/Numbers";
-import {hasValue} from "../../utils/NullSafe";
+import {hasValue} from "typescript-nullsafe";
 
 export const RTableHead = ({label}: {label: string}) => {
     return (<TableHead><TableRow><TableCell colSpan={3}><Translation label={label}/></TableCell></TableRow></TableHead>)

@@ -1,5 +1,5 @@
 import {copyRecipeType, RecipeType, RecipeTypeCopy} from "../types";
-import {hasValue} from "../utils/NullSafe";
+import {hasValue} from "typescript-nullsafe";
 
 export const isCopyOfRecipe = (recipe: RecipeType): recipe is RecipeTypeCopy => {
   return hasValue((recipe as RecipeTypeCopy).copyId)

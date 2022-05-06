@@ -11,7 +11,7 @@ import {RecipeJson} from "./RecipeJson";
 import {RecipeContentLoader} from "../common/RecipeLoader";
 import {EditRecipeDialogTitle} from "./EditRecipeDialogTitle";
 import {EditRecipeDialogIngredients} from "./EditRecipeDialogIngredients";
-import {hasNoValue, hasValue} from "../../../utils/NullSafe";
+import {hasNoValue, hasValue} from "typescript-nullsafe";
 import {RECIPE_CONSTANTS} from "../../../State/RecipeConstants";
 import {TranslatedAddIconButton, TranslatedCancelButton, TranslatedSaveButton} from "../../../Constant/Buttons";
 import {useBakerPercentage} from "./useBakerPercentage";

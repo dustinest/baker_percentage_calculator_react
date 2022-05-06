@@ -15,7 +15,7 @@ import {
   SetEditRecipeInnerTemperatureStateAction,
   SetEditRecipeNameStateAction, UseIngredientInStarterAction
 } from "./EditRecipeStateAction.d";
-import {hasNoValueOrEquals, hasValue} from "../../utils/NullSafe";
+import {hasNoValueOrEquals, hasValue} from "typescript-nullsafe";
 import {getStandardIngredientMethodsGrams} from "../../Constant/Ingredient";
 import { copyCopyOfAwareRecipe } from "../CopyOfRecipeHelper";
 import {resolveActionGenericIndex} from "./resolveActionGenericIndex";
