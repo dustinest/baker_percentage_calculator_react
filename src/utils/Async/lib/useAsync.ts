@@ -5,7 +5,8 @@ import {
   AsyncResulSuccess,
   AsyncResultIdle,
   AsyncResultLoading,
-  AsyncStatus, AsyncStatusResult,
+  AsyncStatus,
+  AsyncStatusResult,
   ConfigurationProps
 } from "../type/AsyncStatus";
 import {useLatest} from "./useLatest";
@@ -38,7 +39,8 @@ export const useAsync = <
   ErrorType extends any = Error,
   Args extends any[] = any[]
   >
-(asyncCallback: (...args: Args) => Promise<ValueType>, props?: ConfigurationProps) : [AsyncStatusResult<ValueType, ErrorType>, ((...args: Args) => Promise<void>) & { cancel: () => void }] =>
+(asyncCallback: (...args: Args) => Promise<ValueType>, props?: ConfigurationProps) :
+  [AsyncStatusResult<ValueType, ErrorType>, ((...args: Args) => Promise<void>) & { cancel: () => void }] =>
 {
   const [state, dispatch] = useReducer<Reducer<AsyncReducedState<ValueType, ErrorType>, AsyncAction<ValueType, ErrorType>>, undefined>
   (
@@ -55,21 +57,20 @@ export const useAsync = <
             error: action.error
           } as AsyncActionError<ErrorType>;
         case AsyncStatus.INIT:
-          if (props?.idleAsLoading) {
-            if (previous.status !== AsyncStatus.LOADING ) {
-              return {...previous, ...{status: AsyncStatus.LOADING}}
-            } else {
-              return previous;
-            }
-          } else {
+          if (props?.useInit) {
             return {...previous, ...{status: AsyncStatus.INIT}}
+          }
+          if (previous.status !== AsyncStatus.LOADING ) {
+            return {...previous, ...{status: AsyncStatus.LOADING}}
+          } else {
+            return previous;
           }
         default:
           return {...previous, ...{status: action.status}} as AsyncStatusPending
       }
     },
     void 0,
-    () => ({status: AsyncStatus.INIT} as AsyncStatusPending)
+    () => ({status: props?.useInit ? AsyncStatus.INIT : AsyncStatus.LOADING} as AsyncStatusPending)
   );
 
   // Creates a stable callback that manages our loading/success/error status updates
@@ -112,35 +113,30 @@ export const useAsync = <
 
   return [
     useMemo(() => {
+      const value = (state as AsyncResulSuccess<ValueType>).value;
+      const resultWithValue = value !== null && value !== undefined && !Number.isNaN(value) ? { value } : {};
       switch (state.status) {
         case AsyncStatus.INIT:
-          return {
-            status: AsyncStatus.INIT
-          } as AsyncResultIdle;
+          return {...resultWithValue, ...{ status: AsyncStatus.INIT }}  as AsyncResultIdle<ValueType>;
         case AsyncStatus.LOADING:
-          return {
-            status: AsyncStatus.LOADING,
-            cancel: () => {
-              // Prevent the callback from dispatching
-              callback.cancel()
-              // Create a new callback and set status to cancelled
-              dispatch({status: AsyncStatus.CANCELLED})
-            },
-          } as AsyncResultLoading;
+          return {...resultWithValue, ...{
+              status: AsyncStatus.LOADING,
+              cancel: () => {
+                // Prevent the callback from dispatching
+                callback.cancel()
+                // Create a new callback and set status to cancelled
+                dispatch({status: AsyncStatus.CANCELLED})
+              }
+          }}  as AsyncResultLoading<ValueType>;
         case AsyncStatus.SUCCESS:
-          return {
-            status: AsyncStatus.SUCCESS,
-            value: state.value
-          } as AsyncResulSuccess<ValueType>;
+          return { value: state.value, status: AsyncStatus.SUCCESS } as AsyncResulSuccess<ValueType>;
         case AsyncStatus.ERROR:
-          return {
-            status: AsyncStatus.ERROR,
-            error: state.error
-          } as AsyncResulError<ErrorType>
+          return {...resultWithValue, ...{
+              status: AsyncStatus.ERROR,
+              error: state.error
+            }} as AsyncResulError<ValueType, ErrorType>;
         case AsyncStatus.CANCELLED:
-          return {
-            status: AsyncStatus.CANCELLED,
-          } as AsyncResulCancelled;
+          return {...resultWithValue, ...{ status: AsyncStatus.CANCELLED }} as AsyncResulCancelled<ValueType>;
       }
     }, [callback, state]) as AsyncStatusResult<ValueType, ErrorType>,
     callback,

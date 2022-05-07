@@ -7,30 +7,35 @@ export enum AsyncStatus {
 }
 
 type BaseAsyncStatusResult<S extends AsyncStatus> = { status: S; }
+type BaseMaybeValueResult<ValueType, S extends AsyncStatus> = {
+    value?: ValueType;
+} & BaseAsyncStatusResult<S>;
 
-export type AsyncResultIdle = BaseAsyncStatusResult<AsyncStatus.INIT>;
-export type AsyncResultLoading = {
+export type AsyncResultIdle<ValueType extends any = any> = BaseMaybeValueResult<ValueType, AsyncStatus.INIT>;
+
+export type AsyncResultLoading<ValueType extends any = any> = {
     cancel: () => void;
-} & BaseAsyncStatusResult<AsyncStatus.LOADING>;
-export type AsyncResulSuccess<ValueType> = {
+} & BaseMaybeValueResult<ValueType, AsyncStatus.LOADING>;
+
+export type AsyncResulSuccess<ValueType extends any = any> = {
     value: ValueType;
 } &  BaseAsyncStatusResult<AsyncStatus.SUCCESS>;
 
-export type AsyncResulError<ErrorType> = {
+export type AsyncResulError<ValueType extends any = any, ErrorType extends any = Error> = {
     error: ErrorType;
-} & BaseAsyncStatusResult<AsyncStatus.ERROR>
+} & BaseMaybeValueResult<ValueType, AsyncStatus.ERROR>
 
-export type AsyncResulCancelled = BaseAsyncStatusResult<AsyncStatus.CANCELLED>;
+export type AsyncResulCancelled<ValueType extends any = any> = BaseMaybeValueResult<ValueType, AsyncStatus.CANCELLED>;
 
 export type AsyncStatusResult<ValueType extends any = any, ErrorType extends any = Error> =
-    AsyncResultIdle |
-    AsyncResultLoading |
+    AsyncResultIdle<ValueType> |
+    AsyncResultLoading<ValueType> |
     AsyncResulSuccess<ValueType> |
-    AsyncResulError<ErrorType> |
-    AsyncResulCancelled;
+    AsyncResulError<ValueType, ErrorType> |
+    AsyncResulCancelled<ValueType>;
 
 export type ConfigurationProps = {
-    idleAsLoading?: boolean; // skips idle part and does return idle as loading
+    useInit?: boolean; // if init should be used. Otherwise is Loading
 }
 export type TimeoutAsyncConfigurationProps = {
     milliseconds?: number;

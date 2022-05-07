@@ -5,7 +5,7 @@ import {
   useAsync,
 } from "../index";
 
-const DEFAULT_PROPS = Object.freeze({milliseconds: 200, idleAsLoading: false}) as TimeoutAsyncConfigurationProps;
+const DEFAULT_PROPS = Object.freeze({milliseconds: 200, useInit: false}) as TimeoutAsyncConfigurationProps;
 
 enum UseTimeoutMethods {
   PROPS,
