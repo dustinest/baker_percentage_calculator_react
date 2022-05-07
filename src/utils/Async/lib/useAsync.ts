@@ -26,7 +26,7 @@ type AsyncActionError<ErrorType> = {
   error?: ErrorType
 }
 type AsyncStatusPending = {
-  status: AsyncStatus.IDLE | AsyncStatus.LOADING | AsyncStatus.CANCELLED;
+  status: AsyncStatus.INIT | AsyncStatus.LOADING | AsyncStatus.CANCELLED;
 }
 
 type AsyncAction<ValueType, ErrorType> =
@@ -55,18 +55,22 @@ export const useAsync = <
             status: AsyncStatus.ERROR,
             error: action.error
           } as AsyncActionError<ErrorType>;
-        case AsyncStatus.IDLE:
+        case AsyncStatus.INIT:
           if (props?.idleAsLoading) {
-            return {...previous, ...{status: AsyncStatus.LOADING}}
+            if (previous.status !== AsyncStatus.LOADING ) {
+              return {...previous, ...{status: AsyncStatus.LOADING}}
+            } else {
+              return previous;
+            }
           } else {
-            return {...previous, ...{status: AsyncStatus.IDLE}}
+            return {...previous, ...{status: AsyncStatus.INIT}}
           }
         default:
           return {...previous, ...{status: action.status}} as AsyncStatusPending
       }
     },
     void 0,
-    () => ({status: AsyncStatus.IDLE} as AsyncStatusPending)
+    () => ({status: AsyncStatus.INIT} as AsyncStatusPending)
   );
 
   // Creates a stable callback that manages our loading/success/error status updates
@@ -110,9 +114,9 @@ export const useAsync = <
   return [
     useMemo(() => {
       switch (state.status) {
-        case AsyncStatus.IDLE:
+        case AsyncStatus.INIT:
           return {
-            status: AsyncStatus.IDLE
+            status: AsyncStatus.INIT
           } as AsyncResultIdle;
         case AsyncStatus.LOADING:
           return {

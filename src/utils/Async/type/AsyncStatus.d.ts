@@ -1,5 +1,5 @@
 export enum AsyncStatus {
-    IDLE = "idle",
+    INIT = "init",
     LOADING = "loading",
     SUCCESS = "success",
     ERROR = "error",
@@ -8,7 +8,7 @@ export enum AsyncStatus {
 
 type BaseAsyncStatusResult<S extends AsyncStatus> = { status: S; }
 
-export type AsyncResultIdle = BaseAsyncStatusResult<AsyncStatus.IDLE>;
+export type AsyncResultIdle = BaseAsyncStatusResult<AsyncStatus.INIT>;
 export type AsyncResultLoading = {
     cancel: () => void;
 } & BaseAsyncStatusResult<AsyncStatus.LOADING>;
