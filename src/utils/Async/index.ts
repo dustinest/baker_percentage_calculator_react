@@ -1,4 +1,4 @@
-export * from "./type/AsyncStatus.d";
+export * from "./type/AsyncStatus";
 
 export * from "./lib/useAsyncEffect";
 export * from "./lib/useAsync";

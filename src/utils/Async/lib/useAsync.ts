@@ -1,5 +1,4 @@
 import {Reducer, useEffect, useMemo, useReducer, useState} from "react";
-// noinspection ES6PreferShortImport
 import {
   AsyncResulCancelled,
   AsyncResulError,
@@ -8,7 +7,7 @@ import {
   AsyncResultLoading,
   AsyncStatus, AsyncStatusResult,
   ConfigurationProps
-} from "../type/AsyncStatus.d";
+} from "../type/AsyncStatus";
 import {useLatest} from "./useLatest";
 
 interface AsyncReducedState<ValueType, ErrorType> {
