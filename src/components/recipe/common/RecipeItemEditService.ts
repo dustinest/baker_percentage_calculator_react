@@ -2,16 +2,16 @@ import {
   RecipeIngredientsType,
   RecipeType
 } from "../../../types";
-import {newBlockingPromiseQueue} from "../../../utils/BlockingQueue";
 import {
   BakerPercentageResult,
   recalculateBakerPercentage
 } from "../../../service/BakerPercentage";
 import {splitStarterAndDough} from "../../../service/SourdoughStarter";
+import {newBlockingPromiseQueue} from "typescript-blocking-queue";
 
 export const blockAndRunRecipeLater = (() => {
   const queue = newBlockingPromiseQueue();
-  return <T, R = void>(value: T, callable: (value: T) => Promise<R>) => queue.blockAndRun(() => callable(value));
+  return <T, R = void>(value: T, callable: (value: T) => Promise<R>) => queue.enqueue(() => callable(value));
 })();
 
 const recalculatePercentage = async (ingredients: RecipeIngredientsType[]): Promise<BakerPercentageResult> => {
