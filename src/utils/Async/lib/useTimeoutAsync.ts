@@ -12,20 +12,14 @@ export const useTimeoutAsync = <
   const [asyncState, setAsyncState] = useAsync<ValueType, ErrorType, Args>(asyncCallback, props)
   const timeoutState = useRef<NodeJS.Timeout | null>(null);
 
-  const cancelTimeout = () => {
-    if (timeoutState.current === null) {
-      return;
-    }
-    try {
-      clearTimeout(timeoutState.current);
-    } catch (e) {} // ignore errors
-  };
-
-
   const [callback] = useState<((...args: Args) => Promise<void>) & { cancel: () => void }>(() => {
     return Object.assign(
       async (...args: Args) => {
-        cancelTimeout();
+        if (timeoutState.current !== null) {
+          try {
+            clearTimeout(timeoutState.current);
+          } catch (e) {} // ignore errors
+        }
         timeoutState.current = setTimeout(() => {
           setAsyncState(...args);
           timeoutState.current = null;
@@ -33,7 +27,11 @@ export const useTimeoutAsync = <
       },
       {
         cancel: () => {
-          cancelTimeout();
+          if (timeoutState.current !== null) {
+            try {
+              clearTimeout(timeoutState.current);
+            } catch (e) {} // ignore errors
+          }
           try {
             setAsyncState.cancel();
           } catch (e) {
@@ -44,15 +42,19 @@ export const useTimeoutAsync = <
     ) as ((...args: Args) => Promise<void>) & { cancel: () => void };
   });
   // Cancels any pending async callbacks when the hook unmounts
-  useEffect(callback.cancel, [callback]);
+  useEffect(() => { callback.cancel(); }, [callback]);
 
   return [
     useMemo(() => {
       if (asyncState.status === AsyncStatus.CANCELLED) {
-        cancelTimeout();
+        if (timeoutState.current !== null) {
+          try {
+            clearTimeout(timeoutState.current);
+          } catch (e) {} // ignore errors
+        }
       }
       return asyncState;
-    }, [callback, asyncState]) as AsyncStatusResult<ValueType, ErrorType>,
+    }, [asyncState]) as AsyncStatusResult<ValueType, ErrorType>,
     callback,
   ] as const as [AsyncStatusResult<ValueType, ErrorType>, ((...args: Args) => Promise<void>) & { cancel: () => void }];
 }

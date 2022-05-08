@@ -1,4 +1,4 @@
-import {Reducer, useEffect, useMemo, useReducer, useState} from "react";
+import {Reducer, useEffect, useMemo, useReducer, useRef, useState} from "react";
 import {
   AsyncResulCancelled,
   AsyncResulError,
@@ -9,7 +9,14 @@ import {
   AsyncStatusResult,
   ConfigurationProps
 } from "../type/AsyncStatus";
-import {useLatest} from "./useLatest";
+
+export const useLatestCallback = <T extends any>(currentCallback: T) => {
+  const callback = useRef(currentCallback)
+  useEffect(() => {
+    callback.current = currentCallback
+  })
+  return callback
+}
 
 interface AsyncReducedState<ValueType, ErrorType> {
   status: AsyncStatus;
@@ -67,7 +74,7 @@ export const useAsync = <
 
   // Creates a stable callback that manages our loading/success/error status updates
   // as the callback is invoked.
-  const storedCallback = useLatest(asyncCallback);
+  const storedCallback = useLatestCallback(asyncCallback);
 
   const [callback] = useState<((...args: Args) => Promise<void>) & { cancel: () => void }>(() => {
     const cancelled: Set<Promise<ValueType> | null> = new Set();

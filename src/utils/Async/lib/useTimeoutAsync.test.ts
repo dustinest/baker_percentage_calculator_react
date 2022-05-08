@@ -1,12 +1,12 @@
 import {renderHook, act} from '@testing-library/react-hooks'
-import {useAsync} from "./useAsync";
+import {useTimeoutAsync} from "./useTimeoutAsync";
 import {
   AsyncResulCancelled,
   AsyncResulSuccess,
   AsyncResultLoading,
   AsyncStatus,
   AsyncStatusResult,
-  ConfigurationProps
+  TimeoutAsyncConfigurationProps
 } from "../type/AsyncStatus";
 
 beforeAll(jest.useFakeTimers);
@@ -16,41 +16,47 @@ const resolveLoading = (result: AsyncStatusResult<boolean>): [{ status: AsyncSta
   const {cancel, ...status} = result as AsyncResultLoading<boolean>;
   return [status, cancel];
 }
-
-const resultTimeout = 1000;
+const milliseconds = 100;
+const resultTimeout = 500;
 
 describe('useAsync()', () => {
   it.each([true, false, undefined, null]) ('When init is used = %s should handle Promise.resolve', async(useInit) => {
-    const props = useInit === null ? undefined : { useInit } as ConfigurationProps;
+    const props = useInit === null ? { milliseconds } : { useInit, milliseconds  } as TimeoutAsyncConfigurationProps;
 
     const {result, waitForNextUpdate} = renderHook<boolean, [AsyncStatusResult<boolean>, ((...args: any) => Promise<void>) & { cancel: () => void }]>(() =>
-      useAsync<boolean>(() =>
-        new Promise((resolve) => {
-          setTimeout(() => resolve(true), resultTimeout);
-        }),
-        props
-      )
+      useTimeoutAsync<boolean>(() =>
+          new Promise((resolve) => {
+            setTimeout(() => resolve(true), resultTimeout);
+          }),
+        props)
     );
     const [status1] = resolveLoading(result.current[0]);
     expect(status1).toStrictEqual(useInit === true ? { status :AsyncStatus.INIT } : { status :AsyncStatus.LOADING });
 
     // noinspection DuplicatedCode
     act(() => { result.current[1](); })
-    const [status2, cancel2] = resolveLoading(result.current[0]);
-    expect(status2).toStrictEqual({ status :AsyncStatus.LOADING });
-    expect(cancel2).toBeDefined();
+    // When we first call the status still is init as timeout is 5 milliseconds
+    const [status2] = resolveLoading(result.current[0]);
+    expect(status2).toStrictEqual(useInit === true ? { status :AsyncStatus.INIT } : { status :AsyncStatus.LOADING });
+
+    act(() => { jest.advanceTimersByTime(milliseconds) });
+    const [status3, cancel3] = resolveLoading(result.current[0]);
+    expect(status3).toStrictEqual({ status :AsyncStatus.LOADING });
+    expect(cancel3).toBeDefined();
+
     act(() => { jest.advanceTimersByTime(resultTimeout) });
     await waitForNextUpdate()
     expect(result.current[0]).toStrictEqual({ status :AsyncStatus.SUCCESS, value: true } as AsyncResulSuccess<boolean>);
   });
 
   it('should cancel the callback', async () => {
+
     const {result} = renderHook<boolean, [AsyncStatusResult<boolean>, ((...args: any) => Promise<void>) & { cancel: () => void }]>(() =>
-      useAsync<boolean>(() =>
+      useTimeoutAsync<boolean>(() =>
           new Promise((resolve) => {
             setTimeout(() => resolve(true), resultTimeout);
-          })
-      )
+          }),
+        {milliseconds})
     );
 
     let cancelled
@@ -65,11 +71,11 @@ describe('useAsync()', () => {
 
   it('should restart after cancel', async () => {
     const {result, waitForNextUpdate} = renderHook<boolean, [AsyncStatusResult<boolean>, ((...args: any) => Promise<void>) & { cancel: () => void }]>(() =>
-      useAsync<boolean>(() =>
+      useTimeoutAsync<boolean>(() =>
           new Promise((resolve) => {
             setTimeout(() => resolve(true), resultTimeout);
-          })
-      )
+          }),
+        {milliseconds})
     );
 
     // Initial cancellation
@@ -82,6 +88,8 @@ describe('useAsync()', () => {
     // Try again
     // noinspection DuplicatedCode
     act(() => { result.current[1]() })
+    // Wait to loading to trigger in
+    act(() => { jest.advanceTimersByTime(milliseconds) });
     const [status2, cancel2] = resolveLoading(result.current[0]);
     expect(status2).toStrictEqual({ status :AsyncStatus.LOADING });
     expect(cancel2).toBeDefined();
