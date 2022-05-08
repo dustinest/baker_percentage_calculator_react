@@ -14,6 +14,9 @@ export function useTimeoutAsyncEffect<
   // Runs the callback each time deps change
   useEffect(() => {
     callback();
+    return () => {
+      callback.cancel();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies)
 
