@@ -83,7 +83,9 @@ export const useAsync = <
         try {
           previous = current = storedCallback.current(...args);
           const value = await current;
-          !cancelled.has(current) && dispatch({status: AsyncStatus.SUCCESS, value});
+          if (!cancelled.has(current)) {
+            dispatch({status: AsyncStatus.SUCCESS, value});
+          }
         } catch (error) {
           if (current && !cancelled.has(current)) {
             dispatch({status: AsyncStatus.ERROR, error} as AsyncActionError<ErrorType>);
