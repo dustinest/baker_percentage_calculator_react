@@ -47,26 +47,18 @@ export const useAsync = <
     (previous: AsyncReducedState<ValueType, ErrorType>, action: AsyncAction<ValueType, ErrorType>) => {
       switch (action.status) {
         case AsyncStatus.SUCCESS:
-          return {
-            status: AsyncStatus.SUCCESS,
-            value: action.value
-          } as AsyncActionSuccess<ValueType>;
+          return { status: AsyncStatus.SUCCESS, value: action.value };
         case AsyncStatus.ERROR:
-          return {
-            status: AsyncStatus.ERROR,
-            error: action.error
-          } as AsyncActionError<ErrorType>;
+          return { status: AsyncStatus.ERROR, error: action.error };
         case AsyncStatus.INIT:
-          if (props?.useInit) {
-            return {...previous, ...{status: AsyncStatus.INIT}}
-          }
+          if (props?.useInit) { return {...previous, ...{status: AsyncStatus.INIT}}; }
           if (previous.status !== AsyncStatus.LOADING ) {
-            return {...previous, ...{status: AsyncStatus.LOADING}}
+            return {...previous, ...{status: AsyncStatus.LOADING}};
           } else {
             return previous;
           }
         default:
-          return {...previous, ...{status: action.status}} as AsyncStatusPending
+          return {...previous, ...{status: action.status}} as AsyncStatusPending;
       }
     },
     void 0,
@@ -75,41 +67,41 @@ export const useAsync = <
 
   // Creates a stable callback that manages our loading/success/error status updates
   // as the callback is invoked.
-  const storedCallback = useLatest(asyncCallback)
+  const storedCallback = useLatest(asyncCallback);
 
   const [callback] = useState<((...args: Args) => Promise<void>) & { cancel: () => void }>(() => {
-    const cancelled: Set<Promise<ValueType> | null> = new Set()
-    let previous: Promise<ValueType> | null
+    const cancelled: Set<Promise<ValueType> | null> = new Set();
+    let previous: Promise<ValueType> | null;
 
     return Object.assign(
       async (...args: Args) => {
         // Reloading automatically cancels previous promises
-        cancelled.add(previous)
-        dispatch({status: AsyncStatus.LOADING} as AsyncStatusPending)
-        let current: Promise<ValueType> | null = null
+        cancelled.add(previous);
+        dispatch({status: AsyncStatus.LOADING} as AsyncStatusPending);
+        let current: Promise<ValueType> | null = null;
 
         try {
-          previous = current = storedCallback.current(...args)
-          const value = await current
-          !cancelled.has(current) && dispatch({status: AsyncStatus.SUCCESS, value})
+          previous = current = storedCallback.current(...args);
+          const value = await current;
+          !cancelled.has(current) && dispatch({status: AsyncStatus.SUCCESS, value});
         } catch (error) {
-          current &&
-          !cancelled.has(current) &&
-          dispatch({status: AsyncStatus.ERROR, error} as AsyncActionError<ErrorType>)
+          if (current && !cancelled.has(current)) {
+            dispatch({status: AsyncStatus.ERROR, error} as AsyncActionError<ErrorType>);
+          }
         } finally {
-          cancelled.delete(current)
+          cancelled.delete(current);
         }
       },
       {
         cancel: () => {
-          cancelled.add(previous)
+          cancelled.add(previous);
         },
       }
     ) as ((...args: Args) => Promise<void>) & { cancel: () => void };
   });
 
   // Cancels any pending async callbacks when the hook unmounts
-  useEffect(() => callback.cancel, [callback])
+  useEffect(() => callback.cancel, [callback]);
 
   return [
     useMemo(() => {
@@ -125,7 +117,7 @@ export const useAsync = <
                 // Prevent the callback from dispatching
                 callback.cancel()
                 // Create a new callback and set status to cancelled
-                dispatch({status: AsyncStatus.CANCELLED})
+                dispatch({status: AsyncStatus.CANCELLED});
               }
           }}  as AsyncResultLoading<ValueType>;
         case AsyncStatus.SUCCESS:
