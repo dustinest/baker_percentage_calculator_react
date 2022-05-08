@@ -9,7 +9,6 @@ export const useTimeoutAsync = <
 (asyncCallback: (...args: Args) => Promise<ValueType>, properties?: TimeoutAsyncConfigurationProps) : [AsyncStatusResult<ValueType, ErrorType>, ((...args: Args) => Promise<void>) & { cancel: () => void }] =>
 {
   const {milliseconds = 100, ...props} = properties ?? {};
-  console.log(milliseconds);
   const [asyncState, setAsyncState] = useAsync<ValueType, ErrorType, Args>(asyncCallback, props)
   const timeoutState = useRef<NodeJS.Timeout | null>(null);
 
