@@ -1,14 +1,15 @@
 import {Reducer, useEffect, useMemo, useReducer, useRef, useState} from "react";
+import {AsyncStatus} from "../type/AsyncStatus";
+import {UseAsyncProps} from "../type/UseAsyncProps";
 import {
   AsyncResulCancelled,
   AsyncResulError,
   AsyncResulSuccess,
   AsyncResultIdle,
-  AsyncResultLoading,
-  AsyncStatus,
-  AsyncStatusResult,
-  ConfigurationProps
-} from "../type/AsyncStatus";
+  AsyncResultWorking,
+  AsyncStatusResult
+} from "../type/UseAsyncResult";
+import {UseAsyncResultType} from "../type/UseAsyncResultType";
 
 export const useLatestCallback = <T extends any>(currentCallback: T) => {
   const callback = useRef(currentCallback)
@@ -33,7 +34,7 @@ type AsyncActionError<ErrorType> = {
   error?: ErrorType
 }
 type AsyncStatusPending = {
-  status: AsyncStatus.INIT | AsyncStatus.LOADING | AsyncStatus.CANCELLED;
+  status: AsyncStatus.INIT | AsyncStatus.WORKING | AsyncStatus.CANCELLED;
 }
 
 type AsyncAction<ValueType, ErrorType> =
@@ -46,8 +47,7 @@ export const useAsync = <
   ErrorType extends any = Error,
   Args extends any[] = any[]
   >
-(asyncCallback: (...args: Args) => Promise<ValueType>, props?: ConfigurationProps) :
-  [AsyncStatusResult<ValueType, ErrorType>, ((...args: Args) => Promise<void>) & { cancel: () => void }] =>
+(asyncCallback: (...args: Args) => Promise<ValueType>, props?: UseAsyncProps) : UseAsyncResultType<ValueType, ErrorType, Args> =>
 {
   const [state, dispatch] = useReducer<Reducer<AsyncReducedState<ValueType, ErrorType>, AsyncAction<ValueType, ErrorType>>, undefined>
   (
@@ -59,8 +59,8 @@ export const useAsync = <
           return { status: AsyncStatus.ERROR, error: action.error };
         case AsyncStatus.INIT:
           if (props?.useInit) { return {...previous, ...{status: AsyncStatus.INIT}}; }
-          if (previous.status !== AsyncStatus.LOADING ) {
-            return {...previous, ...{status: AsyncStatus.LOADING}};
+          if (previous.status !== AsyncStatus.WORKING ) {
+            return {...previous, ...{status: AsyncStatus.WORKING}};
           } else {
             return previous;
           }
@@ -69,10 +69,10 @@ export const useAsync = <
       }
     },
     void 0,
-    () => ({status: props?.useInit ? AsyncStatus.INIT : AsyncStatus.LOADING} as AsyncStatusPending)
+    () => ({status: props?.useInit ? AsyncStatus.INIT : AsyncStatus.WORKING} as AsyncStatusPending)
   );
 
-  // Creates a stable callback that manages our loading/success/error status updates
+  // Creates a stable callback that manages our working/success/error status updates
   // as the callback is invoked.
   const storedCallback = useLatestCallback(asyncCallback);
 
@@ -84,7 +84,7 @@ export const useAsync = <
       async (...args: Args) => {
         // Reloading automatically cancels previous promises
         cancelled.add(previous);
-        dispatch({status: AsyncStatus.LOADING} as AsyncStatusPending);
+        dispatch({status: AsyncStatus.WORKING} as AsyncStatusPending);
         let current: Promise<ValueType> | null = null;
 
         try {
@@ -119,16 +119,16 @@ export const useAsync = <
       switch (state.status) {
         case AsyncStatus.INIT:
           return {...resultWithValue, ...{ status: AsyncStatus.INIT }}  as AsyncResultIdle<ValueType>;
-        case AsyncStatus.LOADING:
+        case AsyncStatus.WORKING:
           return {...resultWithValue, ...{
-              status: AsyncStatus.LOADING,
+              status: AsyncStatus.WORKING,
               cancel: () => {
                 // Prevent the callback from dispatching
                 callback.cancel()
                 // Create a new callback and set status to cancelled
                 dispatch({status: AsyncStatus.CANCELLED});
               }
-          }}  as AsyncResultLoading<ValueType>;
+          }}  as AsyncResultWorking<ValueType>;
         case AsyncStatus.SUCCESS:
           return { value: state.value, status: AsyncStatus.SUCCESS } as AsyncResulSuccess<ValueType>;
         case AsyncStatus.ERROR:

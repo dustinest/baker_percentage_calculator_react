@@ -1,41 +1,63 @@
-export const runPromiseLater = <T>(runnable: () => Promise<T>, timeout: number = 1): Promise<T> => {
-    return new Promise<T>((resolve, reject) => {
-        setTimeout(() => runnable().then(resolve).catch(reject), timeout);
-    });
-};
+type CancellablePromise<ValueType extends any = any> = {
+  cancel: () => void;
+} & Promise<ValueType>;
 
-export const runLater = <T>(runnable: () => T, timeout:number = 1): Promise<T> => {
-    return new Promise<T>((resolve, reject) => {
-        setTimeout(() => {
-            try {
-                const result = runnable();
-                resolve(result);
-            } catch (e) {
-                reject(e);
-            }
-        }, timeout);
-    });
-};
-
-export const iterateLater = <T>(list: T[], runnable: (value: T, index: number) => any, timeout: number = 1): Promise<void> => {
-    let index = 0;
-    const _iterate = async(resolve: () => void, reject: (reason?: any) => void): Promise<void> => {
-        if (index >= list.length) return resolve();
-        try {
-            await runnable(list[index], index);
-            index++;
-            if (index >= list.length) return resolve();
-            // noinspection ES6MissingAwait
-            runLater(() => _iterate(resolve, reject), timeout);
-        } catch (e) {
-            reject(e);
+export const runAsyncLater = <ValueType extends any = any>(
+    runnable: () => Promise<ValueType>,
+    timeout?: number
+): CancellablePromise<ValueType> => {
+  let timeoutValue: NodeJS.Timeout | null = null;
+  return Object.assign(
+    new Promise<ValueType>((resolve, reject) => {
+      try {
+        if (!timeout || timeout === 0) {
+          runnable().then(resolve).catch(reject)
+        } else {
+          timeoutValue = setTimeout(() => runnable().then(resolve).catch(reject), timeout);
         }
-    };
-    return new Promise<void>((resolve, reject) => _iterate(resolve, reject) );
+      } catch (e) {
+        reject(e);
+      }
+  }),
+    {
+      cancel: () => {
+        if (timeoutValue === null) return;
+        clearTimeout(timeoutValue);
+      }
+    }
+  );
+};
+
+export const runLater = <ValueType extends any = any>(runnable: () => ValueType, timeout?: number): CancellablePromise<ValueType> =>
+  runAsyncLater<ValueType>(async () => runnable(), timeout);
+
+export const iterateAsync = <ValueType extends any = any>(
+  list: ValueType[],
+  runnable: (value: ValueType, index: number, cancel: () => void) => Promise<void>,
+  timeout?: number
+): CancellablePromise<void> => {
+  let running = true;
+  return Object.assign(
+    new Promise<void>((resolve, reject) => {
+      let index = -1;
+      const run = () => {
+        index ++;
+        if (!running || index >= list.length) {
+          return null;
+        }
+        runLater<void>(() =>
+          runnable(list[index], index, () => { running = false; })
+        , timeout).then(() => run()).catch(reject);
+      };
+      run();
+    }),
+    {
+      cancel: () => {
+        running = false;
+      }
+    }
+  );
 }
 
-export const iterateAsync = async <T>(list: T[], runnable: (value: T, index: number) => Promise<void>): Promise<void> => {
-    for (let i = 0; i < list.length; i++) {
-        await runnable(list[i], i);
-    }
-}
+export const iterateLater = <T>(list: T[], runnable: (value: T, index: number, cancel: () => void) => any, timeout?: number): Promise<void> =>
+  iterateAsync(list, async (value, index, cancel) => runnable(value, index, cancel), timeout);

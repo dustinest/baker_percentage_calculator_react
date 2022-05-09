@@ -1,12 +1,13 @@
 import {renderHook, act} from '@testing-library/react-hooks'
-import {AsyncResulError, AsyncResultLoading, AsyncStatus, AsyncStatusResult} from "../type/AsyncStatus";
+import {AsyncStatus} from "../type/AsyncStatus";
 import { useTimeoutAsyncEffect } from './useTimeoutAsyncEffect';
+import {AsyncResulError, AsyncResultWorking, AsyncStatusResult} from "../type/UseAsyncResult";
 
 beforeAll(jest.useFakeTimers);
 afterAll(jest.useRealTimers);
 
-const resolveLoading = <T>(result: AsyncStatusResult<T>): { status: AsyncStatus.LOADING; } => {
-  const {cancel, ...status} = result as AsyncResultLoading<T>;
+const resolveLoading = <T>(result: AsyncStatusResult<T>): { status: AsyncStatus.WORKING; } => {
+  const {cancel, ...status} = result as AsyncResultWorking<T>;
   return status;
 }
 
@@ -29,7 +30,7 @@ describe('useAsyncEffect()', () => {
         initialProps: {deps: [true]},
       }
     );
-    expect(resolveLoading(result.current)).toStrictEqual({ status :AsyncStatus.LOADING });
+    expect(resolveLoading(result.current)).toStrictEqual({ status :AsyncStatus.WORKING });
     act(() => { jest.advanceTimersByTime(resultTimeout + milliseconds) });
     await waitForNextUpdate();
     expect(result.current).toStrictEqual({ status: AsyncStatus.SUCCESS, value: true });
@@ -38,7 +39,7 @@ describe('useAsyncEffect()', () => {
     expect(result.current).toStrictEqual({ status: AsyncStatus.SUCCESS, value: true });
     act(() => { jest.advanceTimersByTime(milliseconds); });
     // Yes, this value should be persisted and not reset
-    expect(resolveLoading(result.current)).toStrictEqual({ status :AsyncStatus.LOADING, value: true });
+    expect(resolveLoading(result.current)).toStrictEqual({ status :AsyncStatus.WORKING, value: true });
     act(() => { jest.advanceTimersByTime(resultTimeout); });
     await waitForNextUpdate();
     expect(resolveLoading(result.current)).toStrictEqual({ status :AsyncStatus.SUCCESS, value: false });
@@ -50,7 +51,7 @@ describe('useAsyncEffect()', () => {
         throw new Error('Something got wrong!');
       }, [])
     );
-    expect(resolveLoading(result.current)).toStrictEqual({ status :AsyncStatus.LOADING });
+    expect(resolveLoading(result.current)).toStrictEqual({ status :AsyncStatus.WORKING });
     act(() => { jest.advanceTimersByTime(milliseconds); });
     await waitForNextUpdate()
     const {error, ...others} = resolveLoading(result.current) as any as AsyncResulError<boolean>;
@@ -70,7 +71,7 @@ describe('useAsyncEffect()', () => {
       )
     )
 
-    expect(resolveLoading(result.current)).toStrictEqual({ status :AsyncStatus.LOADING });
+    expect(resolveLoading(result.current)).toStrictEqual({ status :AsyncStatus.WORKING });
     act(() => { jest.advanceTimersByTime(milliseconds + resultTimeout) });
     await waitForNextUpdate()
     const {error, ...others} = resolveLoading(result.current) as any as AsyncResulError<boolean>;

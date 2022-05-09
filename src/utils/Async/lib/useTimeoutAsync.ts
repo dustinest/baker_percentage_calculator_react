@@ -1,14 +1,21 @@
 import {useEffect, useMemo, useRef, useState} from "react";
-import {AsyncStatus, AsyncStatusResult, TimeoutAsyncConfigurationProps, useAsync,} from "../index";
+import { AsyncStatus } from "../type/AsyncStatus";
+import {UseTimeoutAsyncProps} from "../type/UseAsyncProps";
+import {AsyncStatusResult} from "../type/UseAsyncResult";
+import {UseAsyncResultType} from "../type/UseAsyncResultType";
+import { useAsync } from "./useAsync";
 
 export const useTimeoutAsync = <
   ValueType extends any = any,
   ErrorType extends any = Error,
   Args extends any[] = any[]
   >
-(asyncCallback: (...args: Args) => Promise<ValueType>, properties?: TimeoutAsyncConfigurationProps) : [AsyncStatusResult<ValueType, ErrorType>, ((...args: Args) => Promise<void>) & { cancel: () => void }] =>
+(asyncCallback: (...args: Args) => Promise<ValueType>, properties?: UseTimeoutAsyncProps) : UseAsyncResultType<ValueType, ErrorType, Args> =>
 {
   const {milliseconds = 100, ...props} = properties ?? {};
+  if (milliseconds <= 0) {
+    throw new Error(`Ilelgal milliseconds ${milliseconds}. It should be >= 0!`);
+  }
   const [asyncState, setAsyncState] = useAsync<ValueType, ErrorType, Args>(asyncCallback, props)
   const timeoutState = useRef<NodeJS.Timeout | null>(null);
 

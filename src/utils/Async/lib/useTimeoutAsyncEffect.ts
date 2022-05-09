@@ -1,6 +1,6 @@
 import {DependencyList, useEffect} from "react";
 import {useTimeoutAsync} from "./useTimeoutAsync";
-import {TimeoutAsyncConfigurationProps} from "../type/AsyncStatus";
+import {UseTimeoutAsyncProps} from "../type/UseAsyncProps";
 
 export function useTimeoutAsyncEffect<
   ValueType extends any = any,
@@ -8,7 +8,7 @@ export function useTimeoutAsyncEffect<
   >(
   asyncCallback: () => Promise<ValueType>,
   dependencies?: DependencyList,
-  props?: TimeoutAsyncConfigurationProps
+  props?: UseTimeoutAsyncProps
 ) {
   const [state, callback] = useTimeoutAsync<ValueType, ErrorType>(asyncCallback, props)
   // Runs the callback each time deps change
