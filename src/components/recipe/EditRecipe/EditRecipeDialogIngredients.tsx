@@ -75,7 +75,7 @@ export const EditRecipeDialogIngredients = ({
                                             }: EditRecipeDialogIngredientsProps) => {
   const [expanded, setExpanded] = useState<boolean>(false);
 
-  const privileges = useMemo<{expand: { is: boolean, can: boolean}, delete: {can: boolean}}>(() => {
+  const privileges = useMemo<{expand: { is: boolean, can: boolean}, delete: {can: boolean}, enforceStarter: boolean}>(() => {
     const isNewRecipe = recipe.id === RECIPE_CONSTANTS.NEW_RECIPE;
     const hasMoreIngredients = recipe.ingredients.length > 1;
     const hasOtherIngredients = recipe.ingredients.find((a, i) => i !== index && a.ingredients.length > 0) !== undefined;
@@ -86,7 +86,8 @@ export const EditRecipeDialogIngredients = ({
       },
       delete: {
         can: hasOtherIngredients
-      }
+      },
+      enforceStarter: index === 0 && ingredients.ingredients.length > 0
     }
     // To mute ingredients check. We do need it!
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -105,6 +106,7 @@ export const EditRecipeDialogIngredients = ({
     });
   }
 
+
   return (
     <Card>
       <CardHeader
@@ -116,13 +118,13 @@ export const EditRecipeDialogIngredients = ({
           </MenuItem>
         </CommonMenuButton> : undefined}
       />
-      <CardContent>
+      { ingredients.ingredients.length > 0 ? <CardContent>
         <EditRecipeIngredients ingredients={ingredients.ingredients} index={index}/>
-        {index === 0 ? <EnforceStarter ingredients={ingredients} index={index}/> : undefined}
-      </CardContent>
-      {privileges.expand.can ? <CardActions disableSpacing>
-        <ExpandMoreAction expanded={expanded} onChange={setExpanded}/>
-      </CardActions>: undefined}
+      </CardContent> : undefined }
+      <CardActions disableSpacing>
+        {privileges.enforceStarter ? <EnforceStarter ingredients={ingredients} index={index}/> : undefined}
+        {privileges.expand.can ?  <ExpandMoreAction expanded={expanded} onChange={setExpanded}/> : undefined}
+      </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <EditRecipeRemainingIngredients ingredients={ingredients.ingredients} index={index}/>

@@ -1,10 +1,10 @@
 import {IngredientGramsType} from "../../../types";
 import {
+  Input,
   InputAdornment,
   ListItemIcon,
   ListItemText,
   MenuItem,
-  OutlinedInput,
   Select,
   SelectChangeEvent,
   Table,
@@ -199,9 +199,10 @@ export const EditRecipeRemainingIngredients = ({ingredients, index}: EditRecipeR
   return (
     <>
       { !selectedValue ? undefined :
-        <HorizontalActionStack>
+        <HorizontalActionStack spacing={0} justifyContent="center">
+          <HorizontalActionStack spacing={2}>
           <Select
-            labelId="select-ingredients"
+            variant="standard"
             value={selectedValue}
             onChange={(e: SelectChangeEvent) => setSelectedValue(e.target.value)}
           >
@@ -211,13 +212,14 @@ export const EditRecipeRemainingIngredients = ({ingredients, index}: EditRecipeR
               ))
             }
           </Select>
-          <OutlinedInput
+          <Input
             className="recipe-ingredient-amount"
             type="number"
             value={grams}
             onChange={setGrams}
             endAdornment={<InputAdornment position="end">g</InputAdornment>}
           />
+          </HorizontalActionStack>
           <AddButton onClick={addNewItem} disabled={isSameGrams || grams <= 0}/>
         </HorizontalActionStack>
       }
