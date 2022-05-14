@@ -1,6 +1,6 @@
 export enum AsyncStatus {
     INIT = "init",
-    WORKING = "loading",
+    WORKING = "working",
     SUCCESS = "success",
     ERROR = "error",
     CANCELLED = "cancelled"

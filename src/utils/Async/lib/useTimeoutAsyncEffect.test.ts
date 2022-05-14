@@ -1,7 +1,8 @@
 import {renderHook, act} from '@testing-library/react-hooks'
 import {AsyncStatus} from "../type/AsyncStatus";
-import { useTimeoutAsyncEffect } from './useTimeoutAsyncEffect';
+import {useTimeoutAsyncEffect} from './useTimeoutAsyncEffect';
 import {AsyncResulError, AsyncResultWorking, AsyncStatusResult} from "../type/UseAsyncResult";
+import {TimeoutAsyncStatus} from "../type/TimeoutAsyncStatus";
 
 beforeAll(jest.useFakeTimers);
 afterAll(jest.useRealTimers);
@@ -17,32 +18,48 @@ const resultTimeout = 500;
 describe('useAsyncEffect()', () => {
   it('should update when deps change', async () => {
     const {result, rerender, waitForNextUpdate} = renderHook(
-      ({deps}) =>
-        useTimeoutAsyncEffect<boolean>(
-          () =>
-            new Promise((resolve) => {
+      ({deps}) => {
+        //console.log("render", [...deps]);
+        return useTimeoutAsyncEffect<boolean>(
+          () => {
+            //console.log("init asyunc", [...deps]);
+            return new Promise((resolve) => {
               setTimeout(() => {
+                //console.log("RUNNING", [...deps]);
                 resolve(deps[0])
               }, resultTimeout)
-            }),
-          deps, {milliseconds}),
+            })
+          },
+          deps, {milliseconds})
+      }
+      ,
       {
         initialProps: {deps: [true]},
       }
     );
-    expect(resolveLoading(result.current)).toStrictEqual({ status :AsyncStatus.WORKING });
-    act(() => { jest.advanceTimersByTime(resultTimeout + milliseconds) });
+    expect(resolveLoading(result.current)).toStrictEqual({status: TimeoutAsyncStatus.SCHEDULED});
+    act(() => {
+      jest.advanceTimersByTime(milliseconds)
+    });
+    expect(resolveLoading(result.current)).toStrictEqual({status: AsyncStatus.WORKING});
+    act(() => {
+      jest.advanceTimersByTime(resultTimeout)
+    });
     await waitForNextUpdate();
-    expect(result.current).toStrictEqual({ status: AsyncStatus.SUCCESS, value: true });
+    expect(result.current).toStrictEqual({status: AsyncStatus.SUCCESS, value: true});
     rerender({deps: [false]});
     // We still need the timeout to kick in
-    expect(result.current).toStrictEqual({ status: AsyncStatus.SUCCESS, value: true });
-    act(() => { jest.advanceTimersByTime(milliseconds); });
+    expect(resolveLoading(result.current)).toStrictEqual({status: TimeoutAsyncStatus.SCHEDULED, value: true});
+    act(() => {
+      jest.advanceTimersByTime(milliseconds);
+    });
     // Yes, this value should be persisted and not reset
-    expect(resolveLoading(result.current)).toStrictEqual({ status :AsyncStatus.WORKING, value: true });
-    act(() => { jest.advanceTimersByTime(resultTimeout); });
+    expect(resolveLoading(result.current)).toStrictEqual({status: AsyncStatus.WORKING, value: true});
+    act(() => {
+      jest.advanceTimersByTime(resultTimeout);
+    });
     await waitForNextUpdate();
-    expect(resolveLoading(result.current)).toStrictEqual({ status :AsyncStatus.SUCCESS, value: false });
+    expect(resolveLoading(result.current)).toStrictEqual({status: AsyncStatus.SUCCESS, value: false});
   })
 
   it('should handle thrown exceptions', async () => {
@@ -51,11 +68,13 @@ describe('useAsyncEffect()', () => {
         throw new Error('Something got wrong!');
       }, [])
     );
-    expect(resolveLoading(result.current)).toStrictEqual({ status :AsyncStatus.WORKING });
-    act(() => { jest.advanceTimersByTime(milliseconds); });
+    expect(resolveLoading(result.current)).toStrictEqual({status: TimeoutAsyncStatus.SCHEDULED});
+    act(() => {
+      jest.advanceTimersByTime(milliseconds);
+    });
     await waitForNextUpdate()
     const {error, ...others} = resolveLoading(result.current) as any as AsyncResulError<boolean>;
-    expect(others).toStrictEqual({ status :AsyncStatus.ERROR });
+    expect(others).toStrictEqual({status: AsyncStatus.ERROR});
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toBe('Something got wrong!')
   })
@@ -71,11 +90,13 @@ describe('useAsyncEffect()', () => {
       )
     )
 
-    expect(resolveLoading(result.current)).toStrictEqual({ status :AsyncStatus.WORKING });
-    act(() => { jest.advanceTimersByTime(milliseconds + resultTimeout) });
+    expect(resolveLoading(result.current)).toStrictEqual({status: TimeoutAsyncStatus.SCHEDULED});
+    act(() => {
+      jest.advanceTimersByTime(milliseconds + resultTimeout)
+    });
     await waitForNextUpdate()
     const {error, ...others} = resolveLoading(result.current) as any as AsyncResulError<boolean>;
-    expect(others).toStrictEqual({ status: AsyncStatus.ERROR });
+    expect(others).toStrictEqual({status: AsyncStatus.ERROR});
     expect(error).toBe('Something got wrong!')
   })
 })

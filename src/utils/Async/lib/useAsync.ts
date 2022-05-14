@@ -1,4 +1,4 @@
-import {Reducer, useEffect, useMemo, useReducer, useRef, useState} from "react";
+import {Reducer, useEffect, useMemo, useReducer, useState} from "react";
 import {AsyncStatus} from "../type/AsyncStatus";
 import {UseAsyncProps} from "../type/UseAsyncProps";
 import {
@@ -10,14 +10,7 @@ import {
   AsyncStatusResult
 } from "../type/UseAsyncResult";
 import {UseAsyncResultType} from "../type/UseAsyncResultType";
-
-export const useLatestCallback = <T extends any>(currentCallback: T) => {
-  const callback = useRef(currentCallback)
-  useEffect(() => {
-    callback.current = currentCallback
-  })
-  return callback
-}
+import {useLatestCallback} from "./useLatestCallback";
 
 interface AsyncReducedState<ValueType, ErrorType> {
   status: AsyncStatus;
