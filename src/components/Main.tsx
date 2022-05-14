@@ -4,12 +4,17 @@ import {RecipeType} from "../types";
 import {CircularProgress} from "@mui/material";
 import {readJsonRecipe} from "../service/RecipeReader";
 import {useContext, useEffect, useState} from "react";
-import {EditRecipeProvider, RecipesContext, RecipesStateActionTypes, useMessageSnackBar,} from "../State";
-import {RecipeList, RecipePrintList} from "./recipe/RecipeList";
+import {
+  AppStateContext,
+  EditRecipeProvider,
+  RecipesContext,
+  RecipesStateActionTypes,
+  useMessageSnackBar,
+} from "../State";
+import {RecipeList} from "./recipe/RecipeList";
 import {AsyncStatus, runLater, useAsyncEffect} from "../utils/Async";
 import {EditRecipeDialog} from "./recipe/EditRecipe";
-import {AddRecipeIcon} from "./AddRecipeIcon";
-import {FloatingPrintCancelButton} from "../Constant/Buttons";
+import {AddRecipeFloatingButton, FloatingPrintCancelButton} from "../Constant/Buttons";
 import {BakerPercentageAwareRecipe, getBakerPercentageAwareRecipe} from "./recipe/common/BakerPercentageAwareRecipe";
 /*
 const getDuplicateRecipe = (value: JsonRecipeType): JsonRecipeType => {
@@ -49,7 +54,7 @@ export const Main = () => {
   const snackBar = useMessageSnackBar();
   const {recipeState, recipesDispatch} = useContext(RecipesContext);
   const [status, setStatus] = useState<{loading: boolean, amount: number}>({ loading: true, amount: 0 });
-  const [printPreview, setPrintPreview] = useState<boolean>(false);
+  const {appState} = useContext(AppStateContext);
 
   const result = useAsyncEffect<BakerPercentageAwareRecipe[]>(async () => {
     const recipes = getRecipes();
@@ -77,26 +82,26 @@ export const Main = () => {
   }, [result])
 
   useEffect(() => {
-    if (recipeState.recipes.length > 0 && printPreview && !status.loading) runLater(async () => window.print(), 1000);
+    if (recipeState.recipes.length > 0 && appState.printPreview.current && !status.loading) runLater(async () => window.print(), 1000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [printPreview, status, recipeState]);
+  }, [appState.printPreview.current, status, recipeState]);
 
   return (
     <>
       {
         status.loading ? (<CircularProgress/>) :
-          printPreview  ?
+          appState.printPreview.current  ?
             (
               <>
-                <FloatingPrintCancelButton onClick={() => setPrintPreview(false)}/>
-                <RecipePrintList/>
+                <FloatingPrintCancelButton />
+                <RecipeList/>
             </>
             ) :
             (
                 <>
-                  <RecipeNavigation onPrint={() => setPrintPreview(true)}>
+                  <RecipeNavigation>
                     <EditRecipeProvider>
-                      <AddRecipeIcon/>
+                      <AddRecipeFloatingButton/>
                       <EditRecipeDialog/>
                       <RecipeList/>
                     </EditRecipeProvider>

@@ -17,15 +17,10 @@ import {
   Typography
 } from "@mui/material";
 
-import {ReactNode, useState} from "react";
+import {ReactNode, useContext} from "react";
 import {RecipeName} from "../common/RecipeName";
 import {Translation} from "../../Translations";
-import {
-  CheckAllButton,
-  ClearAllButton,
-  DoneButton,
-  MenuIconButton
-} from "../../Constant/Buttons";
+import {CheckAllButton, ClearAllButton, DoneButton, MenuIconButton} from "../../Constant/Buttons";
 import {RecipeType} from "../../types";
 import {DrawerHeader} from "./wrapper/DrawerHeader";
 import {NavigationAppBar} from "./wrapper/NavigationAppBar";
@@ -35,8 +30,9 @@ import {useElementClientHeight} from "../common/useElementClientHeight";
 import {CheckedIcon, PrintIcon, UnCheckedIcon} from "../../Constant/Icons";
 import i18next from "i18next";
 import {CommonMenuButton} from "../common/CommonMenu";
-import {useMessageSnackBar} from "../../State";
+import {AppStateActionTypes, AppStateContext, useMessageSnackBar} from "../../State";
 import {FLAGS} from "../../static/lib";
+import {runLater} from "../../utils/Async";
 
 const NAVIGATION_WIDTH = 260;
 
@@ -66,15 +62,14 @@ const RecipesList = styled('div')<{top: number}>(({  top }) => ({
   marginTop: `${top}px`
 }));
 
-export const RecipeNavigation = ({children, onPrint}: {onPrint: () => void, children: ReactNode}) => {
+export const RecipeNavigation = ({children}: {children: ReactNode}) => {
   const [recipes, actions, recipeStatus] = useRecipeMenuState();
-  const [isOpen, setIsOpen] = useState(false);
-  const handleDrawerOpen = () => setIsOpen(true);
-  const snackBar = useMessageSnackBar();
 
+  const snackBar = useMessageSnackBar();
+  const {appState, appStateDispatch} = useContext(AppStateContext);
   const handleDrawerClose = () => {
-    setIsOpen(false);
-    actions.submit();
+    appStateDispatch(AppStateActionTypes.MENU_CLOSE);
+    runLater(actions.submit, 1);
   }
 
   const [menuHeight, setMenuElement] = useElementClientHeight();
@@ -89,20 +84,20 @@ export const RecipeNavigation = ({children, onPrint}: {onPrint: () => void, chil
   return (
     <Box sx={{display: 'flex'}}>
       <CssBaseline/>
-      <NavigationAppBar position="fixed" open={isOpen} width={NAVIGATION_WIDTH} ref={setHeaderElement}>
+      <NavigationAppBar position="fixed" open={appState.menuOpen.current} width={NAVIGATION_WIDTH} ref={setHeaderElement}>
         <Toolbar>
           <Box display="flex" flexGrow={1}>
             <MenuIconButton
               color="inherit"
               aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              sx={{mr: 2, ...(isOpen && {display: 'none'})}}
+              onClick={() => appStateDispatch(AppStateActionTypes.MENU_OPEN)}
+              sx={{mr: 2, ...(appState.menuOpen.current && {display: 'none'})}}
             />
             <Typography variant="h6" noWrap component="div">
               {recipeStatus.selectedRecipe ? <RecipeName recipe={recipeStatus.selectedRecipe}/> : <Translation label="title" count={recipeStatus.defaultSelected}/>}
             </Typography>
           </Box>
-          {isOpen ? undefined :
+          {appState.menuOpen.current ? undefined :
             <>
               <CommonMenuButton>
                 { FLAGS.map(({key, label, value}) =>
@@ -112,7 +107,7 @@ export const RecipeNavigation = ({children, onPrint}: {onPrint: () => void, chil
                   </MenuItem>
                 )}
                 <Divider variant="middle" />
-                <MenuItem onClick={onPrint}>
+                <MenuItem onClick={() => appStateDispatch(AppStateActionTypes.PRINT_PREVIEW_OPEN)}>
                   <ListItemIcon><PrintIcon/></ListItemIcon>
                   <ListItemText><Translation label="actions.print"/></ListItemText>
                 </MenuItem>
@@ -132,7 +127,7 @@ export const RecipeNavigation = ({children, onPrint}: {onPrint: () => void, chil
         }}
         variant="persistent"
         anchor="left"
-        open={isOpen}
+        open={appState.menuOpen.current}
       >
         <DrawerHeader ref={setMenuElement} width={NAVIGATION_WIDTH}>
           <ButtonGroup>
@@ -154,7 +149,7 @@ export const RecipeNavigation = ({children, onPrint}: {onPrint: () => void, chil
         </List>
         </RecipesList>
       </Drawer>
-      <MainNavigationMainContainer open={isOpen} width={NAVIGATION_WIDTH} menuHeight={contentHeight}>{children}</MainNavigationMainContainer>
+      <MainNavigationMainContainer open={appState.menuOpen.current} width={NAVIGATION_WIDTH} menuHeight={contentHeight}>{children}</MainNavigationMainContainer>
     </Box>
   );
 }

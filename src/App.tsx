@@ -6,6 +6,7 @@ import { initReactI18next } from "react-i18next";
 
 import gb from './static/locales/gb.json'
 import ee from './static/locales/ee.json'
+import {AppStateProvider} from "./State";
 
 i18n.use(initReactI18next)
     .init({
@@ -27,7 +28,9 @@ i18n.use(initReactI18next)
 function App() {
   return (
     <div className="App">
+      <AppStateProvider>
         <Main/>
+      </AppStateProvider>
     </div>
   );
 }
