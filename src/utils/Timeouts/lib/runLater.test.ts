@@ -16,50 +16,59 @@ describe("runLater works", () => {
 
   it ("can be scheduled", async () => {
     const time = await measure(async () => {
-      const result = await runLater(mockCallback, 100);
-      expect(result).toBe("abc");
+      await expect(runLater(mockCallback, 100)).resolves.toBe("abc");
     });
-    expect(mockCallback.mock.calls.length).toBe(1);
+    expect(mockCallback).toBeCalledTimes(1);
     expect(time).toBeGreaterThan(100);
     expect(time).toBeLessThan(200);
   });
 
   it ("schedule immediately", async () => {
     const time = await measure(async () => {
-      const result = await runLater(mockCallback);
-      expect(result).toBe("abc");
+      await expect(runLater(mockCallback)).resolves.toBe("abc");
     });
-    expect(mockCallback.mock.calls.length).toBe(1);
+    expect(mockCallback).toBeCalledTimes(1);
     expect(time).toBeLessThan(10);
+  });
+
+  it ("When exception is thrown in 100ms", async () => {
+    const result = runLater(() =>{
+      throw new Error("lorem ipsum est")
+    } , 100);
+    await expect(result).rejects.toThrowError(new Error("lorem ipsum est"));
+    // let's try again
+    result.cancel();
+    await expect(result).rejects.toThrowError(new Error("lorem ipsum est"));
+  });
+
+  it ("When exception is thrown", async () => {
+    const result = runLater(() =>{
+      throw new Error("lorem ipsum est")
+    });
+    await expect(result).rejects.toThrowError(new Error("lorem ipsum est"));
+    // let's try again
+    result.cancel();
+    await expect(result).rejects.toThrowError(new Error("lorem ipsum est"));
   });
 
   it ("can be cancelled", async () => {
     const time = await measure(async () => {
-      const result = runLater(mockCallback, 100);
+      const result = runLater(mockCallback, 1000);
       result.cancel();
-      let message = "";
-      try {
-        await result;
-      } catch (error) {
-        message = (error as Error).message;
-      }
-      expect(message).toBe("Method cancelled!");
+      await expect(result).rejects.toThrowError(new Error("Method cancelled!"));
       // let's try again
       result.cancel();
     });
-    expect(mockCallback.mock.calls.length).toBe(0);
-    expect(time).toBeLessThan(10);
+    expect(mockCallback).toBeCalledTimes(0);
+    expect(time).toBeLessThan(100);
   });
 
   it ("will not be cancelled when scheduled immediately", async () => {
-    const time = await measure(async () => {
-      const result = runLater(mockCallback);
-      result.cancel();
-      await result;
-      // let's try again
-      result.cancel();
-    });
-    expect(mockCallback.mock.calls.length).toBe(1);
-    expect(time).toBeLessThan(10);
+    const result = runLater(mockCallback);
+    result.cancel();
+    await expect(result).rejects.toThrowError(new Error("Method cancelled!"));
+    // let's try again
+    result.cancel();
+    expect(mockCallback).toBeCalledTimes(1);
   });
 });

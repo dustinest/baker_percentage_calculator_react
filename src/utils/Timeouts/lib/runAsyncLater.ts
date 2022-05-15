@@ -1,4 +1,5 @@
 import {CancellablePromise} from "../type/CancellablePromise";
+import {JobRunningError} from "../type/Exceptions";
 
 export const runAsyncLater = <ValueType extends any = any>(
   runnable: () => Promise<ValueType>,
@@ -6,31 +7,41 @@ export const runAsyncLater = <ValueType extends any = any>(
 ): CancellablePromise<ValueType> => {
   let timeoutValue: NodeJS.Timeout | null = null;
   let rejects: (reason?: any) => void | null = () => {};
+  let running: boolean = true;
 
   const result = new Promise<ValueType>((resolve, reject) => {
     rejects = reject;
     try {
       if (!timeout || timeout === 0) {
-        runnable().then(resolve).catch(reject)
-      } else {
-        timeoutValue = setTimeout(() => runnable().then((result) => {
-          if (timeoutValue === null) return;
-          resolve(result);
+        return runnable().then((result) => {
+          if (running) resolve(result);
         }).catch((error) => {
-          if (timeoutValue === null) return;
-          reject(error);
-        }), timeout);
+          if (running) reject(error);
+        });
       }
-    } catch (e) {
-      reject(e);
+      timeoutValue = setTimeout(
+        () => runnable().then((result) => {
+          if (running) resolve(result);
+        }).catch((error) => {
+          if (running) reject(error);
+        }), timeout);
+    } catch (error) {
+      reject(error);
     }
   });
   return Object.assign(result, {
       cancel: () => {
-        if (timeoutValue === null) return;
-        clearTimeout(timeoutValue);
-        timeoutValue = null;
-        rejects(new Error("Method cancelled!"));
+        try {
+          if (timeoutValue !== null) {
+            try {
+              clearTimeout(timeoutValue);
+            } catch (e) {}
+            timeoutValue = null;
+          }
+          if (running) rejects(new JobRunningError());
+        } finally {
+          running = false;
+        }
       }
     }
   );
