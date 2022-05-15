@@ -10,7 +10,7 @@ import {
   AsyncStatusResult
 } from "../type/UseAsyncResult";
 import {UseAsyncResultType} from "../type/UseAsyncResultType";
-import {useLatestCallback} from "./useLatestCallback";
+import {useLatest} from "./useLatest";
 
 interface AsyncReducedState<ValueType, ErrorType> {
   status: AsyncStatus;
@@ -40,8 +40,13 @@ export const useAsync = <
   ErrorType extends any = Error,
   Args extends any[] = any[]
   >
-(asyncCallback: (...args: Args) => Promise<ValueType>, props?: UseAsyncProps) : UseAsyncResultType<ValueType, ErrorType, Args> =>
+(asyncCallback: (...args: Args) => Promise<ValueType>, properties?: UseAsyncProps) : UseAsyncResultType<ValueType, ErrorType, Args> =>
 {
+  const props = useLatest<UseAsyncProps | undefined, {useInit: boolean}>(properties, (properties) => {
+    const {useInit = false} = properties ?? {};
+    return {useInit}
+  });
+
   const [state, dispatch] = useReducer<Reducer<AsyncReducedState<ValueType, ErrorType>, AsyncAction<ValueType, ErrorType>>, undefined>
   (
     (previous: AsyncReducedState<ValueType, ErrorType>, action: AsyncAction<ValueType, ErrorType>) => {
@@ -51,7 +56,7 @@ export const useAsync = <
         case AsyncStatus.ERROR:
           return { status: AsyncStatus.ERROR, error: action.error };
         case AsyncStatus.INIT:
-          if (props?.useInit) { return {...previous, ...{status: AsyncStatus.INIT}}; }
+          if (props.current.useInit) { return {...previous, ...{status: AsyncStatus.INIT}}; }
           if (previous.status !== AsyncStatus.WORKING ) {
             return {...previous, ...{status: AsyncStatus.WORKING}};
           } else {
@@ -62,12 +67,12 @@ export const useAsync = <
       }
     },
     void 0,
-    () => ({status: props?.useInit ? AsyncStatus.INIT : AsyncStatus.WORKING} as AsyncStatusPending)
+    () => ({status: props.current.useInit ? AsyncStatus.INIT : AsyncStatus.WORKING} as AsyncStatusPending)
   );
 
   // Creates a stable callback that manages our working/success/error status updates
   // as the callback is invoked.
-  const storedCallback = useLatestCallback(asyncCallback);
+  const storedCallback = useLatest(asyncCallback);
 
   const [callback] = useState<((...args: Args) => Promise<void>) & { cancel: () => void }>(() => {
     const cancelled: Set<Promise<ValueType> | null> = new Set();

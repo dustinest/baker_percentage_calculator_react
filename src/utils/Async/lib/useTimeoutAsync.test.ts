@@ -45,7 +45,7 @@ describe('useAsync()', () => {
     expect(result.current[0]).toStrictEqual({ status :AsyncStatus.SUCCESS, value: true } as AsyncResulSuccess<boolean>);
   });
 
-  it.only.each([
+  it.each([
     resultTimeout,
     milliseconds,
     resultTimeout + milliseconds,

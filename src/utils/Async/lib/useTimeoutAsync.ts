@@ -10,7 +10,7 @@ import {
   AsyncStatusResult
 } from "../type/UseAsyncResult";
 import {UseAsyncResultType} from "../type/UseAsyncResultType";
-import {useLatestCallback} from "./useLatestCallback";
+import {useLatest} from "./useLatest";
 import {TimeoutAsyncStatus} from "../type/TimeoutAsyncStatus";
 import {AsyncResultScheduled} from "../type/UseTimeoutAsyncResult";
 
@@ -41,7 +41,6 @@ type AsyncAction<ValueType, ErrorType> =
   AsyncActionError<ErrorType> |
   AsyncStatusPending
 
-
 export const useTimeoutAsync = <
   ValueType extends any = any,
   ErrorType extends any = Error,
@@ -49,10 +48,14 @@ export const useTimeoutAsync = <
   >
 (asyncCallback: (...args: Args) => Promise<ValueType>, properties?: UseTimeoutAsyncProps) : UseAsyncResultType<ValueType, ErrorType, Args> =>
 {
-  const {milliseconds = 100, ...props} = properties ?? {};
-  if (milliseconds <= 0) {
-    throw new Error(`Ilelgal milliseconds ${milliseconds}. It should be >= 0!`);
-  }
+  const props = useLatest<UseTimeoutAsyncProps | undefined, {useInit: boolean; milliseconds: number; }>(properties, (properties) => {
+    const {milliseconds = 100, useInit = false} = properties ?? {};
+    if (milliseconds <= 0) {
+      console.warn(`Setting illegal milliseconds ${milliseconds} to 100! Should be >= 0!`)
+      return {milliseconds: 100, useInit}
+    }
+    return {milliseconds, useInit}
+  });
 
   const [state, dispatch] = useReducer<Reducer<AsyncReducedState<ValueType, ErrorType>, AsyncAction<ValueType, ErrorType>>, undefined>
   (
@@ -64,7 +67,7 @@ export const useTimeoutAsync = <
         case AsyncStatus.ERROR:
           return { status: AsyncStatus.ERROR, error: action.error };
         case AsyncStatus.INIT:
-          if (props?.useInit) { return {...previous, ...{status: AsyncStatus.INIT}}; }
+          if (props.current.useInit) { return {...previous, ...{status: AsyncStatus.INIT}}; }
           if (previous.status !== TimeoutAsyncStatus.SCHEDULED ) {
             return {...previous, ...{status: TimeoutAsyncStatus.SCHEDULED}};
           } else {
@@ -75,13 +78,13 @@ export const useTimeoutAsync = <
       }
     },
     void 0,
-    () => ({status: props?.useInit ? AsyncStatus.INIT : TimeoutAsyncStatus.SCHEDULED} as AsyncStatusPending)
+    () => ({status: props.current.useInit ? AsyncStatus.INIT : TimeoutAsyncStatus.SCHEDULED} as AsyncStatusPending)
   );
 
 
   // Creates a stable callback that manages our working/success/error status updates
   // as the callback is invoked.
-  const storedCallback = useLatestCallback<(...args: Args) => Promise<ValueType>>(asyncCallback);
+  const storedCallback = useLatest(asyncCallback);
 
   const [callback] = useState<((...args: Args) => Promise<void>) & { cancel: () => void }>(() => {
     const cancelled: Set<Promise<ValueType> | null> = new Set();
@@ -105,7 +108,7 @@ export const useTimeoutAsync = <
               } else {
                 reject(new Error("Callback cancelled"));
               }
-            }, milliseconds);
+            }, props.current.milliseconds);
             dispatch({status: TimeoutAsyncStatus.SCHEDULED} as AsyncStatusPending);
           });
           const value = await current;
