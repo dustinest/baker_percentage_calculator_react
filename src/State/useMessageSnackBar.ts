@@ -1,6 +1,6 @@
 import {useSnackbar} from "notistack";
 import {useTranslation} from "../Translations";
-import {runLater} from "../utils/Async";
+import {runLater} from "../utils/Timeouts";
 
 export type VariantType = 'default' | 'error' | 'success' | 'warning' | 'info';
 

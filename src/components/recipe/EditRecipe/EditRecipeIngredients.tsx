@@ -67,6 +67,11 @@ type IngredientSaveAction = {
   action: "save";
   value: number;
 }
+type ValueChangeAction = {
+  action: "change";
+  hydration: RecipeHydration;
+  ingredientGrams: number;
+}
 
 const EditRecipeIngredient = ({
                                 hydration,
@@ -75,8 +80,11 @@ const EditRecipeIngredient = ({
                                 index,
                                 subIndex
                               }: EditRecipeIngredientProps) => {
-  const [ingredientValue, setIngredientValue] = useReducer<Reducer<ReducedState, IngredientModeAction | IngredientSaveAction>>(
+  const [ingredientValue, setIngredientValue] = useReducer<Reducer<ReducedState, IngredientModeAction | IngredientSaveAction | ValueChangeAction>>(
     (state, action) => {
+      if (action.action === "change") {
+        return { mode: "weight", endAdornment: "g", value: action.ingredientGrams, dry: action.hydration.dry, availableMode: state.availableMode }
+      }
       if (action.action === "weight") {
         return { mode: "weight", endAdornment: "g", value: ingredientGrams, dry: hydration.dry, availableMode: state.availableMode }
       } else if (action.action === "percent") {
@@ -101,6 +109,12 @@ const EditRecipeIngredient = ({
       value: ingredientGrams
     }
   );
+
+  useEffect(() => {
+    setIngredientValue({action: "change", hydration, ingredientGrams} as ValueChangeAction);
+  }, [ hydration, ingredientGrams, index, subIndex ])
+
+
   const {editRecipeDispatch} = useContext(EditRecipeContext);
 
   useEffect(() => {
@@ -125,21 +139,32 @@ const EditRecipeIngredient = ({
       },
     });
   }
+  const menu = useMemo<ReactNode[]>(() => {
+    return ingredientValue.availableMode.map((modeValue) =>
+        (<MenuItem key={modeValue} onClick={() => setIngredientValue({action: modeValue} as IngredientModeAction)} disabled={modeValue === ingredientValue.mode}>
+          <ListItemIcon>{
+            modeValue === "weight" ? <WeightIcon fontSize="small"/>:
+            modeValue === "percent" ? <PercentIcon fontSize="small"/>:
+            modeValue === "global_percent" ? <PercentGlobalIcon fontSize="small"/>:
+            undefined
+          }</ListItemIcon>
+          <ListItemText><Translation label={`edit.mode.${modeValue}`}/></ListItemText>
+        </MenuItem>)
+      );
+  }, [ingredientValue.availableMode, ingredientValue.mode]);
+
   return (
     <EditRecipeIngredientRow name={ingredientName}>
-      <EditInputTimeoutNumber  value={ingredientValue.value} onSave={(value) => setIngredientValue({action: "save", value})} onDelete={onDelete} endAdornment={ingredientValue.endAdornment} additionalMenu={
-          ingredientValue.availableMode.map((modeValue) =>
-            (<MenuItem key={modeValue} onClick={() => setIngredientValue({action: modeValue} as IngredientModeAction)} disabled={modeValue === ingredientValue.mode}>
-              <ListItemIcon>{
-                modeValue === "weight" ? <WeightIcon fontSize="small"/>:
-                modeValue === "percent" ? <PercentIcon fontSize="small"/>:
-                modeValue === "global_percent" ? <PercentGlobalIcon fontSize="small"/>:
-                undefined
-              }</ListItemIcon>
-              <ListItemText><Translation label={`edit.mode.${modeValue}`}/></ListItemText>
-            </MenuItem>)
-          )
-      }/>
+      <>{
+        ingredientValue.mode === 'weight' ?
+          <EditInputTimeoutNumber  value={ingredientValue.value} onSave={(value) => setIngredientValue({action: "save", value})} onDelete={onDelete} endAdornment="g" additionalMenu={menu}/> :
+       ingredientValue.mode === 'percent' ?
+          <EditInputTimeoutNumber  value={ingredientValue.value} onSave={(value) => setIngredientValue({action: "save", value})} onDelete={onDelete} endAdornment="%" additionalMenu={menu}/> :
+       ingredientValue.mode === 'global_percent' ?
+          <EditInputTimeoutNumber  value={ingredientValue.value} onSave={(value) => setIngredientValue({action: "save", value})} onDelete={onDelete} endAdornment="%" additionalMenu={menu}/> :
+       undefined
+      }
+      </>
     </EditRecipeIngredientRow>
   )
 };
@@ -181,10 +206,10 @@ export const EditRecipeRemainingIngredients = ({ingredients, index}: EditRecipeR
     setSelectedValue(values.length > 0 ? values[0].type as string : null);
   }, [ingredients])
 
-  const [grams, isSameGrams, setGrams, resetGrams] = useNumberInputValueTracking(0);
+  const [grams, actions, history] = useNumberInputValueTracking(0);
   const {editRecipeDispatch} = useContext(EditRecipeContext);
   const addNewItem = () => {
-    if (isSameGrams || grams <= 0 || hasNoValue(selectedValue)) {
+    if (history.equals || grams <= 0 || hasNoValue(selectedValue)) {
       return;
     }
     editRecipeDispatch({
@@ -193,7 +218,7 @@ export const EditRecipeRemainingIngredients = ({ingredients, index}: EditRecipeR
       item: selectedValue,
       grams
     });
-    resetGrams(0);
+    actions.resetValue(0);
   }
 
   return (
@@ -216,11 +241,11 @@ export const EditRecipeRemainingIngredients = ({ingredients, index}: EditRecipeR
             className="recipe-ingredient-amount"
             type="number"
             value={grams}
-            onChange={setGrams}
+            onChange={actions.setValue}
             endAdornment={<InputAdornment position="end">g</InputAdornment>}
           />
           </HorizontalActionStack>
-          <AddButton onClick={addNewItem} disabled={isSameGrams || grams <= 0}/>
+          <AddButton onClick={addNewItem} disabled={history.equals || grams <= 0}/>
         </HorizontalActionStack>
       }
     </>

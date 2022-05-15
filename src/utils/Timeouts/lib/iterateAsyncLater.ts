@@ -1,7 +1,6 @@
 import {CancellablePromise} from "../type/CancellablePromise";
 import {runLater} from "./runLater";
 
-
 export const iterateAsyncLater = <ValueType extends any = any>(
   list: ValueType[],
   runnable: (value: ValueType, index: number, cancel: () => void) => Promise<void>,

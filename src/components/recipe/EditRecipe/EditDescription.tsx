@@ -11,13 +11,13 @@ type EditDescriptionProps = {
 }
 
 export const EditDescription = ({value, onChange}: EditDescriptionProps) => {
-  const [description, isDescriptionSame, setDescription, resetDescription] = useStringInputValueTracking(value);
+  const [description, actions, history] = useStringInputValueTracking(value);
   const snackBar = useMessageSnackBar();
 
   const onTextChange = () => {
-    if (isDescriptionSame) return;
+    if (history.equals) return;
     onChange(description)
-      .then(() => resetDescription(description))
+      .then(() => actions.resetToCurrentValue())
       .catch((error) => snackBar.error(error as Error, "Error while changing the text!").translate().enqueue() );
   }
   const translation = useTranslation();
@@ -31,9 +31,9 @@ export const EditDescription = ({value, onChange}: EditDescriptionProps) => {
           maxRows={4}
           value={description}
           onBlur={onTextChange}
-          onChange={setDescription}
+          onChange={actions.setValue}
         />
-        <DoneIconButton disabled={isDescriptionSame} onClick={onTextChange}/>
+        <DoneIconButton disabled={history.equals} onClick={onTextChange}/>
     </HorizontalActionStack>
   );
 }

@@ -23,14 +23,14 @@ import {SyntheticEvent, useContext, useEffect, useState} from "react";
 import {Translation, useTranslation} from "../../../Translations";
 
 const EditAmount = ({recipe}: { recipe: RecipeType }) => {
-  const [amount, isSameAmount, setAmount, resetAmount] = useNumberInputValueTracking(recipe.amount);
+  const [amount, actions, history] = useNumberInputValueTracking(recipe.amount);
   const {editRecipeDispatch} = useContext(EditRecipeContext);
   const [tabValue, setTabValue] = useState(0);
   const [edit, setEdit] = useState<boolean>(false);
 
   const translation = useTranslation();
   const sendChange = () => {
-    if (isSameAmount || amount <= 0) {
+    if (history.equals || amount <= 0) {
       return;
     }
     setEdit(false);
@@ -42,7 +42,7 @@ const EditAmount = ({recipe}: { recipe: RecipeType }) => {
   }
 
   useEffect(() => {
-    if (edit) resetAmount(recipe.amount);
+    if (edit) actions.resetToCurrentValue();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [edit, recipe])
 
@@ -68,13 +68,13 @@ const EditAmount = ({recipe}: { recipe: RecipeType }) => {
               className="recipe-amount"
               type="number"
               value={amount}
-              onChange={setAmount}
+              onChange={actions.setValue}
             />
           </HorizontalActionStack>
         </DialogContent>
         <DialogActions>
           <TranslatedCancelButton onClick={onClose}/>
-          <TranslatedChangeButton onClick={sendChange} disabled={isSameAmount || amount <= 0}/>
+          <TranslatedChangeButton onClick={sendChange} disabled={history.equals || amount <= 0}/>
         </DialogActions>
       </Dialog>
       <EditLabelIconButton onClick={() => setEdit(true)}><Translation label={"edit.amount.button"} count={recipe.amount}/></EditLabelIconButton>
@@ -82,15 +82,14 @@ const EditAmount = ({recipe}: { recipe: RecipeType }) => {
 }
 
 export const EditName = ({recipe}: { recipe: RecipeType }) => {
-  const [name, isSameName, setName, resetName] = useStringInputValueTracking(recipe.name);
+  const [name, actions, history] = useStringInputValueTracking(recipe.name);
   const {editRecipeDispatch} = useContext(EditRecipeContext);
   const onNameDone = async () => {
-    const cachedName = name;
     editRecipeDispatch({
       type: EditRecipeStateActionTypes.SET_NAME,
-      name: cachedName
+      name: name
     });
-    resetName(cachedName);
+    actions.resetToCurrentValue();
   }
   return (
     <HorizontalActionStack>
@@ -98,9 +97,9 @@ export const EditName = ({recipe}: { recipe: RecipeType }) => {
         variant="standard"
         type="string"
         value={name}
-        onChange={setName}
+        onChange={actions.setValue}
       />
-      <DoneIconButton disabled={isSameName || name.trim().length <= 0} onClick={onNameDone}/>
+      <DoneIconButton disabled={history.equals || name.trim().length <= 0} onClick={onNameDone}/>
     </HorizontalActionStack>
   );
 };

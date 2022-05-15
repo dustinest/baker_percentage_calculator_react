@@ -10,7 +10,7 @@ import {useContext} from "react";
 type EditRecipeIngredientsNameProps = { ingredients: RecipeIngredientsType; index: number };
 export const EditRecipeIngredientsName = ({ingredients, index}: EditRecipeIngredientsNameProps) => {
   const translation = useTranslation();
-  const [name, isSameName, setName, resetName] = useStringInputValueTracking(ingredients.name);
+  const [name, actions, history] = useStringInputValueTracking(ingredients.name);
   const {editRecipeDispatch} = useContext(EditRecipeContext);
   const onNameDone = () => {
     editRecipeDispatch({
@@ -18,7 +18,7 @@ export const EditRecipeIngredientsName = ({ingredients, index}: EditRecipeIngred
       index: index,
       name: name
     });
-    resetName(name);
+    actions.resetToCurrentValue();
   }
 
   return (<>{index === 0 ? <Translation label="ingredients.title.dough"/> :
@@ -26,11 +26,11 @@ export const EditRecipeIngredientsName = ({ingredients, index}: EditRecipeIngred
       <Input type="string"
              sx={{width: "20ch"}}
              value={name}
-             onChange={setName}
+             onChange={actions.setValue}
              placeholder={translation("edit.ingredients.title")}
       />
       <ButtonGroup size="small">
-        <DoneButton disabled={isSameName} onClick={onNameDone}/>
+        <DoneButton disabled={history.equals} onClick={onNameDone}/>
       </ButtonGroup>
     </LabelAwareStack>
   }</>)

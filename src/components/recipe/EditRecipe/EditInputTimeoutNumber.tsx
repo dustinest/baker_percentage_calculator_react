@@ -23,15 +23,15 @@ type EditInputTimeoutNumberProps = {
 }
 
 export const EditInputTimeoutNumber = ({value, onSave, onDelete, endAdornment, additionalMenu}: EditInputTimeoutNumberProps) => {
-  const [editValue, isSameValue, setValue, resetValue, originalValue] = useNumberInputValueTracking(value);
+  const [editValue, actions, history] = useNumberInputValueTracking(value);
 
   const onSetValue = () => {
-    if (isSameValue) return;
+    if (history.equals) return;
     onSave(editValue);
-    resetValue(editValue);
+    actions.resetToCurrentValue();
   }
 
-  const onResetValue = () => resetValue(originalValue);
+  const onResetValue = () => actions.resetToOriginalValue();
 
   const doOnDelete = () => {
     if (onDelete) onDelete();
@@ -50,20 +50,20 @@ export const EditInputTimeoutNumber = ({value, onSave, onDelete, endAdornment, a
           onKeyUp={keyUp}
           type="number"
           value={editValue}
-          onChange={setValue}
+          onChange={actions.setValue}
           endAdornment={endAdornment ? <InputAdornment position="end">{endAdornment}</InputAdornment> : undefined }
         />
 
         {onDelete ?
           <HorizontalActionStack>
-            <DoneIconButton disabled={isSameValue} onClick={onSetValue}/>
+            <DoneIconButton disabled={history.equals} onClick={onSetValue}/>
             <CommonMenuButton>
               {additionalMenu}
-              <MenuItem onClick={onResetValue} disabled={isSameValue}>
+              <MenuItem onClick={onResetValue} disabled={history.equals}>
                 <ListItemIcon><ResetIcon fontSize="small"/></ListItemIcon>
                 <ListItemText><Translation label="edit.reset"/></ListItemText>
               </MenuItem>
-              <MenuItem onClick={doOnDelete} disabled={!isSameValue}>
+              <MenuItem onClick={doOnDelete} disabled={!history.equals}>
                 <ListItemIcon><DeleteIcon fontSize="small"/></ListItemIcon>
                 <ListItemText><Translation label="edit.delete"/></ListItemText>
               </MenuItem>
@@ -71,8 +71,8 @@ export const EditInputTimeoutNumber = ({value, onSave, onDelete, endAdornment, a
           </HorizontalActionStack>
           :
           <ButtonGroup size="small">
-            <DoneButton disabled={isSameValue} onClick={onSetValue}/>
-            <ResetButton disabled={isSameValue} onClick={onResetValue}/>
+            <DoneButton disabled={history.equals} onClick={onSetValue}/>
+            <ResetButton disabled={history.equals} onClick={onResetValue}/>
           </ButtonGroup>
         }
       </LabelAwareStack>

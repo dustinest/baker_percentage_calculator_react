@@ -32,7 +32,7 @@ import i18next from "i18next";
 import {CommonMenuButton} from "../common/CommonMenu";
 import {AppStateActionTypes, AppStateContext, useMessageSnackBar} from "../../State";
 import {FLAGS} from "../../static/lib";
-import {runLater} from "../../utils/Async";
+import {runLater} from "../../utils/Timeouts";
 
 const NAVIGATION_WIDTH = 260;
 
