@@ -33,7 +33,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "lint": "npx eslint src --ext .js,.tsx,.ts,.jsx && npx tsc --noEmit --strict",
-    "validate": "npm run lint && npm run test",
+    "validate": "npm run test:all && npm run lint",
+    "test:all": "react-scripts test --watchAll=false",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

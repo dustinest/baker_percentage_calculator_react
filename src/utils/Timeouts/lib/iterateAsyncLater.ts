@@ -8,24 +8,30 @@ export const iterateAsyncLater = <ValueType extends any = any>(
 ): CancellablePromise<void> => {
   let running = true;
   let rejects: (reason?: any) => void | null = () => {};
+
   return Object.assign(
     new Promise<void>((resolve, reject) => {
       rejects = reject;
-      let index = -1;
-      const run = () => {
-        index ++;
-        if (!running || index >= list.length) {
-          if (running) resolve();
-          return;
-        }
-        runLater<void>(() =>
-            runnable(list[index], index, () => {
-              running = false;
-              reject(new Error("Iterator cancelled!"));
-            })
-          , timeout).then(() => run()).catch(reject);
+      const cancel = () => {
+        running = false;
+        reject(new Error("Iterator cancelled!"));
       };
-      run();
+      //let index = -1;
+      const _list = [...list];
+      (async () => {
+        for (let index = 0; index < _list.length; index++) {
+          if (!running) return;
+          if (index >= _list.length) {
+            resolve();
+            return;
+          }
+          await runLater<void>(() => runnable(_list[index], index, cancel), timeout);
+        }
+        if (running) resolve();
+      })().catch((error) => {
+        running = false;
+        reject(error);
+      });
     }),
     {
       cancel: () => {
