@@ -8,14 +8,13 @@ import {RecipeItemData} from "./RecipeItemData";
 import {BakerPercentageAwareRecipe} from "../common/BakerPercentageAwareRecipe";
 
 type RecipeItemDetailsProps = {
-  isPrintPreview: boolean;
   recipe: BakerPercentageAwareRecipe;
 };
 
-export const RecipeItem = ({isPrintPreview, recipe}: RecipeItemDetailsProps) => {
+export const RecipeItem = ({recipe}: RecipeItemDetailsProps) => {
   return (<Card variant="outlined" className="recipe">
-    <RecipeHeader recipe={recipe} isPrintPreview={isPrintPreview}/>
+    <RecipeHeader recipe={recipe}/>
     {recipe.bakerPercentage != null ? <IngredientsItems ingredients={recipe.bakerPercentage.ingredients} recipe={recipe}/> : undefined}
-    <RecipeItemData recipe={recipe} isPrintPreview={isPrintPreview}/>
+    <RecipeItemData recipe={recipe}/>
   </Card>);
 }

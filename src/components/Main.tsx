@@ -5,7 +5,6 @@ import {CircularProgress} from "@mui/material";
 import {readJsonRecipe} from "../service/RecipeReader";
 import {useContext, useEffect, useState} from "react";
 import {
-  AppStateContext,
   EditRecipeProvider,
   RecipesContext,
   RecipesStateActionTypes,
@@ -13,9 +12,8 @@ import {
 } from "../State";
 import {RecipeList} from "./recipe/RecipeList";
 import {AsyncStatus, useAsyncEffect} from "../utils/Async";
-import {runLater} from "../utils/Timeouts";
 import {EditRecipeDialog} from "./recipe/EditRecipe";
-import {AddRecipeFloatingButton, FloatingPrintCancelButton} from "../Constant/Buttons";
+import {AddRecipeFloatingButton} from "../Constant/Buttons";
 import {BakerPercentageAwareRecipe, getBakerPercentageAwareRecipe} from "./recipe/common/BakerPercentageAwareRecipe";
 /*
 const getDuplicateRecipe = (value: JsonRecipeType): JsonRecipeType => {
@@ -53,9 +51,8 @@ const getRecipes = (): RecipeType[] => {
 
 export const Main = () => {
   const snackBar = useMessageSnackBar();
-  const {recipeState, recipesDispatch} = useContext(RecipesContext);
+  const {recipesDispatch} = useContext(RecipesContext);
   const [status, setStatus] = useState<{loading: boolean, amount: number}>({ loading: true, amount: 0 });
-  const {appState} = useContext(AppStateContext);
 
   const result = useAsyncEffect<BakerPercentageAwareRecipe[]>(async () => {
     const recipes = getRecipes();
@@ -82,33 +79,19 @@ export const Main = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result])
 
-  useEffect(() => {
-    if (recipeState.recipes.length > 0 && appState.printPreview.current && !status.loading) runLater(async () => window.print(), 1000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appState.printPreview.current, status, recipeState]);
-
   return (
     <>
       {
         status.loading ? (<CircularProgress/>) :
-          appState.printPreview.current  ?
-            (
-              <>
-                <FloatingPrintCancelButton />
-                <RecipeList/>
-            </>
-            ) :
-            (
-                <>
-                  <RecipeNavigation>
-                    <EditRecipeProvider>
-                      <AddRecipeFloatingButton/>
-                      <EditRecipeDialog/>
-                      <RecipeList/>
-                    </EditRecipeProvider>
-                  </RecipeNavigation>
-                </>
-            )
+        <>
+          <RecipeNavigation>
+            <EditRecipeProvider>
+              <AddRecipeFloatingButton/>
+              <EditRecipeDialog/>
+              <RecipeList/>
+            </EditRecipeProvider>
+          </RecipeNavigation>
+        </>
       }
     </>
   )

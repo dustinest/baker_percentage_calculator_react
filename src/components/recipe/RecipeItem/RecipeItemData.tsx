@@ -12,13 +12,25 @@ const BakerPercentageContainer = ({recipe}: RecipeItemDataProps) => {
 }
 
 type RecipeItemDataProps = { recipe: BakerPercentageAwareRecipe; }
-const RecipeItemDataPrint  = ({recipe}: RecipeItemDataProps) => {
+
+const RecipeItemDataList  = ({recipe}: RecipeItemDataProps) => {
   return (<>
+    <VerticalStack className="recipe-data-normal">
+      <RenderBakingTimeAware value={recipe}/>
+      <BakerPercentageContainer recipe={recipe}/>
+      <RecipeGrandTotal recipe={recipe}/>
+    </VerticalStack>
+  </>);
+}
+
+const RecipeItemDataPrint  = ({recipe}: RecipeItemDataProps) => {
+  return (
     <HorizontalActionStack
       justifyContent="space-evenly"
       alignItems="flex-end"
       divider={<Divider orientation="vertical" flexItem />}
       spacing={2}
+      className="recipe-data-printer"
     >
       <BakerPercentageContainer recipe={recipe}/>
       <VerticalStack direction="column"
@@ -30,16 +42,9 @@ const RecipeItemDataPrint  = ({recipe}: RecipeItemDataProps) => {
         <RecipeGrandTotal recipe={recipe}/>
       </VerticalStack>
     </HorizontalActionStack>
-  </>);
-}
-const RecipeItemDataList  = ({recipe}: RecipeItemDataProps) => {
-  return (<>
-    <RenderBakingTimeAware value={recipe}/>
-    <BakerPercentageContainer recipe={recipe}/>
-    <RecipeGrandTotal recipe={recipe}/>
-  </>);
+  );
 }
 
-export const RecipeItemData  = ({recipe, isPrintPreview}: {recipe: BakerPercentageAwareRecipe; isPrintPreview: boolean;}) => {
-  return (<>{ isPrintPreview ? <RecipeItemDataPrint recipe={recipe}/> : <RecipeItemDataList recipe={recipe}/>} </>);
+export const RecipeItemData  = ({recipe}: {recipe: BakerPercentageAwareRecipe }) => {
+  return (<><RecipeItemDataPrint recipe={recipe}/><RecipeItemDataList recipe={recipe}/></>);
 }

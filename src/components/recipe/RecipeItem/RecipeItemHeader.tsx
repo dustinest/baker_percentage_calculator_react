@@ -8,7 +8,7 @@ import {Translation} from "../../../Translations";
 import {CommonMenuButton} from "../../common/CommonMenu";
 import {useRecipeEditService} from "../../../service/RecipeEditService";
 
-const RecipeItemHeaderList = ({recipe}: {recipe: RecipeType}) => {
+export const RecipeHeader = ({recipe}: {recipe: RecipeType}) => {
   const {editRecipeMethods} =  useRecipeEditService();
   const {recipesDispatch} = useContext(RecipesContext);
   const onDeleteRecipe = () => {
@@ -47,12 +47,4 @@ const RecipeItemHeaderList = ({recipe}: {recipe: RecipeType}) => {
       }/>
     </>
   );
-}
-
-const RecipeItemHeaderPrint = ({recipe}: {recipe: RecipeType}) => {
-  return (<CardHeader className="recipe-header recipe-header-print" title={<RecipeName recipe={recipe}/>}/>);
-}
-
-export const RecipeHeader = ({recipe, isPrintPreview}: {recipe: RecipeType; isPrintPreview: boolean;}) => {
-  return (<>{ isPrintPreview ? <RecipeItemHeaderPrint recipe={recipe}/> : <RecipeItemHeaderList recipe={recipe}/>} </>);
 }

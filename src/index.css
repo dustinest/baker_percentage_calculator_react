@@ -23,6 +23,10 @@
   white-space: nowrap;
 }
 
+.recipe-data-printer {
+  display: none !important;
+}
+
 @media print {
   * {
     font-size: 110%;
@@ -67,19 +71,31 @@
     page-break-inside: avoid;
   }
 */
-  article {
-    page-break-after: always;
-/*
-    display: block;
-    float: none;
-    clear: both;
-    border-width: 0;
-    padding: 0;
-    margin: 18pt auto 0 auto;
-    page-break-inside: avoid;
-    position: relative;
-    height: 100%;
-    text-align: center;
- */
+
+  .MuiGrid-root {
+    display: block !important;
+  }
+
+  article, .recipe-item {
+    page-break-after: always !important;
+    /*
+        display: block;
+        float: none;
+        clear: both;
+        border-width: 0;
+        padding: 0;
+        margin: 18pt auto 0 auto;
+        page-break-inside: avoid;
+        position: relative;
+        height: 100%;
+        text-align: center;
+     */
+  }
+  .recipe-data-printer {
+    display: flex !important;
+  }
+  .recipe-data-normal {
+    display: none !important;
   }
 }
+

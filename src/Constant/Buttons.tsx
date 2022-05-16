@@ -2,7 +2,6 @@ import {
   AddIcon,
   CheckAllCheckboxIcon,
   ClearAllCheckboxIcon,
-  CloseIcon,
   DeleteIcon,
   DoneIcon,
   EditIcon,
@@ -17,8 +16,6 @@ import {
 } from "./Icons";
 import {Box, Button, ButtonProps, Fab, IconButton, IconButtonProps, styled} from "@mui/material";
 import {Translation} from "../Translations";
-import {useContext} from "react";
-import {AppStateActionTypes, AppStateContext} from "../State";
 import {useRecipeEditService} from "../service/RecipeEditService";
 
 const IconButtonInt = (props: IconButtonProps) => (<IconButton {...props}/>);
@@ -89,13 +86,4 @@ export const AddRecipeFloatingButton = () => {
   return (
     <MenuTriggerBox className="menu-trigger">
       <Fab color="primary" aria-label="add" onClick={editRecipeMethods.create}><AddIcon/></Fab></MenuTriggerBox>);
-}
-
-export const FloatingPrintCancelButton = () => {
-  const {appStateDispatch} = useContext(AppStateContext);
-  return (
-    <MenuTriggerBox className="menu-trigger">
-      <Fab color="primary" aria-label="cancel"
-           onClick={() => appStateDispatch(AppStateActionTypes.PRINT_PREVIEW_CLOSE)}><CloseIcon/></Fab>
-    </MenuTriggerBox>);
 }

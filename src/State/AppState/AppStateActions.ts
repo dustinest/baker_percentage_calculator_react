@@ -1,6 +1,0 @@
-export enum AppStateActionTypes {
-  MENU_OPEN,
-  MENU_CLOSE,
-  PRINT_PREVIEW_OPEN,
-  PRINT_PREVIEW_CLOSE
-}

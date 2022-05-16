@@ -1,6 +1,5 @@
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
@@ -20,7 +19,6 @@ import EmojiSymbolsOutlinedIcon from '@mui/icons-material/EmojiSymbolsOutlined';
 
 export const EditIcon = EditOutlinedIcon;
 export const ExpandMoreIcon = ExpandMoreOutlinedIcon;
-export const CloseIcon = CloseOutlinedIcon;
 export const DeleteIcon = DeleteOutlineOutlinedIcon;
 export const DoneIcon = DoneOutlinedIcon;
 export const AddIcon = AddOutlinedIcon;

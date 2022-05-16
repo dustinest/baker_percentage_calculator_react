@@ -17,7 +17,7 @@ import {
   Typography
 } from "@mui/material";
 
-import {ReactNode, useContext} from "react";
+import {ReactNode, useState} from "react";
 import {RecipeName} from "../common/RecipeName";
 import {Translation} from "../../Translations";
 import {CheckAllButton, ClearAllButton, DoneButton, MenuIconButton} from "../../Constant/Buttons";
@@ -30,7 +30,7 @@ import {useElementClientHeight} from "../common/useElementClientHeight";
 import {CheckedIcon, PrintIcon, UnCheckedIcon} from "../../Constant/Icons";
 import i18next from "i18next";
 import {CommonMenuButton} from "../common/CommonMenu";
-import {AppStateActionTypes, AppStateContext, useMessageSnackBar} from "../../State";
+import {useMessageSnackBar} from "../../State";
 import {FLAGS} from "../../static/lib";
 import {runLater} from "../../utils/Timeouts";
 
@@ -62,13 +62,18 @@ const RecipesList = styled('div')<{top: number}>(({  top }) => ({
   marginTop: `${top}px`
 }));
 
+const doPrintPreview = () => {
+  runLater(async () => window.print(), 1000);
+}
+
 export const RecipeNavigation = ({children}: {children: ReactNode}) => {
   const [recipes, actions, recipeStatus] = useRecipeMenuState();
+  const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
 
   const snackBar = useMessageSnackBar();
-  const {appState, appStateDispatch} = useContext(AppStateContext);
+
   const handleDrawerClose = () => {
-    appStateDispatch(AppStateActionTypes.MENU_CLOSE);
+    setMenuOpen(false);
     runLater(actions.submit, 1);
   }
 
@@ -84,20 +89,20 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
   return (
     <Box sx={{display: 'flex'}}>
       <CssBaseline/>
-      <NavigationAppBar position="fixed" open={appState.menuOpen.current} width={NAVIGATION_WIDTH} ref={setHeaderElement}>
+      <NavigationAppBar position="fixed" open={isMenuOpen} width={NAVIGATION_WIDTH} ref={setHeaderElement}>
         <Toolbar>
           <Box display="flex" flexGrow={1}>
             <MenuIconButton
               color="inherit"
               aria-label="open drawer"
-              onClick={() => appStateDispatch(AppStateActionTypes.MENU_OPEN)}
-              sx={{mr: 2, ...(appState.menuOpen.current && {display: 'none'})}}
+              onClick={() => setMenuOpen(true)}
+              sx={{mr: 2, ...(isMenuOpen && {display: 'none'})}}
             />
             <Typography variant="h6" noWrap component="div">
               {recipeStatus.selectedRecipe ? <RecipeName recipe={recipeStatus.selectedRecipe}/> : <Translation label="title" count={recipeStatus.defaultSelected}/>}
             </Typography>
           </Box>
-          {appState.menuOpen.current ? undefined :
+          {isMenuOpen ? undefined :
             <>
               <CommonMenuButton>
                 { FLAGS.map(({key, label, value}) =>
@@ -107,7 +112,7 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
                   </MenuItem>
                 )}
                 <Divider variant="middle" />
-                <MenuItem onClick={() => appStateDispatch(AppStateActionTypes.PRINT_PREVIEW_OPEN)}>
+                <MenuItem onClick={doPrintPreview}>
                   <ListItemIcon><PrintIcon/></ListItemIcon>
                   <ListItemText><Translation label="actions.print"/></ListItemText>
                 </MenuItem>
@@ -127,7 +132,7 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
         }}
         variant="persistent"
         anchor="left"
-        open={appState.menuOpen.current}
+        open={isMenuOpen}
       >
         <DrawerHeader ref={setMenuElement} width={NAVIGATION_WIDTH}>
           <ButtonGroup>
@@ -149,7 +154,7 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
         </List>
         </RecipesList>
       </Drawer>
-      <MainNavigationMainContainer open={appState.menuOpen.current} width={NAVIGATION_WIDTH} menuHeight={contentHeight}>{children}</MainNavigationMainContainer>
+      <MainNavigationMainContainer open={isMenuOpen} width={NAVIGATION_WIDTH} menuHeight={contentHeight}>{children}</MainNavigationMainContainer>
     </Box>
   );
 }
