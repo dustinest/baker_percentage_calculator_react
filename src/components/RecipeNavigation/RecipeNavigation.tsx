@@ -2,7 +2,7 @@ import './RecipeNavigation.css';
 import {
   Badge,
   Box,
-  ButtonGroup,
+  ButtonGroup, Container,
   CssBaseline,
   Divider,
   Drawer,
@@ -12,15 +12,18 @@ import {
   ListItemIcon,
   ListItemText,
   MenuItem,
-  styled,
   Toolbar,
-  Typography
 } from "@mui/material";
 
 import {ReactNode, useState} from "react";
 import {RecipeName} from "../common/RecipeName";
 import {Translation} from "../../Translations";
-import {CheckAllButton, ClearAllButton, DoneButton, MenuIconButton} from "../../Constant/Buttons";
+import {
+  AddRecipeButton,
+  CheckAllButton,
+  ClearAllButton,
+  DoneButton, FilterIconButton,
+} from "../../Constant/Buttons";
 import {RecipeType} from "../../types";
 import {DrawerHeader} from "./wrapper/DrawerHeader";
 import {NavigationAppBar} from "./wrapper/NavigationAppBar";
@@ -56,12 +59,6 @@ const RecipeItemName = ({recipe, selected, onChange}: RecipeItemNameProps) => {
 }
 
 
-const RecipesList = styled('div')<{top: number}>(({  top }) => ({
-  display: "block",
-  overflowY: "auto",
-  marginTop: `${top}px`
-}));
-
 const doPrintPreview = () => {
   runLater(async () => window.print(), 1000);
 }
@@ -77,9 +74,8 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
     runLater(actions.submit, 1);
   }
 
-  const [menuHeight, setMenuElement] = useElementClientHeight();
   const [contentHeight, setHeaderElement] = useElementClientHeight();
-
+  const [leftBottomHeight, setLeftBottomFilter] = useElementClientHeight();
   const onLangaugeChange = (language: string) => {
     i18next.changeLanguage(language, (error) => {
       if (error) snackBar.error(error).enqueue();
@@ -91,19 +87,19 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
       <CssBaseline/>
       <NavigationAppBar position="fixed" open={isMenuOpen} width={NAVIGATION_WIDTH} ref={setHeaderElement}>
         <Toolbar>
-          <Box display="flex" flexGrow={1}>
-            <MenuIconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={() => setMenuOpen(true)}
-              sx={{mr: 2, ...(isMenuOpen && {display: 'none'})}}
-            />
-            <Typography variant="h6" noWrap component="div">
-              {recipeStatus.selectedRecipe ? <RecipeName recipe={recipeStatus.selectedRecipe}/> : <Translation label="title" count={recipeStatus.defaultSelected}/>}
-            </Typography>
-          </Box>
           {isMenuOpen ? undefined :
             <>
+            <Box display="flex" flexGrow={1}>
+              <Badge badgeContent={recipeStatus.defaultSelected} overlap="circular" color="info">
+              <FilterIconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={() => setMenuOpen(true)}
+                sx={{mr: 2}}
+              />
+              </Badge>
+            </Box>
+              <AddRecipeButton/>
               <CommonMenuButton>
                 { FLAGS.map(({key, label, value}) =>
                   <MenuItem key={key}  selected={key === i18next.language}  onClick={() => onLangaugeChange(key)}>
@@ -134,7 +130,7 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
         anchor="left"
         open={isMenuOpen}
       >
-        <DrawerHeader ref={setMenuElement} width={NAVIGATION_WIDTH}>
+        <DrawerHeader width={NAVIGATION_WIDTH} height={contentHeight} direction="row" alignItems="center" justifyContent="space-between" ref={setLeftBottomFilter}>
           <ButtonGroup>
             <CheckAllButton disabled={recipeStatus.allSelected} onClick={actions.selectAll}/>
             <ClearAllButton disabled={recipeStatus.noneSelected} onClick={actions.selectNone}/>
@@ -145,14 +141,13 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
             </Badge>
           </ButtonGroup>
         </DrawerHeader>
-        <Divider/>
-        <RecipesList top={menuHeight}>
+        <Container sx={{marginBottom: `${leftBottomHeight}px`}}>
         <List>
           {recipes.map((recipe) => (
             <RecipeItemName recipe={recipe.recipe} selected={recipe.selected} onChange={actions.select} key={recipe.id}/>
           ))}
         </List>
-        </RecipesList>
+        </Container>
       </Drawer>
       <MainNavigationMainContainer open={isMenuOpen} width={NAVIGATION_WIDTH} menuHeight={contentHeight}>{children}</MainNavigationMainContainer>
     </Box>

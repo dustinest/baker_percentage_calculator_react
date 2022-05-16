@@ -13,7 +13,6 @@ import {
 import {RecipeList} from "./recipe/RecipeList";
 import {AsyncStatus, useAsyncEffect} from "../utils/Async";
 import {EditRecipeDialog} from "./recipe/EditRecipe";
-import {AddRecipeFloatingButton} from "../Constant/Buttons";
 import {BakerPercentageAwareRecipe, getBakerPercentageAwareRecipe} from "./recipe/common/BakerPercentageAwareRecipe";
 /*
 const getDuplicateRecipe = (value: JsonRecipeType): JsonRecipeType => {
@@ -83,15 +82,12 @@ export const Main = () => {
     <>
       {
         status.loading ? (<CircularProgress/>) :
-        <>
+        <EditRecipeProvider>
           <RecipeNavigation>
-            <EditRecipeProvider>
-              <AddRecipeFloatingButton/>
               <EditRecipeDialog/>
               <RecipeList/>
-            </EditRecipeProvider>
           </RecipeNavigation>
-        </>
+        </EditRecipeProvider>
       }
     </>
   )

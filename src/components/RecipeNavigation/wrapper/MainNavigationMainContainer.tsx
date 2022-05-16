@@ -1,6 +1,5 @@
 import {styled} from "@mui/material";
 import {ReactNode} from "react";
-import {DrawerHeader} from "./DrawerHeader";
 
 type MainNavigationContainerProps = {
   open: boolean;
@@ -22,7 +21,7 @@ const MainNavigationContainer = styled('main', {shouldForwardProp: (prop) => pro
     duration: theme.transitions.duration.leavingScreen,
   }),
   marginLeft: `-${width}px`,
-  marginTop: `${height}px`,
+  marginBottom: `${height}px`,
   overflow: "hidden",
   ...(open && {
     transition: theme.transitions.create('margin', {
@@ -43,7 +42,6 @@ type MainNavigationMainContainerProps = {
 export const MainNavigationMainContainer = ({open, width, children, menuHeight}: MainNavigationMainContainerProps) => {
   return (
     <MainNavigationContainer open={open} width={width} height={menuHeight}>
-      <DrawerHeader width={width}/>
       {children}
     </MainNavigationContainer>
   );

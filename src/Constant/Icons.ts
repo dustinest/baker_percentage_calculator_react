@@ -4,7 +4,6 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import PrintOutlinedIcon from '@mui/icons-material/PrintOutlined';
-import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
 import LibraryAddCheckOutlinedIcon from '@mui/icons-material/LibraryAddCheckOutlined';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
@@ -16,6 +15,7 @@ import SettingsBackupRestoreOutlinedIcon from '@mui/icons-material/SettingsBacku
 import ScaleOutlinedIcon from '@mui/icons-material/ScaleOutlined';
 import PercentOutlinedIcon from '@mui/icons-material/PercentOutlined';
 import EmojiSymbolsOutlinedIcon from '@mui/icons-material/EmojiSymbolsOutlined';
+import FilterListOutlinedIcon from '@mui/icons-material/FilterListOutlined';
 
 export const EditIcon = EditOutlinedIcon;
 export const ExpandMoreIcon = ExpandMoreOutlinedIcon;
@@ -23,7 +23,6 @@ export const DeleteIcon = DeleteOutlineOutlinedIcon;
 export const DoneIcon = DoneOutlinedIcon;
 export const AddIcon = AddOutlinedIcon;
 export const PrintIcon = PrintOutlinedIcon;
-export const MenuIcon = MenuOutlinedIcon;
 export const ClearAllCheckboxIcon = IndeterminateCheckBoxOutlinedIcon;
 export const CheckAllCheckboxIcon = LibraryAddCheckOutlinedIcon;
 export const MoreVertIcon = MoreVertOutlinedIcon;
@@ -36,3 +35,5 @@ export const ResetIcon = SettingsBackupRestoreOutlinedIcon;
 export const WeightIcon = ScaleOutlinedIcon;
 export const PercentIcon = PercentOutlinedIcon;
 export const PercentGlobalIcon = EmojiSymbolsOutlinedIcon;
+
+export const FilterIcon = FilterListOutlinedIcon;

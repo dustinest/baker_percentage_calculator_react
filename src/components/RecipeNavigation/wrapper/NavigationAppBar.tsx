@@ -12,6 +12,8 @@ export const NavigationAppBar = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+  top: 'auto',
+  bottom: 0,
   ...(open && {
     width: `calc(100% - ${width}px)`,
     marginLeft: `${width}px`,
