@@ -15,7 +15,7 @@ import {
   Toolbar,
 } from "@mui/material";
 
-import {ReactNode, useState} from "react";
+import {ReactNode, useCallback, useState} from "react";
 import {RecipeName} from "../common/RecipeName";
 import {Translation} from "../../Translations";
 import {
@@ -36,6 +36,8 @@ import {CommonMenuButton} from "../common/CommonMenu";
 import {useMessageSnackBar} from "../../State";
 import {FLAGS} from "../../static/lib";
 import {runLater} from "../../utils/Timeouts";
+import {useTimeoutAsync} from "../../utils/Async";
+import {hasValue} from "typescript-nullsafe";
 
 const NAVIGATION_WIDTH = 260;
 
@@ -58,11 +60,6 @@ const RecipeItemName = ({recipe, selected, onChange}: RecipeItemNameProps) => {
    );
 }
 
-
-const doPrintPreview = () => {
-  runLater(async () => window.print(), 1000);
-}
-
 export const RecipeNavigation = ({children}: {children: ReactNode}) => {
   const [recipes, actions, recipeStatus] = useRecipeMenuState();
   const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
@@ -72,6 +69,17 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
   const handleDrawerClose = () => {
     setMenuOpen(false);
     runLater(actions.submit, 1);
+  }
+
+  const doPrintPreview = () => {
+    try {
+      window.print()
+    } catch (error) {
+      if (hasValue(error))
+        snackBar.error(error as Error);
+      else
+        snackBar.error("Print error!");
+    }
   }
 
   const [contentHeight, setHeaderElement] = useElementClientHeight();
