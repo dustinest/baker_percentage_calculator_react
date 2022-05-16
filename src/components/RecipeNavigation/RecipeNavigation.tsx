@@ -15,7 +15,7 @@ import {
   Toolbar,
 } from "@mui/material";
 
-import {ReactNode, useCallback, useState} from "react";
+import {ReactNode, useState} from "react";
 import {RecipeName} from "../common/RecipeName";
 import {Translation} from "../../Translations";
 import {
@@ -36,7 +36,6 @@ import {CommonMenuButton} from "../common/CommonMenu";
 import {useMessageSnackBar} from "../../State";
 import {FLAGS} from "../../static/lib";
 import {runLater} from "../../utils/Timeouts";
-import {useTimeoutAsync} from "../../utils/Async";
 import {hasValue} from "typescript-nullsafe";
 
 const NAVIGATION_WIDTH = 260;
