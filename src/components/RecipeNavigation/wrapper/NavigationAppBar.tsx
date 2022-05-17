@@ -5,6 +5,7 @@ type NavigationAppBarProps = {
   open: boolean;
   width: number;
 } & AppBarProps;
+
 export const NavigationAppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })<NavigationAppBarProps>(({ theme, open, width }) => ({

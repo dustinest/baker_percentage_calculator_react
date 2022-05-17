@@ -2,7 +2,7 @@ import './RecipeNavigation.css';
 import {
   Badge,
   Box,
-  ButtonGroup, Container,
+  ButtonGroup,
   CssBaseline,
   Divider,
   Drawer,
@@ -25,7 +25,7 @@ import {
   DoneButton, FilterIconButton,
 } from "../../Constant/Buttons";
 import {RecipeType} from "../../types";
-import {DrawerHeader} from "./wrapper/DrawerHeader";
+import {DrawerFilters} from "./wrapper/DrawerFilters";
 import {NavigationAppBar} from "./wrapper/NavigationAppBar";
 import {MainNavigationMainContainer} from "./wrapper/MainNavigationMainContainer";
 import {useRecipeMenuState} from "./useRecipeMenuState";
@@ -37,6 +37,7 @@ import {useMessageSnackBar} from "../../State";
 import {FLAGS} from "../../static/lib";
 import {runLater} from "../../utils/Timeouts";
 import {hasValue} from "typescript-nullsafe";
+import {MenuListContainer} from "./wrapper/MenuListContainer";
 
 const NAVIGATION_WIDTH = 260;
 
@@ -83,6 +84,7 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
 
   const [contentHeight, setHeaderElement] = useElementClientHeight();
   const [leftBottomHeight, setLeftBottomFilter] = useElementClientHeight();
+
   const onLangaugeChange = (language: string) => {
     i18next.changeLanguage(language, (error) => {
       if (error) snackBar.error(error).enqueue();
@@ -137,8 +139,16 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
         anchor="left"
         open={isMenuOpen}
       >
-        <DrawerHeader width={NAVIGATION_WIDTH} height={contentHeight} direction="row" alignItems="center" justifyContent="space-between" ref={setLeftBottomFilter}>
-          <ButtonGroup>
+
+        <MenuListContainer bottom={leftBottomHeight}>
+        <List sx={{margin: 0, padding: 0}}>
+          {recipes.map((recipe) => (
+            <RecipeItemName recipe={recipe.recipe} selected={recipe.selected} onChange={actions.select} key={recipe.id}/>
+          ))}
+        </List>
+        </MenuListContainer>
+        <DrawerFilters drawerWith={NAVIGATION_WIDTH} drawerHeight={contentHeight} ref={setLeftBottomFilter} direction="row" alignItems="center" justifyContent="space-between">
+          <ButtonGroup variant="contained">
             <CheckAllButton disabled={recipeStatus.allSelected} onClick={actions.selectAll}/>
             <ClearAllButton disabled={recipeStatus.noneSelected} onClick={actions.selectNone}/>
           </ButtonGroup>
@@ -147,14 +157,7 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
               <DoneButton  onClick={handleDrawerClose} color={recipeStatus.hasChange ? "success" : "info" }/>
             </Badge>
           </ButtonGroup>
-        </DrawerHeader>
-        <Container sx={{marginBottom: `${leftBottomHeight}px`}}>
-        <List>
-          {recipes.map((recipe) => (
-            <RecipeItemName recipe={recipe.recipe} selected={recipe.selected} onChange={actions.select} key={recipe.id}/>
-          ))}
-        </List>
-        </Container>
+        </DrawerFilters>
       </Drawer>
       <MainNavigationMainContainer open={isMenuOpen} width={NAVIGATION_WIDTH} menuHeight={contentHeight}>{children}</MainNavigationMainContainer>
     </Box>

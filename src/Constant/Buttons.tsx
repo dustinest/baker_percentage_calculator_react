@@ -54,13 +54,13 @@ export const TranslatedAddIconButton = (props: { translation: string } & ButtonP
   <TranslatedButton color="secondary" startIcon={<AddIcon/>} {...props}/>);
 
 export const AddButton = (props: ButtonProps) => (<ButtonInt color="success" {...props}><AddIcon/></ButtonInt>);
-export const DoneButton = (props: ButtonProps) => (<ButtonInt color="success" {...props}><DoneIcon/></ButtonInt>);
 export const ResetButton = (props: ButtonProps) => (<ButtonInt color="warning" {...props}><ResetIcon/></ButtonInt>);
 
 export const CheckAllButton = (props: ButtonProps) => (
   <ButtonInt color="success" {...props}><CheckAllCheckboxIcon/></ButtonInt>);
 export const ClearAllButton = (props: ButtonProps) => (
   <ButtonInt color="success" {...props}><ClearAllCheckboxIcon/></ButtonInt>);
+export const DoneButton = (props: ButtonProps) => (<ButtonInt color="success" {...props}><DoneIcon/></ButtonInt>);
 
 const StyledAddIconFab = styled(Fab)({
   position: 'absolute',
