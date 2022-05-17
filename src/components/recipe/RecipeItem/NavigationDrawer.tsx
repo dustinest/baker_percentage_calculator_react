@@ -5,7 +5,6 @@ export const NavigationDrawer = styled(Drawer, {
 })<{ drawerWith: number }>(({theme, drawerWith}) => {
     const width = theme.spacing(drawerWith);
     return {
-      width,
       flexShrink: 0,
       '& .MuiDrawer-paper': {
         width,

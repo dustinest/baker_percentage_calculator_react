@@ -5,18 +5,15 @@ import {
   ButtonGroup,
   CssBaseline,
   IconButton,
-  List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  MenuItem,
   Toolbar,
 } from "@mui/material";
 
 import {ReactNode, useState} from "react";
 import {RecipeName} from "../common/RecipeName";
-import {Translation} from "../../Translations";
 import {
   AddRecipeButton,
   CheckAllButton,
@@ -35,9 +32,10 @@ import {useMessageSnackBar} from "../../State";
 import {FLAGS} from "../../static/lib";
 import {runLater} from "../../utils/Timeouts";
 import {hasValue} from "typescript-nullsafe";
-import {MenuListContainer} from "./wrapper/MenuListContainer";
+import {MenuHeaderContainer} from "./wrapper/MenuHeaderContainer";
 import {NavigationDrawer} from "../recipe/RecipeItem/NavigationDrawer";
 import {ImageIconButton} from "../common/ImgAsIcon";
+import {MenuListContainer} from "./wrapper/MenuListContainer";
 
 const NAVIGATION_WIDTH = 35
 
@@ -120,7 +118,7 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
         anchor="left"
         open={isMenuOpen}
       >
-        <MenuListContainer bottom={leftBottomHeight}>
+        <MenuHeaderContainer bottom={leftBottomHeight}>
           <ButtonGroup variant="contained">
             { FLAGS.map(({key, label, value}) =>
               <ImageIconButton
@@ -131,16 +129,12 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
                 src={value}>{label}</ImageIconButton>
             )}
           </ButtonGroup>
-          <List sx={{margin: 0, padding: 0}}>
+          <MenuListContainer>
             {recipes.map((recipe) => (
               <RecipeItemName recipe={recipe.recipe} selected={recipe.selected} onChange={actions.select} key={recipe.id}/>
             ))}
-          </List>
-          <MenuItem onClick={doPrintPreview}>
-            <ListItemIcon><PrintIcon/></ListItemIcon>
-            <ListItemText><Translation label="actions.print"/></ListItemText>
-          </MenuItem>
-        </MenuListContainer>
+          </MenuListContainer>
+        </MenuHeaderContainer>
         <DrawerFilters drawerWith={NAVIGATION_WIDTH} drawerHeight={contentHeight} ref={setLeftBottomFilter} direction="row" alignItems="center" justifyContent="space-between">
           <ButtonGroup variant="contained">
             <CheckAllButton disabled={recipeStatus.allSelected} onClick={actions.selectAll}/>
