@@ -125,8 +125,7 @@
   "actions": {
     "save": "Save",
     "change": "Change",
-    "cancel": "Cancel",
-    "print": "Print"
+    "cancel": "Cancel"
   },
   "recipe_name": {
     "Täisteraleib": "Whole grain rye bread",

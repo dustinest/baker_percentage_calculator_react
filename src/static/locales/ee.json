@@ -124,8 +124,7 @@
   "actions": {
     "save": "Salvesta",
     "change": "Muuda",
-    "cancel": "Tühista",
-    "print": "Trüki"
+    "cancel": "Tühista"
   },
   "recipe_name": {
     "Täisteraleib": "Täisteraleib",

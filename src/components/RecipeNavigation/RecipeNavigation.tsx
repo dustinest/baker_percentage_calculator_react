@@ -4,7 +4,7 @@ import {
   Box,
   ButtonGroup,
   CssBaseline,
-  Divider,
+  IconButton,
   List,
   ListItem,
   ListItemButton,
@@ -31,7 +31,6 @@ import {useRecipeMenuState} from "./useRecipeMenuState";
 import {useElementClientHeight} from "../common/useElementClientHeight";
 import {CheckedIcon, PrintIcon, UnCheckedIcon} from "../../Constant/Icons";
 import i18next from "i18next";
-import {CommonMenuButton} from "../common/CommonMenu";
 import {useMessageSnackBar} from "../../State";
 import {FLAGS} from "../../static/lib";
 import {runLater} from "../../utils/Timeouts";
@@ -101,28 +100,16 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
             <>
             <Box display="flex" flexGrow={1}>
               <Badge badgeContent={recipeStatus.defaultSelected} overlap="circular" color="info">
-              <FilterIconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={() => setMenuOpen(true)}
-                sx={{mr: 2}}
-              />
+                <FilterIconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={() => setMenuOpen(true)}
+                  sx={{mr: 2}}
+                />
               </Badge>
             </Box>
               <AddRecipeButton/>
-              <CommonMenuButton>
-                { FLAGS.map(({key, label, value}) =>
-                  <MenuItem key={key}  selected={key === i18next.language}  onClick={() => onLangaugeChange(key)}>
-                    <ListItemIcon><img src={value} width={20} alt={label}/></ListItemIcon>
-                    <ListItemText>{label}</ListItemText>
-                  </MenuItem>
-                )}
-                <Divider variant="middle" />
-                <MenuItem onClick={doPrintPreview}>
-                  <ListItemIcon><PrintIcon/></ListItemIcon>
-                  <ListItemText><Translation label="actions.print"/></ListItemText>
-                </MenuItem>
-              </CommonMenuButton>
+              <IconButton color="inherit" onClick={doPrintPreview}><PrintIcon/></IconButton>
             </>
           }
         </Toolbar>
@@ -133,7 +120,6 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
         anchor="left"
         open={isMenuOpen}
       >
-
         <MenuListContainer bottom={leftBottomHeight}>
           <ButtonGroup variant="contained">
             { FLAGS.map(({key, label, value}) =>
@@ -150,6 +136,10 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
               <RecipeItemName recipe={recipe.recipe} selected={recipe.selected} onChange={actions.select} key={recipe.id}/>
             ))}
           </List>
+          <MenuItem onClick={doPrintPreview}>
+            <ListItemIcon><PrintIcon/></ListItemIcon>
+            <ListItemText><Translation label="actions.print"/></ListItemText>
+          </MenuItem>
         </MenuListContainer>
         <DrawerFilters drawerWith={NAVIGATION_WIDTH} drawerHeight={contentHeight} ref={setLeftBottomFilter} direction="row" alignItems="center" justifyContent="space-between">
           <ButtonGroup variant="contained">
