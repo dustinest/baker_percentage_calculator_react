@@ -5,7 +5,6 @@ import {
   ButtonGroup,
   CssBaseline,
   Divider,
-  Drawer,
   List,
   ListItem,
   ListItemButton,
@@ -38,8 +37,10 @@ import {FLAGS} from "../../static/lib";
 import {runLater} from "../../utils/Timeouts";
 import {hasValue} from "typescript-nullsafe";
 import {MenuListContainer} from "./wrapper/MenuListContainer";
+import {NavigationDrawer} from "../recipe/RecipeItem/NavigationDrawer";
+import {ImageIconButton} from "../common/ImgAsIcon";
 
-const NAVIGATION_WIDTH = 260;
+const NAVIGATION_WIDTH = 35
 
 type RecipeItemNameProps = {
   recipe: RecipeType;
@@ -126,26 +127,29 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
           }
         </Toolbar>
       </NavigationAppBar>
-      <Drawer
-        sx={{
-          width: NAVIGATION_WIDTH,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
-            width: NAVIGATION_WIDTH,
-            boxSizing: 'border-box',
-          },
-        }}
+      <NavigationDrawer
+        drawerWith={NAVIGATION_WIDTH}
         variant="persistent"
         anchor="left"
         open={isMenuOpen}
       >
 
         <MenuListContainer bottom={leftBottomHeight}>
-        <List sx={{margin: 0, padding: 0}}>
-          {recipes.map((recipe) => (
-            <RecipeItemName recipe={recipe.recipe} selected={recipe.selected} onChange={actions.select} key={recipe.id}/>
-          ))}
-        </List>
+          <ButtonGroup variant="contained">
+            { FLAGS.map(({key, label, value}) =>
+              <ImageIconButton
+                key={key}
+                disabled={key === i18next.language}
+                onClick={() => onLangaugeChange(key)}
+                alt={label}
+                src={value}>{label}</ImageIconButton>
+            )}
+          </ButtonGroup>
+          <List sx={{margin: 0, padding: 0}}>
+            {recipes.map((recipe) => (
+              <RecipeItemName recipe={recipe.recipe} selected={recipe.selected} onChange={actions.select} key={recipe.id}/>
+            ))}
+          </List>
         </MenuListContainer>
         <DrawerFilters drawerWith={NAVIGATION_WIDTH} drawerHeight={contentHeight} ref={setLeftBottomFilter} direction="row" alignItems="center" justifyContent="space-between">
           <ButtonGroup variant="contained">
@@ -158,7 +162,7 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
             </Badge>
           </ButtonGroup>
         </DrawerFilters>
-      </Drawer>
+      </NavigationDrawer>
       <MainNavigationMainContainer open={isMenuOpen} width={NAVIGATION_WIDTH} menuHeight={contentHeight}>{children}</MainNavigationMainContainer>
     </Box>
   );

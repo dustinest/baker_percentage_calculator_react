@@ -23,6 +23,7 @@ const MainNavigationContainer = styled('main', {shouldForwardProp: (prop) => pro
   marginLeft: `-${width}px`,
   marginBottom: `${height}px`,
   overflow: "hidden",
+  /*
   ...(open && {
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
@@ -30,6 +31,8 @@ const MainNavigationContainer = styled('main', {shouldForwardProp: (prop) => pro
     }),
     marginLeft: 0,
   }),
+
+   */
 }));
 
 type MainNavigationMainContainerProps = {
