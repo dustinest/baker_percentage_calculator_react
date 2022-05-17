@@ -1,7 +1,7 @@
 import './RecipeNavigation.css';
 import {
   Badge,
-  Box,
+  Box, Button,
   ButtonGroup,
   CssBaseline,
   IconButton,
@@ -34,8 +34,8 @@ import {runLater} from "../../utils/Timeouts";
 import {hasValue} from "typescript-nullsafe";
 import {MenuHeaderContainer} from "./wrapper/MenuHeaderContainer";
 import {NavigationDrawer} from "../recipe/RecipeItem/NavigationDrawer";
-import {ImageIconButton} from "../common/ImgAsIcon";
 import {MenuListContainer} from "./wrapper/MenuListContainer";
+import {FlagIcon} from "../../Constant/FlagIcons";
 
 const NAVIGATION_WIDTH = 35
 
@@ -120,13 +120,12 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
       >
         <MenuHeaderContainer bottom={leftBottomHeight}>
           <ButtonGroup variant="contained">
-            { FLAGS.map(({key, label, value}) =>
-              <ImageIconButton
-                key={key}
-                disabled={key === i18next.language}
-                onClick={() => onLangaugeChange(key)}
-                alt={label}
-                src={value}>{label}</ImageIconButton>
+            { FLAGS.map(({key, label, icon}) =>
+              <Button key={key}
+                      disabled={key === i18next.language}
+                      onClick={() => onLangaugeChange(key)}
+                      endIcon={<FlagIcon variant={icon}/>}
+                      >{label}</Button>
             )}
           </ButtonGroup>
           <MenuListContainer>

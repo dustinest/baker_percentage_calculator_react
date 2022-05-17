@@ -1,23 +1,22 @@
 // noinspection ES6PreferShortImport
 import {Locales} from "./Locales.d";
-import gb from '../svg/flags/gb.svg';
-import ee from '../svg/flags/ee.svg';
+import {FlagIconType} from "../../Constant/FlagIcons";
 
 export type FlagType = {
   key: string;
   label: string;
-  value: string;
+  icon: FlagIconType
 }
 
 export const FLAGS = [
   {
     key: "ee",
     label: Locales.ee,
-    value: ee
+    icon: FlagIconType.ee
   } as FlagType,
   {
     key: "gb",
     label: Locales.gb,
-    value: gb
+    icon: FlagIconType.gb
   } as FlagType
 ] as FlagType[]

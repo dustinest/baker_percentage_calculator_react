@@ -6,6 +6,7 @@ import { initReactI18next } from "react-i18next";
 
 import gb from './static/locales/gb.json'
 import ee from './static/locales/ee.json'
+import {createTheme, ThemeProvider} from "@mui/material";
 
 i18n.use(initReactI18next)
     .init({
@@ -24,10 +25,15 @@ i18n.use(initReactI18next)
         }
     }).catch((error) => console.error("Error while reading the translations!", error));
 
+export const appTheme = createTheme({
+});
+
 function App() {
   return (
     <div className="App">
+      <ThemeProvider theme={appTheme}>
       <Main/>
+      </ThemeProvider>
     </div>
   );
 }
