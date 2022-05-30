@@ -1,7 +1,7 @@
 import {ChangeEvent, useEffect, useState} from "react";
 import {normalizeNumber} from "../../utils/Numbers";
 import {InputAdornment, OutlinedInput, TextField} from "@mui/material";
-import {useTimeoutAsyncEffect} from "../../utils/Async";
+import {useTimeoutAsyncEffect} from "react-useasync-hooks";
 
 export type SuffixType = "g" | "%";
 

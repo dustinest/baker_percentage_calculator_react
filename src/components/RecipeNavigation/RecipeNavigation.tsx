@@ -30,12 +30,12 @@ import {CheckedIcon, PrintIcon, UnCheckedIcon} from "../../Constant/Icons";
 import i18next from "i18next";
 import {useMessageSnackBar} from "../../State";
 import {FLAGS} from "../../static/lib";
-import {runLater} from "../../utils/Timeouts";
 import {hasValue} from "typescript-nullsafe";
 import {MenuHeaderContainer} from "./wrapper/MenuHeaderContainer";
 import {NavigationDrawer} from "../recipe/RecipeItem/NavigationDrawer";
 import {MenuListContainer} from "./wrapper/MenuListContainer";
 import {FlagIcon} from "../../Constant/FlagIcons";
+import {runLater} from "typescript-async-timeouts";
 
 const NAVIGATION_WIDTH = 35
 

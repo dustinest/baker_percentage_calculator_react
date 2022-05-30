@@ -1,10 +1,10 @@
 import {RecipeType} from "../../../types";
 import {BakerPercentageResult} from "../../../service/BakerPercentage";
 import {useEffect, useState} from "react";
-import {AsyncStatus, useAsyncEffect} from "../../../utils/Async";
 import {hasValue} from "typescript-nullsafe";
 import {recalculateRecipeBakerPercentage} from "../common/RecipeItemEditService";
 import {useMessageSnackBar} from "../../../State";
+import {AsyncStatus, useAsyncEffect} from "react-useasync-hooks";
 
 type UseBakerPercentageResultNoValue = {
   hasValue: false;

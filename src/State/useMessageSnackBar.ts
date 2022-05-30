@@ -1,6 +1,6 @@
 import {useSnackbar} from "notistack";
 import {useTranslation} from "../Translations";
-import {runLater} from "../utils/Timeouts";
+import {runLater} from "typescript-async-timeouts";
 
 export type VariantType = 'default' | 'error' | 'success' | 'warning' | 'info';
 

@@ -1,7 +1,7 @@
 import {useContext, useEffect, useState} from "react";
 import {RecipeType} from "../../types";
 import {RecipesContext, RecipesStateActionTypes} from "../../State";
-import {runLater} from "../../utils/Timeouts";
+import {runLater} from "typescript-async-timeouts";
 
 export type RecipeMenuItemType = {
   id: string;

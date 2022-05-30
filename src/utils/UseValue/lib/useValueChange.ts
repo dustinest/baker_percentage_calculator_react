@@ -9,8 +9,8 @@ interface ReducedState<ValueType> {
   equals: boolean;
 }
 
-type Action<Action = "SET" | "RESET" | "UNDO" | "HARD_RESET"> = {
-  action: Action
+type Action<ActionType = "SET" | "RESET" | "UNDO" | "HARD_RESET"> = {
+  action: ActionType
 }
 
 type SetAction<ValueType, ActionType = "SET" | "RESET" | "HARD_RESET"> = {
