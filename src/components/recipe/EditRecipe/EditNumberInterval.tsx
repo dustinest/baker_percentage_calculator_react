@@ -5,19 +5,19 @@ import {HorizontalActionStack} from "../../common/CommonStack";
 
 type EditNumberIntervalProps = {
   interval: NumberIntervalType;
-  onChange: (from: number, until: number) => Promise<void>;
+  onChange: (from: number, until: number) => void;
   suffix?: string;
   className?: string;
 }
 
-export const triggerFrom = (from: number, interval: NumberIntervalType, onChange: (from: number, until: number) => Promise<void>): Promise<void> => {
+const triggerFrom = async (from: number, interval: NumberIntervalType, onChange: (from: number, until: number) => void) => {
   const until = from > interval.until ? from : interval.until;
-  return onChange(from, until);
+  onChange(from, until);
 }
 
-export const triggerUntil = (until: number, interval: NumberIntervalType, onChange: (from: number, until: number) => Promise<void>): Promise<void> => {
+const triggerUntil = async (until: number, interval: NumberIntervalType, onChange: (from: number, until: number) => void) => {
   const from = until < interval.from ? until : interval.from;
-  return onChange(from, until);
+  onChange(from, until);
 }
 
 export const EditNumberInterval = ({interval, suffix, onChange, className}: EditNumberIntervalProps) => {

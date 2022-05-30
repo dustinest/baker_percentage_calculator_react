@@ -1,14 +1,7 @@
-import {useBooleanInputValueChange} from "../../../utils/UseValue";
+import {useNumberInputValueChange} from "../../../utils/UseValue";
 import {KeyboardEvent, ReactNode} from "react";
 import {HorizontalActionStack, LabelAwareStack} from "../../common/CommonStack";
-import {
-  ButtonGroup,
-  Input,
-  InputAdornment,
-  ListItemIcon,
-  ListItemText,
-  MenuItem,
-} from "@mui/material";
+import {ButtonGroup, Input, InputAdornment, ListItemIcon, ListItemText, MenuItem,} from "@mui/material";
 import {DoneButton, DoneIconButton, ResetButton} from "../../../Constant/Buttons";
 import {DeleteIcon, ResetIcon} from "../../../Constant/Icons";
 import {Translation} from "../../../Translations";
@@ -23,7 +16,7 @@ type EditInputTimeoutNumberProps = {
 }
 
 export const EditInputTimeoutNumber = ({value, onSave, onDelete, endAdornment, additionalMenu}: EditInputTimeoutNumberProps) => {
-  const [editValue, actions, history] = useBooleanInputValueChange(value);
+  const [editValue, actions, history] = useNumberInputValueChange(value);
 
   const onSetValue = () => {
     if (history.equals) return;

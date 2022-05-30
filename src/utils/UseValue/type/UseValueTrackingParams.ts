@@ -4,8 +4,8 @@ export type UseValueTrackingParams<ValueType extends any = any,
   {
     initValue: ValueType,
     valueParser: (value: SetterType, currentValue: ValueType, originalValue: ValueType) => ValueType,
-    resetValueParser?: (value: ResetType | undefined, currentValue: ValueType, originalValue: ValueType) => ValueType,
-    historyDepth?: number
+    objectEquals: (value1: ValueType, value2: ValueType) => boolean,
+    resetValueParser?: (value: ResetType | undefined, currentValue: ValueType, originalValue: ValueType) => ValueType
   };
 
 export type UseValueTrackingResult<ValueType extends any = any,
@@ -16,12 +16,10 @@ export type UseValueTrackingResult<ValueType extends any = any,
     setValue: (value: SetterType) => void,
     resetValue: (value?: ResetType) => void,
     resetToCurrentValue: () => void,
-    resetToOriginalValue: () => void,
-    undo: () => void
+    resetToOriginalValue: () => void
   },
   {
     equals: boolean,
-    original: ValueType,
-    history: ValueType[]
+    original: ValueType
   }
 ];

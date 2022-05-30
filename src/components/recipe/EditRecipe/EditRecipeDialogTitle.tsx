@@ -10,7 +10,7 @@ import {
   TextField
 } from "@mui/material";
 import {EditRecipeContext, EditRecipeStateActionTypes} from "../../../State";
-import {useBooleanInputValueChange, useStringInputValueChange} from "../../../utils/UseValue";
+import {useNumberInputValueChange, useStringInputValueChange} from "../../../utils/UseValue";
 import "./EditRecipeDialogTitle.css";
 import {
   DoneIconButton,
@@ -23,7 +23,7 @@ import {SyntheticEvent, useContext, useEffect, useState} from "react";
 import {Translation, useTranslation} from "../../../Translations";
 
 const EditAmount = ({recipe}: { recipe: RecipeType }) => {
-  const [amount, actions, history] = useBooleanInputValueChange(recipe.amount);
+  const [amount, actions, history] = useNumberInputValueChange(recipe.amount);
   const {editRecipeDispatch} = useContext(EditRecipeContext);
   const [tabValue, setTabValue] = useState(0);
   const [edit, setEdit] = useState<boolean>(false);

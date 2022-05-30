@@ -1,21 +1,26 @@
-import {hasValue} from "typescript-nullsafe";
 import {useValueChange} from "./useValueChange";
 import {ChangeEvent} from "react";
+import {hasNoValue, hasValue} from "typescript-nullsafe";
 
-export const useBooleanValueChange = (value: boolean | null | undefined, historyDepth?: number) =>
-  useValueChange<boolean, string | boolean | null | undefined, boolean | null | undefined>({
-      initValue: value === true,
-      valueParser: (newValue) => newValue === true,
-      resetValueParser: (newValue, oldValue) => hasValue(newValue) ? newValue : oldValue,
-      historyDepth
+const isTrue = (value: boolean | string | null | undefined): boolean => {
+  if (hasNoValue(value)) return false;
+  return value === "true" ||  value === "on" || value === true;
+};
+
+export const useBooleanValueChange = (value: boolean | string | null | undefined) =>
+  useValueChange<boolean | null | undefined, boolean | string | null | undefined>({
+      initValue: isTrue(value),
+      valueParser: (newValue) => isTrue(newValue),
+      objectEquals: (value1, value2) => value1 === value2,
+      resetValueParser: (newValue, oldValue) => hasValue(newValue) ? isTrue(newValue) : isTrue(oldValue)
     }
   );
 
-export const useBooleanInputValueChange = (value: boolean | null | undefined, historyDepth?: number) =>
+export const useBooleanInputValueChange = (value: boolean | string | null | undefined) =>
   useValueChange<boolean, ChangeEvent<HTMLInputElement>, boolean | null | undefined>({
-      initValue: value === true,
-      valueParser: (newValue) => newValue.target.checked,
-      resetValueParser: (newValue, oldValue) => hasValue(newValue) ? newValue : oldValue,
-      historyDepth
+      initValue: isTrue(value),
+      valueParser: (newValue) => isTrue(newValue.target.checked),
+      objectEquals: (value1, value2) => value1 === value2,
+      resetValueParser: (newValue, oldValue) => hasValue(newValue) ? isTrue(newValue) : isTrue(oldValue)
     }
   );

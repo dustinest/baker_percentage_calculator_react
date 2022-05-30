@@ -129,7 +129,7 @@ export const EditRecipeDialog = () => {
               <GridItem>
                 <Container>
                   <VerticalStack spacing={1}>
-                    <EditInnerTemperature recipe={data.edit}/>
+                    <EditInnerTemperature temperature={data.edit.innerTemperature}/>
                     <EditDescription value={data.edit.description} onChange={setDescription}/>
                   </VerticalStack>
                 </Container>

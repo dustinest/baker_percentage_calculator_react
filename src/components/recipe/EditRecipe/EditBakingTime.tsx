@@ -3,48 +3,71 @@ import {Checkbox, Divider, Typography} from "@mui/material";
 import {EditNumberInterval} from "./EditNumberInterval";
 import {EditRecipeContext, EditRecipeStateActionTypes} from "../../../State";
 import {Translation} from "../../../Translations";
-import {useContext, useEffect, useMemo, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {DeleteIconButton, DoneIconButton} from "../../../Constant/Buttons";
 import "./EditBakingTime.css";
 import {HorizontalActionStack, VerticalStack} from "../../common/CommonStack";
+import {useValueChange} from "../../../utils/UseValue";
+import {valueOf} from "typescript-nullsafe";
+import {useTimeoutAsyncEffect} from "react-useasync-hooks";
 
+type DummyBakingTimeType = BakingTimeType & {dummy: true};
 const DUMMY_BAKING_TIME = Object.freeze({
   time: {from: 1, until: 1},
   temperature: {from: 1, until: 1},
-  steam: false
-} as BakingTimeType) as BakingTimeType;
+  steam: false,
+  dummy: true
+} as DummyBakingTimeType) as DummyBakingTimeType;
 
-const EditBakingTimeRow = ({bakingTime, index}: {bakingTime?: BakingTimeType, index: number}) => {
+type EditBakingTimeRowProps = {
+  bakingTime: BakingTimeType;
+  index: number;
+  onRemove: () => void;
+  onDone: (value: BakingTimeType) => void;
+}
+
+const bakingTimeEquals = (v1: BakingTimeType, v2: BakingTimeType): boolean => {
+    return v1.time.from === v2.time.from && v1.time.until === v2.time.until && v1.temperature.from === v2.temperature.from && v1.temperature.until === v2.temperature.until && v1.steam === v2.steam;
+};
+
+const EditBakingTimeRow = ({bakingTime, index, onRemove, onDone}: EditBakingTimeRowProps) => {
   const {editRecipeDispatch} = useContext(EditRecipeContext);
-  const [value, setValue] = useState<BakingTimeType>(DUMMY_BAKING_TIME);
-
-  const bakingTimeValue = useMemo<BakingTimeType>(() => {
-    return bakingTime || DUMMY_BAKING_TIME;
-  }, [bakingTime])
+  const [value, methods, history] = useValueChange<BakingTimeType>({
+    initValue: bakingTime,
+    objectEquals: bakingTimeEquals,
+    resetValueParser: v => valueOf(v, DUMMY_BAKING_TIME),
+    valueParser: (v) => v
+  });
 
   useEffect(() => {
-    setValue(bakingTimeValue);
-  }, [bakingTimeValue]);
+    if (bakingTimeEquals(value, bakingTime)) {
+      return;
+    }
+    methods.resetValue(bakingTime);
+    // eslint-disable-next-line
+  }, [bakingTime, index]);
 
-  const dispatchChange = (valueToSet: BakingTimeType) => {
-    editRecipeDispatch({...valueToSet, ...{type: EditRecipeStateActionTypes.SET_BAKING_TIME, index}});
+  const dispatchChange = () => {
+    editRecipeDispatch({...value, ...{type: EditRecipeStateActionTypes.SET_BAKING_TIME, index}});
+    methods.resetValue(value);
+    onDone(value);
   }
-  const dispatchOrSet = (valueToSet: BakingTimeType) => {
-    if (bakingTime)
-      dispatchChange(valueToSet);
-    else
-      setValue(valueToSet);
-  }
 
-  const setRecipeBakingTime = async(from: number, until: number) => dispatchOrSet({...value, ...{time: {from, until }}});
-  const setRecipeTemperature = async(from: number, until: number) => dispatchOrSet({...value, ...{temperature: {from, until }}});
-  const setRecipeSteam = async(steam: boolean) => dispatchOrSet({...value, ...{steam: steam}});
+  useTimeoutAsyncEffect(async () => {
+    if (history.equals || (history.original as DummyBakingTimeType).dummy) return;
+    dispatchChange();
+  }, [value, history] )
 
 
-  const triggerChange = () => dispatchChange(value);
+  const setRecipeBakingTime = async(from: number, until: number) => methods.setValue({time: {from, until }, temperature: value.temperature, steam: value.steam } );
+  const setRecipeTemperature = async(from: number, until: number) => methods.setValue({temperature: {from, until }, time: value.time, steam: value.steam});
+  const setRecipeSteam = async(steam: boolean) => methods.setValue({steam: steam, temperature: value.temperature, time: value.time});
 
-  const removeBakingTime = async() =>
+
+  const removeBakingTime = async() => {
     editRecipeDispatch({type: EditRecipeStateActionTypes.REMOVE_BAKING_TIME, index});
+    onRemove();
+  }
 
   return (
     <HorizontalActionStack spacing={1}>
@@ -55,12 +78,25 @@ const EditBakingTimeRow = ({bakingTime, index}: {bakingTime?: BakingTimeType, in
           <EditNumberInterval className="temperature" interval={value.temperature} onChange={(from, until) => setRecipeTemperature(from, until)}/>
         </HorizontalActionStack>
       </HorizontalActionStack>
-      {bakingTime ? <DeleteIconButton onClick={removeBakingTime}/> : <DoneIconButton onClick={triggerChange}/> }
+      {(history.original as DummyBakingTimeType).dummy || !history.equals ? <DoneIconButton onClick={dispatchChange} disabled={history.equals} /> : <DeleteIconButton onClick={removeBakingTime}/> }
     </HorizontalActionStack>
   )
 }
 
 export const EditBakingTime = ({bakingTime}: {bakingTime: BakingTimeType[]}) => {
+  const [values, setValues] = useState<BakingTimeType[]>([...bakingTime]);
+  const onRemove = (index: number) => {
+    setValues([...values].filter((e, _index) => index !== _index));
+  };
+  const onDone = (value: BakingTimeType, index: number) => {
+    const _values = [...values];
+    if (index >= _values.length) {
+      _values.push(value);
+      setValues(_values);
+      return;
+    }
+    setValues(_values.map((e, _index) => _index === index ? value : e));
+  };
   return (
     <VerticalStack
       className="edit-baking-time"
@@ -75,10 +111,10 @@ export const EditBakingTime = ({bakingTime}: {bakingTime: BakingTimeType[]}) => 
         <Typography variant="body1" gutterBottom><Translation label="edit.baking_instructions.time"/></Typography>
         <Typography variant="body1" gutterBottom><Translation label="edit.baking_instructions.temperature"/></Typography>
       </HorizontalActionStack>
-      {bakingTime.map((bakingTime, index) => (
-        <EditBakingTimeRow key={index} bakingTime={bakingTime} index={index}/>
+      {values.map((bakingTime, index) => (
+        <EditBakingTimeRow key={index} bakingTime={bakingTime} index={index} onDone={(value) => onDone(value, index)} onRemove={() => onRemove(index)}/>
       ))}
-      <EditBakingTimeRow index={bakingTime.length} key={`new_baking-${bakingTime.length}`}/>
+      <EditBakingTimeRow index={values.length} key={`new_baking-${bakingTime.length}`} bakingTime={DUMMY_BAKING_TIME} onDone={(value) => onDone(value, values.length)} onRemove={() => {}}/>
     </VerticalStack>
   )
 }

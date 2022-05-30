@@ -12,7 +12,7 @@ import {
   TableCell,
   TableRow
 } from "@mui/material";
-import {useBooleanInputValueChange} from "../../../utils/UseValue";
+import {useNumberInputValueChange} from "../../../utils/UseValue";
 import {EditRecipeContext, EditRecipeStateActionTypes} from "../../../State";
 import {Translation} from "../../../Translations";
 import "./EditRecipeIngredients.css";
@@ -206,7 +206,7 @@ export const EditRecipeRemainingIngredients = ({ingredients, index}: EditRecipeR
     setSelectedValue(values.length > 0 ? values[0].type as string : null);
   }, [ingredients])
 
-  const [grams, actions, history] = useBooleanInputValueChange(0);
+  const [grams, actions, history] = useNumberInputValueChange(0);
   const {editRecipeDispatch} = useContext(EditRecipeContext);
   const addNewItem = () => {
     if (history.equals || grams <= 0 || hasNoValue(selectedValue)) {
