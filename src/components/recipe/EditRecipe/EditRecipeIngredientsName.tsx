@@ -1,7 +1,7 @@
 import {RecipeIngredientsType} from "../../../types";
 import {ButtonGroup, Input} from "@mui/material";
 import {Translation, useTranslation} from "../../../Translations";
-import {useStringInputValueTracking} from "../../../utils/UseValue";
+import {useStringInputValueChange} from "../../../utils/UseValue";
 import {EditRecipeContext, EditRecipeStateActionTypes} from "../../../State";
 import {DoneButton} from "../../../Constant/Buttons";
 import {LabelAwareStack} from "../../common/CommonStack";
@@ -10,7 +10,7 @@ import {useContext} from "react";
 type EditRecipeIngredientsNameProps = { ingredients: RecipeIngredientsType; index: number };
 export const EditRecipeIngredientsName = ({ingredients, index}: EditRecipeIngredientsNameProps) => {
   const translation = useTranslation();
-  const [name, actions, history] = useStringInputValueTracking(ingredients.name);
+  const [name, actions, history] = useStringInputValueChange(ingredients.name);
   const {editRecipeDispatch} = useContext(EditRecipeContext);
   const onNameDone = () => {
     editRecipeDispatch({

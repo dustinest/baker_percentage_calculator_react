@@ -10,7 +10,7 @@ import {
   TextField
 } from "@mui/material";
 import {EditRecipeContext, EditRecipeStateActionTypes} from "../../../State";
-import {useNumberInputValueTracking, useStringInputValueTracking} from "../../../utils/UseValue";
+import {useBooleanInputValueChange, useStringInputValueChange} from "../../../utils/UseValue";
 import "./EditRecipeDialogTitle.css";
 import {
   DoneIconButton,
@@ -23,7 +23,7 @@ import {SyntheticEvent, useContext, useEffect, useState} from "react";
 import {Translation, useTranslation} from "../../../Translations";
 
 const EditAmount = ({recipe}: { recipe: RecipeType }) => {
-  const [amount, actions, history] = useNumberInputValueTracking(recipe.amount);
+  const [amount, actions, history] = useBooleanInputValueChange(recipe.amount);
   const {editRecipeDispatch} = useContext(EditRecipeContext);
   const [tabValue, setTabValue] = useState(0);
   const [edit, setEdit] = useState<boolean>(false);
@@ -82,7 +82,7 @@ const EditAmount = ({recipe}: { recipe: RecipeType }) => {
 }
 
 export const EditName = ({recipe}: { recipe: RecipeType }) => {
-  const [name, actions, history] = useStringInputValueTracking(recipe.name);
+  const [name, actions, history] = useStringInputValueChange(recipe.name);
   const {editRecipeDispatch} = useContext(EditRecipeContext);
   const onNameDone = async () => {
     editRecipeDispatch({

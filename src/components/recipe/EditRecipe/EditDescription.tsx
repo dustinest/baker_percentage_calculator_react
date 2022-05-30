@@ -1,7 +1,7 @@
 import {TextField} from "@mui/material";
 import {useTranslation} from "../../../Translations";
 import {useMessageSnackBar} from "../../../State";
-import {useStringInputValueTracking} from "../../../utils/UseValue";
+import {useStringInputValueChange} from "../../../utils/UseValue";
 import {DoneIconButton} from "../../../Constant/Buttons";
 import {HorizontalActionStack} from "../../common/CommonStack";
 
@@ -11,7 +11,7 @@ type EditDescriptionProps = {
 }
 
 export const EditDescription = ({value, onChange}: EditDescriptionProps) => {
-  const [description, actions, history] = useStringInputValueTracking(value);
+  const [description, actions, history] = useStringInputValueChange(value);
   const snackBar = useMessageSnackBar();
 
   const onTextChange = () => {

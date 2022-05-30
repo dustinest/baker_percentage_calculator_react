@@ -1,4 +1,4 @@
-import {useNumberInputValueTracking} from "../../../utils/UseValue";
+import {useBooleanInputValueChange} from "../../../utils/UseValue";
 import {KeyboardEvent, ReactNode} from "react";
 import {HorizontalActionStack, LabelAwareStack} from "../../common/CommonStack";
 import {
@@ -23,7 +23,7 @@ type EditInputTimeoutNumberProps = {
 }
 
 export const EditInputTimeoutNumber = ({value, onSave, onDelete, endAdornment, additionalMenu}: EditInputTimeoutNumberProps) => {
-  const [editValue, actions, history] = useNumberInputValueTracking(value);
+  const [editValue, actions, history] = useBooleanInputValueChange(value);
 
   const onSetValue = () => {
     if (history.equals) return;

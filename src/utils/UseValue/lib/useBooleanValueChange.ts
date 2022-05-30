@@ -2,7 +2,7 @@ import {hasValue} from "typescript-nullsafe";
 import {useValueChange} from "./useValueChange";
 import {ChangeEvent} from "react";
 
-export const useBooleanTracking = (value: boolean | null | undefined, historyDepth?: number) =>
+export const useBooleanValueChange = (value: boolean | null | undefined, historyDepth?: number) =>
   useValueChange<boolean, string | boolean | null | undefined, boolean | null | undefined>({
       initValue: value === true,
       valueParser: (newValue) => newValue === true,
@@ -11,7 +11,7 @@ export const useBooleanTracking = (value: boolean | null | undefined, historyDep
     }
   );
 
-export const useBooleanInputValueTracking = (value: boolean | null | undefined, historyDepth?: number) =>
+export const useBooleanInputValueChange = (value: boolean | null | undefined, historyDepth?: number) =>
   useValueChange<boolean, ChangeEvent<HTMLInputElement>, boolean | null | undefined>({
       initValue: value === true,
       valueParser: (newValue) => newValue.target.checked,
