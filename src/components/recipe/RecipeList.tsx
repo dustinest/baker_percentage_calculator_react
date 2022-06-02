@@ -1,6 +1,6 @@
 import {RecipeItem} from "./RecipeItem";
 import {RecipesContext} from "../../State";
-import {Stack, Typography} from "@mui/material";
+import {alpha, Stack, styled, Typography} from "@mui/material";
 import {Translation} from "../../Translations";
 import {useContext, useMemo} from "react";
 import {GridContainer, GridItem} from "../common/GridContainer";
@@ -9,20 +9,35 @@ import {TranslatedAddIconButton} from "../../Constant/Buttons";
 import {useRecipeEditService} from "../../service/RecipeEditService";
 import {BakerIcon} from "../../Constant/BakerIcon";
 
+export const BakerIconStyled = styled(BakerIcon)(({ theme }) => ({
+  padding: 0,
+  width: theme.spacing(20),
+  height: theme.spacing(20),
+  color: alpha(theme.palette.warning.main, 0.5) // https://mui.com/material-ui/customization/how-to-customize/#2-reusable-component
+}));
+
 const NoRecipesError = () => {
   const {editRecipeMethods} = useRecipeEditService();
   return (
     <>
+      <div
+        style={{
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)'
+        }}
+      >
       <Stack
-        direction="row"
+        direction="column"
         justifyContent="center"
         alignItems="center"
         spacing={2}
       >
-        <BakerIcon sx={{width: 100, height: 100}} color="warning"/>
+        <BakerIconStyled/>
         <Stack
           direction="column"
-          justifyContent="space-between"
+          justifyContent="center"
           alignItems="center"
           spacing={2}
         >
@@ -32,6 +47,7 @@ const NoRecipesError = () => {
           <TranslatedAddIconButton translation="actions.add_recipe" onClick={editRecipeMethods.create}/>
         </Stack>
       </Stack>
+      </div>
     </>);
 }
 
