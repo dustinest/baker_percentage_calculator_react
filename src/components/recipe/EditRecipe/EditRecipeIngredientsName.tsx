@@ -1,7 +1,7 @@
 import {RecipeIngredientsType} from "../../../types";
 import {ButtonGroup, Input} from "@mui/material";
 import {Translation, useTranslation} from "../../../Translations";
-import {useStringInputValueChange} from "../../../utils/UseValue";
+import {useStringInputValueChange} from "react-use-value-change";
 import {EditRecipeContext, EditRecipeStateActionTypes} from "../../../State";
 import {DoneButton} from "../../../Constant/Buttons";
 import {LabelAwareStack} from "../../common/CommonStack";

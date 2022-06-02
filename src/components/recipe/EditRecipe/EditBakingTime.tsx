@@ -7,9 +7,9 @@ import {useContext, useEffect, useState} from "react";
 import {DeleteIconButton, DoneIconButton} from "../../../Constant/Buttons";
 import "./EditBakingTime.css";
 import {HorizontalActionStack, VerticalStack} from "../../common/CommonStack";
-import {useValueChange} from "../../../utils/UseValue";
 import {valueOf} from "typescript-nullsafe";
 import {useTimeoutAsyncEffect} from "react-useasync-hooks";
+import {useValueChange} from "react-use-value-change";
 
 type DummyBakingTimeType = BakingTimeType & {dummy: true};
 const DUMMY_BAKING_TIME = Object.freeze({

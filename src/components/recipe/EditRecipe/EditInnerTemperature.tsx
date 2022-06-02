@@ -6,9 +6,9 @@ import {useContext} from "react";
 import {EditNumberInterval} from "./EditNumberInterval";
 import {DeleteIconButton, DoneIconButton} from "../../../Constant/Buttons";
 import {HorizontalActionStack, LabelAwareStack} from "../../common/CommonStack";
-import {useValueChange} from "../../../utils/UseValue";
 import {valueOf} from "typescript-nullsafe";
 import {useTimeoutAsyncEffect} from "react-useasync-hooks";
+import {useValueChange} from "react-use-value-change";
 
 type DummyTemperatureType = NumberIntervalType & {dummy: true};
 const DUMMY_INNER_TEMPERATURE = Object.freeze({from: 1, until: 1, dummy: true} as DummyTemperatureType) as DummyTemperatureType;

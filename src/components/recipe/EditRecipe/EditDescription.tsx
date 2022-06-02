@@ -1,9 +1,9 @@
 import {TextField} from "@mui/material";
 import {useTranslation} from "../../../Translations";
 import {useMessageSnackBar} from "../../../State";
-import {useStringInputValueChange} from "../../../utils/UseValue";
 import {DoneIconButton} from "../../../Constant/Buttons";
 import {HorizontalActionStack} from "../../common/CommonStack";
+import {useStringInputValueChange} from "react-use-value-change";
 
 type EditDescriptionProps = {
   value?: string | null,

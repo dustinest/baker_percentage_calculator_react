@@ -10,7 +10,7 @@ import {
   TextField
 } from "@mui/material";
 import {EditRecipeContext, EditRecipeStateActionTypes} from "../../../State";
-import {useNumberInputValueChange, useStringInputValueChange} from "../../../utils/UseValue";
+import {useNumberInputValueChange, useStringInputValueChange} from "react-use-value-change";
 import "./EditRecipeDialogTitle.css";
 import {
   DoneIconButton,

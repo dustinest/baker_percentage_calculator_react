@@ -1,4 +1,3 @@
-import {useNumberInputValueChange} from "../../../utils/UseValue";
 import {KeyboardEvent, ReactNode} from "react";
 import {HorizontalActionStack, LabelAwareStack} from "../../common/CommonStack";
 import {ButtonGroup, Input, InputAdornment, ListItemIcon, ListItemText, MenuItem,} from "@mui/material";
@@ -6,6 +5,7 @@ import {DoneButton, DoneIconButton, ResetButton} from "../../../Constant/Buttons
 import {DeleteIcon, ResetIcon} from "../../../Constant/Icons";
 import {Translation} from "../../../Translations";
 import {CommonMenuButton} from "../../common/CommonMenu";
+import {useNumberInputValueChange} from "react-use-value-change";
 
 type EditInputTimeoutNumberProps = {
   value: number;

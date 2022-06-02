@@ -12,7 +12,7 @@ import {
   TableCell,
   TableRow
 } from "@mui/material";
-import {useNumberInputValueChange} from "../../../utils/UseValue";
+import {useNumberInputValueChange} from "react-use-value-change";
 import {EditRecipeContext, EditRecipeStateActionTypes} from "../../../State";
 import {Translation} from "../../../Translations";
 import "./EditRecipeIngredients.css";
