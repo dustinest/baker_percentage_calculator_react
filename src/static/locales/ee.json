@@ -113,7 +113,7 @@
     }
   },
   "messages": {
-    "no_recipes": "Retsepte ei ole valitud!"
+    "no_recipes": "Retsepte ei leitud või pole valitud!"
   },
   "snackbar": {
     "recipes_one": "üks retsept",
@@ -124,7 +124,8 @@
   "actions": {
     "save": "Salvesta",
     "change": "Muuda",
-    "cancel": "Tühista"
+    "cancel": "Tühista",
+    "add_recipe": "Lisa uus retsept"
   },
   "recipe_name": {
     "Täisteraleib": "Täisteraleib",

@@ -114,7 +114,7 @@
     "other": "Others"
   },
   "messages": {
-    "no_recipes": "No recipes!"
+    "no_recipes": "No recipes found or selected!"
   },
   "snackbar": {
     "recipes_one": "one recipe",
@@ -125,7 +125,8 @@
   "actions": {
     "save": "Save",
     "change": "Change",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "add_recipe": "Add new recipe"
   },
   "recipe_name": {
     "Täisteraleib": "Whole grain rye bread",
