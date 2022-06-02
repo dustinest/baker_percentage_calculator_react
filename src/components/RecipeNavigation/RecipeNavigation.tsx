@@ -12,7 +12,7 @@ import {
   Toolbar,
 } from "@mui/material";
 
-import {ReactNode, useState} from "react";
+import {ReactNode, useMemo, useState} from "react";
 import {RecipeName} from "../common/RecipeName";
 import {
   AddRecipeButton,
@@ -30,7 +30,7 @@ import {CheckedIcon, PrintIcon, UnCheckedIcon} from "../../Constant/Icons";
 import i18next from "i18next";
 import {useMessageSnackBar} from "../../State";
 import {FLAGS} from "../../static/lib";
-import {hasValue} from "typescript-nullsafe";
+import {hasNoValue, hasValue} from "typescript-nullsafe";
 import {MenuHeaderContainer} from "./wrapper/MenuHeaderContainer";
 import {NavigationDrawer} from "../recipe/RecipeItem/NavigationDrawer";
 import {MenuListContainer} from "./wrapper/MenuListContainer";
@@ -80,6 +80,8 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
     }
   }
 
+  const printDisabled = useMemo(() => hasNoValue(recipes.find(e => e.selected)), [recipes]);
+
   const [contentHeight, setHeaderElement] = useElementClientHeight();
   const [leftBottomHeight, setLeftBottomFilter] = useElementClientHeight();
 
@@ -107,7 +109,7 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
               </Badge>
             </Box>
               <AddRecipeButton/>
-              <IconButton color="inherit" onClick={doPrintPreview}><PrintIcon/></IconButton>
+              <IconButton color="inherit" onClick={doPrintPreview} disabled={printDisabled}><PrintIcon/></IconButton>
             </>
           }
         </Toolbar>
