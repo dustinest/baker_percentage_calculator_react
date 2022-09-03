@@ -3,6 +3,7 @@ import {Container, Divider} from "@mui/material";
 import {BakerPercentage} from "../common/BakerPercentage";
 import {HorizontalActionStack, VerticalStack} from "../../common/CommonStack";
 import {BakerPercentageAwareRecipe, RecipeGrandTotal} from "../common/BakerPercentageAwareRecipe";
+import {StackProps} from "@mui/material/Stack/Stack";
 
 const BakerPercentageContainer = ({recipe}: RecipeItemDataProps) => {
   return (<>
@@ -11,11 +12,11 @@ const BakerPercentageContainer = ({recipe}: RecipeItemDataProps) => {
   </>);
 }
 
-type RecipeItemDataProps = { recipe: BakerPercentageAwareRecipe; }
+type RecipeItemDataProps = { recipe: BakerPercentageAwareRecipe; } & StackProps;
 
-const RecipeItemDataList  = ({recipe}: RecipeItemDataProps) => {
+const RecipeItemDataList  = ({recipe, ...stackProps}: RecipeItemDataProps) => {
   return (<>
-    <VerticalStack className="recipe-data-normal">
+    <VerticalStack className="recipe-data-normal" {...stackProps}>
       <RenderBakingTimeAware value={recipe}/>
       <BakerPercentageContainer recipe={recipe}/>
       <RecipeGrandTotal recipe={recipe}/>
@@ -23,9 +24,10 @@ const RecipeItemDataList  = ({recipe}: RecipeItemDataProps) => {
   </>);
 }
 
-const RecipeItemDataPrint  = ({recipe}: RecipeItemDataProps) => {
+const RecipeItemDataPrint  = ({recipe, ...stackProps}: RecipeItemDataProps) => {
   return (
     <HorizontalActionStack
+      {...stackProps}
       justifyContent="space-evenly"
       alignItems="flex-end"
       divider={<Divider orientation="vertical" flexItem />}
@@ -46,5 +48,8 @@ const RecipeItemDataPrint  = ({recipe}: RecipeItemDataProps) => {
 }
 
 export const RecipeItemData  = ({recipe}: {recipe: BakerPercentageAwareRecipe }) => {
-  return (<><RecipeItemDataPrint recipe={recipe}/><RecipeItemDataList recipe={recipe}/></>);
+  return (<>
+    <RecipeItemDataPrint recipe={recipe} sx={{display: 'none', displayPrint: 'flex'}}/>
+    <RecipeItemDataList recipe={recipe} sx={{display: 'flex', displayPrint: 'none'}}/>
+  </>);
 }

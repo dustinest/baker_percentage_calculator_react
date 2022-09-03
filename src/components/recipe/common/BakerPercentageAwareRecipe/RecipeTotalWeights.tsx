@@ -1,7 +1,7 @@
 import {BakerPercentageAwareRecipe} from "./index";
 import {HorizontalActionStack, VerticalStack} from "../../../common/CommonStack";
-import {Divider, Table, TableBody, TableCell, TableRow} from "@mui/material";
-import {ItemText} from "../ItemText";
+import {Divider, styled, Table, TableBody, TableCell, TableRow} from "@mui/material";
+import {ItemTextNoWrap} from "../ItemText";
 import {Translation} from "../../../../Translations";
 import {getRecipePortions, RecipePortion} from "./RecipePortionsCalculator";
 import {useMemo} from "react";
@@ -20,14 +20,14 @@ type RecipeTotals = {
 };
 
 const RenderPortionItem = ({amount, portion}: {amount: number, portion: RecipePortion}) => {
-  return (<ItemText className="totals">{amount !== portion.amount ? `${portion.label} = ` : undefined}{portion.grams} g</ItemText>)
+  return (<ItemTextNoWrap className="totals">{amount !== portion.amount ? `${portion.label} = ` : undefined}{portion.grams} g</ItemTextNoWrap>)
 }
 
 const RenderTotalAmount = ({portions, label, amount}: { portions: RecipePortion[], label: string, amount:number }) => {
   return (<>
       <HorizontalActionStack justifyContent="center" alignItems="baseline"
                              spacing={0}>
-        <ItemText><Translation label={label}/></ItemText>
+        <ItemTextNoWrap><Translation label={label}/></ItemTextNoWrap>
         <HorizontalActionStack justifyContent="center" alignItems="baseline"
                                divider={<Divider orientation="vertical" flexItem/>}
                                spacing={0.5}>
@@ -37,10 +37,13 @@ const RenderTotalAmount = ({portions, label, amount}: { portions: RecipePortion[
   </>)
 }
 
+const TableCellNoWrap = styled(TableCell)({
+  whiteSpace: 'nowrap'
+});
 const RenderTotalsAsTableRow = ({portions, label, amount}: { portions: RecipePortion[], label: string, amount:number }) => {
   return (<TableRow>
-    <TableCell><Translation label={label}/></TableCell>
-    {portions.map((portion, portionIndex) => <TableCell key={portionIndex}><RenderPortionItem portion={portion} amount={amount}/></TableCell>)}
+    <TableCellNoWrap><Translation label={label}/></TableCellNoWrap>
+    {portions.map((portion, portionIndex) => <TableCellNoWrap key={portionIndex}><RenderPortionItem portion={portion} amount={amount}/></TableCellNoWrap>)}
   </TableRow>)
 }
 

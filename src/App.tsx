@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './Print.css';
 import {Main} from "./components/Main";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";

@@ -1,50 +1,37 @@
 import {styled} from "@mui/material";
 import {ReactNode} from "react";
+import {useIsDesktop} from "../../../utils/ThemeQuery/lib/useIsDesktop";
 
 type MainNavigationContainerProps = {
-  open: boolean;
-  width: number;
+  isDesktop: boolean;
   height: number;
 }
-const MainNavigationContainer = styled('main', {shouldForwardProp: (prop) => prop !== 'open'})<
+const MainNavigationContainer = styled('main', {shouldForwardProp: (prop) => prop !== 'isDesktop' && prop !== 'height'})<
   MainNavigationContainerProps>((
     {
       theme,
-      open,
-      width,
-      height
+      height,
+      isDesktop
     }) => ({
   flexGrow: 1,
-  padding: theme.spacing(3),
+  padding: isDesktop ? theme.spacing(3) : 0,
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  marginLeft: `-${width}px`,
   marginBottom: `${height}px`,
   overflow: "hidden",
-  /*
-  ...(open && {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginLeft: 0,
-  }),
-
-   */
 }));
 
 type MainNavigationMainContainerProps = {
-  open: boolean;
-  width: number;
   children: ReactNode;
   menuHeight: number;
 }
 
-export const MainNavigationMainContainer = ({open, width, children, menuHeight}: MainNavigationMainContainerProps) => {
+export const MainNavigationMainContainer = ({children, menuHeight}: MainNavigationMainContainerProps) => {
+  const isDesktop = useIsDesktop();
   return (
-    <MainNavigationContainer open={open} width={width} height={menuHeight}>
+    <MainNavigationContainer height={menuHeight} isDesktop={isDesktop}>
       {children}
     </MainNavigationContainer>
   );

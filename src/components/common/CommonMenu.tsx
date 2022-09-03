@@ -43,6 +43,7 @@ export const CommonMenuButton = ({children, onClose}: {children: ReactNode, onCl
       <CommonMenu anchor={anchorElement} onClose={_onClose}>{children}</CommonMenu>
       <MoreIconButton aria-controls={anchorElement !== null ? 'basic-menu' : undefined}
                       color="inherit"
+                      sx={{ displayPrint: 'none' }}
                   aria-haspopup="true"
                   aria-expanded={anchorElement !== null ? 'true' : undefined}
                   onClick={onMenuOpen}/>

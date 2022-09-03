@@ -51,7 +51,7 @@ const getRecipes = (): RecipeType[] => {
 export const Main = () => {
   const snackBar = useMessageSnackBar();
   const {recipesDispatch} = useContext(RecipesContext);
-  const [status, setStatus] = useState<{loading: boolean, amount: number}>({ loading: true, amount: 0 });
+  const [status, setStatus] = useState<{ loading: boolean, amount: number }>({loading: true, amount: 0});
 
   const result = useAsyncEffect<BakerPercentageAwareRecipe[]>(async () => {
     const recipes = getRecipes();
@@ -71,24 +71,23 @@ export const Main = () => {
         type: RecipesStateActionTypes.SET_RECIPES,
         value: result.value
       });
-      setStatus({ loading: false, amount: result.value.length });
+      setStatus({loading: false, amount: result.value.length});
     } else {
       setStatus({...status, ...{loading: true}});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result])
 
+  if (status.loading) {
+    return <CircularProgress/>;
+  }
+
   return (
-    <>
-      {
-        status.loading ? (<CircularProgress/>) :
-        <EditRecipeProvider>
-          <RecipeNavigation>
-              <EditRecipeDialog/>
-              <RecipeList/>
-          </RecipeNavigation>
-        </EditRecipeProvider>
-      }
-    </>
+    <EditRecipeProvider>
+      <RecipeNavigation>
+        <EditRecipeDialog/>
+        <RecipeList/>
+      </RecipeNavigation>
+    </EditRecipeProvider>
   )
 }

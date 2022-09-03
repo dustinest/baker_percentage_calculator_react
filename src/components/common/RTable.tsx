@@ -1,4 +1,4 @@
-import {TableCell, TableHead, TableRow} from "@mui/material";
+import {styled, TableCell, TableHead, TableRow} from "@mui/material";
 import {Translation} from "../../Translations";
 import {normalizeNumber} from "../../utils/Numbers";
 import {hasValue} from "typescript-nullsafe";
@@ -35,15 +35,24 @@ type RTableRowProps = {
     percent:any;
 } & RenderTranslatableLabelProps;
 
+const TableNumberCell = styled(TableCell)({
+    textAlign: 'right',
+    whiteSpace: 'nowrap'
+});
+
+const NumberCellLabel = ({value} : {value: any}) => {
+    if (typeof value === "number" ) {
+        return <label>{normalizeNumber(value)} g</label>;
+    }
+    return <label>{value}</label>;
+}
 
 export const RTableRow = (props: RTableRowProps) => {
-    return (<TableRow>
-        <TableCell className="label"><RenderTranslatableLabel {...props}/></TableCell>
-        <TableCell className="amount">{
-            typeof props.grams === "number" ? <label>{normalizeNumber(props.grams)} g</label> : props.grams
-        }</TableCell>
-        <TableCell className="percent">{
-            typeof props.percent === "number" ? <label>{normalizeNumber(props.percent)}%</label> : props.percent
-        }</TableCell>
-    </TableRow>);
+    return (
+      <TableRow>
+          <TableCell><RenderTranslatableLabel {...props}/></TableCell>
+          <TableNumberCell><NumberCellLabel value={props.grams} /></TableNumberCell>
+          <TableNumberCell><NumberCellLabel value={props.percent} /></TableNumberCell>
+      </TableRow>
+    );
 }

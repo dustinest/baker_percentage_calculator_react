@@ -85,7 +85,7 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
   const [contentHeight, setHeaderElement] = useElementClientHeight();
   const [leftBottomHeight, setLeftBottomFilter] = useElementClientHeight();
 
-  const onLangaugeChange = (language: string) => {
+  const onLanguageChange = (language: string) => {
     i18next.changeLanguage(language, (error) => {
       if (error) snackBar.error(error).enqueue();
     }).catch(error => snackBar.error(error).enqueue());
@@ -94,7 +94,9 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
   return (
     <Box sx={{display: 'flex'}}>
       <CssBaseline/>
-      <NavigationAppBar position="fixed" open={isMenuOpen} width={NAVIGATION_WIDTH} ref={setHeaderElement}>
+      <NavigationAppBar position="fixed" ref={setHeaderElement}
+                        sx={{ displayPrint: 'none' }}
+      >
         <Toolbar>
           {isMenuOpen ? undefined :
             <>
@@ -119,13 +121,14 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
         variant="persistent"
         anchor="left"
         open={isMenuOpen}
+        sx={{ displayPrint: 'none' }}
       >
         <MenuHeaderContainer bottom={leftBottomHeight}>
           <ButtonGroup variant="contained">
             { FLAGS.map(({key, label, icon}) =>
               <Button key={key}
                       disabled={key === i18next.language}
-                      onClick={() => onLangaugeChange(key)}
+                      onClick={() => onLanguageChange(key)}
                       endIcon={<FlagIcon variant={icon}/>}
                       >{label}</Button>
             )}
@@ -148,7 +151,7 @@ export const RecipeNavigation = ({children}: {children: ReactNode}) => {
           </ButtonGroup>
         </DrawerFilters>
       </NavigationDrawer>
-      <MainNavigationMainContainer open={isMenuOpen} width={NAVIGATION_WIDTH} menuHeight={contentHeight}>{children}</MainNavigationMainContainer>
+      <MainNavigationMainContainer menuHeight={contentHeight}>{children}</MainNavigationMainContainer>
     </Box>
   );
 }
