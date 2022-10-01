@@ -1,6 +1,6 @@
 import {RecipeType} from "../../../types";
 import {useEffect, useState} from "react";
-import {recipeType2RecipeJson} from "../../../service/RecipeReader";
+import {recipeToJson} from "../../../service/PredefinedRecipeService";
 import './RecipeJson.css';
 
 import {
@@ -18,7 +18,7 @@ export const RecipeJson = ({recipe}: {recipe: RecipeType}) => {
 
     useEffect(() => {
         if (isExpanded) {
-            recipeType2RecipeJson(recipe)
+          recipeToJson(recipe)
                 .then((result) => JSON.stringify(result, null, 2))
                 .then(setRecipeJson).catch(console.error);
         } else {

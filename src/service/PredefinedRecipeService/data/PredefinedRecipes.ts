@@ -1,4 +1,4 @@
-import {JsonRecipeType} from "../service/RecipeReader/types";
+import {JsonRecipe} from "../type/JsonRecipe";
 
 export const PREDEFINED_RECIPES = [
     {
@@ -33,6 +33,25 @@ export const PREDEFINED_RECIPES = [
                 ingredients: [
                     { type: "WHEAT_405_FLOUR", grams: 462 },
                     { type: "WATER", percent: 82 },
+                    { type: "SALT", percent: 1.62 }
+                ]
+
+            }
+        ],
+    },
+    {
+        name: "Sai",
+        description: "Kukkel küpseta 25 minutit 180℃",
+        bakingTime: [
+            { time: 20, temperature: 240, steam: true },
+            { time: 20, temperature: 240 }
+        ],
+        innerTemperature: {from: 88, until: 99},
+        ingredients: [
+            {
+                ingredients: [
+                    { type: "WHEAT_405_FLOUR", grams: 462 },
+                    { type: "WATER", percent: 65 },
                     { type: "SALT", percent: 1.62 }
                 ]
 
@@ -243,5 +262,5 @@ export const PREDEFINED_RECIPES = [
             }
         ],
     }
-] as JsonRecipeType[];
+] as JsonRecipe[];
 

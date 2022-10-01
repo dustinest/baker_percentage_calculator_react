@@ -91,12 +91,12 @@ export const StandardIngredientMethods: StandardIngredientMethodsType = Object.f
     return obj;
   }, {} as StandardIngredientMethodsType)) as StandardIngredientMethodsType;
 
-export const getStandardIngredientMethodsGrams = (key: string, grams: number): IngredientGramsType | undefined => {
+export const getIngredientGrams = (key: string, grams: number): IngredientGramsType | undefined => {
   const standardMethod = StandardIngredientMethods[key as keyof StandardIngredient];
   if (!standardMethod) return undefined;
   return standardMethod(grams);
 }
 
 export const StandardIngredientMethodGrams:Readonly<IngredientGramsType[]> = Object.freeze(SORT_INGREDIENTS.add(Object.keys(StandardIngredientMethods)
-  .map((key) => getStandardIngredientMethodsGrams(key, 1))
+  .map((key) => getIngredientGrams(key, 1))
   .filter(hasValue)));

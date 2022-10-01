@@ -7,7 +7,7 @@ export * from "./RecipeIngredientsTypeMethods";
 export * from "./BakingTimeType.d";
 export * from "./BakingTimeTypeMethods";
 
-export * from "./NumberIntervalType.d";
+export * from "./NumberInterval";
 export * from "./NumberIntervalTypeMethods";
 
 export * from "./IngredientType.d";

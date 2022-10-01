@@ -1,19 +1,12 @@
-import {PREDEFINED_RECIPES} from "../data/PredefinedRecipes";
 import {RecipeNavigation} from "./RecipeNavigation";
-import {RecipeType} from "../types";
 import {CircularProgress} from "@mui/material";
-import {readJsonRecipe} from "../service/RecipeReader";
 import {useContext, useEffect, useState} from "react";
-import {
-  EditRecipeProvider,
-  RecipesContext,
-  RecipesStateActionTypes,
-  useMessageSnackBar,
-} from "../State";
+import {EditRecipeProvider, RecipesContext, RecipesStateActionTypes, useMessageSnackBar,} from "../State";
 import {RecipeList} from "./recipe/RecipeList";
 import {EditRecipeDialog} from "./recipe/EditRecipe";
 import {BakerPercentageAwareRecipe, getBakerPercentageAwareRecipe} from "./recipe/common/BakerPercentageAwareRecipe";
 import {AsyncStatus, useAsyncEffect} from "react-useasync-hooks";
+import {readPredefinedRecipes} from "../service/PredefinedRecipeService";
 /*
 const getDuplicateRecipe = (value: JsonRecipeType): JsonRecipeType => {
   return {
@@ -41,20 +34,13 @@ const getDuplicateRecipe = (value: JsonRecipeType): JsonRecipeType => {
   } as JsonRecipeType;
 };
 */
-const getRecipes = (): RecipeType[] => {
-  return PREDEFINED_RECIPES
-    //.reduce((current, value) => ([...current, ...[value, getDuplicateRecipe(value)]]), [] as JsonRecipeType[])
-    //.map((e) => ({...e, ...{id: resolveJsonRecipeTypeId(e), label: getJsonRecipeTypeLabel(e, translate(e.name))}} as JsonRecipeTypeWithLabel))
-    .map(readJsonRecipe);
-}
-
 export const Main = () => {
   const snackBar = useMessageSnackBar();
   const {recipesDispatch} = useContext(RecipesContext);
   const [status, setStatus] = useState<{ loading: boolean, amount: number }>({loading: true, amount: 0});
 
   const result = useAsyncEffect<BakerPercentageAwareRecipe[]>(async () => {
-    const recipes = getRecipes();
+    const recipes = readPredefinedRecipes();
     const result: BakerPercentageAwareRecipe[] = [];
     for (let i = 0; i < recipes.length; i++) {
       const bakerPercentage = await getBakerPercentageAwareRecipe(recipes[i]);

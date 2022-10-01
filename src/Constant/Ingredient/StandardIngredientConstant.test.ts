@@ -1,6 +1,6 @@
 import {NutritionType} from "../../types/NutritionType";
 import {
-  getStandardIngredientMethodsGrams,
+  getIngredientGrams,
   StandardIngredientMethods,
   StandardIngredients
 } from "./StandardIngredientConstant";
@@ -58,7 +58,7 @@ describe("PREDEFINED_INGREDIENT are defined", () => {
 
 describe("getStandardIngredientMethodsGrams works", () => {
   it ("Salt is OK", () => {
-    const salt = getStandardIngredientMethodsGrams("SALT", 123);
+    const salt = getIngredientGrams("SALT", 123);
     expect(salt?.id).toBe("SALT_salt.generic");
     expect(salt?.name).toBe("ingredient.predefined.salt.generic");
     expect(salt?.nutrients.length).toBe(1);
@@ -68,7 +68,7 @@ describe("getStandardIngredientMethodsGrams works", () => {
   });
 
   it ("Salt is not found", () => {
-    const salt = getStandardIngredientMethodsGrams("salt", 123);
+    const salt = getIngredientGrams("salt", 123);
     expect(salt).toBeUndefined();
   });
 });

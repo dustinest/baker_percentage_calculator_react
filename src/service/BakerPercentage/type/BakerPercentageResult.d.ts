@@ -1,5 +1,5 @@
 import {IngredientGramsType, IngredientPercentType, RecipeIngredientsType} from "../../../types";
-import {MicroNutrientsCalculationResult} from "./MicroNutrientsCalculationResult";
+import {MicroNutrientsResultType} from "./MicroNutrientsCalculationResult";
 
 export type IngredientWithPercentType = IngredientPercentType & IngredientGramsType;
 
@@ -8,6 +8,6 @@ export type RecipeIngredientsWithPercentType = {
 } & RecipeIngredientsType;
 
 export type BakerPercentageResult = {
-  microNutrients: MicroNutrientsCalculationResult;
+  microNutrients: MicroNutrientsResultType;
   ingredients: RecipeIngredientsWithPercentType[];
 }

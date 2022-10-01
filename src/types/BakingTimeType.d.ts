@@ -1,4 +1,4 @@
-import {NumberIntervalType} from "./NumberIntervalType";
+import {NumberIntervalType} from "./NumberInterval";
 
 export type BakingTimeType = {
     time: NumberIntervalType;

@@ -1,16 +1,14 @@
 import {
-    JsonBakingTimeType,
-    JsonRecipeType
-} from "../types";
-import {
     BakingTimeType, DRY_NUTRIENTS,
     IngredientGramsType,
     NumberIntervalType,
     RecipeIngredientsType,
     RecipeType
-} from "../../../types";
+} from "../../../types/index";
 import {resolveJsonRecipeTypeId} from "./JsonRecepyIdGenerator";
-import {resolveIngredient, ResolveTestType} from "./JsonRecipeReaderMethods";
+import {readJsonIngredient, ResolveTestType} from "./readJsonIngredient";
+import {JsonBakingTime} from "../type/JsonBakingTime";
+import {JsonRecipe} from "../type/JsonRecipe";
 
 const resolveNumberIntervalType = (value: NumberIntervalType | number): NumberIntervalType => {
     const first: number = typeof value === "number" ? value as number : (value as NumberIntervalType).from;
@@ -26,7 +24,7 @@ const resolveInnerTemperature = (value?: NumberIntervalType | number): NumberInt
     return resolveNumberIntervalType(value);
 }
 
-const resolveBakingTime = (bakingTimes?: JsonBakingTimeType[]): BakingTimeType[] => {
+const resolveBakingTime = (bakingTimes?: JsonBakingTime[]): BakingTimeType[] => {
     if (bakingTimes) {
         return bakingTimes.map((bakingTime) => ({
             time: resolveNumberIntervalType(bakingTime.time),
@@ -37,7 +35,7 @@ const resolveBakingTime = (bakingTimes?: JsonBakingTimeType[]): BakingTimeType[]
     return [];
 };
 
-export const readJsonRecipe = (recipe: JsonRecipeType): RecipeType => {
+export const readJsonRecipe = (recipe: JsonRecipe): RecipeType => {
     const result = {
         id: resolveJsonRecipeTypeId(recipe),
         name: recipe.name,
@@ -66,21 +64,21 @@ export const readJsonRecipe = (recipe: JsonRecipeType): RecipeType => {
             ingredients: []
         } as RecipeIngredientsType;
 
-        ingredients.ingredients.map(resolveIngredient).forEach(([ingredient, resolveTest]) => {
+        ingredients.ingredients.map(readJsonIngredient).forEach(([ingredient, resolveTest]) => {
             recipeIngredientsType.ingredients.push(ingredient);
             const dryPercentage = ingredient.nutrients
               .filter((ingredient) => DRY_NUTRIENTS.includes(ingredient.type))
               .reduce((value, ingredient) => Math.max(value, ingredient.percent), 0);
 
             if (dryPercentage <= 0) {
-                if (!resolveTest.grams.has) {
+                if (!resolveTest.grams.hadValue) {
                     toBeCalculated.percent.push([ingredient, resolveTest]);
                 }
                 return;
             }
-            if (resolveTest.grams.has) {
+            if (resolveTest.grams.hadValue) {
                 toBeCalculated.flour.amount += resolveTest.grams.value * dryPercentage / 100;
-            } else if (resolveTest.percent.has) {
+            } else if (resolveTest.percent.hadValue) {
                 toBeCalculated.flour.percent -= resolveTest.percent.value * 100 / dryPercentage;
                 toBeCalculated.percent.push([ingredient, resolveTest])
             } else {

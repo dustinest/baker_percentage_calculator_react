@@ -5,7 +5,7 @@ Demo is running at https://juuretis.herokuapp.com/
 The goal of this app is to calculate any baking recipe to sourdough based on baker's percentages.
 There are some hacks in code which might need some attention (IE starter for pancakes).
 
-Check [src/data/PredefinedRecipes.ts](src/data/PredefinedRecipes.ts) for predefined recipes.
+Check [src/data/PredefinedRecipes.ts](src/service/PredefinedRecipeService/data/PredefinedRecipes.ts) for predefined recipes.
 
 The predefined flour even can be defined as percentage. But the total of the percentages must be less than 100. For instance:
 ```

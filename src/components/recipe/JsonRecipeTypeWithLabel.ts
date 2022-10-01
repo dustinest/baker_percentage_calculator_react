@@ -1,6 +1,6 @@
-import {JsonRecipeType} from "../../service/RecipeReader/types";
+import {JsonRecipe} from "../../service/PredefinedRecipeService";
 
 export type JsonRecipeTypeWithLabel = {
     id: string;
     label: string;
-} & JsonRecipeType;
+} & JsonRecipe;

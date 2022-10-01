@@ -1,4 +1,4 @@
-import {DRY_NUTRIENTS, RecipeIngredientsType} from "../../../types";
+import {DRY_NUTRIENTS, RecipeIngredientsType} from "../../../types/index";
 
 export type FindHighestDryResult = {
   ingredients: number,

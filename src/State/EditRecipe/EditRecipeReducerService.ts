@@ -16,7 +16,7 @@ import {
   SetEditRecipeNameStateAction, UseIngredientInStarterAction
 } from "./EditRecipeStateAction.d";
 import {hasNoValueOrEquals, hasValue} from "typescript-nullsafe";
-import {getStandardIngredientMethodsGrams} from "../../Constant/Ingredient";
+import {getIngredientGrams} from "../../Constant/Ingredient";
 import { copyCopyOfAwareRecipe } from "../CopyOfRecipeHelper";
 import {resolveActionGenericIndex} from "./resolveActionGenericIndex";
 
@@ -51,7 +51,7 @@ export const EditRecipeReducerService = Object.freeze({
       if (!type) {
         throw new Error("Type must be provided!");
       }
-      const item = getStandardIngredientMethodsGrams(type, action.grams);
+      const item = getIngredientGrams(type, action.grams);
       if (!item) throw new Error(`Could not find item for type ${type}!`)
       const copy = copyCopyOfAwareRecipe(recipe);
       copy.ingredients[index].ingredients.push(item);

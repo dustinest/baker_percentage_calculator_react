@@ -1,5 +1,5 @@
 import {BakingTimeType} from "./BakingTimeType";
-import {NumberIntervalType} from "./NumberIntervalType";
+import {NumberIntervalType} from "./NumberInterval";
 
 export type BakingAwareType = {
   innerTemperature: NumberIntervalType | null;

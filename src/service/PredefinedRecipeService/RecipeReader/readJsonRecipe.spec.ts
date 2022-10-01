@@ -1,4 +1,4 @@
-import {readJsonRecipe} from "./JsonRecipeReader";
+import {readJsonRecipe} from "./readJsonRecipe";
 
 describe("JsonRecipeType can be read", () => {
     it ("Simple recipe is OK", async () => {
