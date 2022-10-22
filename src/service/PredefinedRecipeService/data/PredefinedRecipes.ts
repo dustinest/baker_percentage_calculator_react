@@ -31,7 +31,7 @@ export const PREDEFINED_RECIPES = [
         ingredients: [
             {
                 ingredients: [
-                    { type: "WHEAT_405_FLOUR", grams: 462 },
+                    { type: "WHEAT_550_FLOUR", grams: 462 },
                     { type: "WATER", percent: 82 },
                     { type: "SALT", percent: 1.62 }
                 ]
@@ -50,7 +50,7 @@ export const PREDEFINED_RECIPES = [
         ingredients: [
             {
                 ingredients: [
-                    { type: "WHEAT_405_FLOUR", grams: 462 },
+                    { type: "WHEAT_550_FLOUR", grams: 462 },
                     { type: "WATER", percent: 65 },
                     { type: "SALT", percent: 1.62 }
                 ]
@@ -68,7 +68,7 @@ export const PREDEFINED_RECIPES = [
         ingredients: [
             {
                 ingredients: [
-                    { type: "WHEAT_405_FLOUR", grams: 462 },
+                    { type: "WHEAT_550_FLOUR", grams: 462 },
                     { type: "DRY", name: "Kaerahelbed", grams: 10 },
                     { type: "DRY", name: "Seemned", grams: 12 },
                     { type: "WATER", percent: 82 },
@@ -110,7 +110,7 @@ export const PREDEFINED_RECIPES = [
             {
                 starter: true,
                 ingredients: [
-                    { type: "WHEAT_405_FLOUR", grams: 362 },
+                    { type: "WHEAT_550_FLOUR", grams: 362 },
                     { type: "WATER", grams: 129.5 },
                     { type: "MILK", grams: 454 },
                 ]
@@ -150,7 +150,7 @@ export const PREDEFINED_RECIPES = [
         ingredients: [
             {
                 ingredients: [
-                    { type: "WHEAT_550_FLOUR", grams: 483 },
+                    { type: "WHEAT_405_FLOUR", grams: 483 },
                     { type: "WATER", grams: 83 },
                     { type: "MILK", grams: 210 },
                     { type: "BUTTER", grams: 75 },
@@ -171,7 +171,7 @@ export const PREDEFINED_RECIPES = [
         ingredients: [
             {
                 ingredients: [
-                    { type: "WHEAT_550_FLOUR", grams: 483 },
+                    { type: "WHEAT_405_FLOUR", grams: 483 },
                     { type: "WATER", grams: 83 },
                     { type: "MILK", grams: 210 },
                     { type: "BUTTER", grams: 75 },
@@ -202,7 +202,7 @@ export const PREDEFINED_RECIPES = [
         ingredients: [
             {
                 ingredients: [
-                    { type: "WHEAT_405_FLOUR", grams: 808 },
+                    { type: "WHEAT_550_FLOUR", grams: 808 },
                     { type: "WATER", grams: 123 },
                     { type: "MILK", grams: 385 },
                     { type: "BUTTER", grams: 200 },
@@ -222,7 +222,7 @@ export const PREDEFINED_RECIPES = [
         ingredients: [
             {
                 ingredients: [
-                    { type: "WHEAT_405_FLOUR", grams: 340 },
+                    { type: "WHEAT_550_FLOUR", grams: 340 },
                     { type: "WATER", grams: 142 },
                     { type: "MILK", grams: 85 },
                     { type: "SALT", grams: 6 },
