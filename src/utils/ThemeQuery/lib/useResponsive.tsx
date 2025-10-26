@@ -1,7 +1,7 @@
 import {UserResponsiveBetween, UserResponsiveDown, UserResponsiveOnly, UserResponsiveUp} from "../type/ThemeQueryType";
 import {useTheme} from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import {Breakpoints} from "@mui/system/createTheme/createBreakpoints";
+import {Breakpoints} from "@mui/system";
 import {hasValue} from "typescript-nullsafe";
 
 type ResponsivePropsType = UserResponsiveBetween | UserResponsiveUp | UserResponsiveDown | UserResponsiveOnly;

@@ -1,23 +1,31 @@
 @media print {
   * {
+    margin: 0;
+    padding: 0;
     font-size: 110%;
   }
+
   .MuiTypography-h5 {
     font-size: 98%;
   }
-  body{
+
+  body {
     background-color: #ffffff;
   }
+
   main {
-    margin: 0!important;
+    margin: 0 !important;
   }
-  .MuiPaper-root {
-    border-width: 0!important;
+
+  .MuiGrid-root, .MuiPaper-root {
+    border-width: 0 !important;
     margin-bottom: 0;
   }
+
   .MuiTableCell-root {
-    padding: 0.6em!important;
+    padding: 0.6em !important;
   }
+
   .recipe-item {
     page-break-after: always !important;
   }
