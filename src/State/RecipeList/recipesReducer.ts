@@ -4,6 +4,16 @@ import {RecipeType} from "../../types";
 import {RecipeStateType} from "./RecipesProvider";
 import {isCopyOfRecipe} from "../CopyOfRecipeHelper";
 
+const resolveCopy = (recipe: RecipeType): [RecipeType, String | undefined] => {
+  if (isCopyOfRecipe(recipe)) {
+    const copyId = recipe.copyId;
+    const result = {...recipe} as { copyId?: string };
+    delete result.copyId;
+    return [result as RecipeType, copyId];
+  }
+  return [recipe, undefined];
+}
+
 export const updateRecipesReducer = (state: RecipeStateType, action: RecipesStateActions): RecipeStateType => {
   switch (action.type) {
     case RecipesStateActionTypes.SET_RECIPES:
@@ -16,16 +26,16 @@ export const updateRecipesReducer = (state: RecipeStateType, action: RecipesStat
     case RecipesStateActionTypes.SAVE_RECIPE:
       const result: RecipeType[] = [];
       let updated = false;
-      const copyId = isCopyOfRecipe(action.value) ? action.value.copyId : undefined;
+      const [recipe, copyId] = resolveCopy(action.value);
       state.recipes.forEach((e) => {
         if (e.id === action.value.id) {
-          result.push(action.value);
+          result.push(recipe);
           updated = true;
         } else {
           result.push(e);
         }
         if (e.id === copyId) {
-          result.push(action.value);
+          result.push(recipe);
           updated = true;
         }
       })
