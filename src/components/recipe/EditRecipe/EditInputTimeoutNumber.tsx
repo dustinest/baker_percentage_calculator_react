@@ -1,11 +1,11 @@
-import {KeyboardEvent, ReactNode} from "react";
+import {KeyboardEvent, ReactNode, useEffect, useState} from "react";
 import {HorizontalActionStack, LabelAwareStack} from "../../common/CommonStack";
 import {ButtonGroup, Input, InputAdornment, ListItemIcon, ListItemText, MenuItem,} from "@mui/material";
 import {DoneButton, DoneIconButton, ResetButton} from "../../../Constant/Buttons";
 import {DeleteIcon, ResetIcon} from "../../../Constant/Icons";
 import {Translation} from "../../../Translations";
 import {CommonMenuButton} from "../../common/CommonMenu";
-import {useNumberInputValueChange} from "react-use-value-change";
+import {valueOfFloat} from "typescript-nullsafe/src/parseNullSafeNumber/parseNullSafeNumber";
 
 type EditInputTimeoutNumberProps = {
   value: number;
@@ -15,16 +15,28 @@ type EditInputTimeoutNumberProps = {
   additionalMenu?: ReactNode;
 }
 
-export const EditInputTimeoutNumber = ({value, onSave, onDelete, endAdornment, additionalMenu}: EditInputTimeoutNumberProps) => {
-  const [editValue, actions, history] = useNumberInputValueChange(value);
+export const EditInputTimeoutNumber = ({
+                                         value,
+                                         onSave,
+                                         onDelete,
+                                         endAdornment,
+                                         additionalMenu
+                                       }: EditInputTimeoutNumberProps) => {
+  const [numberValue, setNumberValue] = useState(value);
+  useEffect(() => {
+    setNumberValue(value);
+  }, [value, setNumberValue]);
+  const [equals, setEquals] = useState(true);
+  useEffect(() => {
+    setEquals(numberValue == value);
+  }, [numberValue, value, setEquals]);
 
   const onSetValue = () => {
-    if (history.equals) return;
-    onSave(editValue);
-    actions.resetToCurrentValue();
+    if (equals) return;
+    onSave(numberValue);
   }
 
-  const onResetValue = () => actions.resetToOriginalValue();
+  const onResetValue = () => setNumberValue(value);
 
   const doOnDelete = () => {
     if (onDelete) onDelete();
@@ -39,34 +51,34 @@ export const EditInputTimeoutNumber = ({value, onSave, onDelete, endAdornment, a
   return (
       <LabelAwareStack>
         <Input
-          className="recipe-ingredient-amount"
-          onKeyUp={keyUp}
-          type="number"
-          value={editValue}
-          onChange={actions.setValue}
-          endAdornment={endAdornment ? <InputAdornment position="end">{endAdornment}</InputAdornment> : undefined }
+            className="recipe-ingredient-amount"
+            onKeyUp={keyUp}
+            type="number"
+            value={numberValue}
+            onChange={(e) => setNumberValue(valueOfFloat(e.target.value, numberValue))}
+            endAdornment={endAdornment ? <InputAdornment position="end">{endAdornment}</InputAdornment> : undefined}
         />
 
         {onDelete ?
-          <HorizontalActionStack>
-            <DoneIconButton disabled={history.equals} onClick={onSetValue}/>
-            <CommonMenuButton>
-              {additionalMenu}
-              <MenuItem onClick={onResetValue} disabled={history.equals}>
-                <ListItemIcon><ResetIcon fontSize="small"/></ListItemIcon>
-                <ListItemText><Translation label="edit.reset"/></ListItemText>
-              </MenuItem>
-              <MenuItem onClick={doOnDelete} disabled={!history.equals}>
-                <ListItemIcon><DeleteIcon fontSize="small"/></ListItemIcon>
-                <ListItemText><Translation label="edit.delete"/></ListItemText>
-              </MenuItem>
-            </CommonMenuButton>
-          </HorizontalActionStack>
-          :
-          <ButtonGroup size="small">
-            <DoneButton disabled={history.equals} onClick={onSetValue}/>
-            <ResetButton disabled={history.equals} onClick={onResetValue}/>
-          </ButtonGroup>
+            <HorizontalActionStack>
+              <DoneIconButton disabled={equals} onClick={onSetValue}/>
+              <CommonMenuButton>
+                {additionalMenu}
+                <MenuItem onClick={onResetValue} disabled={equals}>
+                  <ListItemIcon><ResetIcon fontSize="small"/></ListItemIcon>
+                  <ListItemText><Translation label="edit.reset"/></ListItemText>
+                </MenuItem>
+                <MenuItem onClick={doOnDelete} disabled={!equals}>
+                  <ListItemIcon><DeleteIcon fontSize="small"/></ListItemIcon>
+                  <ListItemText><Translation label="edit.delete"/></ListItemText>
+                </MenuItem>
+              </CommonMenuButton>
+            </HorizontalActionStack>
+            :
+            <ButtonGroup size="small">
+              <DoneButton disabled={equals} onClick={onSetValue}/>
+              <ResetButton disabled={equals} onClick={onResetValue}/>
+            </ButtonGroup>
         }
       </LabelAwareStack>
   )
