@@ -1,4 +1,4 @@
-import { ReactComponent as BakerIconSvg } from "./Graphics/baker-svgrepo-com.svg";
+import BakerIconSvg from "./Graphics/baker-svgrepo-com.svg?react";
 import {SvgIcon} from "@mui/material";
 import {SvgIconProps} from "@mui/material/SvgIcon/SvgIcon";
 

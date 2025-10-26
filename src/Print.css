@@ -17,7 +17,17 @@
     margin: 0 !important;
   }
 
-  .MuiGrid-root, .MuiPaper-root {
+  .MuiGrid-root {
+    display: block !important;
+  }
+
+  .MuiGrid-item {
+    max-width: 100% !important;
+    flex-basis: 100% !important;
+    width: 100% !important;
+  }
+
+  .MuiPaper-root {
     border-width: 0 !important;
     margin-bottom: 0;
   }
@@ -28,6 +38,7 @@
 
   .recipe-item {
     page-break-after: always !important;
+    page-break-inside: avoid !important;
   }
 }
 

@@ -1,5 +1,5 @@
-import { ReactComponent as EstonianFlag } from "./flags/ee.svg";
-import { ReactComponent as GBFlag } from "./flags/gb.svg";
+import EstonianFlag from "./flags/ee.svg?react";
+import GBFlag from "./flags/gb.svg?react";
 import {SvgIcon} from "@mui/material";
 
 export enum FlagIconType {
