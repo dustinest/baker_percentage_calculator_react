@@ -94,6 +94,15 @@
           "generic_other": "Nisujahu {{count}}",
           "whole_grain": "Täistera nisujahu",
           "durum": "Durum jahu"
+        },
+        "barley": {
+          "generic": "Kaer",
+          "generic_other": "Kaer ({{count}} ash)",
+          "whole_grain": "Täistera kaer"
+        },
+        "seeds": {
+          "generic": "Seemned",
+          "generic_other": "Seemned ({{count}} ash)"
         }
       },
       "butter": {
@@ -136,7 +145,8 @@
     "Kaneelirullid": "Kaneelirullid",
     "Plaadikook": "Plaadikook",
     "Pikk sai": "Pikk sai",
-    "Moskva saiakesed": "Moskva saiakesed"
+    "Moskva saiakesed": "Moskva saiakesed",
+    "Sai seemnete ja kaerahelvestega": "Sai seemnete ja kaerahelvestega"
   },
   "Kihistamiseks": "Kihistamiseks"
 }

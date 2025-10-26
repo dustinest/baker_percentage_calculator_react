@@ -89,6 +89,15 @@
           "generic_other": "Wheat flour ({{count}} ash)",
           "whole_grain": "Whole grain wheat flour",
           "durum": "Durum flour"
+        },
+        "barley": {
+          "generic": "Barley",
+          "generic_other": "Barley ({{count}} ash)",
+          "whole_grain": "Whole grain barley"
+        },
+        "seeds": {
+          "generic": "Seeds",
+          "generic_other": "Seeds ({{count}} ash)"
         }
       },
       "butter": {
@@ -137,7 +146,8 @@
     "Kaneelirullid": "Cinnamon rolls",
     "Plaadikook": "Pie dough",
     "Pikk sai": "Baguette",
-    "Moskva saiakesed": "Moskow pastries"
+    "Moskva saiakesed": "Moskow pastries",
+    "Sai seemnete ja kaerahelvestega": "Bread with seeds and barley"
   },
   "Kihistamiseks": "Lamination"
 }

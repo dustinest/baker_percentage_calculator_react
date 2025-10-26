@@ -78,18 +78,27 @@ export const StandardIngredients: { [Property in keyof StandardIngredient]: Ingr
 
   WHOLE_RYE_MALT_FLOUR: createPredefined("flour.rye.malt", NutritionType.flour, 100, NutritionType.whole_grain, 100),
   WHEAT_405_FLOUR: createPredefined("flour.wheat.generic", NutritionType.flour, 100, NutritionType.ash, 405),
-  WHEAT_550_FLOUR: createPredefined("flour.wheat.generic", NutritionType.flour, 100, NutritionType.ash, 550)
+  WHEAT_550_FLOUR: createPredefined("flour.wheat.generic", NutritionType.flour, 100, NutritionType.ash, 550),
+
+  BARLEY: createPredefined("flour.barley.generic", NutritionType.dry, 100),
+  SEEDS: createPredefined("flour.seeds.generic", NutritionType.dry, 100)
+
 });
 
 type StandardIngredientMethodsType = { [Property in keyof StandardIngredient]: (grams: number) => IngredientGramsType };
 
 
 export const StandardIngredientMethods: StandardIngredientMethodsType = Object.freeze(
-  Object.entries(StandardIngredients).reduce((obj, [key, value]) => {
-    const id = `${key}_${value.id}`;
-    obj[key as keyof StandardIngredient] = (grams: number) => copyIngredientGramsType({...value, ...{grams}, ...{type: key, id: id}})
-    return obj;
-  }, {} as StandardIngredientMethodsType)) as StandardIngredientMethodsType;
+    Object.entries(StandardIngredients).reduce((obj, [key, value]) => {
+      const id = `${key}_${value.id}`;
+      obj[key as keyof StandardIngredient] = (grams: number) => copyIngredientGramsType({
+        ...value, ...{grams}, ...{
+          type: key,
+          id: id
+        }
+      })
+      return obj;
+    }, {} as StandardIngredientMethodsType)) as StandardIngredientMethodsType;
 
 export const getIngredientGrams = (key: string, grams: number): IngredientGramsType | undefined => {
   const standardMethod = StandardIngredientMethods[key as keyof StandardIngredient];
@@ -97,6 +106,6 @@ export const getIngredientGrams = (key: string, grams: number): IngredientGramsT
   return standardMethod(grams);
 }
 
-export const StandardIngredientMethodGrams:Readonly<IngredientGramsType[]> = Object.freeze(SORT_INGREDIENTS.add(Object.keys(StandardIngredientMethods)
-  .map((key) => getIngredientGrams(key, 1))
-  .filter(hasValue)));
+export const StandardIngredientMethodGrams: Readonly<IngredientGramsType[]> = Object.freeze(SORT_INGREDIENTS.add(Object.keys(StandardIngredientMethods)
+    .map((key) => getIngredientGrams(key, 1))
+    .filter(hasValue)));
