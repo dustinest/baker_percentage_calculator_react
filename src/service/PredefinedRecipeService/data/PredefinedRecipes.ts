@@ -52,7 +52,7 @@ export const PREDEFINED_RECIPES = [
           {type: "WHEAT_550_FLOUR", grams: 462},
           {type: "BARLEY", grams: 10},
           {type: "SEEDS", grams: 12},
-          {type: "WATER", percent: 75},
+          {type: "WATER", percent: 73.76},
           {type: "SALT", percent: 1.55}
         ]
 

@@ -4,13 +4,24 @@
     padding: 0;
     font-size: 110%;
   }
-
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  /*
   .MuiTypography-h5 {
     font-size: 98%;
   }
 
+   */
+
   body {
     background-color: #ffffff;
+    /*
+    width: 210mm;
+    height: 297mm;
+
+     */
   }
 
   main {
