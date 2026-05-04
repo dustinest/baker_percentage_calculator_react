@@ -4,5 +4,8 @@
 # Fresh build output
 _fresh/
 
+# IDE
+.idea/
+
 # macOS
 .DS_Store
