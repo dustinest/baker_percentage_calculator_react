@@ -26,7 +26,7 @@ export interface StandardIngredientKeys {
   BUTTER: IngredientType;
   OIL: IngredientType;
   OLIVE_OIL: IngredientType;
-  MILK: IngredientType;
+  MILK_25: IngredientType;
   EGG: IngredientType;
   CARDAMOM: IngredientType;
   CINNAMON: IngredientType;
@@ -48,7 +48,7 @@ export const StandardIngredients: StandardIngredientKeys = Object.freeze({
   BUTTER:             createPredefined("butter.generic",        NutritionType.fat,         82, NutritionType.water, 18),
   OIL:                createPredefined("oil.generic",           NutritionType.fat,        100),
   OLIVE_OIL:          createPredefined("oil.olive",             NutritionType.fat,        100),
-  MILK:               createPredefined("milk.generic",          NutritionType.fat,        2.8, NutritionType.water, 97.5),
+  MILK_25:            createPredefined("milk.fat_25",           NutritionType.fat,        2.5, NutritionType.water, 97.5),
   EGG:                createPredefined("egg.generic",           NutritionType.egg,        100),
   CARDAMOM:           createPredefined("spice.cardamom",        NutritionType.spice,      100),
   CINNAMON:           createPredefined("spice.cinnamon",        NutritionType.spice,      100),

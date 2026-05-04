@@ -18,7 +18,9 @@
       "add": "Add new group",
       "ingredient": "Ingredient",
       "add_ingredient": "Add ingredient",
-      "baker_percent": "Baker %"
+      "baker_percent": "Baker %",
+      "choose": "Choose ingredient",
+      "custom": "Custom"
     },
     "baking_instructions": {
       "steam": "Steam",
@@ -52,6 +54,7 @@
       "dough": "Dough",
       "sourdough_starter_dough": "Levain",
       "water": "Water",
+      "liquid": "Liquid",
       "salt": "Salt",
       "sugar": "Sugar",
       "fat": "Fat",
@@ -80,7 +83,8 @@
       },
       "milk": {
         "generic": "Milk",
-        "generic_other": "Milk ({{count}}% fat)"
+        "generic_other": "Milk ({{count}}% fat)",
+        "fat_25": "Milk (2.5% fat)"
       },
       "spice": {
         "generic": "Spice",

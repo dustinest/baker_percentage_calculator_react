@@ -96,7 +96,7 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
         ingredients: [
           { type: "WHEAT_550_FLOUR", grams: 500 },
           { type: "WATER", grams: 140 },
-          { type: "MILK", grams: 140 },
+          { type: "MILK_25", grams: 140 },
           { type: "SUGAR", percent: 11 },
           { type: "BUTTER", grams: 40 },
           { type: "SALT", percent: 2.4 },
@@ -116,7 +116,7 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
         ingredients: [
           { type: "WHEAT_550_FLOUR", grams: 362 },
           { type: "WATER", grams: 129.5 },
-          { type: "MILK", grams: 454 },
+          { type: "MILK_25", grams: 454 },
         ],
       },
       {
@@ -151,7 +151,7 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
       ingredients: [
         { type: "WHEAT_405_FLOUR", grams: 483 },
         { type: "WATER", grams: 83 },
-        { type: "MILK", grams: 210 },
+        { type: "MILK_25", grams: 210 },
         { type: "BUTTER", grams: 75 },
         { type: "SALT", grams: 5 },
         { type: "SUGAR_BROWN", grams: 50 },
@@ -168,7 +168,7 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
         ingredients: [
           { type: "WHEAT_405_FLOUR", grams: 483 },
           { type: "WATER", grams: 83 },
-          { type: "MILK", grams: 210 },
+          { type: "MILK_25", grams: 210 },
           { type: "BUTTER", grams: 75 },
           { type: "SALT", grams: 5 },
           { type: "SUGAR_BROWN", grams: 50 },
@@ -195,7 +195,7 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
       ingredients: [
         { type: "WHEAT_550_FLOUR", grams: 808 },
         { type: "WATER", grams: 123 },
-        { type: "MILK", grams: 385 },
+        { type: "MILK_25", grams: 385 },
         { type: "BUTTER", grams: 200 },
         { type: "SALT", grams: 7.5 },
       ],
@@ -213,7 +213,7 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
       ingredients: [
         { type: "WHEAT_550_FLOUR", grams: 340 },
         { type: "WATER", grams: 142 },
-        { type: "MILK", grams: 85 },
+        { type: "MILK_25", grams: 85 },
         { type: "SALT", grams: 6 },
       ],
     }],
@@ -227,7 +227,7 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
         ingredients: [
           { type: "WHEAT_405_FLOUR", grams: 408 },
           { type: "WATER", grams: 130 },
-          { type: "MILK", grams: 140 },
+          { type: "MILK_25", grams: 140 },
           { type: "SUGAR_BROWN", grams: 16 },
           { type: "BUTTER", grams: 50 },
           { type: "SALT", grams: 2 },

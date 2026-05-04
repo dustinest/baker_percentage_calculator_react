@@ -18,7 +18,9 @@
       "add": "Lisa uus grupp",
       "ingredient": "Koostisosa",
       "add_ingredient": "Lisa koostisosa",
-      "baker_percent": "Pagari %"
+      "baker_percent": "Pagari %",
+      "choose": "Vali koostisosa",
+      "custom": "Muu"
     },
     "baking_instructions": {
       "steam": "Auruta",
@@ -52,6 +54,7 @@
       "dough": "Taigen",
       "sourdough_starter_dough": "Eeltaigen",
       "water": "Vesi",
+      "liquid": "Vedelik",
       "salt": "Sool",
       "sugar": "Suhkur",
       "fat": "Rasv",
@@ -85,7 +88,8 @@
       },
       "milk": {
         "generic": "Piim",
-        "generic_other": "Piim ({{count}}%)"
+        "generic_other": "Piim ({{count}}%)",
+        "fat_25": "Piim (2,5%)"
       },
       "spice": {
         "generic": "Vürts",

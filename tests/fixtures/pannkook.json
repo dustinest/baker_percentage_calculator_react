@@ -15,7 +15,7 @@
       "ingredients": [
         { "key": "SOURDOUGH_STARTER", "grams": 14,    "bakerPercent": 3.87 },
         { "key": "WATER",             "grams": 122,   "bakerPercent": 33.70 },
-        { "key": "MILK",              "grams": 454,   "bakerPercent": 125.41 },
+        { "key": "MILK_25",              "grams": 454,   "bakerPercent": 125.41 },
         { "key": "WHEAT_550_FLOUR",   "grams": 355,   "bakerPercent": 98.07 }
       ]
     },

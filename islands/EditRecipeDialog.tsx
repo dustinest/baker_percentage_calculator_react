@@ -5,7 +5,6 @@ import {
   copyRecipeType,
   DRY_NUTRIENTS,
   nameForLang,
-  nameStr,
   NutritionType,
   RecipeType,
 } from "../lib/types.ts";
@@ -17,7 +16,15 @@ import {
   updateRecipe,
 } from "../lib/state.ts";
 import { readJsonRecipe } from "../lib/resolution.ts";
+import { getIngredientGrams, StandardIngredients, StandardIngredientKeys } from "../lib/ingredients.ts";
 import { t } from "../lib/i18n.ts";
+
+const INGREDIENT_GROUPS: { labelKey: string; keys: (keyof StandardIngredientKeys)[] }[] = [
+  { labelKey: "ingredients.title.dry",   keys: ["WHOLE_RYE_FLOUR", "WHOLE_RYE_MALT_FLOUR", "WHOLE_WHEAT_FLOUR", "DURUM_WHEAT", "WHEAT_405_FLOUR", "WHEAT_550_FLOUR", "BARLEY", "SEEDS"] },
+  { labelKey: "ingredients.title.fat",   keys: ["BUTTER", "OIL", "OLIVE_OIL"] },
+  { labelKey: "ingredients.title.liquid", keys: ["WATER", "MILK_25"] },
+  { labelKey: "ingredients.title.other", keys: ["SALT", "SUGAR", "SUGAR_BROWN", "EGG", "CARDAMOM", "CINNAMON"] },
+];
 
 type Tab = "edit" | "json" | "import";
 
@@ -29,6 +36,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
   const importError = useSignal("");
   const copied = useSignal(false);
   const draft = useSignal<RecipeType>(copyRecipeType(recipe));
+  const customIngIds = useSignal<Set<string>>(new Set());
 
   const close = () => { editingRecipe.value = null; };
   const save = () => { updateRecipe(draft.value); close(); };
@@ -90,6 +98,12 @@ export default function EditRecipeDialog({ recipe }: Props) {
   const delIng = (gi: number, ii: number) => updateDraft((c) => {
     c.ingredients[gi].ingredients = c.ingredients[gi].ingredients.filter((_, i) => i !== ii);
   });
+
+  const pickStandardIng = (gi: number, ii: number, key: string, currentGrams: number) => {
+    const ing = getIngredientGrams(key, currentGrams || 0);
+    if (!ing) return;
+    updateDraft((c) => { c.ingredients[gi].ingredients[ii] = ing; });
+  };
 
   const handleImport = () => {
     importError.value = "";
@@ -177,6 +191,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
 
             {d.ingredients.map((group, gi) => {
               const isCustom = group.name !== undefined && typeof group.name === "object";
+              const usedKeys = new Set(group.ingredients.map((i) => i.type).filter((t) => t && t !== "other"));
               const nameRecord = isCustom ? group.name as Record<string, string> : null;
               return (
                 <div key={gi} class="border border-base-300 rounded-lg p-3">
@@ -225,14 +240,50 @@ export default function EditRecipeDialog({ recipe }: Props) {
                       {group.ingredients.map((ing, ii) => (
                         <tr key={ii}>
                           <td>
-                            {isCustom ? (
-                              <input
-                                class="input input-bordered input-xs w-full"
-                                value={ing.name}
-                                placeholder={t("edit.ingredients.ingredient")}
-                                onInput={(e) => setIngName(gi, ii, (e.target as HTMLInputElement).value)}
-                              />
-                            ) : (
+                            {isCustom ? (() => {
+                              const isStandard = ing.type && ing.type !== "other";
+                              const isCustomText = !isStandard && (ing.name !== "" || customIngIds.value.has(ing.id));
+                              if (isCustomText) {
+                                return (
+                                  <input
+                                    class="input input-bordered input-xs w-full"
+                                    value={ing.name}
+                                    placeholder={t("edit.ingredients.ingredient")}
+                                    onInput={(e) => setIngName(gi, ii, (e.target as HTMLInputElement).value)}
+                                  />
+                                );
+                              }
+                              return (
+                                <select
+                                  class="select select-bordered select-xs w-full"
+                                  value={isStandard ? ing.type : ""}
+                                  onChange={(e) => {
+                                    const key = (e.target as HTMLSelectElement).value;
+                                    if (key === "CUSTOM") {
+                                      customIngIds.value = new Set([...customIngIds.value, ing.id]);
+                                    } else if (key) {
+                                      pickStandardIng(gi, ii, key, ing.grams);
+                                    }
+                                  }}
+                                >
+                                  <option value="" disabled>{t("edit.ingredients.choose")}</option>
+                                  {INGREDIENT_GROUPS.map((grp) => {
+                                    const available = grp.keys.filter((k) => !usedKeys.has(k) || k === ing.type);
+                                    if (available.length === 0) return null;
+                                    return (
+                                      <optgroup key={grp.labelKey} label={t(grp.labelKey)}>
+                                        {available.map((key) => (
+                                          <option key={key} value={key}>
+                                            {t(StandardIngredients[key].name)}
+                                          </option>
+                                        ))}
+                                      </optgroup>
+                                    );
+                                  })}
+                                  <option value="CUSTOM">— {t("edit.ingredients.custom")} —</option>
+                                </select>
+                              );
+                            })() : (
                               t(ing.name) !== ing.name ? t(ing.name) : ing.name
                             )}
                           </td>

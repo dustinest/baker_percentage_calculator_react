@@ -26,7 +26,7 @@
       "innerTemperature": { "from": 82, "until": 88 },
       "ingredients": [
         { "key": "WATER",           "grams": 54,  "bakerPercent": 15.88 },
-        { "key": "MILK",            "grams": 85,  "bakerPercent": 25.00 },
+        { "key": "MILK_25",            "grams": 85,  "bakerPercent": 25.00 },
         { "key": "WHEAT_550_FLOUR", "grams": 252, "bakerPercent": 74.12 },
         { "key": "SALT",            "grams": 6,   "bakerPercent": 1.76 }
       ]
