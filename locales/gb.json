@@ -15,7 +15,10 @@
     },
     "ingredients": {
       "title": "Ingredients title",
-      "add": "Add new group"
+      "add": "Add new group",
+      "ingredient": "Ingredient",
+      "add_ingredient": "Add ingredient",
+      "baker_percent": "Baker %"
     },
     "baking_instructions": {
       "steam": "Steam",

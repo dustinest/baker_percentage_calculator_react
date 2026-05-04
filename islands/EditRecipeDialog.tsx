@@ -1,6 +1,6 @@
 import { useEffect } from "preact/hooks";
 import { useSignal } from "@preact/signals";
-import { BakerPercentageAwareRecipe, nameForLang, nameStr, NutritionType } from "../lib/types.ts";
+import { BakerPercentageAwareRecipe, nameForLang, nameStr } from "../lib/types.ts";
 import {
   addImportedRecipe,
   addIngredientGroup,
@@ -29,7 +29,6 @@ export default function EditRecipeDialog({ recipe }: Props) {
   const importText = useSignal("");
   const importError = useSignal("");
   const copied = useSignal(false);
-  const inputModes = useSignal<Record<string, "g" | "%">>({});
 
   const close = () => { editingRecipe.value = null; };
 
@@ -154,26 +153,21 @@ export default function EditRecipeDialog({ recipe }: Props) {
                   <table class="table table-xs w-full">
                     <thead>
                       <tr>
-                        <th>{language.value === "ee" ? "Koostisosa" : "Ingredient"}</th>
-                        <th class="text-right w-28">{language.value === "ee" ? "Gramm" : "Grams"}</th>
+                        <th>{t("edit.ingredients.ingredient")}</th>
+                        <th class="text-right w-20">g</th>
+                        <th class="text-right w-20">{t("edit.ingredients.baker_percent")}</th>
                         {isCustom && <th class="w-6" />}
                       </tr>
                     </thead>
                     <tbody>
-                      {group.ingredients.map((ing, ii) => {
-                        const modeKey = `${gi}-${ii}`;
-                        const mode = inputModes.value[modeKey] ?? "g";
-                        const isWater = ing.nutrients.some((n) => n.type === NutritionType.water && n.percent > 50);
-                        const canPercent = !isWater && dryTotal > 0;
-                        const displayValue = mode === "%" ? (ing.grams * 100 / dryTotal).toFixed(1) : ing.grams;
-                        return (
+                      {group.ingredients.map((ing, ii) => (
                           <tr key={ii}>
                             <td>
                               {isCustom ? (
                                 <input
                                   class="input input-bordered input-xs w-full"
                                   value={ing.name}
-                                  placeholder={language.value === "ee" ? "Koostisosa" : "Ingredient"}
+                                  placeholder={t("edit.ingredients.ingredient")}
                                   onInput={(e) => setIngredientName(recipe.id, gi, ii, (e.target as HTMLInputElement).value)}
                                 />
                               ) : (
@@ -181,30 +175,31 @@ export default function EditRecipeDialog({ recipe }: Props) {
                               )}
                             </td>
                             <td>
-                              <div class="flex items-center justify-end gap-1">
+                              <input
+                                type="number"
+                                class="input input-bordered input-xs w-full text-right"
+                                value={ing.grams}
+                                min={0}
+                                step={0.5}
+                                onInput={(e) => setIngredientGrams(recipe.id, gi, ii, Number((e.target as HTMLInputElement).value))}
+                              />
+                            </td>
+                            <td>
+                              {dryTotal > 0 ? (
                                 <input
                                   type="number"
-                                  class="input input-bordered input-xs w-20 text-right"
-                                  value={displayValue}
+                                  class="input input-bordered input-xs w-full text-right"
+                                  value={(ing.grams * 100 / dryTotal).toFixed(1)}
                                   min={0}
-                                  step={mode === "%" ? 0.1 : 0.5}
+                                  step={0.1}
                                   onInput={(e) => {
-                                    const num = Number((e.target as HTMLInputElement).value);
-                                    const grams = mode === "%" ? Math.round(num * dryTotal / 100 * 10) / 10 : num;
-                                    setIngredientGrams(recipe.id, gi, ii, grams);
+                                    const pct = Number((e.target as HTMLInputElement).value);
+                                    setIngredientGrams(recipe.id, gi, ii, Math.round(pct * dryTotal / 100 * 10) / 10);
                                   }}
                                 />
-                                <button
-                                  type="button"
-                                  class={`btn btn-xs btn-ghost font-mono text-xs w-5 px-0 ${!canPercent ? "opacity-20 pointer-events-none" : ""}`}
-                                  onClick={() => {
-                                    if (!canPercent) return;
-                                    inputModes.value = { ...inputModes.value, [modeKey]: mode === "g" ? "%" : "g" };
-                                  }}
-                                >
-                                  {mode}
-                                </button>
-                              </div>
+                              ) : (
+                                <span class="text-base-content/30 text-xs flex justify-end">—</span>
+                              )}
                             </td>
                             {isCustom && (
                               <td>
@@ -212,14 +207,13 @@ export default function EditRecipeDialog({ recipe }: Props) {
                               </td>
                             )}
                           </tr>
-                        );
-                      })}
+                      ))}
                     </tbody>
                   </table>
 
                   {isCustom && (
                     <button type="button" class="btn btn-xs btn-ghost mt-2" onClick={() => addIngredientToGroup(recipe.id, gi)}>
-                      + {language.value === "ee" ? "Lisa koostisosa" : "Add ingredient"}
+                      + {t("edit.ingredients.add_ingredient")}
                     </button>
                   )}
                 </div>

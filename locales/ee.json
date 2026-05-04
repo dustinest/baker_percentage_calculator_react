@@ -15,7 +15,10 @@
     },
     "ingredients": {
       "title": "Nimetus",
-      "add": "Lisa uus grupp"
+      "add": "Lisa uus grupp",
+      "ingredient": "Koostisosa",
+      "add_ingredient": "Lisa koostisosa",
+      "baker_percent": "Pagari %"
     },
     "baking_instructions": {
       "steam": "Auruta",
