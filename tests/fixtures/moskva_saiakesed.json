@@ -1,7 +1,6 @@
 {
   "recipe": "Moskva saiakesed",
   "amount": 1,
-  "notes": "water/flour = 130/408 = 31.9%, falls in 10-40%. BUTTER (18% water) enters the liquid bucket but only WATER fills the levain liquid slot. MILK and dough-group BUTTER stay entirely in the dough. Lamination BUTTER (group index 2) counts as 'others' in totalWeight.",
   "levainAlgorithm": {
     "condition": "water_10_to_40pct",
     "fridge": 8,
@@ -13,8 +12,9 @@
       "translationKey": "ingredients.title.sourdough_starter_dough",
       "ingredients": [
         { "key": "SOURDOUGH_STARTER", "grams": 16,  "bakerPercent": 3.92 },
-        { "key": "WATER",             "grams": 122,  "bakerPercent": 29.90 },
-        { "key": "WHEAT_405_FLOUR",   "grams": 122,  "bakerPercent": 29.90 }
+        { "key": "WATER",             "grams": 122, "bakerPercent": 29.90 },
+        { "key": "MILK",              "grams": 140, "bakerPercent": 34.31 },
+        { "key": "WHEAT_405_FLOUR",   "grams": 122, "bakerPercent": 29.90 }
       ]
     },
     {
@@ -24,15 +24,14 @@
       ],
       "innerTemperature": { "from": 82, "until": 88 },
       "ingredients": [
-        { "key": "MILK",           "grams": 140,  "bakerPercent": 34.31 },
-        { "key": "WHEAT_405_FLOUR","grams": 278,  "bakerPercent": 68.14 },
-        { "key": "BUTTER",         "grams": 50,   "bakerPercent": 12.25 },
-        { "key": "SALT",           "grams": 2,    "bakerPercent": 0.49 },
-        { "key": "SUGAR_BROWN",    "grams": 16,   "bakerPercent": 3.92 }
+        { "key": "WHEAT_405_FLOUR", "grams": 278, "bakerPercent": 68.14 },
+        { "key": "BUTTER",          "grams": 50,  "bakerPercent": 12.25 },
+        { "key": "SALT",            "grams": 2,   "bakerPercent": 0.49 },
+        { "key": "SUGAR_BROWN",     "grams": 16,  "bakerPercent": 3.92 }
       ]
     },
     {
-      "name": "Kihistamiseks",
+      "translationKey": "Kihistamiseks",
       "ingredients": [
         { "key": "BUTTER", "grams": 100, "bakerPercent": 24.51 }
       ]

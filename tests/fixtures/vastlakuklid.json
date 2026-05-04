@@ -1,7 +1,6 @@
 {
   "recipe": "Vastlakuklid",
   "amount": 18,
-  "notes": "BUTTER has 18% water so it enters the liquid bucket in calculateDryAndLiquid, but its normalised equivalent is large (75*100/18=417g). The condition water/flour = 83/483 = 17.2% falls in 10-40%, so levainFlour = floor(83) - fridge = 74. Only WATER fills the levain liquid slot; MILK and BUTTER remain in the dough. CARDAMOM is 0.2% of totalFlourAmount=483, resolves to 1g.",
   "levainAlgorithm": {
     "condition": "water_10_to_40pct",
     "fridge": 9,
@@ -13,8 +12,9 @@
       "translationKey": "ingredients.title.sourdough_starter_dough",
       "ingredients": [
         { "key": "SOURDOUGH_STARTER", "grams": 18,  "bakerPercent": 3.73 },
-        { "key": "WATER",             "grams": 74,   "bakerPercent": 15.32 },
-        { "key": "WHEAT_405_FLOUR",   "grams": 74,   "bakerPercent": 15.32 }
+        { "key": "WATER",             "grams": 74,  "bakerPercent": 15.32 },
+        { "key": "MILK",              "grams": 210, "bakerPercent": 43.48 },
+        { "key": "WHEAT_405_FLOUR",   "grams": 74,  "bakerPercent": 15.32 }
       ]
     },
     {
@@ -24,12 +24,11 @@
       ],
       "innerTemperature": { "from": 82, "until": 88 },
       "ingredients": [
-        { "key": "MILK",          "grams": 210,  "bakerPercent": 43.48 },
-        { "key": "WHEAT_405_FLOUR","grams": 400, "bakerPercent": 82.82 },
-        { "key": "BUTTER",        "grams": 75,   "bakerPercent": 15.53 },
-        { "key": "SALT",          "grams": 5,    "bakerPercent": 1.04 },
-        { "key": "SUGAR_BROWN",   "grams": 50,   "bakerPercent": 10.35 },
-        { "key": "CARDAMOM",      "grams": 1,    "bakerPercent": 0.21 }
+        { "key": "WHEAT_405_FLOUR", "grams": 400, "bakerPercent": 82.82 },
+        { "key": "BUTTER",          "grams": 75,  "bakerPercent": 15.53 },
+        { "key": "SALT",            "grams": 5,   "bakerPercent": 1.04 },
+        { "key": "SUGAR_BROWN",     "grams": 50,  "bakerPercent": 10.35 },
+        { "key": "CARDAMOM",        "grams": 1,   "bakerPercent": 0.21 }
       ]
     }
   ],

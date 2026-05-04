@@ -183,10 +183,26 @@ export const splitStarterAndDough = async (
   fillSlot(cal.ingredients.flour, starterIngredients, leftovers, cal.starter.flour);
   fillSlot(cal.ingredients.liquid, starterIngredients, leftovers, cal.starter.liquid);
 
-  // ── MILK RULE (Task 7 adds this) ───────────────────────────────────────────
-  // After filling the liquid slot, if no pure water remains for the dough,
-  // all MILK ingredients move from leftovers into the levain.
-  // (Implemented in Task 7 after fixtures are updated.)
+  // Milk rule: if all pure WATER was consumed (leftover = 0), move MILK to levain
+  const waterIngredients = cal.ingredients.liquid.filter((i) =>
+    i.nutrients.every((n) => n.type !== NutritionType.flour) &&
+    i.nutrients.some((n) => n.type === NutritionType.water && n.percent === 100)
+  );
+  const milkIngredients = cal.ingredients.liquid.filter((i) =>
+    i.nutrients.some((n) => n.type === NutritionType.water && n.percent < 100 && n.percent > 50)
+  );
+  const waterConsumedFully = waterIngredients.some((waterIng) => {
+    // leftover = grams - liquidSlotAmount - fridge = 0
+    return Math.floor(waterIng.grams - cal.starter.liquid.amount - cal.starter.liquid.fridge) === 0;
+  });
+  if (waterConsumedFully && milkIngredients.length > 0 && !recipeIngredients[0].starter) {
+    for (const milkIng of milkIngredients) {
+      const idx = leftovers.findIndex((l) => l.id === milkIng.id);
+      if (idx !== -1) {
+        starterIngredients.push(leftovers.splice(idx, 1)[0]);
+      }
+    }
+  }
 
   const result: RecipeIngredientsType[] = [];
   recipeIngredients.forEach((group, index) => {
@@ -196,7 +212,7 @@ export const splitStarterAndDough = async (
     }
     const nonStarter: IngredientGramsType[] = [
       ...leftovers.filter((e) => Math.floor(e.grams) > 0),
-      ...cal.ingredients.other.filter((e) => Math.floor(e.grams) > 0).map(remapIngredient),
+      ...cal.ingredients.other.filter((e) => Math.floor(e.grams) > 0).map((e) => remapIngredient(e)),
     ];
 
     if (group.starter) {
