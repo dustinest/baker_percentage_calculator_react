@@ -61,14 +61,6 @@ export const copyIngredientGramsType = (v: IngredientGramsType): IngredientGrams
   nutrients: v.nutrients.map(copyNutrientPercentType),
 });
 
-export const copyIngredientPercentType = (v: IngredientPercentType): IngredientPercentType => ({
-  percent: v.percent,
-  name: v.name,
-  type: v.type,
-  id: v.id,
-  nutrients: v.nutrients.map(copyNutrientPercentType),
-});
-
 // ── Baking ──────────────────────────────────────────────────────────────────
 
 export type BakingTimeType = {
@@ -93,17 +85,6 @@ export const copyBakingTimeType = (v: BakingTimeType): BakingTimeType => ({
   steam: v.steam,
   label: v.label,
 });
-
-export const numberIntervalTypeEquals = (a: NumberIntervalType | null, b: NumberIntervalType | null): boolean => {
-  if (a == null && b == null) return true;
-  if (a == null || b == null) return false;
-  return a.from === b.from && a.until === b.until;
-};
-
-export const bakingTimeEquals = (a: BakingTimeType, b: BakingTimeType): boolean =>
-  a.steam === b.steam &&
-  numberIntervalTypeEquals(a.time, b.time) &&
-  numberIntervalTypeEquals(a.temperature, b.temperature);
 
 // ── Recipe groups ───────────────────────────────────────────────────────────
 

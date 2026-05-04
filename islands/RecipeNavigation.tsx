@@ -1,6 +1,7 @@
 import { useSignal } from "@preact/signals";
 import { nameForLang } from "../lib/types.ts";
 import {
+  addNewRecipe,
   allRecipes,
   initUrlSync,
   language,
@@ -73,6 +74,19 @@ export default function RecipeNavigation() {
           </label>
         </li>
       ))}
+
+      <div class="divider my-1" />
+
+      <li>
+        <button class="btn btn-sm btn-ghost w-full justify-start" onClick={addNewRecipe}>
+          + {t("actions.add_recipe")}
+        </button>
+      </li>
+      <li>
+        <button class="btn btn-sm btn-ghost w-full justify-start" onClick={() => window.print()}>
+          🖨 {t("actions.print")}
+        </button>
+      </li>
     </ul>
   );
 }

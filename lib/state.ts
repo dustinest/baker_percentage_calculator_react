@@ -91,6 +91,24 @@ export const copyRecipe = (recipe: RecipeType) => {
   showToast("Retsept kopeeritud");
 };
 
+export const addNewRecipe = () => {
+  editingRecipe.value = {
+    id: "",
+    name: { et: "Uus retsept", en: "New recipe" },
+    amount: 1,
+    ingredients: [{ ingredients: [], bakingTime: [], innerTemperature: null, description: null }],
+    bakingTime: [],
+    innerTemperature: null,
+    description: null,
+  };
+};
+
+export const confirmNewRecipe = (recipe: RecipeType) => {
+  const withId = { ...recipe, id: `new_${Date.now()}` };
+  allRecipes.value = [...allRecipes.value, withId];
+  selectedIds.value = new Set([...selectedIds.value, withId.id]);
+};
+
 export const addImportedRecipe = (recipe: RecipeType) => {
   const existing = allRecipes.value.find((r) => r.id === recipe.id);
   if (existing) {

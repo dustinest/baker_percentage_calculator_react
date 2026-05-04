@@ -58,7 +58,7 @@ const resolveInnerTemperature = (value?: NumberIntervalType | number | null): Nu
   return resolveNumberIntervalType(value);
 };
 
-const resolveBakingTime = (bakingTimes?: Array<{ time: NumberIntervalType | number; temperature: NumberIntervalType | number; steam?: boolean; label?: string }>): BakingTimeType[] => {
+const resolveBakingTime = (bakingTimes?: Array<{ time: NumberIntervalType | number; temperature: NumberIntervalType | number; steam?: boolean; label?: string | Record<string, string> }>): BakingTimeType[] => {
   if (!bakingTimes) return [];
   return bakingTimes.map((bt) => ({
     time: resolveNumberIntervalType(bt.time),

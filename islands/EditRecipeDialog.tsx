@@ -10,6 +10,7 @@ import {
 } from "../lib/types.ts";
 import {
   addImportedRecipe,
+  confirmNewRecipe,
   editingRecipe,
   language,
   recipeToJsonExport,
@@ -39,7 +40,14 @@ export default function EditRecipeDialog({ recipe }: Props) {
   const customIngIds = useSignal<Set<string>>(new Set());
 
   const close = () => { editingRecipe.value = null; };
-  const save = () => { updateRecipe(draft.value); close(); };
+  const save = () => {
+    if (!draft.value.id) {
+      confirmNewRecipe(draft.value);
+    } else {
+      updateRecipe(draft.value);
+    }
+    close();
+  };
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };

@@ -149,7 +149,8 @@
     "save": "Save",
     "change": "Change",
     "cancel": "Cancel",
-    "add_recipe": "Add new recipe"
+    "add_recipe": "Add new recipe",
+    "print": "Print recipes"
   },
   "recipe": {
     "servings": "servings"

@@ -148,7 +148,8 @@
     "save": "Salvesta",
     "change": "Muuda",
     "cancel": "Tühista",
-    "add_recipe": "Lisa uus retsept"
+    "add_recipe": "Lisa uus retsept",
+    "print": "Prindi retseptid"
   },
   "recipe": {
     "servings": "portsjonit"
