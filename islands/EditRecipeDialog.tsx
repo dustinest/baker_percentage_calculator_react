@@ -11,6 +11,7 @@ import {
 import { readJsonRecipe } from "../lib/resolution.ts";
 import { t } from "../lib/i18n.ts";
 
+
 type Tab = "edit" | "json" | "import";
 
 type Props = { recipe: BakerPercentageAwareRecipe };
@@ -19,6 +20,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
   const activeTab = useSignal<Tab>("edit");
   const importText = useSignal("");
   const importError = useSignal("");
+  const copied = useSignal(false);
 
   const close = () => { editingRecipe.value = null; };
 
@@ -121,20 +123,45 @@ export default function EditRecipeDialog({ recipe }: Props) {
           </div>
         )}
 
-        {activeTab.value === "json" && (
-          <div>
-            <details class="collapse collapse-arrow border border-base-300">
-              <summary class="collapse-title text-sm font-medium">
-                Retsept JSON formaadis
-              </summary>
-              <div class="collapse-content">
-                <pre class="text-xs overflow-auto max-h-96 bg-base-200 p-3 rounded">
-                  {JSON.stringify(recipeToJsonExport(recipe), null, 2)}
-                </pre>
-              </div>
-            </details>
-          </div>
-        )}
+        {activeTab.value === "json" && (() => {
+          const json = JSON.stringify(recipeToJsonExport(recipe), null, 2);
+          const handleCopy = async () => {
+            if (navigator.clipboard) {
+              await navigator.clipboard.writeText(json);
+            } else {
+              const el = document.createElement("textarea");
+              el.value = json;
+              el.style.cssText = "position:fixed;opacity:0";
+              document.body.appendChild(el);
+              el.select();
+              document.execCommand("copy");
+              document.body.removeChild(el);
+            }
+            copied.value = true;
+            setTimeout(() => { copied.value = false; }, 2000);
+          };
+          return (
+            <div class="relative">
+              <button
+                type="button"
+                class="absolute top-2 right-2 btn btn-xs btn-ghost opacity-60 hover:opacity-100"
+                onClick={handleCopy}
+                title="Copy to clipboard"
+              >
+                {copied.value ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                )}
+              </button>
+              <pre class="text-xs overflow-auto max-h-96 bg-base-200 p-3 rounded">{json}</pre>
+            </div>
+          );
+        })()}
 
         {activeTab.value === "import" && (
           <div class="space-y-3">
