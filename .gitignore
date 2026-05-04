@@ -1,5 +1,6 @@
 # Deno
 .deno/
+node_modules/
 
 # Fresh build output
 _fresh/
