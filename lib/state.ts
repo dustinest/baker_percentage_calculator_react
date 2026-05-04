@@ -84,11 +84,13 @@ export const updateRecipe = (updated: RecipeType) => {
 
 export const copyRecipe = (recipe: RecipeType) => {
   const copied = copyRecipeType(recipe);
-  copied.name = `Koopia — ${nameStr(recipe.name)}`;
-  copied.id = resolveJsonRecipeTypeId({ name: copied.name, amount: copied.amount }) + "_copy_" + Date.now();
-  allRecipes.value = [...allRecipes.value, copied];
-  selectedIds.value = new Set([...selectedIds.value, copied.id]);
-  showToast("Retsept kopeeritud");
+  copied.id = "";
+  if (typeof copied.name === "object") {
+    copied.name = Object.fromEntries(Object.entries(copied.name).map(([k, v]) => [k, `Koopia — ${v}`]));
+  } else {
+    copied.name = `Koopia — ${copied.name}`;
+  }
+  editingRecipe.value = copied;
 };
 
 export const addNewRecipe = () => {
