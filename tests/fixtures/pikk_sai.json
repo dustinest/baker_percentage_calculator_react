@@ -1,0 +1,42 @@
+{
+  "recipe": "Pikk sai",
+  "amount": 2,
+  "notes": "water/flour = 142/340 = 41.8%, which is NOT in 10-40% (strictly < 40), so the default 26% formula applies. levainFlour = floor(340*0.26) - 6 = 88 - 6 = 82. WATER fills levain liquid (82g), leaving 54g water and all 85g MILK for the dough.",
+  "levainAlgorithm": {
+    "condition": "default_26pct",
+    "fridge": 6,
+    "flourAmount": 82,
+    "liquidAmount": 82
+  },
+  "groups": [
+    {
+      "translationKey": "ingredients.title.sourdough_starter_dough",
+      "ingredients": [
+        { "key": "SOURDOUGH_STARTER", "grams": 12,  "bakerPercent": 3.53 },
+        { "key": "WATER",             "grams": 82,   "bakerPercent": 24.12 },
+        { "key": "WHEAT_550_FLOUR",   "grams": 82,   "bakerPercent": 24.12 }
+      ]
+    },
+    {
+      "translationKey": "ingredients.title.dough",
+      "bakingTime": [
+        { "steam": true,  "time": { "from": 10, "until": 10 }, "temperature": { "from": 180, "until": 180 } },
+        { "steam": false, "time": { "from": 15, "until": 20 }, "temperature": { "from": 180, "until": 180 } }
+      ],
+      "innerTemperature": { "from": 82, "until": 88 },
+      "ingredients": [
+        { "key": "WATER",           "grams": 54,  "bakerPercent": 15.88 },
+        { "key": "MILK",            "grams": 85,  "bakerPercent": 25.00 },
+        { "key": "WHEAT_550_FLOUR", "grams": 252, "bakerPercent": 74.12 },
+        { "key": "SALT",            "grams": 6,   "bakerPercent": 1.76 }
+      ]
+    }
+  ],
+  "microNutrients": {
+    "dryTotal": 340,
+    "water":  { "grams": 224.875, "percent": 66.14 },
+    "salt":   { "grams": 6,       "percent": 1.76 },
+    "fat":    { "grams": 2.38,    "percent": 0.70 }
+  },
+  "totalWeight": { "dough": 573, "others": 0, "total": 573 }
+}

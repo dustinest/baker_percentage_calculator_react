@@ -1,0 +1,40 @@
+{
+  "recipe": "Pizza",
+  "amount": 3,
+  "notes": "DURUM_WHEAT has NutritionType.whole_grain, so the whole-grain levain formula applies. OLIVE_OIL has no water/flour nutrients so it goes to the dough directly as 'other'. Salt and oil grams are specified directly (not percent-based).",
+  "levainAlgorithm": {
+    "condition": "whole_grain",
+    "fridge": 10,
+    "flourAmount": 257,
+    "liquidAmount": 210
+  },
+  "groups": [
+    {
+      "translationKey": "ingredients.title.sourdough_starter_dough",
+      "ingredients": [
+        { "key": "SOURDOUGH_STARTER", "grams": 20,  "bakerPercent": 3.88 },
+        { "key": "WATER",             "grams": 210,  "bakerPercent": 40.78 },
+        { "key": "DURUM_WHEAT",       "grams": 257,  "bakerPercent": 49.90 }
+      ]
+    },
+    {
+      "translationKey": "ingredients.title.dough",
+      "bakingTime": [
+        { "steam": false, "time": { "from": 18, "until": 30 }, "temperature": { "from": 210, "until": 210 } }
+      ],
+      "ingredients": [
+        { "key": "WATER",      "grams": 120,   "bakerPercent": 23.30 },
+        { "key": "DURUM_WHEAT","grams": 248,   "bakerPercent": 48.16 },
+        { "key": "OLIVE_OIL",  "grams": 27.44, "bakerPercent": 5.33 },
+        { "key": "SALT",       "grams": 7.5,   "bakerPercent": 1.46 }
+      ]
+    }
+  ],
+  "microNutrients": {
+    "dryTotal": 515,
+    "water": { "grams": 340,   "percent": 66.02 },
+    "salt":  { "grams": 7.5,   "percent": 1.46 },
+    "fat":   { "grams": 27.44, "percent": 5.33 }
+  },
+  "totalWeight": { "dough": 889.94, "others": 0, "total": 889.94 }
+}

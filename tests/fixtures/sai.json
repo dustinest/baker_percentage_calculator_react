@@ -1,0 +1,39 @@
+{
+  "recipe": "Sai",
+  "amount": 1,
+  "levainAlgorithm": {
+    "condition": "default_26pct",
+    "fridge": 9,
+    "flourAmount": 111,
+    "liquidAmount": 111
+  },
+  "groups": [
+    {
+      "translationKey": "ingredients.title.sourdough_starter_dough",
+      "ingredients": [
+        { "key": "SOURDOUGH_STARTER",  "grams": 18,    "bakerPercent": 3.90 },
+        { "key": "WATER",              "grams": 111,   "bakerPercent": 24.03 },
+        { "key": "WHEAT_550_FLOUR",    "grams": 111,   "bakerPercent": 24.03 }
+      ]
+    },
+    {
+      "translationKey": "ingredients.title.dough",
+      "bakingTime": [
+        { "steam": true,  "time": { "from": 20, "until": 20 }, "temperature": { "from": 240, "until": 240 } },
+        { "steam": false, "time": { "from": 20, "until": 20 }, "temperature": { "from": 240, "until": 240 } }
+      ],
+      "innerTemperature": { "from": 88, "until": 99 },
+      "ingredients": [
+        { "key": "WATER",           "grams": 258.8, "bakerPercent": 56.02 },
+        { "key": "WHEAT_550_FLOUR", "grams": 342,   "bakerPercent": 74.03 },
+        { "key": "SALT",            "grams": 7.5,   "bakerPercent": 1.62 }
+      ]
+    }
+  ],
+  "microNutrients": {
+    "dryTotal": 462,
+    "water": { "grams": 378.8, "percent": 81.99 },
+    "salt":  { "grams": 7.5,   "percent": 1.62 }
+  },
+  "totalWeight": { "dough": 848.3, "others": 0, "total": 848.3 }
+}

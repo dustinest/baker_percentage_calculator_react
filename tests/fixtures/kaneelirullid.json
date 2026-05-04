@@ -1,0 +1,53 @@
+{
+  "recipe": "Kaneelirullid",
+  "amount": 1,
+  "notes": "Same dough as Vastlakuklid plus a cinnamon layer group. CINNAMON is 3.28% of totalFlourAmount=483, resolves to 15.8g (displayed as 16g). The cinnamon layer is index 2 so it counts as 'others' in totalWeight, not 'dough'.",
+  "levainAlgorithm": {
+    "condition": "water_10_to_40pct",
+    "fridge": 9,
+    "flourAmount": 74,
+    "liquidAmount": 74
+  },
+  "groups": [
+    {
+      "translationKey": "ingredients.title.sourdough_starter_dough",
+      "ingredients": [
+        { "key": "SOURDOUGH_STARTER", "grams": 18,  "bakerPercent": 3.73 },
+        { "key": "WATER",             "grams": 74,   "bakerPercent": 15.32 },
+        { "key": "WHEAT_405_FLOUR",   "grams": 74,   "bakerPercent": 15.32 }
+      ]
+    },
+    {
+      "translationKey": "ingredients.title.dough",
+      "bakingTime": [
+        { "steam": false, "time": { "from": 20, "until": 25 }, "temperature": { "from": 210, "until": 210 } }
+      ],
+      "innerTemperature": { "from": 82, "until": 88 },
+      "ingredients": [
+        { "key": "MILK",          "grams": 210,  "bakerPercent": 43.48 },
+        { "key": "WHEAT_405_FLOUR","grams": 400, "bakerPercent": 82.82 },
+        { "key": "BUTTER",        "grams": 75,   "bakerPercent": 15.53 },
+        { "key": "SALT",          "grams": 5,    "bakerPercent": 1.04 },
+        { "key": "SUGAR_BROWN",   "grams": 50,   "bakerPercent": 10.35 },
+        { "key": "CARDAMOM",      "grams": 1,    "bakerPercent": 0.21 }
+      ]
+    },
+    {
+      "name": "Kaanelikiht",
+      "ingredients": [
+        { "key": "BUTTER",   "grams": 112,  "bakerPercent": 23.19 },
+        { "key": "SALT",     "grams": 1,    "bakerPercent": 0.21 },
+        { "key": "SUGAR",    "grams": 95,   "bakerPercent": 19.67 },
+        { "key": "CINNAMON", "grams": 15.8, "bakerPercent": 3.27 }
+      ]
+    }
+  ],
+  "microNutrients": {
+    "dryTotal": 483,
+    "water":  { "grams": 321.41, "percent": 66.54 },
+    "salt":   { "grams": 6,      "percent": 1.24 },
+    "sugar":  { "grams": 145,    "percent": 30.02 },
+    "fat":    { "grams": 159.22, "percent": 32.96 }
+  },
+  "totalWeight": { "dough": 907, "others": 223.8, "total": 1130.8 }
+}

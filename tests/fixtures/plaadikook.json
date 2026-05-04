@@ -1,0 +1,41 @@
+{
+  "recipe": "Plaadikook",
+  "amount": 1,
+  "notes": "Fridge capped at 11g (floor(808*2%)=16, capped). water/flour = 123/808 = 15.2%, falls in 10-40%, so levainFlour = floor(123) - 11 = 112. Only WATER fills the levain liquid slot; MILK and BUTTER go entirely to the dough.",
+  "levainAlgorithm": {
+    "condition": "water_10_to_40pct",
+    "fridge": 11,
+    "flourAmount": 112,
+    "liquidAmount": 112
+  },
+  "groups": [
+    {
+      "translationKey": "ingredients.title.sourdough_starter_dough",
+      "ingredients": [
+        { "key": "SOURDOUGH_STARTER", "grams": 22,  "bakerPercent": 2.72 },
+        { "key": "WATER",             "grams": 112,  "bakerPercent": 13.86 },
+        { "key": "WHEAT_550_FLOUR",   "grams": 112,  "bakerPercent": 13.86 }
+      ]
+    },
+    {
+      "translationKey": "ingredients.title.dough",
+      "bakingTime": [
+        { "steam": false, "time": { "from": 20, "until": 30 }, "temperature": { "from": 210, "until": 210 } }
+      ],
+      "innerTemperature": { "from": 82, "until": 88 },
+      "ingredients": [
+        { "key": "MILK",            "grams": 385,  "bakerPercent": 47.65 },
+        { "key": "WHEAT_550_FLOUR", "grams": 685,  "bakerPercent": 84.78 },
+        { "key": "BUTTER",          "grams": 200,  "bakerPercent": 24.75 },
+        { "key": "SALT",            "grams": 7.5,  "bakerPercent": 0.93 }
+      ]
+    }
+  ],
+  "microNutrients": {
+    "dryTotal": 808,
+    "water":  { "grams": 534.375, "percent": 66.14 },
+    "salt":   { "grams": 7.5,     "percent": 0.93 },
+    "fat":    { "grams": 174.78,  "percent": 21.63 }
+  },
+  "totalWeight": { "dough": 1523.5, "others": 0, "total": 1523.5 }
+}

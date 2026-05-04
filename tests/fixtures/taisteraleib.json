@@ -1,0 +1,40 @@
+{
+  "recipe": "Täisteraleib",
+  "amount": 1,
+  "levainAlgorithm": {
+    "condition": "whole_grain",
+    "fridge": 8,
+    "flourAmount": 212,
+    "liquidAmount": 263
+  },
+  "groups": [
+    {
+      "translationKey": "ingredients.title.sourdough_starter_dough",
+      "ingredients": [
+        { "key": "SOURDOUGH_STARTER", "grams": 16,  "bakerPercent": 3.76 },
+        { "key": "WATER",             "grams": 263,  "bakerPercent": 61.88 },
+        { "key": "WHOLE_RYE_FLOUR",   "grams": 212,  "bakerPercent": 49.88 }
+      ]
+    },
+    {
+      "translationKey": "ingredients.title.dough",
+      "bakingTime": [
+        { "steam": true,  "time": { "from": 20, "until": 20 }, "temperature": { "from": 240, "until": 240 } },
+        { "steam": false, "time": { "from": 40, "until": 40 }, "temperature": { "from": 240, "until": 240 } }
+      ],
+      "innerTemperature": { "from": 88, "until": 99 },
+      "ingredients": [
+        { "key": "WATER",                "grams": 154,  "bakerPercent": 36.24 },
+        { "key": "WHOLE_RYE_FLOUR",      "grams": 185,  "bakerPercent": 43.53 },
+        { "key": "WHOLE_RYE_MALT_FLOUR", "grams": 20,   "bakerPercent": 4.71 },
+        { "key": "SALT",                 "grams": 7.5,  "bakerPercent": 1.76 }
+      ]
+    }
+  ],
+  "microNutrients": {
+    "dryTotal": 425,
+    "water": { "grams": 425,  "percent": 100 },
+    "salt":  { "grams": 7.5,  "percent": 1.76 }
+  },
+  "totalWeight": { "dough": 857.5, "others": 0, "total": 857.5 }
+}
