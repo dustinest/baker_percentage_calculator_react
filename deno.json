@@ -16,7 +16,9 @@
     "@tailwindcss/postcss": "npm:@tailwindcss/postcss@^4.1.10",
     "postcss": "npm:postcss@^8.5.6",
     "@std/assert": "jsr:@std/assert@^1.0.0",
-    "daisyui": "npm:daisyui@^5"
+    "daisyui": "npm:daisyui@^5",
+    "sortablejs": "npm:sortablejs@^1.15.3",
+    "@types/sortablejs": "npm:@types/sortablejs@^1.15.9"
   },
   "compilerOptions": {
     "jsx": "react-jsx",

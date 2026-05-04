@@ -150,6 +150,7 @@
     "change": "Change",
     "cancel": "Cancel",
     "add_recipe": "Add new recipe",
+    "sort": "Sort",
     "print": "Print recipes"
   },
   "recipe": {

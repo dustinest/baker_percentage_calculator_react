@@ -149,6 +149,7 @@
     "change": "Muuda",
     "cancel": "Tühista",
     "add_recipe": "Lisa uus retsept",
+    "sort": "Sorteeri",
     "print": "Prindi retseptid"
   },
   "recipe": {

@@ -1,5 +1,7 @@
 import { useEffect } from "preact/hooks";
 import { useSignal } from "@preact/signals";
+import IconCopy from "../components/icons/IconCopy.tsx";
+import IconCheck from "../components/icons/IconCheck.tsx";
 import {
   BakerPercentageAwareRecipe,
   copyRecipeType,
@@ -156,12 +158,13 @@ export default function EditRecipeDialog({ recipe }: Props) {
       <div class="modal-box max-w-3xl w-full max-h-[90vh] overflow-y-auto">
         <div class="flex justify-between items-center mb-4">
           <h3 class="font-bold text-lg">{nameForLang(d.name, language.value)}</h3>
-          <button class="btn btn-sm btn-circle btn-ghost" onClick={close}>✕</button>
+          <button type="button" class="btn btn-sm btn-circle btn-ghost" onClick={close}>✕</button>
         </div>
 
         <div role="tablist" class="tabs tabs-bordered mb-4">
           {(["edit", "json", "import"] as Tab[]).map((tab) => (
             <button
+              type="button"
               key={tab}
               role="tab"
               class={`tab ${activeTab.value === tab ? "tab-active" : ""}`}
@@ -378,15 +381,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
                 onClick={handleCopy}
                 title="Copy to clipboard"
               >
-                {copied.value ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                  </svg>
-                )}
+                {copied.value ? <IconCheck class="h-4 w-4 text-success" /> : <IconCopy />}
               </button>
               <pre class="text-xs overflow-auto max-h-96 bg-base-200 p-3 rounded">{json}</pre>
             </div>
@@ -409,7 +404,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
                 <span>{importError.value}</span>
               </div>
             )}
-            <button class="btn btn-primary btn-sm" onClick={handleImport}>
+            <button type="button" class="btn btn-primary btn-sm" onClick={handleImport}>
               Impordi
             </button>
           </div>
@@ -418,11 +413,11 @@ export default function EditRecipeDialog({ recipe }: Props) {
         <div class="modal-action">
           {activeTab.value === "edit" ? (
             <>
-              <button class="btn btn-ghost btn-sm" onClick={close}>{t("actions.cancel")}</button>
-              <button class="btn btn-primary btn-sm" onClick={save} disabled={!canSave}>{t("actions.save")}</button>
+              <button type="button" class="btn btn-ghost btn-sm" onClick={close}>{t("actions.cancel")}</button>
+              <button type="button" class="btn btn-primary btn-sm" onClick={save} disabled={!canSave}>{t("actions.save")}</button>
             </>
           ) : (
-            <button class="btn btn-ghost btn-sm" onClick={close}>{t("actions.cancel")}</button>
+            <button type="button" class="btn btn-ghost btn-sm" onClick={close}>{t("actions.cancel")}</button>
           )}
         </div>
       </div>

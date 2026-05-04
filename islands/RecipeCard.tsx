@@ -2,6 +2,8 @@ import { BakerPercentageAwareRecipe, DISPLAYABLE_NUTRIENTS_TYPE_ARRAY, nameForLa
 import { t } from "../lib/i18n.ts";
 import { copyRecipe, editingRecipe, language } from "../lib/state.ts";
 import EditRecipeDialog from "./EditRecipeDialog.tsx";
+import IconEdit from "../components/icons/IconEdit.tsx";
+import IconCopyPlus from "../components/icons/IconCopyPlus.tsx";
 
 const fmt = (n: number) => Math.round(n);
 const fmtPct = (n: number) => n.toFixed(2);
@@ -39,16 +41,20 @@ export default function RecipeCard({ recipe }: Props) {
           </div>
           <div class="flex gap-1 print:hidden">
             <button
-              class="btn btn-sm btn-outline"
+              type="button"
+              class="btn btn-sm btn-outline btn-square"
+              title={t("edit.edit")}
               onClick={() => { editingRecipe.value = recipe; }}
             >
-              {t("edit.edit")}
+              <IconEdit />
             </button>
             <button
-              class="btn btn-sm btn-ghost"
+              type="button"
+              class="btn btn-sm btn-ghost btn-square"
+              title={t("edit.copyOf")}
               onClick={() => copyRecipe(recipe)}
             >
-              {t("edit.copyOf")}
+              <IconCopyPlus />
             </button>
           </div>
         </div>

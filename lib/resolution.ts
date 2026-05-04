@@ -1,6 +1,5 @@
 import {
   BakingTimeType,
-  copyIngredientGramsType,
   DRY_NUTRIENTS,
   GramsAmountType,
   IngredientGramsType,

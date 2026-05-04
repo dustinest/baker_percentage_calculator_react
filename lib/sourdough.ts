@@ -18,7 +18,7 @@ interface DryAndLiquidResult {
   totals: { flour: number; liquid: number; water: number };
 }
 
-const calculateDryAndLiquid = async (ingredients: IngredientGramsType[]): Promise<DryAndLiquidResult> => {
+const calculateDryAndLiquid = (ingredients: IngredientGramsType[]): DryAndLiquidResult => {
   if (!ingredients) throw new Error("No ingredients defined!");
   const result: DryAndLiquidResult = {
     ingredients: { flour: [], liquid: [], other: [] },
@@ -67,8 +67,8 @@ const calculateStarterFlour = (totalFlour: number): number => {
   return result > 11 ? 11 : result;
 };
 
-export const calculateSourDoughStarter = async (group: RecipeIngredientsType): Promise<StarterCalculationResult> => {
-  const dal = await calculateDryAndLiquid(group.ingredients.map(copyIngredientGramsType));
+export const calculateSourDoughStarter = (group: RecipeIngredientsType): StarterCalculationResult => {
+  const dal = calculateDryAndLiquid(group.ingredients.map(copyIngredientGramsType));
   const flour = Math.floor(dal.totals.flour);
   const water = Math.floor(dal.totals.water);
   const liquid = Math.floor(dal.totals.liquid);
@@ -162,11 +162,11 @@ const fillSlot = (
   }
 };
 
-export const splitStarterAndDough = async (
+export const splitStarterAndDough = (
   recipeIngredients: RecipeIngredientsType[],
-): Promise<RecipeIngredientsType[]> => {
+): RecipeIngredientsType[] => {
   if (recipeIngredients.length === 0) return [];
-  const cal = await calculateSourDoughStarter(recipeIngredients[0]);
+  const cal = calculateSourDoughStarter(recipeIngredients[0]);
   if (!cal) return [];
 
   const starterIngredients: IngredientGramsType[] = [{
