@@ -43,6 +43,7 @@
     "npm:@types/react@^18.3.18": "18.3.28",
     "npm:@vitejs/plugin-react@^5.1.0": "5.2.0_vite@7.3.2__@types+node@22.19.17_@types+node@22.19.17",
     "npm:buffer@^6.0.3": "6.0.3",
+    "npm:daisyui@5": "5.5.19",
     "npm:esbuild-wasm@~0.25.11": "0.25.12",
     "npm:esbuild@0.25.7": "0.25.7",
     "npm:esbuild@~0.25.5": "0.25.12",
@@ -1610,6 +1611,9 @@
     "csstype@3.2.3": {
       "integrity": "sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ=="
     },
+    "daisyui@5.5.19": {
+      "integrity": "sha512-pbFAkl1VCEh/MPCeclKL61I/MqRIFFhNU7yiXoDDRapXN4/qNCoMxeCCswyxEEhqL5eiTTfwHvucFtOE71C9sA=="
+    },
     "debug@4.4.3": {
       "integrity": "sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==",
       "dependencies": [
@@ -2452,6 +2456,7 @@
       "jsr:@std/assert@1",
       "npm:@preact/signals@^2.9.0",
       "npm:@tailwindcss/postcss@^4.1.10",
+      "npm:daisyui@5",
       "npm:postcss@^8.5.6",
       "npm:preact@^10.29.1",
       "npm:tailwindcss@^4.1.10"

@@ -15,7 +15,8 @@
     "tailwindcss": "npm:tailwindcss@^4.1.10",
     "@tailwindcss/postcss": "npm:@tailwindcss/postcss@^4.1.10",
     "postcss": "npm:postcss@^8.5.6",
-    "@std/assert": "jsr:@std/assert@^1.0.0"
+    "@std/assert": "jsr:@std/assert@^1.0.0",
+    "daisyui": "npm:daisyui@^5"
   },
   "compilerOptions": {
     "jsx": "react-jsx",
