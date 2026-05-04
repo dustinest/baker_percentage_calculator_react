@@ -1,79 +1,95 @@
-# App to convert pastry recipe to use sourdough starter
+# Baker's Percentage Calculator
 
-Demo is running at https://juuretis.herokuapp.com/
+Converts any baking recipe to use a sourdough starter, based on baker's percentages.
 
-The goal of this app is to calculate any baking recipe to sourdough based on baker's percentages.
-There are some hacks in code which might need some attention (IE starter for pancakes).
+Predefined recipes included. Custom recipes can be imported via JSON paste. All calculations run client-side; recipes can be shared via URL (`?r=` query param).
 
-Check [src/data/PredefinedRecipes.ts](src/service/PredefinedRecipeService/data/PredefinedRecipes.ts) for predefined recipes.
+---
 
-The predefined flour even can be defined as percentage. But the total of the percentages must be less than 100. For instance:
+## Prerequisites
+
+Install [Deno](https://deno.land/):
+
+```bash
+curl -fsSL https://deno.land/install.sh | sh
 ```
-[{
-    name: "flour1"
-    amount: 123,
-},
+
+---
+
+## Development
+
+```bash
+deno task dev
+```
+
+Open [http://localhost:8000](http://localhost:8000). The server watches `routes/` and `static/` for changes.
+
+---
+
+## Tests
+
+```bash
+deno task test
+```
+
+Runs pure calculation tests (resolution, sourdough split, baker%, weights) against fixture files in `tests/fixtures/`.
+
+---
+
+## Production build
+
+```bash
+deno task build
+deno task start
+```
+
+`build` compiles islands and CSS into `_fresh/`. `start` serves the pre-built output.
+
+---
+
+## Deploy to Cloudflare Pages
+
+1. Push the repo to GitHub.
+
+2. In the [Cloudflare Pages dashboard](https://dash.cloudflare.com/), create a new project and connect the GitHub repo.
+
+3. Set build configuration:
+   - **Framework preset:** None
+   - **Build command:** `deno run -A dev.ts build`
+   - **Build output directory:** `_fresh`
+
+4. Add an environment variable so Cloudflare installs Deno during the build:
+   - `DENO_VERSION` → `2.x` (or the specific version you use)
+
+5. Save and deploy. Cloudflare Pages runs the build command and serves the `_fresh/` output.
+
+> **Note:** Fresh is a server-rendered framework. For full SSR support on Cloudflare, you may need [Cloudflare Workers](https://workers.cloudflare.com/) with a custom entry point instead of Pages. For a simpler alternative, [Deno Deploy](https://deno.com/deploy) natively supports Fresh apps with zero configuration.
+
+---
+
+## Recipe format
+
+Recipes are defined as JSON. Flour amounts drive baker's percentages. Non-flour ingredients can be specified as grams or as a percentage of total flour.
+
+Example — flour defined by grams, salt defined by percentage:
+
+```json
 {
-    name: "flour2"
-    percent: 100,
-}]
+  "name": "My bread",
+  "ingredients": [{
+    "ingredients": [
+      { "type": "WHEAT_550_FLOUR", "grams": 500 },
+      { "type": "WATER", "percent": 75 },
+      { "type": "SALT", "percent": 2 }
+    ]
+  }]
+}
 ```
-Will fail. As there can not be total 200% of flour.
 
+Percentage-based flour also works, as long as the total percentage is below 100:
+
+```json
+{ "type": "RYE_FLOUR", "percent": 20 }
 ```
-[{
-    name: "flour1"
-    amount: 123,
-},
-{
-    name: "flour2"
-    percent: 2,
-},
-{
-    name: "flour3"
-    percent: 50,
-}]
-```
-Does not fail, as flour1 percentage will be `123 * (100 - 2 - 50) / 100`
 
-## Material icons
-Project uses MUI https://mui.com/components
-Icons can be found at https://mui.com/components/material-icons/
-Breakpoints can be found at https://mui.com/material-ui/customization/breakpoints/
-
-# Setup
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-- node >= 16.14.2
-- npm >= 8.52
-
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### relesing
-It will be released automagically to digital ocean after commit
+Paste this JSON into the **Import** tab of any recipe's edit dialog to add it.
