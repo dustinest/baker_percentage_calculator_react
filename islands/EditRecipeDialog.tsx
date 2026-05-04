@@ -1,8 +1,10 @@
+import { useEffect } from "preact/hooks";
 import { useSignal } from "@preact/signals";
-import { BakerPercentageAwareRecipe, nameStr } from "../lib/types.ts";
+import { BakerPercentageAwareRecipe, nameForLang, nameStr } from "../lib/types.ts";
 import {
   addImportedRecipe,
   editingRecipe,
+  language,
   recipeToJsonExport,
   setIngredientGrams,
   setRecipeAmount,
@@ -23,6 +25,12 @@ export default function EditRecipeDialog({ recipe }: Props) {
   const copied = useSignal(false);
 
   const close = () => { editingRecipe.value = null; };
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, []);
 
   const handleImport = () => {
     importError.value = "";
@@ -86,7 +94,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
               <div key={gi} class="border border-base-300 rounded-lg p-3">
                 {group.name && (
                   <p class="text-xs font-semibold uppercase text-base-content/50 mb-2">
-                    {t(group.name) || group.name}
+                    {typeof group.name === "string" ? (t(group.name) || group.name) : nameForLang(group.name, language.value)}
                   </p>
                 )}
                 <table class="table table-xs w-full">
