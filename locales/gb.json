@@ -143,5 +143,8 @@
     "cancel": "Cancel",
     "add_recipe": "Add new recipe"
   },
+  "recipe": {
+    "servings": "servings"
+  },
   "Kihistamiseks": "Lamination"
 }

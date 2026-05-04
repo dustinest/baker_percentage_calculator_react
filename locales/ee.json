@@ -142,5 +142,8 @@
     "cancel": "Tühista",
     "add_recipe": "Lisa uus retsept"
   },
+  "recipe": {
+    "servings": "portsjonit"
+  },
   "Kihistamiseks": "Kihistamiseks"
 }
