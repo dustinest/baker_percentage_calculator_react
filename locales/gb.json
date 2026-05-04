@@ -2,6 +2,7 @@
   "edit": {
     "hydration": "Hydration",
     "edit": "Change",
+    "name": "Name",
     "delete": "Delete",
     "reset": "Reset",
     "copyOf": "Copy",

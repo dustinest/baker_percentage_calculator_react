@@ -6,6 +6,7 @@
       "legend": "Kuna vaikimisi püütakse leida retseptist vajalik kogus vedelikku, siis mõningatel juhtudel on vaja algoritmi aidata ning öelda, et kõik, mis siin retseptis on, kuulub eeltaignasse."
     },
     "edit": "Muuda",
+    "name": "Nimi",
     "delete": "Kustuta",
     "reset": "Lähtesta",
     "copyOf": "Kopeeri",

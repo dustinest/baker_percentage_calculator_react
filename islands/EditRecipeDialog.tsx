@@ -1,14 +1,20 @@
 import { useEffect } from "preact/hooks";
 import { useSignal } from "@preact/signals";
-import { BakerPercentageAwareRecipe, nameForLang, nameStr } from "../lib/types.ts";
+import { BakerPercentageAwareRecipe, nameForLang, nameStr, NutritionType } from "../lib/types.ts";
 import {
   addImportedRecipe,
+  addIngredientGroup,
+  addIngredientToGroup,
   editingRecipe,
   language,
   recipeToJsonExport,
+  removeGroup,
+  removeIngredient,
+  setGroupName,
   setIngredientGrams,
+  setIngredientName,
   setRecipeAmount,
-  setRecipeName,
+  setRecipeNameForLang,
 } from "../lib/state.ts";
 import { readJsonRecipe } from "../lib/resolution.ts";
 import { t } from "../lib/i18n.ts";
@@ -23,6 +29,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
   const importText = useSignal("");
   const importError = useSignal("");
   const copied = useSignal(false);
+  const inputModes = useSignal<Record<string, "g" | "%">>({});
 
   const close = () => { editingRecipe.value = null; };
 
@@ -72,62 +79,156 @@ export default function EditRecipeDialog({ recipe }: Props) {
         {activeTab.value === "edit" && (
           <div class="space-y-4">
             <div class="form-control">
-              <label class="label"><span class="label-text">Nimi</span></label>
-              <input
-                class="input input-bordered input-sm"
-                value={nameStr(recipe.name)}
-                onInput={(e) => setRecipeName(recipe.id, (e.target as HTMLInputElement).value)}
-              />
+              <label class="label"><span class="label-text">{t("edit.name")}</span></label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-0">
+              <label class="input input-bordered input-sm flex items-center gap-2">
+                <span>🇪🇪</span>
+                <input
+                  type="text"
+                  class="grow"
+                  value={typeof recipe.name === "object" ? (recipe.name["et"] ?? "") : recipe.name}
+                  onInput={(e) => setRecipeNameForLang(recipe.id, "et", (e.target as HTMLInputElement).value)}
+                />
+              </label>
+              <label class="input input-bordered input-sm flex items-center gap-2">
+                <span>🇬🇧</span>
+                <input
+                  type="text"
+                  class="grow"
+                  value={typeof recipe.name === "object" ? (recipe.name["en"] ?? "") : recipe.name}
+                  onInput={(e) => setRecipeNameForLang(recipe.id, "en", (e.target as HTMLInputElement).value)}
+                />
+              </label>
             </div>
-            <div class="form-control">
-              <label class="label"><span class="label-text">{t("edit.amount.title")}</span></label>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <span class="label-text">{t("edit.amount.title")}</span>
               <input
                 type="number"
-                class="input input-bordered input-sm w-24"
+                class="input input-bordered input-sm w-24 text-right ml-auto"
                 value={recipe.amount}
                 min={1}
                 onInput={(e) => setRecipeAmount(recipe.id, Number((e.target as HTMLInputElement).value))}
               />
             </div>
 
-            {recipe.ingredients.map((group, gi) => (
-              <div key={gi} class="border border-base-300 rounded-lg p-3">
-                {group.name && (
-                  <p class="text-xs font-semibold uppercase text-base-content/50 mb-2">
-                    {typeof group.name === "string" ? (t(group.name) || group.name) : nameForLang(group.name, language.value)}
-                  </p>
-                )}
-                <table class="table table-xs w-full">
-                  <thead>
-                    <tr>
-                      <th>Koostisosa</th>
-                      <th class="text-right">Gramm</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {group.ingredients.map((ing, ii) => (
-                      <tr key={ii}>
-                        <td>{t(ing.name) !== ing.name ? t(ing.name) : ing.name}</td>
-                        <td class="text-right">
+            {recipe.ingredients.map((group, gi) => {
+              const isCustom = group.name !== undefined && typeof group.name === "object";
+              const nameRecord = isCustom ? group.name as Record<string, string> : null;
+              const dryTotal = recipe.bakerPercentage?.microNutrients.dry_total ?? 0;
+              return (
+                <div key={gi} class="border border-base-300 rounded-lg p-3">
+                  {isCustom ? (
+                    <div class="flex gap-2 items-start mb-2">
+                      <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <label class="input input-bordered input-xs flex items-center gap-2">
+                          <span>🇪🇪</span>
                           <input
-                            type="number"
-                            class="input input-bordered input-xs w-20 text-right"
-                            value={ing.grams}
-                            min={0}
-                            step={0.5}
-                            onInput={(e) =>
-                              setIngredientGrams(
-                                recipe.id, gi, ii,
-                                Number((e.target as HTMLInputElement).value),
-                              )}
+                            type="text"
+                            class="grow"
+                            value={nameRecord!["et"] ?? ""}
+                            onInput={(e) => setGroupName(recipe.id, gi, "et", (e.target as HTMLInputElement).value)}
                           />
-                        </td>
+                        </label>
+                        <label class="input input-bordered input-xs flex items-center gap-2">
+                          <span>🇬🇧</span>
+                          <input
+                            type="text"
+                            class="grow"
+                            value={nameRecord!["en"] ?? ""}
+                            onInput={(e) => setGroupName(recipe.id, gi, "en", (e.target as HTMLInputElement).value)}
+                          />
+                        </label>
+                      </div>
+                      <button type="button" class="btn btn-xs btn-ghost text-error" onClick={() => removeGroup(recipe.id, gi)}>
+                        {t("edit.delete")}
+                      </button>
+                    </div>
+                  ) : group.name && (
+                    <p class="text-xs font-semibold uppercase text-base-content/50 mb-2">
+                      {typeof group.name === "string" ? (t(group.name) || group.name) : nameForLang(group.name, language.value)}
+                    </p>
+                  )}
+
+                  <table class="table table-xs w-full">
+                    <thead>
+                      <tr>
+                        <th>{language.value === "ee" ? "Koostisosa" : "Ingredient"}</th>
+                        <th class="text-right w-28">{language.value === "ee" ? "Gramm" : "Grams"}</th>
+                        {isCustom && <th class="w-6" />}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ))}
+                    </thead>
+                    <tbody>
+                      {group.ingredients.map((ing, ii) => {
+                        const modeKey = `${gi}-${ii}`;
+                        const mode = inputModes.value[modeKey] ?? "g";
+                        const isWater = ing.nutrients.some((n) => n.type === NutritionType.water && n.percent > 50);
+                        const canPercent = !isWater && dryTotal > 0;
+                        const displayValue = mode === "%" ? (ing.grams * 100 / dryTotal).toFixed(1) : ing.grams;
+                        return (
+                          <tr key={ii}>
+                            <td>
+                              {isCustom ? (
+                                <input
+                                  class="input input-bordered input-xs w-full"
+                                  value={ing.name}
+                                  placeholder={language.value === "ee" ? "Koostisosa" : "Ingredient"}
+                                  onInput={(e) => setIngredientName(recipe.id, gi, ii, (e.target as HTMLInputElement).value)}
+                                />
+                              ) : (
+                                t(ing.name) !== ing.name ? t(ing.name) : ing.name
+                              )}
+                            </td>
+                            <td>
+                              <div class="flex items-center justify-end gap-1">
+                                <input
+                                  type="number"
+                                  class="input input-bordered input-xs w-20 text-right"
+                                  value={displayValue}
+                                  min={0}
+                                  step={mode === "%" ? 0.1 : 0.5}
+                                  onInput={(e) => {
+                                    const num = Number((e.target as HTMLInputElement).value);
+                                    const grams = mode === "%" ? Math.round(num * dryTotal / 100 * 10) / 10 : num;
+                                    setIngredientGrams(recipe.id, gi, ii, grams);
+                                  }}
+                                />
+                                <button
+                                  type="button"
+                                  class={`btn btn-xs btn-ghost font-mono text-xs w-5 px-0 ${!canPercent ? "opacity-20 pointer-events-none" : ""}`}
+                                  onClick={() => {
+                                    if (!canPercent) return;
+                                    inputModes.value = { ...inputModes.value, [modeKey]: mode === "g" ? "%" : "g" };
+                                  }}
+                                >
+                                  {mode}
+                                </button>
+                              </div>
+                            </td>
+                            {isCustom && (
+                              <td>
+                                <button type="button" class="btn btn-xs btn-ghost text-error px-1" onClick={() => removeIngredient(recipe.id, gi, ii)}>×</button>
+                              </td>
+                            )}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+
+                  {isCustom && (
+                    <button type="button" class="btn btn-xs btn-ghost mt-2" onClick={() => addIngredientToGroup(recipe.id, gi)}>
+                      + {language.value === "ee" ? "Lisa koostisosa" : "Add ingredient"}
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+
+            <button type="button" class="btn btn-sm btn-ghost w-full" onClick={() => addIngredientGroup(recipe.id)}>
+              + {t("edit.ingredients.add")}
+            </button>
           </div>
         )}
 

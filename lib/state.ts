@@ -3,6 +3,7 @@ import {
   BakerPercentageAwareRecipe,
   copyRecipeType,
   nameStr,
+  NutritionType,
   RecipeType,
 } from "./types.ts";
 import { readJsonRecipe, recipeToJson, resolveJsonRecipeTypeId } from "./resolution.ts";
@@ -127,6 +128,75 @@ export const setRecipeAmount = (recipeId: string, amount: number) => {
   copy.amount = amount;
   updateRecipe(copy);
 };
+
+export const setRecipeNameForLang = (recipeId: string, lang: string, value: string) => {
+  const recipe = allRecipes.value.find((r) => r.id === recipeId);
+  if (!recipe) return;
+  const copy = copyRecipeType(recipe);
+  const cur: Record<string, string> = typeof copy.name === "string"
+    ? { et: copy.name, en: copy.name }
+    : { ...(copy.name as Record<string, string>) };
+  cur[lang] = value;
+  copy.name = cur;
+  updateRecipe(copy);
+};
+
+export const setGroupName = (recipeId: string, groupIndex: number, lang: string, value: string) => {
+  const recipe = allRecipes.value.find((r) => r.id === recipeId);
+  if (!recipe) return;
+  const copy = copyRecipeType(recipe);
+  const cur: Record<string, string> = typeof copy.ingredients[groupIndex].name === "object"
+    ? { ...(copy.ingredients[groupIndex].name as Record<string, string>) }
+    : { et: "", en: "" };
+  cur[lang] = value;
+  copy.ingredients[groupIndex].name = cur;
+  updateRecipe(copy);
+};
+
+export const addIngredientGroup = (recipeId: string) => {
+  const recipe = allRecipes.value.find((r) => r.id === recipeId);
+  if (!recipe) return;
+  const copy = copyRecipeType(recipe);
+  copy.ingredients.push({ name: { et: "", en: "" }, ingredients: [], bakingTime: [], innerTemperature: null, description: null, starter: false });
+  updateRecipe(copy);
+};
+
+export const addIngredientToGroup = (recipeId: string, groupIndex: number) => {
+  const recipe = allRecipes.value.find((r) => r.id === recipeId);
+  if (!recipe) return;
+  const copy = copyRecipeType(recipe);
+  copy.ingredients[groupIndex].ingredients.push({
+    id: `custom_${Date.now()}`,
+    name: "",
+    grams: 0,
+    nutrients: [{ type: NutritionType.other, percent: 100 }],
+    type: "other",
+  });
+  updateRecipe(copy);
+};
+
+export const setIngredientName = (recipeId: string, groupIndex: number, ingredientIndex: number, name: string) => {
+  const recipe = allRecipes.value.find((r) => r.id === recipeId);
+  if (!recipe) return;
+  const copy = copyRecipeType(recipe);
+  copy.ingredients[groupIndex].ingredients[ingredientIndex].name = name;
+  updateRecipe(copy);
+};
+
+export const removeIngredient = (recipeId: string, groupIndex: number, ingredientIndex: number) => {
+  const recipe = allRecipes.value.find((r) => r.id === recipeId);
+  if (!recipe) return;
+  const copy = copyRecipeType(recipe);
+  copy.ingredients[groupIndex].ingredients = copy.ingredients[groupIndex].ingredients.filter((_, i) => i !== ingredientIndex);
+  updateRecipe(copy);
+};
+
+export const removeGroup = (recipeId: string, groupIndex: number) => {
+  const recipe = allRecipes.value.find((r) => r.id === recipeId);
+  if (!recipe) return;
+  const copy = copyRecipeType(recipe);
+  copy.ingredients = copy.ingredients.filter((_, i) => i !== groupIndex);
+  updateRecipe(copy);};
 
 // ── Derived ───────────────────────────────────────────────────────────────────
 
