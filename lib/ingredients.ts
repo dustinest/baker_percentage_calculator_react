@@ -46,7 +46,7 @@ export const StandardIngredients: StandardIngredientKeys = Object.freeze({
   SUGAR_BROWN:        createPredefined("sugar.brown",           NutritionType.sugar,      100),
   WATER:              createPredefined("water.generic",         NutritionType.water,      100),
   BUTTER:             createPredefined("butter.generic",        NutritionType.fat,         82, NutritionType.water, 18),
-  OIL:                createPredefined("oil.generic",           NutritionType.fat,         82, NutritionType.fat,  100),
+  OIL:                createPredefined("oil.generic",           NutritionType.fat,        100),
   OLIVE_OIL:          createPredefined("oil.olive",             NutritionType.fat,        100),
   MILK:               createPredefined("milk.generic",          NutritionType.fat,        2.8, NutritionType.water, 97.5),
   EGG:                createPredefined("egg.generic",           NutritionType.egg,        100),
