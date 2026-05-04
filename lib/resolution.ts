@@ -5,6 +5,7 @@ import {
   GramsAmountType,
   IngredientGramsType,
   IngredientType,
+  nameStr,
   NutrientPercentType,
   NutritionType,
   NumberIntervalType,
@@ -31,9 +32,9 @@ export const base64Encode = (...values: (string | number)[]): string => {
 
 // ── ID generators ───────────────────────────────────────────────────────────
 
-export const resolveJsonRecipeTypeId = (value: { name: string; id?: string; amount?: number }): string => {
+export const resolveJsonRecipeTypeId = (value: { name: string | Record<string, string>; id?: string; amount?: number }): string => {
   if (value.id) return value.id;
-  return base64Encode("json", "ingredient", value.name, value.amount || 1);
+  return base64Encode("json", "ingredient", nameStr(value.name), value.amount || 1);
 };
 
 const resolveJsonExtraStandardIngredient = (
@@ -57,12 +58,13 @@ const resolveInnerTemperature = (value?: NumberIntervalType | number | null): Nu
   return resolveNumberIntervalType(value);
 };
 
-const resolveBakingTime = (bakingTimes?: Array<{ time: NumberIntervalType | number; temperature: NumberIntervalType | number; steam?: boolean }>): BakingTimeType[] => {
+const resolveBakingTime = (bakingTimes?: Array<{ time: NumberIntervalType | number; temperature: NumberIntervalType | number; steam?: boolean; label?: string }>): BakingTimeType[] => {
   if (!bakingTimes) return [];
   return bakingTimes.map((bt) => ({
     time: resolveNumberIntervalType(bt.time),
     temperature: resolveNumberIntervalType(bt.temperature),
     steam: bt.steam === true,
+    ...(bt.label ? { label: typeof bt.label === "string" ? { et: bt.label, en: bt.label } : bt.label } : {}),
   }));
 };
 

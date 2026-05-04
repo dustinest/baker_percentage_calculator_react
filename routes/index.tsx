@@ -9,6 +9,7 @@ export default function Home() {
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Pagari protsendi kalkulaator</title>
+        <link rel="icon" href="/logo.svg" type="image/svg+xml" />
         <link rel="stylesheet" href="/styles.css" />
       </head>
       <body class="bg-base-100 min-h-screen">
@@ -21,6 +22,7 @@ export default function Home() {
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </label>
+              <img src="/logo.svg" class="h-7 w-7" alt="" />
               <span class="text-lg font-semibold">Pagari %</span>
             </div>
             <main class="p-4">

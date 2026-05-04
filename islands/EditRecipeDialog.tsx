@@ -1,5 +1,5 @@
 import { useSignal } from "@preact/signals";
-import { BakerPercentageAwareRecipe } from "../lib/types.ts";
+import { BakerPercentageAwareRecipe, nameStr } from "../lib/types.ts";
 import {
   addImportedRecipe,
   editingRecipe,
@@ -42,7 +42,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
     <dialog class="modal modal-open" onClick={(e) => e.target === e.currentTarget && close()}>
       <div class="modal-box max-w-3xl w-full max-h-[90vh] overflow-y-auto">
         <div class="flex justify-between items-center mb-4">
-          <h3 class="font-bold text-lg">{recipe.name}</h3>
+          <h3 class="font-bold text-lg">{nameStr(recipe.name)}</h3>
           <button class="btn btn-sm btn-circle btn-ghost" onClick={close}>✕</button>
         </div>
 
@@ -65,7 +65,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
               <label class="label"><span class="label-text">Nimi</span></label>
               <input
                 class="input input-bordered input-sm"
-                value={recipe.name}
+                value={nameStr(recipe.name)}
                 onInput={(e) => setRecipeName(recipe.id, (e.target as HTMLInputElement).value)}
               />
             </div>

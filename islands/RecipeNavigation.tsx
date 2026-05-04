@@ -1,4 +1,5 @@
 import { useSignal } from "@preact/signals";
+import { nameForLang } from "../lib/types.ts";
 import {
   allRecipes,
   initUrlSync,
@@ -22,7 +23,8 @@ export default function RecipeNavigation() {
   return (
     <ul class="menu bg-base-200 min-h-full w-64 p-4 gap-1">
       <li class="menu-title flex flex-row justify-between items-center">
-        <span class="text-lg font-bold">🍞 Pagari %</span>
+        <img src="/logo.svg" class="h-8 w-8 flex-shrink-0" alt="" />
+        <span class="text-lg font-bold">Pagari %</span>
         <div class="flex gap-1">
           <button
             class={`btn btn-xs ${language.value === "ee" ? "btn-primary" : "btn-ghost"}`}
@@ -65,7 +67,7 @@ export default function RecipeNavigation() {
               onChange={() => toggleSelected(recipe.id)}
             />
             <span class="text-sm">
-              {t(recipe.name) !== recipe.name ? t(recipe.name) : recipe.name}
+              {nameForLang(recipe.name, language.value)}
               {recipe.amount > 1 && <span class="text-xs text-base-content/60 ml-1">×{recipe.amount}</span>}
             </span>
           </label>

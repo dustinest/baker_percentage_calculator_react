@@ -2,6 +2,7 @@ import { computed, effect, signal } from "@preact/signals";
 import {
   BakerPercentageAwareRecipe,
   copyRecipeType,
+  nameStr,
   RecipeType,
 } from "./types.ts";
 import { readJsonRecipe, recipeToJson, resolveJsonRecipeTypeId } from "./resolution.ts";
@@ -82,7 +83,7 @@ export const updateRecipe = (updated: RecipeType) => {
 
 export const copyRecipe = (recipe: RecipeType) => {
   const copied = copyRecipeType(recipe);
-  copied.name = `Koopia — ${recipe.name}`;
+  copied.name = `Koopia — ${nameStr(recipe.name)}`;
   copied.id = resolveJsonRecipeTypeId({ name: copied.name, amount: copied.amount }) + "_copy_" + Date.now();
   allRecipes.value = [...allRecipes.value, copied];
   selectedIds.value = new Set([...selectedIds.value, copied.id]);
@@ -113,7 +114,7 @@ export const setIngredientGrams = (
 
 export const setRecipeName = (recipeId: string, name: string) => {
   const recipe = allRecipes.value.find((r) => r.id === recipeId);
-  if (!recipe || recipe.name === name) return;
+  if (!recipe || nameStr(recipe.name) === name) return;
   const copy = copyRecipeType(recipe);
   copy.name = name;
   updateRecipe(copy);
@@ -138,9 +139,7 @@ export const selectedRecipes = computed(() =>
 export const initUrlSync = () => {
   selectedIds.value = parseUrlIds();
   if (selectedIds.value.size === 0) {
-    // Default: select first recipe
-    const first = allRecipes.value[0];
-    if (first) selectedIds.value = new Set([first.id]);
+    selectedIds.value = new Set(allRecipes.value.map((r) => r.id));
   }
   syncUrlEffect(selectedIds);
 };

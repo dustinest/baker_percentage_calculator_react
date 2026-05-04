@@ -6,6 +6,7 @@ interface JsonBakingTime {
   time: JsonNumberInterval;
   temperature: JsonNumberInterval;
   steam?: boolean;
+  label?: string | Record<string, string>;
 }
 
 interface JsonIngredientsIngredient {
@@ -18,7 +19,7 @@ interface JsonIngredientsIngredient {
 }
 
 export interface JsonIngredients {
-  name?: string;
+  name?: string | Record<string, string>;
   ingredients: JsonIngredientsIngredient[];
   bakingTime?: JsonBakingTime[];
   innerTemperature?: JsonNumberInterval;
@@ -28,7 +29,7 @@ export interface JsonIngredients {
 
 export interface JsonRecipe {
   id?: string;
-  name: string;
+  name: string | Record<string, string>;
   amount?: number;
   bakingTime?: JsonBakingTime[];
   innerTemperature?: JsonNumberInterval;
@@ -38,7 +39,7 @@ export interface JsonRecipe {
 
 export const PREDEFINED_RECIPES: JsonRecipe[] = [
   {
-    name: "Täisteraleib",
+    name: { et: "Täisteraleib", en: "Whole grain rye bread" },
     bakingTime: [
       { time: 20, temperature: 240, steam: true },
       { time: 40, temperature: 240 },
@@ -54,11 +55,11 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
     }],
   },
   {
-    name: "Sai",
-    description: "Kukkel küpseta 25 minutit 180℃",
+    name: { et: "Sai", en: "Wheat bread" },
     bakingTime: [
       { time: 20, temperature: 240, steam: true },
       { time: 20, temperature: 240 },
+      { time: 25, temperature: 180, label: { et: "Kukkel 90g", en: "Bun 90g" } },
     ],
     innerTemperature: { from: 88, until: 99 },
     ingredients: [{
@@ -70,7 +71,7 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
     }],
   },
   {
-    name: "Sai seemnete ja kaerahelvestega",
+    name: { et: "Sai seemnete ja kaerahelvestega", en: "Bread with seeds and oats" },
     bakingTime: [
       { time: 20, temperature: 240, steam: true },
       { time: 20, temperature: 240 },
@@ -87,7 +88,7 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
     }],
   },
   {
-    name: "Croissant",
+    name: { et: "Croissant", en: "Croissant" },
     bakingTime: [{ time: { from: 20, until: 30 }, temperature: 210 }],
     innerTemperature: { from: 82, until: 88 },
     ingredients: [
@@ -102,13 +103,13 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
         ],
       },
       {
-        name: "Kihistamiseks",
+        name: { et: "Kihistamiseks", en: "Lamination" },
         ingredients: [{ type: "BUTTER", grams: 280 }],
       },
     ],
   },
   {
-    name: "Pannkook",
+    name: { et: "Pannkook", en: "Pancake" },
     ingredients: [
       {
         starter: true,
@@ -129,7 +130,7 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
     ],
   },
   {
-    name: "Pizza",
+    name: { et: "Pizza", en: "Pizza" },
     amount: 3,
     bakingTime: [{ time: { from: 18, until: 30 }, temperature: 210 }],
     ingredients: [{
@@ -142,7 +143,7 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
     }],
   },
   {
-    name: "Vastlakuklid",
+    name: { et: "Vastlakuklid", en: "Semla" },
     amount: 18,
     bakingTime: [{ time: { from: 20, until: 25 }, temperature: 180 }],
     innerTemperature: { from: 82, until: 88 },
@@ -159,7 +160,7 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
     }],
   },
   {
-    name: "Kaneelirullid",
+    name: { et: "Kaneelirullid", en: "Cinnamon rolls" },
     bakingTime: [{ time: { from: 20, until: 25 }, temperature: 210 }],
     innerTemperature: { from: 82, until: 88 },
     ingredients: [
@@ -175,7 +176,7 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
         ],
       },
       {
-        name: "Kaanelikiht",
+        name: { et: "Kaanelikiht", en: "Cinnamon layer" },
         ingredients: [
           { type: "CINNAMON", percent: 3.28 },
           { type: "BUTTER", grams: 112 },
@@ -186,7 +187,7 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
     ],
   },
   {
-    name: "Plaadikook",
+    name: { et: "Plaadikook", en: "Pie dough" },
     description: "Pirukad küpseta umbes 30 - 40 minutit 180℃",
     bakingTime: [{ time: { from: 20, until: 30 }, temperature: 210 }],
     innerTemperature: { from: 82, until: 88 },
@@ -201,7 +202,7 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
     }],
   },
   {
-    name: "Pikk sai",
+    name: { et: "Pikk sai", en: "Baguette" },
     amount: 2,
     bakingTime: [
       { time: 10, temperature: 180, steam: true },
@@ -218,7 +219,7 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
     }],
   },
   {
-    name: "Moskva saiakesed",
+    name: { et: "Moskva saiakesed", en: "Moscow pastries" },
     bakingTime: [{ time: { from: 20, until: 25 }, temperature: 180 }],
     innerTemperature: { from: 82, until: 88 },
     ingredients: [
@@ -233,7 +234,7 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
         ],
       },
       {
-        name: "Kihistamiseks",
+        name: { et: "Kihistamiseks", en: "Lamination" },
         ingredients: [{ type: "BUTTER", grams: 100 }],
       },
     ],

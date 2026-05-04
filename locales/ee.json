@@ -46,7 +46,13 @@
     "title": {
       "baker_percentage": "Pagari protsent",
       "dough": "Taigen",
-      "sourdough_starter_dough": "Eeltaigen"
+      "sourdough_starter_dough": "Eeltaigen",
+      "water": "Vesi",
+      "salt": "Sool",
+      "sugar": "Suhkur",
+      "fat": "Rasv",
+      "other": "Muu",
+      "dry": "Kuiv"
     }
   },
   "totals": {
@@ -135,18 +141,6 @@
     "change": "Muuda",
     "cancel": "Tühista",
     "add_recipe": "Lisa uus retsept"
-  },
-  "recipe_name": {
-    "Täisteraleib": "Täisteraleib",
-    "Sai": "Sai",
-    "Sai seemnetega": "Sai seemnetega",
-    "Pannkook": "Pannkook",
-    "Vastlakuklid": "Vastlakuklid",
-    "Kaneelirullid": "Kaneelirullid",
-    "Plaadikook": "Plaadikook",
-    "Pikk sai": "Pikk sai",
-    "Moskva saiakesed": "Moskva saiakesed",
-    "Sai seemnete ja kaerahelvestega": "Sai seemnete ja kaerahelvestega"
   },
   "Kihistamiseks": "Kihistamiseks"
 }

@@ -6,8 +6,8 @@
     "reset": "Reset",
     "copyOf": "Copy",
     "enforce_starter": {
-      "button": "Use all in pre-dough",
-      "legend": "As the pre-dough algorithm tries to find specific amount but you would like to use all ingredients in it then it might need help to indicate that everything in this list belongs to the pre-dough."
+      "button": "Use all in levain",
+      "legend": "As the levain algorithm tries to find a specific amount but you would like to use all ingredients in it, you may need to indicate that everything in this list belongs to the levain."
     },
     "description": {
       "generic": "Description"
@@ -46,7 +46,13 @@
     "title": {
       "baker_percentage": "Baker's percentage",
       "dough": "Dough",
-      "sourdough_starter_dough": "Pre-dough"
+      "sourdough_starter_dough": "Levain",
+      "water": "Water",
+      "salt": "Salt",
+      "sugar": "Sugar",
+      "fat": "Fat",
+      "other": "Other",
+      "dry": "Dry"
     }
   },
   "ingredient": {
@@ -136,18 +142,6 @@
     "change": "Change",
     "cancel": "Cancel",
     "add_recipe": "Add new recipe"
-  },
-  "recipe_name": {
-    "Täisteraleib": "Whole grain rye bread",
-    "Sai": "Wheat bread",
-    "Sai seemnetega": "Wheat bread with seeds",
-    "Pannkook": "Pancake",
-    "Vastlakuklid": "Semla",
-    "Kaneelirullid": "Cinnamon rolls",
-    "Plaadikook": "Pie dough",
-    "Pikk sai": "Baguette",
-    "Moskva saiakesed": "Moskow pastries",
-    "Sai seemnete ja kaerahelvestega": "Bread with seeds and barley"
   },
   "Kihistamiseks": "Lamination"
 }
