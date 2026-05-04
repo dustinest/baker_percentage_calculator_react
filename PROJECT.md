@@ -1,114 +1,333 @@
-# Baker's Percentage Calculator — Project Document
+# Baker's Percentage Calculator — Complete Project Reference
 
-## What the App Does
+## Purpose
 
-A client-side bread-baking tool that helps bakers manage recipes and calculate **baker's percentages** (the standard professional method of expressing ingredient quantities as a percentage of the total flour weight).
+A client-side bread-baking tool that helps bakers manage recipes and calculate **baker's percentages** — the professional convention of expressing every ingredient as a percentage of total dry/flour weight. The app also automatically splits any recipe into a minimal 2-step sourdough process (levain + final dough).
 
-The app is entirely frontend — no server, no database. All data lives in memory during a session. There is no persistence between sessions.
+Entirely frontend. No server, no database. All data lives in memory. No persistence between sessions (localStorage was scaffolded in the code but commented out).
 
 ---
 
 ## Core Features
 
 ### 1. Recipe List & Navigation
-- A left-side drawer lists all available recipes
-- User selects which recipes to display (multi-select with check/uncheck all)
-- Selected recipes are shown as cards in the main area
-- Badge on the drawer button shows how many recipes are currently visible
+- Left-side drawer lists all available recipes
+- User selects which recipes to display (multi-select, check/uncheck all)
+- Selected recipes shown as cards in the main area
+- Badge on the drawer button shows how many are currently selected
+- Language switcher (EE / EN) in the drawer
 
 ### 2. Baker's Percentage Calculation
-- Each ingredient is expressed as grams **and** as a percentage of total dry ingredients (flour + dry)
-- Percentages update live when ingredients change
-- Separate percentage tables per ingredient group
+- Every ingredient expressed as grams **and** as % of total dry weight (flour + dry)
+- Separate table per ingredient group (levain / dough / lamination / etc.)
+- Updates live when any ingredient changes
 
 ### 3. Micro Nutrients Summary
-- Aggregate totals per recipe: water, salt, sugar, fat, flour, whole grain, etc.
+- Aggregated per recipe across all groups: total dry, water, salt, sugar, fat
 - Displayed as grams and % of dry weight
+- Whole grain and ash are tracked internally but not displayed
 
 ### 4. Sourdough Levain Auto-Calculator
+Full 5-step pipeline — see the Algorithm section below.
 
-The most complex feature. When a recipe has an ingredient group flagged as `starter: true`, the app automatically splits the ingredients into a minimal 2-step process: **Step 1 — build the levain**, **Step 2 — mix the final dough**. The levain numbers are designed to be practical whole integers (no fractional grams).
+### 5. Recipe Editing (full CRUD)
+- Edit name, ingredient grams, group names, description
+- Copy recipe (creates a new editable duplicate)
+- Create new recipe from scratch
+- Baking time editor: multiple phases, each with time (fixed or range), temperature, steam flag
+- Inner temperature target range (from / until °C)
+- Scale by portion count — optionally recalculates all ingredient grams proportionally
+- Add / remove ingredient groups
+- Mark a group as sourdough pre-dough (`starter: true`)
+- Hydration editor: change the % hydration of a group and have water ingredients adjusted automatically
 
-#### Full algorithm pipeline
+### 6. Print View
+- `window.print()` → A4 layout
+- Navigation, drawers, action buttons hidden (`displayPrint: none`)
+- Each recipe card gets its own page break
 
-**Step A — Resolve percent-based ingredients to grams** (`readJsonRecipe`)
+### 7. JSON Export / Import
+- Edit dialog shows the recipe serialised as JSON (expandable accordion)
+- Useful for copying a recipe back into the predefined dataset
+- **Import does not exist yet** — export only
 
-Ingredients can be defined as baker's percentages rather than absolute grams. They are converted:
+### 8. Internationalisation
+- Languages: **Estonian** (`ee`, default) and **English** (`gb`)
+- i18next with nested key format
+- Recipe names, ingredient names, UI strings all translated
+
+---
+
+## Algorithm: Full Sourdough Levain Pipeline
+
+This is the most important and most complex part of the app. The pipeline runs every time a recipe is displayed or edited.
+
+### Entry point
+
 ```
-grams = Math.round(percent_value × total_flour_grams / 10) / 10
-```
-This gives 1-decimal precision. Example: WATER at 82% with 462g flour → `Math.round(82 × 462 / 10) / 10 = 378.8g`.
-
-**Step B — Split all ingredients into flour / liquid / other** (`calculateDryAndLiquid`)
-
-- **Flour bucket**: ingredients whose `nutrients` include `NutritionType.flour`. Total is normalised to 100% flour content.
-- **Liquid bucket**: ingredients whose `nutrients` include `NutritionType.water`. Total is normalised to pure-water equivalent.
-- **Other bucket**: everything else (salt, sugar, eggs, fat-only ingredients, spices).
-
-**Step C — Decide levain amounts** (`calculateSourDoughStarter`)
-
-```
-fridge_culture = min(floor(total_flour × 2%), 11g)   // seed kept in the fridge, capped at 11g
+recalculateRecipeBakerPercentage(recipe)
+  → splitStarterAndDough(recipe.ingredients)   // levain split
+  → recalculateBakerPercentage(splitResult)    // baker % calculation
 ```
 
-Then choose how much flour goes into the levain (four cases, checked in order):
+A prioritised blocking queue (`typescript-blocking-queue`) serialises these calls so rapid edits don't overlap.
 
-| Condition | Levain flour amount |
-|---|---|
-| `liquid / flour < 30%` (very stiff dough) | `floor(liquid)` — use all liquid |
-| `10% < water / flour < 40%` (small water fraction) | `floor(water)` |
-| Whole grain flour detected | `floor(flour × 50%)` |
-| Default (normal white-flour hydration) | `floor(flour × 26%)` |
+---
+
+### Step A — Resolve percent-based ingredients to grams
+
+File: `src/service/PredefinedRecipeService/RecipeReader/readJsonRecipe.ts`
+
+Ingredients can be specified as baker's percentages instead of absolute grams. The conversion:
 
 ```
-levain_flour_amount = result_above − fridge_culture
-levain_liquid_amount = levain_flour_amount          // 1:1 ratio (white flour)
+totalFlourAmount = 100 × sum(grams × dryPercent/100) / remainingDryPercent
 
-// Exception for whole grain:
-levain_liquid_amount = floor(liquid × 62%)          // slightly less water
+resolvedGrams = Math.round(percent_value × totalFlourAmount / 10) / 10
 ```
 
-The 1:1 flour-to-water ratio in the levain means the levain itself is always 100% hydration. The percentages (26%, 50%, 62%) were chosen empirically so that for typical recipe sizes the levain amounts come out as practical whole numbers without awkward digits.
+The `/10 … /10` pattern rounds to **1 decimal place**.
 
-**Step D — Assign ingredients to levain vs dough** (`splitStarterAndDough`)
+**Critical detail — dry extras inflate totalFlourAmount.** Ingredients with `NutritionType.dry` (BARLEY, SEEDS) count toward `totalFlourAmount` even though they are not flour. Example: "Sai seemnete" has WHEAT_550 462g + BARLEY 10g + SEEDS 12g → `totalFlourAmount = 484g`, not 462g. This makes water and salt percentages slightly different than if calculated on flour alone.
+
+Examples:
+| Recipe | Ingredient | % input | totalFlour | Resolved grams |
+|---|---|---|---|---|
+| Sai | WATER | 82% | 462g | 378.8g |
+| Sai | SALT | 1.62% | 462g | 7.5g |
+| Täisteraleib | WATER | 100% | 425g | 425g |
+| Täisteraleib | SALT | 1.76% | 425g | 7.5g |
+| Sai seemnete | WATER | 73.76% | 484g | 357g |
+| Vastlakuklid | CARDAMOM | 0.2% | 483g | 1g |
+| Kaneelirullid | CINNAMON | 3.28% | 483g | 15.8g |
+| Pizza | SALT | — | — | 7.5g (entered as grams) |
+
+---
+
+### Step B — Classify ingredients into flour / liquid / other
+
+File: `src/service/SourdoughStarter/calculateDryAndLiquid.ts`
+
+Each ingredient is assigned to exactly one bucket based on its `nutrients`:
+
+| Bucket | Condition | Examples |
+|---|---|---|
+| **Flour** | has `NutritionType.flour` | All flour types |
+| **Liquid** | has `NutritionType.water` | WATER, MILK, BUTTER (18% water) |
+| **Other** | neither flour nor water | SALT, SUGAR, EGG, OLIVE_OIL, BARLEY, SEEDS, CARDAMOM, CINNAMON |
+
+Totals are normalised to their pure component:
+- `totals.flour` = sum of `grams × 100 / flourPercent` per flour ingredient
+- `totals.liquid` = sum of `grams × 100 / waterPercent` per liquid ingredient
+- `totals.water` = same but only for ingredients that are **100% water**
+
+**Rule — dry extras (BARLEY, SEEDS) never enter the levain.** They have `NutritionType.dry` with no flour or water, so they fall into `other` and always go to the dough.
+
+**Note on BUTTER** — BUTTER has 18% water so it appears in the liquid bucket. Its normalised liquid equivalent is very large (`grams × 100/18`). This raises `totals.liquid` significantly but `totals.water` not at all (only 100%-water ingredients affect `totals.water`). This matters for which levain condition fires.
+
+---
+
+### Step C — Decide levain amounts
+
+File: `src/service/SourdoughStarter/SourDoughStarterCalculator.ts`
+
+```
+fridge_culture = min(floor(totals.flour × 2%), 11g)   // capped at 11g
+```
+
+Four conditions checked **in this order**:
+
+| # | Condition | Levain flour | Note |
+|---|---|---|---|
+| 1 | `totals.liquid / totals.flour < 30%` | `floor(totals.liquid)` | Very stiff dough — use all liquid |
+| 2 | `10% < totals.water / totals.flour < 40%` | `floor(totals.water)` | Small pure-water fraction |
+| 3 | Any flour ingredient has `NutritionType.whole_grain` | `floor(totals.flour × 50%)` | Whole grain formula |
+| 4 | Default | `floor(totals.flour × 26%)` | Normal white-flour hydration |
+
+```
+levain_flour_amount = condition_result − fridge_culture
+
+// White flour (conditions 1, 2, 4):
+levain_liquid_amount = levain_flour_amount   // 1:1, levain is 100% hydration
+
+// Whole grain (condition 3):
+levain_liquid_amount = floor(totals.liquid × 62%)
+```
+
+The percentages (26%, 50%, 62%) were chosen empirically so that typical recipe sizes produce practical whole-gram numbers.
+
+**Which condition fires per recipe:**
+
+| Recipe | totals.flour | totals.water | totals.liquid | Condition | fridge | levain flour | levain liquid |
+|---|---|---|---|---|---|---|---|
+| Täisteraleib | 425 | 425 | 425 | whole_grain (3) | 8 | 212 | 263 |
+| Sai | 462 | 378.8 | 378.8 | default (4) | 9 | 111 | 111 |
+| Sai seemnete | 462 | 357 | 357 | default (4) | 9 | 111 | 111 |
+| Croissant | 500 | 140 | 283.6 | water 10-40% (2) | 10 | 130 | 130 |
+| Pannkook | 362 | 129.5 | 594.6 | water 10-40% (2) | 7 | 122 | 122 |
+| Pizza | 515 | 340 | 340 | whole_grain (3) | 10 | 257 | 210 |
+| Vastlakuklid | 483 | 83 | 715 | water 10-40% (2) | 9 | 74 | 74 |
+| Kaneelirullid | 483 | 83 | 715 | water 10-40% (2) | 9 | 74 | 74 |
+| Plaadikook | 808 | 123 | 1629 | water 10-40% (2) | 11* | 112 | 112 |
+| Pikk sai | 340 | 142 | 229 | default (4)† | 6 | 82 | 82 |
+| Moskva saiakesed | 408 | 130 | 551 | water 10-40% (2) | 8 | 122 | 122 |
+
+\* Fridge capped at 11g (floor(808×2%)=16 → capped).
+† Pikk sai: water/flour = 142/340 = 41.8% — just above the 40% upper bound, so condition 2 does NOT fire and it falls to default.
+
+---
+
+### Step D — Assign ingredients to levain vs dough
+
+File: `src/service/SourdoughStarter/IngredientStarterService.ts`
+
+The levain group is built by processing the flour bucket first, then the liquid bucket, filling up to their respective amounts. Any remainder goes to the dough (leftovers).
 
 The levain group always starts with the fridge culture entry:
 ```
-sourdough_starter ingredient: grams = fridge_flour + fridge_liquid,
-                               nutrients = [50% flour, 50% water]
+{ name: "ingredient.sourdough_starter.name",
+  grams: fridge_flour + fridge_liquid,
+  nutrients: [50% flour, 50% water] }
 ```
 
-Then flour ingredients are assigned to the levain first (up to `levain_flour_amount`), then liquid ingredients (up to `levain_liquid_amount`). Any remainder stays in the dough group. "Other" ingredients (salt, etc.) always go into the dough group.
+**Special path for `starter: true` groups**
 
-**Step E — Sort ingredient order** (`IngredientsSort`)
+When the first ingredient group is flagged `starter: true` (currently only Pannkook), the algorithm runs differently: instead of splitting the group's ingredients between levain and dough, the algorithm keeps ALL ingredients in the pre-dough group and only subtracts the fridge amount from the flour. The flour goes from `362g → 362−7 = 355g`. The water slot is still filled from WATER. MILK (which wouldn't normally enter the levain) stays in the group because the entire group is the pre-dough.
 
-Within each group, ingredients are sorted by nutrition type priority: flour → water → fat → salt → sugar.
+**Rule — milk follows water into the levain when water barely covers the slot (NOT YET IMPLEMENTED)**
 
-### 5. Recipe Editing (full CRUD)
-- **Edit existing recipe**: name, each ingredient (grams), ingredient group name, description
-- **Copy recipe**: duplicates a recipe as a new editable entry
-- **Create new recipe**: empty template with one ingredient group
-- **Baking time editor**: multiple phases, each with time (fixed or range), temperature, steam flag
-- **Inner temperature**: target range (from / until)
-- **Scale amount**: change the portion count and optionally recalculate all ingredient grams proportionally
-- **Add ingredient group**: recipes can have multiple groups (e.g., dough + lamination)
-- **Sourdough starter flag**: mark a group as the pre-dough
+When WATER exactly fills the levain liquid budget leaving 0 g of pure water for the dough, ALL milk must also move into the levain. The rationale: if the dough would receive zero free water, it is hydrated entirely by milk — in this case milk belongs with the levain for fermentation.
 
-### 6. Print View
-- Browser print (`window.print()`) produces A4-formatted output
-- Navigation, drawers, and action buttons are hidden in print mode
-- Each recipe card gets its own page break
-- Print button is only enabled when at least one recipe is selected
+Threshold: `ingredient_water_grams − levain_liquid_amount − fridge = 0`
 
-### 7. JSON Export
-- Inside the edit dialog, an expandable accordion shows the recipe serialised as JSON
-- Useful for copying a recipe back into the predefined dataset
+| Recipe | Water grams | Fridge | Budget | Leftover water | Milk grams | Rule fires? |
+|---|---|---|---|---|---|---|
+| Vastlakuklid | 83 | 9 | 74 | 0 | 210 | **YES** — milk → levain |
+| Plaadikook | 123 | 11 | 112 | 0 | 385 | **YES** — milk → levain |
+| Croissant | 140 | 10 | 130 | 0 | 140 | **YES** — milk → levain |
+| Moskva saiakesed | 130 | 8 | 122 | 0 | 140 | **YES** — milk → levain |
+| Sai | 378.8 | 9 | 111 | 258.8 | — | no milk |
+| Pikk sai | 142 | 6 | 82 | 54 | 85 | no — water remains |
+| Pannkook | 129.5 | 7 | 122 | 0 | 454 | handled by `starter:true` |
 
-### 8. Internationalisation
-- Two languages: **Estonian** (`ee`) and **English** (`gb`)
-- Language switcher in the navigation drawer
-- Ingredient names, recipe names, UI labels all translated
-- Translation keys follow i18next nested key format
+**The current React implementation does NOT implement this rule.** The `tests/fixtures/` files for Vastlakuklid, Plaadikook, Croissant, and Moskva saiakesed reflect the current (broken) behaviour. Each of those fixtures has `"fixtureStatus": "CURRENT_BEHAVIOUR"` to mark this.
+
+---
+
+### Step E — Sort ingredient order within each group
+
+File: `src/service/SourdoughStarter/IngredientsSort.ts`
+
+Display sort priority (water → flour → fat → salt → sugar). Any ingredient whose dominant nutrient is >80% of that type gets sorted by position in that priority list.
+
+The fridge culture entry (50% flour, 50% water) hits a **known bug**: the condition `flour === 50 && flour === 50` (checks flour twice, should check `flour === 50 && water === 50`) always evaluates true when flour is exactly 50%, which returns sort value 0 — placing it first before all other water ingredients. This accidentally produces the correct visual result (fridge culture always appears first in the levain).
+
+Sort order for "add ingredient" dropdown: flour → water → fat → salt → sugar (slightly different from display order).
+
+---
+
+### Step F — Baker's percentage calculation
+
+File: `src/service/BakerPercentage/lib/BakerPercentageCalulation.ts`
+File: `src/service/BakerPercentage/lib/MicroNutrientsCalculator.ts`
+
+The `dryTotal` denominator is the sum of the **maximum dry nutrient contribution** per ingredient across all groups (including levain):
+
+```
+dryTotal = Σ max(grams × dryNutrientPercent/100)   for each ingredient
+           where DRY_NUTRIENTS = [NutritionType.flour, NutritionType.dry]
+```
+
+The fridge culture (50% flour, 50% water) contributes `fridge_grams × 0.5` to the dry total.
+
+Baker percent for each ingredient = `ingredient.grams / dryTotal × 100`
+
+Micro nutrients are the aggregated gram totals per `NutritionType` across all groups. Only `[water, salt, sugar, fat, other]` are displayed; `whole_grain` and `ash` are tracked but not shown.
+
+---
+
+### Display rounding
+
+Individual ingredient grams are displayed as **integers** (the app rounds for display). Baker percentages are displayed to **2 decimal places**. Total weights use **precise unrounded values**. The `tests/fixtures/` files store precise values; the PDF shows the rounded display values.
+
+---
+
+## Verified Recipe Outputs (from PDF print)
+
+All values verified by tracing source code. Grams are precise calculated values; the PDF displays grams rounded to nearest integer.
+
+### Täisteraleib (Whole grain rye bread) — total 857.5g
+**Levain:** Juuretis 16g (3.76%) · Vesi 263g (61.88%) · Täistera rukkijahu 212g (49.88%)
+**Dough:** Vesi 154g (36.24%) · Täistera rukkijahu 185g (43.53%) · Rukkilinnase jahu 20g (4.71%) · Sool 7.5g (1.76%)
+**Baker%:** dry=425g · water=425g (100%) · salt=7.5g (1.76%)
+**Baking:** steam 20 min 240°C → 40 min 240°C · inner 88–99°C
+
+### Sai (Wheat bread) — total 848.3g
+**Levain:** Juuretis 18g (3.90%) · Vesi 111g (24.03%) · Nisujahu 550 111g (24.03%)
+**Dough:** Vesi 258.8g (56.02%) · Nisujahu 550 342g (74.03%) · Sool 7.5g (1.62%)
+**Baker%:** dry=462g · water=378.8g (81.99%) · salt=7.5g (1.62%)
+**Baking:** steam 20 min 240°C → 20 min 240°C · inner 88–99°C
+
+### Sai seemnete ja kaerahelvestega — total 848.5g
+**Levain:** Juuretis 18g (3.72%) · Vesi 111g (22.93%) · Nisujahu 550 111g (22.93%)
+**Dough:** Vesi 237g (48.97%) · Nisujahu 550 342g (70.66%) · Sool 7.5g (1.55%) · Kaer 10g (2.07%) · Seemned 12g (2.48%)
+**Baker%:** dry=484g (462 flour + 10 barley + 12 seeds) · water=357g (73.76%) · salt=7.5g (1.55%)
+**Baking:** steam 20 min 240°C → 20 min 240°C · inner 88–99°C
+
+### Croissant — total 1167g (dough 887g + lamination 280g)
+**Levain:** Juuretis 20g (4.00%) · Vesi 130g (26.00%) · Nisujahu 550 130g (26.00%)
+**Dough:** Piim 140g (28.00%) · Nisujahu 550 360g (72.00%) · Või 40g (8.00%) · Sool 12g (2.40%) · Suhkur 55g (11.00%)
+**Lamination:** Või 280g (56.00%)
+**Baker%:** dry=500g · water=334.1g (66.82%) · salt=12g (2.40%) · sugar=55g (11.00%) · fat=266.3g (53.26%)
+**Baking:** 20–30 min 210°C · inner 82–88°C
+⚠ Milk rule not implemented: MILK 140g should be in levain (water leftover=0)
+
+### Pannkook (Pancake) — total 1272.5g
+**Levain (starter:true path):** Juuretis 14g (3.87%) · Vesi 122g (33.70%) · Piim 454g (125.41%) · Nisujahu 550 355g (98.07%)
+**Dough:** Või 50g (13.81%) · Sool 7.5g (2.07%) · Suhkur 14g (3.87%) · 4 muna 256g (70.72%)
+**Baker%:** dry=362g · water=580.65g (160.40%) · salt=7.5g (2.07%) · sugar=14g (3.87%) · fat=53.7g (14.84%)
+
+### Pizza (×3) — total 889.9g (1/3 = 296.6g)
+**Levain:** Juuretis 20g (3.88%) · Vesi 210g (40.78%) · Durum jahu 257g (49.90%)
+**Dough:** Vesi 120g (23.30%) · Durum jahu 248g (48.16%) · Oliivõli 27.44g (5.33%) · Sool 7.5g (1.46%)
+**Baker%:** dry=515g · water=340g (66.02%) · salt=7.5g (1.46%) · fat=27.44g (5.33%)
+**Baking:** 18–30 min 210°C
+
+### Vastlakuklid (Semla, ×18) — total 907g (1/18 = 50.3g)
+**Levain:** Juuretis 18g (3.73%) · Vesi 74g (15.32%) · Nisujahu 405 74g (15.32%)
+**Dough (current):** Piim 210g (43.48%) · Nisujahu 405 400g (82.82%) · Või 75g (15.53%) · Sool 5g (1.04%) · Pruunsuhkur 50g (10.35%) · Kardemon 1g (0.21%)
+**Baker%:** dry=483g · water=301.25g (62.37%) · salt=5g (1.04%) · sugar=50g (10.35%) · fat=67.38g (13.95%)
+**Baking:** 20–25 min 180°C · inner 82–88°C
+⚠ Milk rule not implemented: MILK 210g should be in levain (water leftover=0)
+
+### Kaneelirullid (Cinnamon rolls) — total 1130.8g (dough 907g + cinnamon 223.8g)
+Same levain and dough as Vastlakuklid.
+**Cinnamon layer:** Või 112g (23.19%) · Sool 1g (0.21%) · Suhkur 95g (19.67%) · Kaneel 15.8g (3.27%)
+**Baker%:** dry=483g · water=321.41g (66.54%) · salt=6g (1.24%) · sugar=145g (30.02%) · fat=159.22g (32.96%)
+**Baking:** 20–25 min 210°C · inner 82–88°C
+⚠ Milk rule not implemented (same as Vastlakuklid)
+
+### Plaadikook (Pie dough) — total 1523.5g
+**Levain:** Juuretis 22g (2.72%) · Vesi 112g (13.86%) · Nisujahu 550 112g (13.86%)
+**Dough (current):** Piim 385g (47.65%) · Nisujahu 550 685g (84.78%) · Või 200g (24.75%) · Sool 7.5g (0.93%)
+**Baker%:** dry=808g · water=534.375g (66.14%) · salt=7.5g (0.93%) · fat=174.78g (21.63%)
+**Baking:** 20–30 min 210°C · inner 82–88°C
+⚠ Milk rule not implemented: MILK 385g should be in levain (water leftover=0); fridge capped at 11g
+
+### Pikk sai (Baguette, ×2) — total 573g (1/2 = 286.5g)
+**Levain:** Juuretis 12g (3.53%) · Vesi 82g (24.12%) · Nisujahu 550 82g (24.12%)
+**Dough:** Vesi 54g (15.88%) · Piim 85g (25.00%) · Nisujahu 550 252g (74.12%) · Sool 6g (1.76%)
+**Baker%:** dry=340g · water=224.875g (66.14%) · salt=6g (1.76%) · fat=2.38g (0.70%)
+**Baking:** steam 10 min 180°C → 15–20 min 180°C · inner 82–88°C
+✓ Milk rule does NOT fire (54g water leftover in dough)
+
+### Moskva saiakesed (Moscow pastries) — total 846g (dough 746g + lamination 100g)
+**Levain:** Juuretis 16g (3.92%) · Vesi 122g (29.90%) · Nisujahu 405 122g (29.90%)
+**Dough (current):** Piim 140g (34.31%) · Nisujahu 405 278g (68.14%) · Või 50g (12.25%) · Sool 2g (0.49%) · Pruunsuhkur 16g (3.92%)
+**Lamination:** Või 100g (24.51%)
+**Baker%:** dry=408g · water=293.5g (71.94%) · salt=2g (0.49%) · sugar=16g (3.92%) · fat=126.92g (31.11%)
+**Baking:** 20–25 min 180°C · inner 82–88°C
+⚠ Milk rule not implemented: MILK 140g should be in levain (water leftover=0)
 
 ---
 
@@ -117,453 +336,355 @@ Within each group, ingredients are sorted by nutrition type priority: flour → 
 ```
 RecipeType
   id: string
-  name: string                        // displayed via translation key if available
-  amount: number                      // how many portions / loaves
+  name: string                        // translation key if available, otherwise raw name
+  amount: number                      // portions / loaves
   description?: string
   bakingTime: BakingTimeType[]
-  innerTemperature?: NumberInterval   // { from, until } in °C
+  innerTemperature?: NumberInterval   // { from, until } °C
   ingredients: RecipeIngredientsType[]
 
 RecipeIngredientsType
-  name?: string                       // optional group name (e.g. "Lamination")
-  starter: boolean                    // marks this group as sourdough pre-dough
+  name?: string                       // optional group name e.g. "Kihistamiseks"
+  starter: boolean                    // true = sourdough pre-dough special path
   description?: string
-  bakingTime: BakingTimeType[]        // per-group baking time (rarely used)
+  bakingTime: BakingTimeType[]
   innerTemperature?: NumberInterval
   ingredients: IngredientGramsType[]
 
 IngredientGramsType
   id: string
-  name: string                        // translation key, e.g. "ingredient.predefined.flour.wheat.generic"
+  name: string                        // translation key e.g. "ingredient.predefined.flour.wheat.generic"
   grams: number
-  nutrients: NutrientPercentType[]    // e.g. [{ type: "flour", percent: 100 }]
+  nutrients: NutrientPercentType[]    // [{ type: NutritionType, percent: number }]
 
 BakingTimeType
-  time: number | { from, until }      // minutes
-  temperature: number                 // °C
-  steam?: boolean
+  time: NumberInterval                // { from, until } minutes — single value stored as {from:N, until:N}
+  temperature: NumberInterval         // { from, until } °C
+  steam: boolean
+
+NumberInterval { from: number, until: number }
 
 NutritionType (enum)
   flour | dry | water | salt | sugar | fat | spice | egg | other | whole_grain | ash
+
+DRY_NUTRIENTS = [flour, dry]          // used as the baker% denominator
+DISPLAYABLE_NUTRIENTS = [water, salt, sugar, fat, other]   // shown in micro nutrients panel
 ```
-
----
-
-## Predefined Recipes
-
-11 hardcoded recipes in Estonian (names translated in the `gb` locale):
-
-| Estonian | English |
-|---|---|
-| Täisteraleib | Whole grain rye bread |
-| Sai | Wheat bread |
-| Sai seemnete ja kaerahelvestega | Bread with seeds and barley |
-| Croissant | Croissant |
-| Pannkook | Pancake |
-| Pizza | Pizza |
-| Vastlakuklid | Semla |
-| Kaneelirullid | Cinnamon rolls |
-| Plaadikook | Pie dough |
-| Pikk sai | Baguette |
-| Moskva saiakesed | Moscow pastries |
-
-Recipes are defined in TypeScript source code as `PREDEFINED_RECIPES` — they are not loaded from a file or API.
 
 ---
 
 ## Standard Ingredients
 
-16 predefined ingredients with nutrition profiles:
+18 predefined ingredients (ingredient key → id → translation key):
 
-| Key | Name | Nutrition |
+| Key | Nutrition profile |
+|---|---|
+| SALT | salt 100% |
+| SUGAR | sugar 100% |
+| SUGAR_BROWN | sugar 100% |
+| WATER | water 100% |
+| BUTTER | fat 82%, water 18% |
+| OIL | fat 82% |
+| OLIVE_OIL | fat 100% |
+| MILK | fat 2.8%, water 97.5% |
+| EGG | egg 100% |
+| CARDAMOM | spice 100% |
+| CINNAMON | spice 100% |
+| WHOLE_RYE_FLOUR | flour 100%, whole_grain 100% |
+| WHOLE_RYE_MALT_FLOUR | flour 100%, whole_grain 100% |
+| WHOLE_WHEAT_FLOUR | flour 100%, whole_grain 100% |
+| DURUM_WHEAT | flour 100%, whole_grain 100% |
+| WHEAT_405_FLOUR | flour 100%, ash 405 |
+| WHEAT_550_FLOUR | flour 100%, ash 550 |
+| BARLEY | dry 100% |
+| SEEDS | dry 100% |
+
+**Whole-grain trigger:** any ingredient with `NutritionType.whole_grain` in its nutrients causes the whole-grain levain formula (50%/62%) to apply for the entire recipe.
+
+**Liquid bucket membership:** BUTTER (18% water), MILK (97.5% water) both enter the liquid bucket. OLIVE_OIL (100% fat, no water) does not.
+
+---
+
+## Predefined Recipes — Input Definitions
+
+```typescript
+// All defined in src/service/PredefinedRecipeService/data/PredefinedRecipes.ts
+// Ingredients specified as either { type, grams } or { type, percent }
+// percent is baker's percentage relative to total dry weight
+```
+
+| Recipe | Portions | Key ingredients |
 |---|---|---|
-| SALT | Salt | 100% salt |
-| SUGAR / SUGAR_BROWN | Sugar | 100% sugar |
-| WATER | Water | 100% water |
-| BUTTER | Butter | 82% fat, 18% water |
-| OIL / OLIVE_OIL | Oil | 100% fat |
-| MILK | Milk | 2.8% fat, 97.5% water |
-| EGG | Egg | 100% egg |
-| CARDAMOM / CINNAMON | Spices | 100% spice |
-| WHEAT_405_FLOUR | Wheat flour (405) | 100% flour, ash 405 |
-| WHEAT_550_FLOUR | Wheat flour (550) | 100% flour, ash 550 |
-| WHOLE_RYE_FLOUR | Whole rye flour | 100% flour, 100% whole_grain |
-| WHOLE_RYE_MALT_FLOUR | Rye malt flour | 100% flour, 100% whole_grain |
-| WHOLE_WHEAT_FLOUR | Whole wheat flour | 100% flour, 100% whole_grain |
-| DURUM_WHEAT | Durum flour | 100% flour, 100% whole_grain |
-| BARLEY | Barley | 100% dry |
-| SEEDS | Seeds | 100% dry |
+| Täisteraleib | 1 | WHOLE_RYE_FLOUR 405g, WHOLE_RYE_MALT_FLOUR 20g, WATER 100%, SALT 1.76% |
+| Sai | 1 | WHEAT_550_FLOUR 462g, WATER 82%, SALT 1.62% |
+| Sai seemnete | 1 | WHEAT_550_FLOUR 462g, BARLEY 10g, SEEDS 12g, WATER 73.76%, SALT 1.55% |
+| Croissant | 1 | WHEAT_550_FLOUR 500g, WATER 140g, MILK 140g, SUGAR 11%, BUTTER 40g, SALT 2.4%, [lam] BUTTER 280g |
+| Pannkook | 1 | [starter] WHEAT_550_FLOUR 362g, WATER 129.5g, MILK 454g · BUTTER 50g, SALT 7.5g, SUGAR 14g, EGG 256g |
+| Pizza | 3 | DURUM_WHEAT 515g, WATER 340g, OLIVE_OIL 27.44g, SALT 7.5g |
+| Vastlakuklid | 18 | WHEAT_405_FLOUR 483g, WATER 83g, MILK 210g, BUTTER 75g, SALT 5g, SUGAR_BROWN 50g, CARDAMOM 0.2% |
+| Kaneelirullid | 1 | same dough as Vastlakuklid + [cinnamon] CINNAMON 3.28%, BUTTER 112g, SALT 1g, SUGAR 95g |
+| Plaadikook | 1 | WHEAT_550_FLOUR 808g, WATER 123g, MILK 385g, BUTTER 200g, SALT 7.5g |
+| Pikk sai | 2 | WHEAT_550_FLOUR 340g, WATER 142g, MILK 85g, SALT 6g |
+| Moskva saiakesed | 1 | WHEAT_405_FLOUR 408g, WATER 130g, MILK 140g, SUGAR_BROWN 16g, BUTTER 50g, SALT 2g, [lam] BUTTER 100g |
 
 ---
 
 ## Current Technology Stack
 
-| Layer | Technology | Version |
+| Layer | Technology | Notes |
 |---|---|---|
-| Language | TypeScript | 4.9.x |
-| Framework | React | 18.3 |
-| Build tool | Vite | 7.x |
-| Package manager | npm | ≥10 |
-| UI library | MUI (Material UI) | 6.x + Emotion |
-| i18n | i18next + react-i18next | 23.x |
-| Notifications | notistack | 3.x |
-| State | React Context + useReducer | — |
-| Async hooks | react-useasync-hooks | 1.x |
-| Utilities | typescript-nullsafe, typescript-async-timeouts, typescript-blocking-queue | 1.x |
-| Base64 | buffer (Node.js polyfill) | 6.x |
-| Testing | Jest + @testing-library | — |
-| Deployment | DigitalOcean (static) | — |
+| Language | TypeScript 4.9 | Stuck at 4.9; latest is 5.x |
+| Framework | React 18.3 | |
+| Build | Vite 7.x | |
+| Package manager | npm ≥10 + Node ≥20 | |
+| UI | MUI 6.x + Emotion | ~500 KB gzipped — very heavy |
+| i18n | i18next + react-i18next | |
+| Notifications | notistack | Snackbar toasts |
+| State | React Context + useReducer | Two contexts: RecipesContext, EditRecipeContext |
+| Async | react-useasync-hooks | Used for initial recipe load |
+| Queue | typescript-blocking-queue | Debounces rapid baker% recalculations |
+| Timeouts | typescript-async-timeouts | Only `runLater` used (delayed drawer close) |
+| Null safety | typescript-nullsafe | `hasValue` / `hasNoValue` helpers |
+| Base64 | buffer (Node.js polyfill) | Unnecessary — `btoa()` is native |
+| Testing | Jest + @testing-library | Unit tests exist for calculation logic |
+| Deployment | DigitalOcean (static) | Via GitHub Actions |
 
-### Pain Points
-- Requires Node.js ≥ 20 + npm to build or develop
-- MUI is ~500 KB gzipped — very heavy for this level of UI
-- `buffer` polyfill is unnecessary (Web Crypto / `btoa` is universally available)
-- Multiple one-person utility packages (`react-useasync-hooks`, `typescript-blocking-queue`, etc.)
-- No data persistence — all edits are lost on page reload
-- Recipes are hardcoded in TypeScript — adding new ones requires a code change and rebuild
-- No routing — the whole app is a single "page" with dialog-based editing
-- TypeScript version is stuck at 4.9 (latest is 5.x)
+### Key source files
+
+| File | Purpose |
+|---|---|
+| `src/service/PredefinedRecipeService/data/PredefinedRecipes.ts` | All hardcoded recipe definitions |
+| `src/service/PredefinedRecipeService/RecipeReader/readJsonRecipe.ts` | Percent → grams resolution |
+| `src/service/SourdoughStarter/calculateDryAndLiquid.ts` | Flour/liquid/other classification |
+| `src/service/SourdoughStarter/SourDoughStarterCalculator.ts` | Levain amount decision |
+| `src/service/SourdoughStarter/IngredientStarterService.ts` | Ingredient assignment to groups |
+| `src/service/SourdoughStarter/IngredientsSort.ts` | Display sort order |
+| `src/service/BakerPercentage/lib/BakerPercentageCalulation.ts` | Baker % per ingredient |
+| `src/service/BakerPercentage/lib/MicroNutrientsCalculator.ts` | Micro nutrient aggregation |
+| `src/components/recipe/common/RecipeItemEditService.ts` | Pipeline entry point + queue |
+| `src/State/EditRecipe/EditRecipeReducerService.ts` | All recipe mutation operations |
+| `src/State/EditRecipe/editRecipeHydrationReducerService.ts` | Hydration % editing |
+| `src/Constant/Ingredient/StandardIngredientConstant.ts` | Ingredient definitions |
+| `src/Constant/Ingredient/CustomIngredient.ts` | Custom ingredient support (not wired to UI) |
+| `src/utils/Base64.ts` | URL sharing infrastructure (unused in UI) |
+| `src/static/locales/gb.json` | English translations |
+| `src/static/locales/ee.json` | Estonian translations |
+
+### Known deficiencies in the current codebase
+- **Milk rule not implemented** (see algorithm Step D above)
+- `CustomIngredient.ts` exists but is not reachable from the UI
+- `Base64.ts` URL-sharing utility exists but is not wired to anything
+- localStorage persistence is commented out in `RecipesProvider.tsx`
+- No recipe import (only export via JSON accordion)
+- Sorting bug `flour===50 && flour===50` produces correct result accidentally
+- TypeScript 4.9 (not 5.x)
+- No routing — single-page dialog model
 
 ---
 
-## Rebuild Plan: Modern Serverless Stack
+## Rebuild Plan
 
 ### Goals
-- **No npm** — no Node.js toolchain at all
-- **Fully serverless** — deployable to edge/serverless platforms (Deno Deploy, Cloudflare Pages, Vercel)
-- **No build step required to run** (or a minimal, self-contained one)
-- Preserve all existing functionality exactly
-- Add local persistence (localStorage) that was originally commented out
-
----
+- **No npm** — no Node.js toolchain whatsoever
+- **Fully serverless** — deployable to edge platforms without a Node server
+- Preserve all existing calculation logic exactly (port verbatim)
+- Fix the milk rule (the one known algorithm deficiency)
+- Add localStorage persistence (already scaffolded, just uncommented)
+- Add recipe import from JSON
 
 ### Recommended Stack
 
 | Layer | Choice | Reason |
 |---|---|---|
-| Runtime | **Deno** | Native TypeScript, no npm, imports from URLs, has `deno fmt` / `deno lint` / `deno test` built in |
-| Framework | **Fresh 2** (Deno) | Islands architecture, SSR by default, Preact, no bundler needed in dev, deploys to Deno Deploy as serverless |
-| UI | **Preact** (ships with Fresh) | Drop-in React replacement, ~3 KB, compatible with JSX |
-| Styling | **Tailwind CSS** (Deno-native via Fresh plugin) | No PostCSS/webpack, utility-first, print variants built in |
-| i18n | Custom signal-based, or `@preact/signals` store | Remove i18next entirely — the translation files are small enough to inline |
-| State | **Preact Signals** (`@preact/signals`) | Simpler than Context + useReducer, reactive, no boilerplate |
-| Persistence | `localStorage` | Restore the commented-out code; serialize recipes as JSON |
-| Testing | `deno test` | Built in, no jest config needed |
-| Deployment | **Deno Deploy** | Free tier, edge-deployed, zero config, works directly from a GitHub repo |
+| Runtime | **Deno** | Native TypeScript, no npm, URL imports, built-in fmt/lint/test |
+| Framework | **Fresh 2** | Islands architecture, Preact, no bundler in dev, deploys to Deno Deploy |
+| UI | **Preact** (bundled with Fresh) | Drop-in React replacement, ~3 KB |
+| Styling | **Tailwind CSS** via Fresh plugin | No PostCSS, utility-first, print: variant built in |
+| i18n | Custom signal-based lookup | Remove i18next entirely — files are small |
+| State | **Preact Signals** | Replaces Context + useReducer, reactive, no boilerplate |
+| Persistence | `localStorage` | Restore commented-out code |
+| Testing | `deno test` | Built in, no Jest config |
+| Deployment | **Deno Deploy** | Free tier, edge, push-to-deploy from GitHub |
 
----
-
-### Architecture Overview
+### Project structure
 
 ```
 fresh-baker/
-├── deno.json              # tasks, import map, compiler options
-├── main.ts                # Deno entry point (Fresh server)
-├── fresh.config.ts        # Fresh configuration
-├── islands/               # Interactive Preact components (client-side hydrated)
+├── deno.json
+├── main.ts
+├── fresh.config.ts
+├── islands/
 │   ├── RecipeNavigation.tsx
 │   ├── RecipeList.tsx
-│   ├── EditRecipeDialog.tsx
-│   └── RecipeCard.tsx
-├── components/            # Static server-rendered components (no JS sent to browser)
+│   ├── RecipeCard.tsx
+│   └── EditRecipeDialog.tsx
+├── components/
 │   ├── Layout.tsx
-│   └── PrintPage.tsx
+│   └── PrintLayout.tsx
 ├── routes/
-│   └── index.tsx          # Main page route
+│   └── index.tsx
 ├── lib/
-│   ├── ingredients.ts     # StandardIngredients constant (same logic)
-│   ├── baker-percentage.ts # BakerPercentageCalculation (same logic)
-│   ├── sourdough.ts       # SourdoughStarterCalculator (same logic)
-│   ├── recipes.ts         # Predefined recipes data
-│   ├── i18n.ts            # Lightweight translation (signal-based)
-│   └── storage.ts         # localStorage persistence layer
-├── static/
-│   ├── flags/ee.svg
-│   └── flags/gb.svg
-└── locales/
-    ├── ee.json
-    └── gb.json
+│   ├── types.ts          # all types (port from src/types/)
+│   ├── ingredients.ts    # StandardIngredients (port verbatim)
+│   ├── recipes.ts        # PREDEFINED_RECIPES (port verbatim)
+│   ├── resolution.ts     # readJsonRecipe percent→grams (port verbatim)
+│   ├── sourdough.ts      # full levain pipeline WITH milk rule fixed
+│   ├── baker-percent.ts  # recalculateBakerPercentage (port verbatim)
+│   ├── state.ts          # Preact Signals global state
+│   ├── i18n.ts           # lightweight t() function
+│   └── storage.ts        # localStorage save/load
+├── locales/
+│   ├── ee.json
+│   └── gb.json
+└── static/
+    ├── flags/ee.svg
+    └── flags/gb.svg
 ```
 
----
+### Dependency replacements
 
-### Migration Steps
+| Current | Replacement |
+|---|---|
+| React Context + useReducer | Preact Signals |
+| i18next + react-i18next | Custom `t()` (~30 lines) |
+| notistack | Signal-driven toast component (~30 lines) |
+| react-useasync-hooks | `useEffect` + signal |
+| typescript-blocking-queue | 300ms `setTimeout` debounce |
+| typescript-async-timeouts | `setTimeout` directly |
+| typescript-nullsafe | Native `!= null` checks |
+| buffer (base64 polyfill) | Native `btoa()` / `atob()` |
+| MUI + Emotion | Tailwind CSS |
 
-#### Step 1 — Bootstrap Deno Fresh project
-```bash
-deno run -A jsr:@fresh/init fresh-baker
-```
-No npm needed. Deno and Fresh are the only prerequisites.
+### MUI → Tailwind mapping
 
-#### Step 2 — Port the pure calculation logic (no UI dependencies)
-These files contain no React and can be copied almost verbatim:
-- `BakerPercentageCalulation.ts` → `lib/baker-percentage.ts`
-- `MicroNutrientsCalculator.ts` → `lib/baker-percentage.ts`
-- `SourDoughStarterCalculator.ts` → `lib/sourdough.ts`
-- `StandardIngredientConstant.ts` → `lib/ingredients.ts`
-- `PredefinedRecipes.ts` → `lib/recipes.ts`
-- `NutritionType.ts`, all `types/*.d.ts` → `lib/types.ts`
-- Remove `buffer` dependency — replace `base64Encode` with native `btoa()`
+| MUI | Tailwind |
+|---|---|
+| `Card variant="outlined"` | `border rounded-lg` |
+| `Dialog fullScreen` | `fixed inset-0 z-50 bg-white overflow-auto` |
+| `Drawer` | `fixed left-0 top-0 h-full w-64 bg-white shadow-lg` |
+| `Table/TableRow/TableCell` | `table w-full text-sm` |
+| `CircularProgress` | CSS spinner |
+| `Accordion` | `<details><summary>` |
+| `Snackbar` | CSS transition + signal |
+| Print hiding | `print:hidden` |
+| Per-page print break | `print:break-after-page print:break-inside-avoid` |
 
-#### Step 3 — Port state management
-Replace React Context + useReducer with Preact Signals:
+### What can be ported verbatim (no React dependencies)
+- `BakerPercentageCalulation.ts`
+- `MicroNutrientsCalculator.ts`
+- `calculateDryAndLiquid.ts`
+- `SourDoughStarterCalculator.ts`
+- `IngredientsSort.ts`
+- `StandardIngredientConstant.ts`
+- `PredefinedRecipes.ts`
+- `readJsonRecipe.ts` (except remove `hasValue` dependency)
+- All `types/*.d.ts`
+- `locales/ee.json`, `locales/gb.json`
+
+### What must be rewritten
+- `IngredientStarterService.ts` — fix the milk rule here
+- All React components → Preact islands
+- All Context/useReducer state → Signals
+- `EditRecipeReducerService.ts` → plain functions called by signals
+- `RecipeEditService.ts` → plain functions
+
+### i18n replacement
+
 ```ts
-// lib/state.ts
-import { signal, computed } from "@preact/signals";
-import { RecipeType } from "./types.ts";
+import { signal } from "@preact/signals";
+import gb from "../locales/gb.json" with { type: "json" };
+import ee from "../locales/ee.json" with { type: "json" };
 
-export const allRecipes = signal<RecipeType[]>([]);
-export const selectedIds = signal<string[]>([]);
-export const editedRecipe = signal<RecipeType | null>(null);
 export const language = signal<"ee" | "gb">("ee");
 
-export const visibleRecipes = computed(() =>
-  allRecipes.value.filter(r => selectedIds.value.includes(r.id))
-);
-```
-
-#### Step 4 — Port UI components
-- Replace `@mui/material` components with Tailwind utility classes
-- Map MUI components to equivalents:
-  - `Card` → `<div class="border rounded-lg p-4">`
-  - `Dialog fullScreen` → `<div class="fixed inset-0 z-50 bg-white overflow-auto">`
-  - `Drawer` → `<div class="fixed left-0 top-0 h-full w-64 bg-white shadow-lg">`
-  - `Table/TableRow/TableCell` → `<table class="w-full text-sm">`
-  - `CircularProgress` → CSS spinner
-  - `Accordion` → `<details>/<summary>`
-  - `Snackbar` → toast via CSS transition + signal
-- Keep the same component decomposition (RecipeCard, IngredientsTable, EditDialog, etc.)
-- Use Preact's `useSignal` inside island components
-
-#### Step 5 — Port i18n
-Replace i18next with a signal-based lookup:
-```ts
-// lib/i18n.ts
-import { language } from "./state.ts";
-import gbTranslations from "../locales/gb.json" assert { type: "json" };
-import eeTranslations from "../locales/ee.json" assert { type: "json" };
-
-const translations = { gb: gbTranslations, ee: eeTranslations };
-
-export const t = (key: string, vars?: Record<string, unknown>): string => {
+export const t = (key: string, vars?: Record<string, string | number>): string => {
   const parts = key.split(".");
-  let current: unknown = translations[language.value];
-  for (const part of parts) {
-    current = (current as Record<string, unknown>)?.[part];
-  }
-  let result = (typeof current === "string" ? current : key);
-  if (vars) {
-    for (const [k, v] of Object.entries(vars)) {
-      result = result.replace(`{{${k}}}`, String(v));
-    }
-  }
-  return result;
+  let node: unknown = language.value === "ee" ? ee : gb;
+  for (const part of parts) node = (node as Record<string, unknown>)?.[part];
+  let out = typeof node === "string" ? node : key;
+  if (vars) for (const [k, v] of Object.entries(vars)) out = out.replace(`{{${k}}}`, String(v));
+  return out;
 };
 ```
 
-#### Step 6 — Add localStorage persistence
+### localStorage persistence
+
 ```ts
-// lib/storage.ts
-import { allRecipes } from "./state.ts";
-import { RecipeType } from "./types.ts";
-
 const KEY = "baker_recipes_v1";
-
-export const loadFromStorage = (): RecipeType[] => {
-  try {
-    const raw = localStorage.getItem(KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch { return []; }
+export const loadRecipes = (): RecipeType[] => {
+  try { return JSON.parse(localStorage.getItem(KEY) ?? "[]"); } catch { return []; }
 };
-
-export const saveToStorage = (recipes: RecipeType[]) => {
+export const saveRecipes = (recipes: RecipeType[]) =>
   localStorage.setItem(KEY, JSON.stringify(recipes));
-};
 ```
-Wire `saveToStorage` into the signal effect so it auto-saves on every change.
+Wire into a signal `effect(() => saveRecipes(allRecipes.value))`.
 
-#### Step 7 — Print support
-Tailwind's `print:` variant covers everything in the current `Print.css`:
-```html
-<div class="print:break-after-page print:break-inside-avoid recipe-card">
-```
-Add `print:hidden` to navigation, dialogs, and action buttons.
+### Deployment
 
-#### Step 8 — Deploy
 ```bash
-# Push to GitHub, connect repo to Deno Deploy
-# Or deploy directly:
+# Dev (no npm, no build step)
+deno task start
+
+# Deploy
 deployctl deploy --project=baker-percentage main.ts
 ```
-Zero config. Runs on Deno Deploy's serverless edge network.
+
+### Features to add in the rebuild (were missing or wired up)
+1. **Milk rule** — fix `IngredientStarterService.ts` (detailed above)
+2. **localStorage persistence** — restore commented code
+3. **Recipe import from JSON** — paste JSON → parse → add to recipe list
+4. **Custom ingredient creation** — `CustomIngredient.ts` logic exists, just needs UI
+5. **URL sharing** — base64-encode selected recipe IDs in query param
+
+### Effort estimate
+
+| Area | Complexity |
+|---|---|
+| Calculation logic port | Low — pure functions, port verbatim |
+| Milk rule fix | Low — add one condition to `IngredientStarterService` |
+| State rewrite (Context → Signals) | Medium |
+| UI rewrite (MUI → Tailwind) | High — most of the work |
+| i18n replacement | Low |
+| localStorage | Low |
+| Tests | Medium — port to `deno test` |
+| Deploy setup | Low |
 
 ---
 
-### What Does NOT Need to Change
+## Test Fixtures
 
-The following logic is framework-independent and can be ported nearly verbatim:
+### Reference files
+- `Sourdough baker percentages.pdf` — browser print of the deployed app, all 11 recipes with calculated outputs. **Ground truth** for regression testing.
+- `Sourdough baker percentages.html` — the deployed Vite build (Cloudflare-served). Same dataset, live calculation.
 
-- Baker's percentage formula
-- Micro nutrients aggregation
-- Sourdough starter calculation algorithm
-- Ingredient sort order
-- All predefined ingredient definitions and their nutrition profiles
-- All predefined recipe data
-- Both translation files (`ee.json`, `gb.json`)
-- The JSON serialisation/deserialisation of recipes
-- The "copy recipe" and "scale amount" logic
+### Fixture files (already created)
+`tests/fixtures/` — one JSON file per recipe. Derived by tracing the source algorithm and cross-checked against the PDF.
 
----
-
-### Feature Additions Worth Including in the Rebuild
-
-These were commented out or missing from the current codebase:
-
-1. **LocalStorage persistence** — recipes survive page reload (already scaffolded in commented code)
-2. **Import recipe from JSON** — paste the JSON output back in to add a recipe (the JSON export already exists, the import doesn't)
-3. **Custom ingredient creation** — the `CustomIngredient.ts` file exists but is not wired into the UI
-4. **URL sharing** — encode selected recipe IDs or a custom recipe in the URL as a base64 query param (infrastructure already exists via `Base64.ts`)
-
----
-
-### What to Skip / Simplify
-
-- `react-useasync-hooks` — replace with `useSignal` + `useEffect` in Preact; the async loading pattern is trivial
-- `typescript-blocking-queue` — only used for debouncing input; replace with a 300 ms `setTimeout` + cleanup
-- `typescript-async-timeouts` — only `runLater` is used; replace with `setTimeout`
-- `typescript-nullsafe` — replace `hasValue` / `hasNoValue` with native `!= null` checks or a two-line util
-- `notistack` — replace with a simple signal-driven toast component (~30 lines of Preact)
-- `react-use-value-change` — not needed with Preact Signals (reactivity is built in)
-- `buffer` polyfill — use native `btoa()` / `atob()`
-- MUI — replace entirely with Tailwind
-
----
-
-### Estimated Effort
-
-| Area | Complexity | Notes |
+| File | Recipe | Status |
 |---|---|---|
-| Calculation logic port | Low | Pure functions, no UI |
-| State management rewrite | Medium | Context → Signals is a straightforward mental model shift |
-| UI component rewrite | High | Most time will be spent here (MUI → Tailwind) |
-| i18n replacement | Low | Simple key lookup, small files |
-| localStorage persistence | Low | Already scaffolded |
-| Print CSS | Low | Tailwind `print:` variants |
-| Testing | Medium | Port existing unit tests to `deno test` |
-| Deployment setup | Low | Deno Deploy is near-zero config |
+| `taisteraleib.json` | Whole grain rye bread | ✓ correct |
+| `sai.json` | Wheat bread | ✓ correct |
+| `sai_seemnete.json` | Bread with seeds & barley | ✓ correct |
+| `croissant.json` | Croissant | ⚠ milk rule not applied |
+| `pannkook.json` | Pancake | ✓ correct (starter:true path) |
+| `pizza.json` | Pizza ×3 | ✓ correct |
+| `vastlakuklid.json` | Semla ×18 | ⚠ milk rule not applied |
+| `kaneelirullid.json` | Cinnamon rolls | ⚠ milk rule not applied |
+| `plaadikook.json` | Pie dough | ⚠ milk rule not applied |
+| `pikk_sai.json` | Baguette ×2 | ✓ correct |
+| `moskva_saiakesed.json` | Moscow pastries | ⚠ milk rule not applied |
 
-**Total estimated rewrite**: medium-sized project. The calculation core is the most important and least work. The UI is the most work but the recipes are simple enough that MUI components can be replaced with clean Tailwind without losing functionality.
+Each fixture has: `levainAlgorithm` (condition + fridge + amounts), `groups[]` (ingredients with precise grams and baker%), `microNutrients` (dryTotal + per-nutrient), `totalWeight` (dough / others / total). Files marked ⚠ have `"fixtureStatus": "CURRENT_BEHAVIOUR"` and must be recalculated once the milk rule is implemented.
 
----
-
-## Reference Snapshot for Regression Testing
-
-`Sourdough baker percentages.html` in the project root is a deployed build of the current app (Vite-compiled, served via Cloudflare). It loads the same predefined recipe dataset and runs the full calculation pipeline in the browser. It serves as the **ground truth** for regression tests in the rebuild — any output the new implementation produces must match what this build produces.
-
-### Fixture files — already created
-
-`tests/fixtures/` contains one JSON file per recipe, derived by tracing the source code algorithm against the PDF print-out as ground truth. The PDF values were used to verify every number before writing the fixture.
-
-| File | Recipe | Key notes |
-|---|---|---|
-| `taisteraleib.json` | Whole grain rye bread | Whole-grain formula: 50%/62% |
-| `sai.json` | Wheat bread | Default 26% formula |
-| `sai_seemnete.json` | Bread with seeds & barley | dryTotal=484 (BARLEY+SEEDS count as dry) |
-| `croissant.json` | Croissant | water/flour=28%, lamination group |
-| `pannkook.json` | Pancake | `starter:true` — special split path |
-| `pizza.json` | Pizza (×3) | DURUM_WHEAT triggers whole-grain formula |
-| `vastlakuklid.json` | Semla (×18) | BUTTER enters liquid bucket (18% water) |
-| `kaneelirullid.json` | Cinnamon rolls | Cinnamon layer as index-2 group → others |
-| `plaadikook.json` | Pie dough | Fridge capped at 11g (rule: max 11) |
-| `pikk_sai.json` | Baguette (×2) | water/flour=41.8% — just above 40% threshold |
-| `moskva_saiakesed.json` | Moscow pastries | water/flour=31.9%, lamination group |
-
-Each fixture records:
-- `levainAlgorithm` — which condition was triggered and the resulting `fridge`, `flourAmount`, `liquidAmount`
-- `groups[]` — all ingredient groups after the sourdough split, in display order, with precise gram values and baker percentages
-- `microNutrients` — `dryTotal` and per-nutrient `grams`/`percent` (using precise values, not display-rounded)
-- `totalWeight` — `dough` (groups 0–1), `others` (groups 2+), `total`
-
-**Precision note**: individual ingredient grams in the fixtures use the algorithmically precise values (e.g. salt = 7.5g, dough water = 258.8g), not the display-rounded integers shown in the PDF. The PDF's baker-percentage column uses the precise values too, so both can be verified against the fixture.
-
-### What to capture as test fixtures
-
-The following calculated outputs should be extracted from the running app (or derived by tracing the existing source) and stored as JSON fixtures before the rewrite begins:
-
-#### 1. Ingredient gram resolution (percent → grams)
-
-For every percent-based ingredient in every predefined recipe, the resolved gram value. Example fixture:
-
-```json
-{ "recipe": "Sai", "ingredient": "WATER", "percentInput": 82, "flourGrams": 462, "resolvedGrams": 378.8 }
-{ "recipe": "Sai", "ingredient": "SALT",  "percentInput": 1.62, "flourGrams": 462, "resolvedGrams": 7.5 }
-```
-
-#### 2. Sourdough levain split — per recipe that has `starter: true`
-
-For each recipe whose first ingredient group has `starter: true` (currently: Pannkook), the full split result:
-
-```json
-{
-  "recipe": "Pannkook",
-  "fridge": { "flour": 7, "liquid": 7 },
-  "levain": { "flour": ..., "liquid": ... },
-  "levainIngredients": [ ... ],
-  "doughIngredients": [ ... ]
-}
-```
-
-For all other recipes (no explicit `starter: true`), the system still auto-generates a levain — those outputs should also be captured.
-
-#### 3. Baker's percentages — per recipe, per ingredient group
-
-For every ingredient in every group after the full pipeline (levain split → baker % calculation):
-
-```json
-{
-  "recipe": "Sai",
-  "groups": [
-    {
-      "name": "Pre-dough",
-      "ingredients": [
-        { "name": "ingredient.sourdough_starter.name", "grams": 18, "percent": ... },
-        { "name": "ingredient.predefined.flour.wheat.generic", "grams": 111, "percent": 100 },
-        { "name": "ingredient.predefined.water.generic", "grams": 111, "percent": 100 }
-      ]
-    },
-    {
-      "name": "Dough",
-      "ingredients": [ ... ]
-    }
-  ],
-  "microNutrients": {
-    "dry_total": ...,
-    "nutrients": { "flour": { "grams": ..., "percent": 100 }, "water": { ... }, ... }
-  }
-}
-```
-
-#### 4. Total weights — per recipe
-
-```json
-{ "recipe": "Sai", "totalWeight": { "dough": ..., "others": ..., "total": ... } }
-```
-
-### Suggested test structure for the rebuild
+### Suggested test structure
 
 ```
 tests/
-  fixtures/
-    sai.json
-    taisteraleib.json
-    croissant.json
-    pannkook.json
-    pizza.json
-    ...
-  ingredient_resolution_test.ts   // readJsonRecipe percent → grams
-  sourdough_split_test.ts         // splitStarterAndDough output matches fixture
-  baker_percentage_test.ts        // recalculateBakerPercentage output matches fixture
-  micro_nutrients_test.ts         // calculateMicroNutrientsResult matches fixture
+  fixtures/               # JSON ground truth (already created)
+  resolution_test.ts      # readJsonRecipe: percent → grams
+  sourdough_test.ts       # full levain split matches fixture
+  baker_percent_test.ts   # baker% and micro nutrients match fixture
+  total_weight_test.ts    # dough/others/total match fixture
 ```
 
-All tests run with `deno test` — no Jest, no config files.
+All run with `deno test --allow-read`. No Jest, no config files.

@@ -1,24 +1,8 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-.idea
+# Deno
+.deno/
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# Fresh build output
+_fresh/
 
-# testing
-/coverage
-
-# production
-/build
-
-# misc
+# macOS
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
