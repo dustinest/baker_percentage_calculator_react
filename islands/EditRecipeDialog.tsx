@@ -131,6 +131,18 @@ export default function EditRecipeDialog({ recipe }: Props) {
       return sum + ing.grams * dp / 100;
     }, 0);
 
+  const canSave = (() => {
+    const defaultGroup = d.ingredients.find((g) => !g.name);
+    if (!defaultGroup) return true;
+    const hasFlour = defaultGroup.ingredients.some(
+      (ing) => ing.grams > 0 && ing.nutrients.some((n) => n.type === NutritionType.flour),
+    );
+    const hasLiquid = defaultGroup.ingredients.some(
+      (ing) => ing.grams > 0 && ing.nutrients.some((n) => n.type === NutritionType.water),
+    );
+    return hasFlour && hasLiquid;
+  })();
+
   return (
     <dialog class="modal modal-open" onClick={(e) => e.target === e.currentTarget && close()}>
       <div class="modal-box max-w-3xl w-full max-h-[90vh] overflow-y-auto">
@@ -233,14 +245,14 @@ export default function EditRecipeDialog({ recipe }: Props) {
                         <th>{t("edit.ingredients.ingredient")}</th>
                         <th class="text-right w-20">g</th>
                         <th class="text-right w-20">{t("edit.ingredients.baker_percent")}</th>
-                        {isCustom && <th class="w-6" />}
+                        <th class="w-6" />
                       </tr>
                     </thead>
                     <tbody>
                       {group.ingredients.map((ing, ii) => (
                         <tr key={ii}>
                           <td>
-                            {isCustom ? (() => {
+                            {(() => {
                               const isStandard = ing.type && ing.type !== "other";
                               const isCustomText = !isStandard && (ing.name !== "" || customIngIds.value.has(ing.id));
                               if (isCustomText) {
@@ -283,9 +295,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
                                   <option value="CUSTOM">— {t("edit.ingredients.custom")} —</option>
                                 </select>
                               );
-                            })() : (
-                              t(ing.name) !== ing.name ? t(ing.name) : ing.name
-                            )}
+                            })()}
                           </td>
                           <td>
                             <input
@@ -314,21 +324,17 @@ export default function EditRecipeDialog({ recipe }: Props) {
                               <span class="text-base-content/30 text-xs flex justify-end">—</span>
                             )}
                           </td>
-                          {isCustom && (
-                            <td>
-                              <button type="button" class="btn btn-xs btn-ghost text-error px-1" onClick={() => delIng(gi, ii)}>×</button>
-                            </td>
-                          )}
+                          <td>
+                            <button type="button" class="btn btn-xs btn-ghost text-error px-1" onClick={() => delIng(gi, ii)}>×</button>
+                          </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
 
-                  {isCustom && (
-                    <button type="button" class="btn btn-xs btn-ghost mt-2" onClick={() => addIng(gi)}>
-                      + {t("edit.ingredients.add_ingredient")}
-                    </button>
-                  )}
+                  <button type="button" class="btn btn-xs btn-ghost mt-2" onClick={() => addIng(gi)}>
+                    + {t("edit.ingredients.add_ingredient")}
+                  </button>
                 </div>
               );
             })}
@@ -405,7 +411,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
           {activeTab.value === "edit" ? (
             <>
               <button class="btn btn-ghost btn-sm" onClick={close}>{t("actions.cancel")}</button>
-              <button class="btn btn-primary btn-sm" onClick={save}>{t("actions.save")}</button>
+              <button class="btn btn-primary btn-sm" onClick={save} disabled={!canSave}>{t("actions.save")}</button>
             </>
           ) : (
             <button class="btn btn-ghost btn-sm" onClick={close}>{t("actions.cancel")}</button>
