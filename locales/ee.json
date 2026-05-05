@@ -159,6 +159,7 @@
     "select_recipe": "Vali vasakult retsept, mida kuvada"
   },
   "navigation": {
+    "title": "Pagari %",
     "select_all": "Vali kõik",
     "selected": "{{count}} valitud"
   },

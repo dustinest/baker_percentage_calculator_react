@@ -160,6 +160,7 @@
     "select_recipe": "Select a recipe from the left to display"
   },
   "navigation": {
+    "title": "Sourdough %",
     "select_all": "Select all",
     "selected": "{{count}} selected"
   },

@@ -62,10 +62,69 @@ export default function RecipeNavigation() {
 
   return (
     <>
-      <ul class="menu bg-base-200 min-h-full w-64 p-4 gap-1">
-        <li class="menu-title flex flex-row justify-between items-center">
+      <div class="flex flex-col h-screen w-64 bg-base-200">
+
+        <div class="flex-none flex items-center gap-2 px-4 py-3">
           <img src="/logo.svg" class="h-8 w-8 flex-shrink-0" alt="" />
-          <span class="text-lg font-bold">Pagari %</span>
+          <span class="text-lg font-bold">{t("navigation.title")}</span>
+        </div>
+
+        <div class="flex-1 overflow-y-auto">
+          <ul class="menu gap-1 px-4 pb-2">
+            <li>
+              <label class="cursor-pointer flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  class="checkbox checkbox-sm"
+                  checked={allSelected}
+                  onChange={() => allSelected ? selectNone() : selectAll()}
+                />
+                <span class="text-sm font-medium">
+                  {selectedCount > 0 ? t("navigation.selected", { count: selectedCount }) : t("navigation.select_all")}
+                </span>
+              </label>
+            </li>
+
+            <div class="divider my-1" />
+
+            {allRecipes.value.map((recipe) => (
+              <li key={recipe.id}>
+                <label class="cursor-pointer flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    class="checkbox checkbox-sm"
+                    checked={selectedIds.value.has(recipe.id)}
+                    onChange={() => toggleSelected(recipe.id)}
+                  />
+                  <span class="text-sm">
+                    {nameForLang(recipe.name, language.value)}
+                    {recipe.amount > 1 && <span class="text-xs text-base-content/60 ml-1">×{recipe.amount}</span>}
+                  </span>
+                </label>
+              </li>
+            ))}
+
+            <div class="divider my-1" />
+
+            <li>
+              <button type="button" class="btn btn-sm btn-ghost w-full justify-start" onClick={addNewRecipe}>
+                + {t("actions.add_recipe")}
+              </button>
+            </li>
+            <li>
+              <button type="button" class="btn btn-sm btn-ghost w-full justify-start" onClick={openSort}>
+                ⇅ {t("actions.sort")}
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div class="flex-none flex items-center justify-between px-4 py-2 border-t border-base-300">
+          <div class="flex gap-1">
+            <button type="button" class="btn btn-xs btn-ghost" onClick={() => globalThis.print()}>
+              🖨 {t("actions.print")}
+            </button>
+          </div>
           <div class="flex gap-1">
             <button
               type="button"
@@ -82,59 +141,8 @@ export default function RecipeNavigation() {
               🇬🇧
             </button>
           </div>
-        </li>
-
-        <li>
-          <label class="cursor-pointer flex items-center gap-2">
-            <input
-              type="checkbox"
-              class="checkbox checkbox-sm"
-              checked={allSelected}
-              onChange={() => allSelected ? selectNone() : selectAll()}
-            />
-            <span class="text-sm font-medium">
-              {selectedCount > 0 ? t("navigation.selected", { count: selectedCount }) : t("navigation.select_all")}
-            </span>
-          </label>
-        </li>
-
-        <div class="divider my-1" />
-
-        {allRecipes.value.map((recipe) => (
-          <li key={recipe.id}>
-            <label class="cursor-pointer flex items-center gap-2">
-              <input
-                type="checkbox"
-                class="checkbox checkbox-sm"
-                checked={selectedIds.value.has(recipe.id)}
-                onChange={() => toggleSelected(recipe.id)}
-              />
-              <span class="text-sm">
-                {nameForLang(recipe.name, language.value)}
-                {recipe.amount > 1 && <span class="text-xs text-base-content/60 ml-1">×{recipe.amount}</span>}
-              </span>
-            </label>
-          </li>
-        ))}
-
-        <div class="divider my-1" />
-
-        <li>
-          <button type="button" class="btn btn-sm btn-ghost w-full justify-start" onClick={addNewRecipe}>
-            + {t("actions.add_recipe")}
-          </button>
-        </li>
-        <li>
-          <button type="button" class="btn btn-sm btn-ghost w-full justify-start" onClick={openSort}>
-            ⇅ {t("actions.sort")}
-          </button>
-        </li>
-        <li>
-          <button type="button" class="btn btn-sm btn-ghost w-full justify-start" onClick={() => globalThis.print()}>
-            🖨 {t("actions.print")}
-          </button>
-        </li>
-      </ul>
+        </div>
+      </div>
 
       {showSort.value && (
         <dialog class="modal modal-open" onClick={(e) => e.target === e.currentTarget && closeSort()}>

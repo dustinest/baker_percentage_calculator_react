@@ -8,7 +8,8 @@ export default function Home() {
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Pagari protsendi kalkulaator</title>
+        <title>Juuretise kalkulaator / Sourdough calculator</title>
+        <meta name="keywords" content="juuretis, pagari protsent, sourdough, baker's percentage, leib, retsept" />
         <link rel="icon" href="/logo.svg" type="image/svg+xml" />
         <link rel="stylesheet" href="/styles.css" />
       </head>
@@ -23,7 +24,6 @@ export default function Home() {
                 </svg>
               </label>
               <img src="/logo.svg" class="h-7 w-7" alt="" />
-              <span class="text-lg font-semibold">Pagari %</span>
             </div>
             <main class="p-4">
               <RecipeList />
