@@ -33,8 +33,13 @@
   ],
   "microNutrients": {
     "dryTotal": 425,
-    "water": { "grams": 425,  "percent": 100 },
-    "salt":  { "grams": 7.5,  "percent": 1.76 }
+    "water":   { "grams": 425,    "percent": 100 },
+    "salt":    { "grams": 7.5,    "percent": 1.765 },
+    "sugar":   { "grams": 5.57,   "percent": 1.311 },
+    "fat":     { "grams": 8.34,   "percent": 1.962 },
+    "protein": { "grams": 41.9,   "percent": 9.859 },
+    "carbs":   { "grams": 249.8,  "percent": 58.776 },
+    "fiber":   { "grams": 62.35,  "percent": 14.671 }
   },
   "totalWeight": { "dough": 857.5, "others": 0, "total": 857.5 }
 }

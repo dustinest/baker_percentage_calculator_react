@@ -11,6 +11,9 @@ interface FixtureMicro {
   salt?: { grams: number; percent: number };
   sugar?: { grams: number; percent: number };
   fat?: { grams: number; percent: number };
+  protein?: { grams: number; percent: number };
+  carbs?: { grams: number; percent: number };
+  fiber?: { grams: number; percent: number };
 }
 interface Fixture { recipe: string; microNutrients: FixtureMicro }
 
@@ -51,6 +54,9 @@ Deno.test("baker-percent: micro nutrients match fixtures for all 11 recipes", as
     check(NutritionType.salt, fm.salt);
     check(NutritionType.sugar, fm.sugar);
     check(NutritionType.fat, fm.fat);
+    check(NutritionType.protein, fm.protein);
+    check(NutritionType.carbs, fm.carbs);
+    check(NutritionType.fiber, fm.fiber);
   }
 });
 

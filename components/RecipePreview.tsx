@@ -1,5 +1,5 @@
 import type { ComponentChildren } from "preact";
-import { BakerPercentageResult, DISPLAYABLE_NUTRIENTS_TYPE_ARRAY, RecipeType } from "../lib/types.ts";
+import { BakerPercentageResult, DISPLAYABLE_NUTRIENTS_TYPE_ARRAY, NutritionType, RecipeType } from "../lib/types.ts";
 import { t } from "../lib/i18n.ts";
 import { computeSummaryWeights } from "../lib/summary-weights.ts";
 
@@ -61,7 +61,7 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
       {children}
 
       <div class="px-4 pb-3">
-        <div class="divider my-1 text-xs">{t("ingredients.title.baker_percentage")}</div>
+        <div class="divider my-1" />
         <table class="table w-full">
           <tbody>
             <tr>
@@ -69,13 +69,32 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
               <td class="text-right tabular-nums">{fmt(bp.microNutrients.dry_total)}g</td>
               <td class="text-right tabular-nums">100%</td>
             </tr>
-            {DISPLAYABLE_NUTRIENTS_TYPE_ARRAY.map((type) => {
+            {(() => {
+              const n = bp.microNutrients.nutrients[NutritionType.water];
+              if (!n || n.grams < 0.1) return null;
+              return (
+                <tr>
+                  <td>{t("ingredients.title.water")}</td>
+                  <td class="text-right tabular-nums">{fmtG(n.grams)}g</td>
+                  <td class="text-right tabular-nums">{fmtPct(n.percent)}%</td>
+                </tr>
+              );
+            })()}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="px-4 pb-3">
+        <div class="divider my-1" />
+        <table class="table w-full">
+          <tbody>
+            {DISPLAYABLE_NUTRIENTS_TYPE_ARRAY.filter((type) => type !== NutritionType.water).map((type) => {
               const n = bp.microNutrients.nutrients[type];
               if (!n || n.grams < 0.1) return null;
               return (
                 <tr key={type}>
                   <td>{t(`ingredients.title.${type}`) || type}</td>
-                  <td class="text-right tabular-nums">{fmt(n.grams)}g</td>
+                  <td class="text-right tabular-nums">{fmtG(n.grams)}g</td>
                   <td class="text-right tabular-nums">{fmtPct(n.percent)}%</td>
                 </tr>
               );

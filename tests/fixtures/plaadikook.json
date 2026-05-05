@@ -13,17 +13,13 @@
       "ingredients": [
         { "key": "SOURDOUGH_STARTER", "grams": 22,  "bakerPercent": 2.72 },
         { "key": "WATER",             "grams": 112, "bakerPercent": 13.86 },
-        { "key": "MILK_25",              "grams": 385, "bakerPercent": 47.65 },
         { "key": "WHEAT_550_FLOUR",   "grams": 112, "bakerPercent": 13.86 }
       ]
     },
     {
       "translationKey": "ingredients.title.dough",
-      "bakingTime": [
-        { "steam": false, "time": { "from": 20, "until": 30 }, "temperature": { "from": 210, "until": 210 } }
-      ],
-      "innerTemperature": { "from": 82, "until": 88 },
       "ingredients": [
+        { "key": "MILK_25",         "grams": 385, "bakerPercent": 47.65 },
         { "key": "WHEAT_550_FLOUR", "grams": 685, "bakerPercent": 84.78 },
         { "key": "BUTTER",          "grams": 200, "bakerPercent": 24.75 },
         { "key": "SALT",            "grams": 7.5, "bakerPercent": 0.93 }
@@ -32,9 +28,13 @@
   ],
   "microNutrients": {
     "dryTotal": 808,
-    "water":  { "grams": 534.375, "percent": 66.14 },
-    "salt":   { "grams": 7.5,     "percent": 0.93 },
-    "fat":    { "grams": 174.78,  "percent": 21.63 }
+    "water":   { "grams": 497.65,  "percent": 61.59 },
+    "salt":    { "grams": 9.5,     "percent": 1.176 },
+    "sugar":   { "grams": 18.095,  "percent": 2.239 },
+    "fat":     { "grams": 181.595, "percent": 22.475 },
+    "protein": { "grams": 102.375, "percent": 12.67 },
+    "carbs":   { "grams": 565.87,  "percent": 70.033 },
+    "fiber":   { "grams": 31.88,   "percent": 3.946 }
   },
   "totalWeight": { "dough": 1523.5, "others": 0, "total": 1523.5 }
 }

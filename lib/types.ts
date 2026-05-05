@@ -3,10 +3,14 @@
 export enum NutritionType {
   flour = "flour",
   dry = "dry",
+  liquid = "liquid",
   water = "water",
   salt = "salt",
   sugar = "sugar",
   fat = "fat",
+  protein = "protein",
+  carbs = "carbs",
+  fiber = "fiber",
   spice = "spice",
   egg = "egg",
   other = "other",
@@ -19,6 +23,9 @@ export const DISPLAYABLE_NUTRIENTS_TYPE_ARRAY = [
   NutritionType.salt,
   NutritionType.sugar,
   NutritionType.fat,
+  NutritionType.protein,
+  NutritionType.carbs,
+  NutritionType.fiber,
   NutritionType.other,
 ];
 

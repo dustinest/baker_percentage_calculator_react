@@ -30,22 +30,30 @@ const calculateDryAndLiquid = (ingredients: IngredientGramsType[]): DryAndLiquid
       (acc, n) => {
         if (n.type === NutritionType.flour) acc.flour += n.percent;
         if (n.type === NutritionType.water) acc.water += n.percent;
+        if (n.type === NutritionType.fat)   acc.fat   += n.percent;
+        if (n.type === NutritionType.dry)   acc.dry   += n.percent;
         return acc;
       },
-      { flour: 0, water: 0 },
+      { flour: 0, water: 0, fat: 0, dry: 0 },
     );
+
+    // Ingredients are "liquid" only if they are not a bakery dry base (flour/dry) AND their
+    // water+fat content dominates (≥50%). This prevents flours (water ~12%) and spices
+    // (water ~8%, fat ~7%) from being incorrectly classified as liquid.
+    const isBakingDry = pct.flour > 0 || pct.dry > 0;
+    const isLiquid = !isBakingDry && pct.water > 0 && (pct.water + pct.fat) >= 50;
 
     if (pct.flour > 0) {
       result.ingredients.flour.push(ingredient);
       result.totals.flour += ingredient.grams * 100 / pct.flour;
     }
-    if (pct.water > 0) {
+    if (isLiquid) {
       const grams = ingredient.grams * 100 / pct.water;
       result.ingredients.liquid.push(ingredient);
       result.totals.liquid += grams;
       if (pct.water === 100) result.totals.water += grams;
     }
-    if (pct.flour === 0 && pct.water === 0) result.ingredients.other.push(ingredient);
+    if (!pct.flour && !isLiquid) result.ingredients.other.push(ingredient);
   }
   return result;
 };
