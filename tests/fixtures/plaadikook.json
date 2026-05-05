@@ -1,0 +1,40 @@
+{
+  "recipe": "Plaadikook",
+  "amount": 1,
+  "levainAlgorithm": {
+    "condition": "water_10_to_40pct",
+    "fridge": 11,
+    "flourAmount": 112,
+    "liquidAmount": 112
+  },
+  "groups": [
+    {
+      "translationKey": "ingredients.title.sourdough_starter_dough",
+      "ingredients": [
+        { "key": "SOURDOUGH_STARTER", "grams": 22,  "bakerPercent": 2.72 },
+        { "key": "WATER",             "grams": 112, "bakerPercent": 13.86 },
+        { "key": "WHEAT_550_FLOUR",   "grams": 112, "bakerPercent": 13.86 }
+      ]
+    },
+    {
+      "translationKey": "ingredients.title.dough",
+      "ingredients": [
+        { "key": "MILK_25",         "grams": 385, "bakerPercent": 47.65 },
+        { "key": "WHEAT_550_FLOUR", "grams": 685, "bakerPercent": 84.78 },
+        { "key": "BUTTER",          "grams": 200, "bakerPercent": 24.75 },
+        { "key": "SALT",            "grams": 7.5, "bakerPercent": 0.93 }
+      ]
+    }
+  ],
+  "microNutrients": {
+    "dryTotal": 808,
+    "water":   { "grams": 497.65,  "percent": 61.59 },
+    "salt":    { "grams": 9.5,     "percent": 1.176 },
+    "sugar":   { "grams": 18.095,  "percent": 2.239 },
+    "fat":     { "grams": 181.595, "percent": 22.475 },
+    "protein": { "grams": 102.375, "percent": 12.67 },
+    "carbs":   { "grams": 565.87,  "percent": 70.033 },
+    "fiber":   { "grams": 31.88,   "percent": 3.946 }
+  },
+  "totalWeight": { "dough": 1523.5, "others": 0, "total": 1523.5 }
+}

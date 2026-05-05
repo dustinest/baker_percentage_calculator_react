@@ -1,0 +1,51 @@
+{
+  "recipe": "Kaneelirullid",
+  "amount": 1,
+  "levainAlgorithm": {
+    "condition": "water_10_to_40pct",
+    "fridge": 9,
+    "flourAmount": 74,
+    "liquidAmount": 74
+  },
+  "groups": [
+    {
+      "translationKey": "ingredients.title.sourdough_starter_dough",
+      "ingredients": [
+        { "key": "SOURDOUGH_STARTER", "grams": 18,  "bakerPercent": 3.73 },
+        { "key": "WATER",             "grams": 74,  "bakerPercent": 15.32 },
+        { "key": "WHEAT_405_FLOUR",   "grams": 74,  "bakerPercent": 15.32 }
+      ]
+    },
+    {
+      "translationKey": "ingredients.title.dough",
+      "ingredients": [
+        { "key": "MILK_25",         "grams": 210, "bakerPercent": 43.48 },
+        { "key": "WHEAT_405_FLOUR", "grams": 400, "bakerPercent": 82.82 },
+        { "key": "BUTTER",          "grams": 75,  "bakerPercent": 15.53 },
+        { "key": "SALT",            "grams": 5,   "bakerPercent": 1.04 },
+        { "key": "SUGAR_BROWN",     "grams": 50,  "bakerPercent": 10.35 },
+        { "key": "CARDAMOM",        "grams": 1,   "bakerPercent": 0.21 }
+      ]
+    },
+    {
+      "translationKey": "Kaanelikiht",
+      "ingredients": [
+        { "key": "BUTTER",   "grams": 112,  "bakerPercent": 23.19 },
+        { "key": "SALT",     "grams": 1,    "bakerPercent": 0.21 },
+        { "key": "SUGAR",    "grams": 95,   "bakerPercent": 19.67 },
+        { "key": "CINNAMON", "grams": 15.8, "bakerPercent": 3.27 }
+      ]
+    }
+  ],
+  "microNutrients": {
+    "dryTotal": 483,
+    "water":   { "grams": 299.82,  "percent": 62.075 },
+    "salt":    { "grams": 7.87,    "percent": 1.629 },
+    "sugar":   { "grams": 153.706, "percent": 31.823 },
+    "fat":     { "grams": 163.558, "percent": 33.863 },
+    "protein": { "grams": 56.942,  "percent": 11.789 },
+    "carbs":   { "grams": 350.528, "percent": 72.573 },
+    "fiber":   { "grams": 22.874,  "percent": 4.736 }
+  },
+  "totalWeight": { "dough": 907, "others": 223.8, "total": 1130.8 }
+}

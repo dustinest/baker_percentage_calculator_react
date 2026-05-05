@@ -1,0 +1,188 @@
+{
+  "edit": {
+    "hydration": "Vedelik",
+    "enforce_starter": {
+      "button": "Kogu grupp läheb eeltaignasse, mitte ainult osa sellest."
+    },
+    "edit": "Muuda",
+    "name": "Nimi",
+    "delete": "Kustuta",
+    "reset": "Lähtesta",
+    "copyOf": "Kopeeri",
+    "description": {
+      "generic": "Kirjeldus"
+    },
+    "ingredients": {
+      "title": "Nimetus",
+      "add": "Lisa uus grupp",
+      "ingredient": "Koostisosa",
+      "add_ingredient": "Lisa koostisosa",
+      "baker_percent": "Pagari %",
+      "choose": "Vali koostisosa",
+      "custom": "Muu"
+    },
+    "baking_instructions": {
+      "steam": "Auruta",
+      "time": "Aeg",
+      "temperature": "Temperatuur",
+      "inner_temperature": "Sisetemperatuur"
+    },
+    "amount": {
+      "button": "Kogus: {{count}}",
+      "tab": {
+        "calculate": "Arvuta",
+        "change": "Muuda"
+      },
+      "title": "Retsepti kogus",
+      "calculate": "Kalkuleeri kogus",
+      "change": "Muuda koguse number"
+    },
+    "mode": {
+      "weight": "Muuda kaalu",
+      "percent": "Protsenti kuivainete suhtes"
+    },
+    "baking": {
+      "add": "Lisa küpsetusaeg",
+      "add_inner_temperature": "Lisa sisetemperatuur",
+      "remove_inner_temperature": "Eemalda sisetemperatuur",
+      "time": "Aeg (min)",
+      "temperature": "Temperatuur (°C)",
+      "steam": "Aur",
+      "add_label": "Lisa silt",
+      "label_et": "Silt (ET)",
+      "label_en": "Silt (EN)"
+    },
+    "preview_hint": "Lisa jahu ja vedelik, et eelvaade näha",
+    "import": {
+      "hint": "Kleebi JSON retsept alla ja vajuta \"Impordi\".",
+      "placeholder": "{ \"name\": \"Minu retsept\", \"ingredients\": [...] }",
+      "button": "Impordi",
+      "error_format": "Vigane JSON formaat — name ja ingredients on kohustuslikud",
+      "error_json": "JSON viga: {{message}}"
+    }
+  },
+  "baking_instructions": {
+    "steam": "Auruta {{minutes}} minutit {{temperature}}℃",
+    "bake": "Küpseta {{minutes}} minutit {{temperature}}℃",
+    "inner_temperature": "Sisetemperatuur {{temperature}}℃"
+  },
+  "ingredients": {
+    "title": {
+      "baker_percentage": "Pagari protsent",
+      "dough": "Taigen",
+      "sourdough_starter_dough": "Eeltaigen",
+      "water": "Vesi",
+      "liquid": "Vedelik",
+      "salt": "Sool",
+      "sugar": "Suhkur",
+      "fat": "Rasv",
+      "protein": "Valk",
+      "carbs": "Süsivesikud",
+      "fiber": "Kiudained",
+      "other": "Muu",
+      "dry": "Kuiv"
+    }
+  },
+  "totals": {
+    "total": "Kokku",
+    "dough": "Tainas",
+    "other": "Teised"
+  },
+  "ingredient": {
+    "sourdough_starter": {
+      "name": "Juuretis"
+    },
+    "predefined": {
+      "water": {
+        "generic": "Vesi"
+      },
+      "salt": {
+        "generic": "Sool"
+      },
+      "sugar": {
+        "generic": "Suhkur",
+        "brown": "Pruunsuhkur"
+      },
+      "oil": {
+        "generic": "õli",
+        "olive": "Oliivõli"
+      },
+      "milk": {
+        "generic": "Piim",
+        "generic_other": "Piim ({{count}}%)",
+        "fat_25": "Piim (2,5%)"
+      },
+      "spice": {
+        "generic": "Vürts",
+        "cardamom": "Kardemon",
+        "cinnamon": "Kaneel"
+      },
+      "flour": {
+        "generic": "Jahu",
+        "rye": {
+          "generic": "Rukkijahu",
+          "whole_grain": "Täistera rukkijahu",
+          "malt": "Rukkilinnase jahu"
+        },
+        "wheat": {
+          "generic": "Nisujahu",
+          "generic_other": "Nisujahu {{count}}",
+          "whole_grain": "Täistera nisujahu",
+          "durum": "Durum jahu"
+        },
+        "barley": {
+          "generic": "Kaer",
+          "generic_other": "Kaer ({{count}} ash)",
+          "whole_grain": "Täistera kaer"
+        },
+        "seeds": {
+          "generic": "Seemned",
+          "generic_other": "Seemned ({{count}} ash)"
+        }
+      },
+      "butter": {
+        "generic": "Või",
+        "generic_other": "Või ({{count}}%)"
+      },
+      "egg": {
+        "generic": "Muna",
+        "generic_other": "{{count}} muna"
+      },
+      "fat": {
+        "generic": "Rasv"
+      },
+      "dry": {
+        "generic": "Kuiv"
+      }
+    }
+  },
+  "messages": {
+    "no_recipes": "Retsepte ei leitud või pole valitud!",
+    "select_recipe": "Vali vasakult retsept, mida kuvada"
+  },
+  "navigation": {
+    "title": "Pagari %",
+    "select_all": "Vali kõik",
+    "selected": "{{count}} valitud"
+  },
+  "snackbar": {
+    "recipes_one": "üks retsept",
+    "recipes_other": "{{count}} retsepti",
+    "print_pages_one": "Prindid ühe kahepoolse lehe",
+    "print_pages_other": "Prindid {{count}} kahepoolse lehte"
+  },
+  "actions": {
+    "save": "Salvesta",
+    "change": "Muuda",
+    "cancel": "Tühista",
+    "add_recipe": "Lisa uus retsept",
+    "sort": "Sorteeri",
+    "print": "Prindi retseptid",
+    "copy_to_clipboard": "Kopeeri lõikelauale",
+    "import": "Impordi"
+  },
+  "recipe": {
+    "servings": "portsjonit"
+  },
+  "Kihistamiseks": "Kihistamiseks"
+}

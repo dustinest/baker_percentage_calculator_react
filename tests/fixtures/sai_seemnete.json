@@ -1,0 +1,46 @@
+{
+  "recipe": "Sai seemnete ja kaerahelvestega",
+  "amount": 1,
+  "notes": "Water and salt are percent-based. totalFlourAmount = 462 (flour) + 10 (barley) + 12 (seeds) = 484 because BARLEY/SEEDS have NutritionType.dry which counts toward the dry total in readJsonRecipe.",
+  "levainAlgorithm": {
+    "condition": "default_26pct",
+    "fridge": 9,
+    "flourAmount": 111,
+    "liquidAmount": 111
+  },
+  "groups": [
+    {
+      "translationKey": "ingredients.title.sourdough_starter_dough",
+      "ingredients": [
+        { "key": "SOURDOUGH_STARTER", "grams": 18,  "bakerPercent": 3.72 },
+        { "key": "WATER",             "grams": 111,  "bakerPercent": 22.93 },
+        { "key": "WHEAT_550_FLOUR",   "grams": 111,  "bakerPercent": 22.93 }
+      ]
+    },
+    {
+      "translationKey": "ingredients.title.dough",
+      "bakingTime": [
+        { "steam": true,  "time": { "from": 20, "until": 20 }, "temperature": { "from": 240, "until": 240 } },
+        { "steam": false, "time": { "from": 20, "until": 20 }, "temperature": { "from": 240, "until": 240 } }
+      ],
+      "innerTemperature": { "from": 88, "until": 99 },
+      "ingredients": [
+        { "key": "WATER",           "grams": 237,  "bakerPercent": 48.97 },
+        { "key": "WHEAT_550_FLOUR", "grams": 342,  "bakerPercent": 70.66 },
+        { "key": "SALT",            "grams": 7.5,  "bakerPercent": 1.55 },
+        { "key": "BARLEY",          "grams": 10,   "bakerPercent": 2.07 },
+        { "key": "SEEDS",           "grams": 12,   "bakerPercent": 2.48 }
+      ]
+    }
+  ],
+  "microNutrients": {
+    "dryTotal": 484,
+    "water":   { "grams": 357,    "percent": 73.76 },
+    "salt":    { "grams": 7.5,    "percent": 1.55 },
+    "fat":     { "grams": 10.13,  "percent": 2.093 },
+    "protein": { "grams": 53.23,  "percent": 10.998 },
+    "carbs":   { "grams": 329.07, "percent": 67.99 },
+    "fiber":   { "grams": 21.42,  "percent": 4.426 }
+  },
+  "totalWeight": { "dough": 848.5, "others": 0, "total": 848.5 }
+}

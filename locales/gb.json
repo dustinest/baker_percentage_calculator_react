@@ -1,0 +1,189 @@
+{
+  "edit": {
+    "hydration": "Hydration",
+    "edit": "Change",
+    "name": "Name",
+    "delete": "Delete",
+    "reset": "Reset",
+    "copyOf": "Copy",
+    "enforce_starter": {
+      "button": "Entire group goes into the levain, not just part of it."
+    },
+    "description": {
+      "generic": "Description"
+    },
+    "ingredients": {
+      "title": "Ingredients title",
+      "add": "Add new group",
+      "ingredient": "Ingredient",
+      "add_ingredient": "Add ingredient",
+      "baker_percent": "Baker %",
+      "choose": "Choose ingredient",
+      "custom": "Custom"
+    },
+    "baking_instructions": {
+      "steam": "Steam",
+      "time": "Time",
+      "temperature": "Temperature",
+      "inner_temperature": "Inner temperature"
+    },
+    "amount": {
+      "button": "Amount: {{count}}",
+      "tab": {
+        "calculate": "Calculate",
+        "change": "Change"
+      },
+      "title": "Recipe amount",
+      "calculate": "Calculate ingredients amount",
+      "change": "Change ingredients amount number"
+    },
+    "mode": {
+      "weight": "Change weight",
+      "percent": "Percent based on dry ingredients"
+    },
+    "baking": {
+      "add": "Add baking step",
+      "add_inner_temperature": "Add inner temperature",
+      "remove_inner_temperature": "Remove inner temperature",
+      "time": "Time (min)",
+      "temperature": "Temperature (°C)",
+      "steam": "Steam",
+      "add_label": "Add label",
+      "label_et": "Label (ET)",
+      "label_en": "Label (EN)"
+    },
+    "preview_hint": "Add flour and liquid to see preview",
+    "import": {
+      "hint": "Paste a JSON recipe below and click \"Import\".",
+      "placeholder": "{ \"name\": \"My recipe\", \"ingredients\": [...] }",
+      "button": "Import",
+      "error_format": "Invalid JSON format — name and ingredients are required",
+      "error_json": "JSON error: {{message}}"
+    }
+  },
+  "baking_instructions": {
+    "steam": "Steam {{minutes}} minutes {{temperature}}℃",
+    "bake": "Bake {{minutes}} minutes {{temperature}}℃",
+    "inner_temperature": "Inner temperature {{temperature}}℃"
+  },
+  "ingredients": {
+    "title": {
+      "baker_percentage": "Baker's percentage",
+      "dough": "Dough",
+      "sourdough_starter_dough": "Levain",
+      "water": "Water",
+      "liquid": "Liquid",
+      "salt": "Salt",
+      "sugar": "Sugar",
+      "fat": "Fat",
+      "protein": "Protein",
+      "carbs": "Carbohydrates",
+      "fiber": "Fiber",
+      "other": "Other",
+      "dry": "Dry"
+    }
+  },
+  "ingredient": {
+    "sourdough_starter": {
+      "name": "Sourdough starter"
+    },
+    "predefined": {
+      "water": {
+        "generic": "Water"
+      },
+      "salt": {
+        "generic": "Salt"
+      },
+      "sugar": {
+        "generic": "Sugar",
+        "brown": "Brown sugar"
+      },
+      "oil": {
+        "generic": "Oil",
+        "olive": "Olive oil"
+      },
+      "milk": {
+        "generic": "Milk",
+        "generic_other": "Milk ({{count}}% fat)",
+        "fat_25": "Milk (2.5% fat)"
+      },
+      "spice": {
+        "generic": "Spice",
+        "cardamom": "Cardamom",
+        "cinnamon": "Cinnamon"
+      },
+      "flour": {
+        "generic": "Flour",
+        "rye": {
+          "generic": "Rye flour",
+          "whole_grain": "Whole grain rye flour",
+          "malt": "Rye malt flour"
+        },
+        "wheat": {
+          "generic": "Wheat flour",
+          "generic_other": "Wheat flour ({{count}} ash)",
+          "whole_grain": "Whole grain wheat flour",
+          "durum": "Durum flour"
+        },
+        "barley": {
+          "generic": "Barley",
+          "generic_other": "Barley ({{count}} ash)",
+          "whole_grain": "Whole grain barley"
+        },
+        "seeds": {
+          "generic": "Seeds",
+          "generic_other": "Seeds ({{count}} ash)"
+        }
+      },
+      "butter": {
+        "generic": "Butter",
+        "generic_other": "Butter ({{count}}% fat)"
+      },
+      "egg": {
+        "generic": "Egg",
+        "generic_one": "{{count}} egg",
+        "generic_other": "{{count}} eggs"
+      },
+      "fat": {
+        "generic": "Fat"
+      },
+      "dry": {
+        "generic": "Dry"
+      }
+    }
+  },
+  "totals": {
+    "total": "Total",
+    "dough": "Dough",
+    "other": "Others"
+  },
+  "messages": {
+    "no_recipes": "No recipes found or selected!",
+    "select_recipe": "Select a recipe from the left to display"
+  },
+  "navigation": {
+    "title": "Sourdough %",
+    "select_all": "Select all",
+    "selected": "{{count}} selected"
+  },
+  "snackbar": {
+    "recipes_one": "one recipe",
+    "recipes_other": "{{count}} recipes",
+    "print_pages_one": "Print one double side page",
+    "print_pages_other": "Print {{count}} double side pages"
+  },
+  "actions": {
+    "save": "Save",
+    "change": "Change",
+    "cancel": "Cancel",
+    "add_recipe": "Add new recipe",
+    "sort": "Sort",
+    "print": "Print recipes",
+    "copy_to_clipboard": "Copy to clipboard",
+    "import": "Import"
+  },
+  "recipe": {
+    "servings": "servings"
+  },
+  "Kihistamiseks": "Lamination"
+}

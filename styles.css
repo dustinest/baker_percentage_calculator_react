@@ -1,0 +1,21 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@media print {
+  html {
+    font-size: 10.5pt;
+  }
+
+  .table tr:first-child > * {
+    border-top-width: 0;
+  }
+
+  .table tr:last-child > * {
+    border-bottom-width: 0;
+  }
+
+  .divider::before,
+  .divider::after {
+    opacity: 0.25;
+  }
+}

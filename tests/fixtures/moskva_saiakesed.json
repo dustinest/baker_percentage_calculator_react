@@ -1,0 +1,47 @@
+{
+  "recipe": "Moskva saiakesed",
+  "amount": 1,
+  "levainAlgorithm": {
+    "condition": "water_10_to_40pct",
+    "fridge": 8,
+    "flourAmount": 122,
+    "liquidAmount": 122
+  },
+  "groups": [
+    {
+      "translationKey": "ingredients.title.sourdough_starter_dough",
+      "ingredients": [
+        { "key": "SOURDOUGH_STARTER", "grams": 16,  "bakerPercent": 3.92 },
+        { "key": "WATER",             "grams": 122, "bakerPercent": 29.90 },
+        { "key": "WHEAT_405_FLOUR",   "grams": 122, "bakerPercent": 29.90 }
+      ]
+    },
+    {
+      "translationKey": "ingredients.title.dough",
+      "ingredients": [
+        { "key": "MILK_25",         "grams": 140, "bakerPercent": 34.31 },
+        { "key": "WHEAT_405_FLOUR", "grams": 278, "bakerPercent": 68.14 },
+        { "key": "BUTTER",          "grams": 50,  "bakerPercent": 12.25 },
+        { "key": "SALT",            "grams": 2,   "bakerPercent": 0.49 },
+        { "key": "SUGAR_BROWN",     "grams": 16,  "bakerPercent": 3.92 }
+      ]
+    },
+    {
+      "translationKey": "Kihistamiseks",
+      "ingredients": [
+        { "key": "BUTTER", "grams": 100, "bakerPercent": 24.51 }
+      ]
+    }
+  ],
+  "microNutrients": {
+    "dryTotal": 408,
+    "water":   { "grams": 278.6,   "percent": 68.284 },
+    "salt":    { "grams": 3.5,     "percent": 0.858 },
+    "sugar":   { "grams": 22.1,    "percent": 5.417 },
+    "fat":     { "grams": 130.5,   "percent": 31.985 },
+    "protein": { "grams": 46.12,   "percent": 11.304 },
+    "carbs":   { "grams": 292,     "percent": 71.569 },
+    "fiber":   { "grams": 12,      "percent": 2.941 }
+  },
+  "totalWeight": { "dough": 746, "others": 100, "total": 846 }
+}

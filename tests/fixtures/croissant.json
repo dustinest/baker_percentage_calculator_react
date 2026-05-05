@@ -1,0 +1,47 @@
+{
+  "recipe": "Croissant",
+  "amount": 1,
+  "levainAlgorithm": {
+    "condition": "water_10_to_40pct",
+    "fridge": 10,
+    "flourAmount": 130,
+    "liquidAmount": 130
+  },
+  "groups": [
+    {
+      "translationKey": "ingredients.title.sourdough_starter_dough",
+      "ingredients": [
+        { "key": "SOURDOUGH_STARTER", "grams": 20,  "bakerPercent": 4.00 },
+        { "key": "WATER",             "grams": 130,  "bakerPercent": 26.00 },
+        { "key": "WHEAT_550_FLOUR",   "grams": 130,  "bakerPercent": 26.00 }
+      ]
+    },
+    {
+      "translationKey": "ingredients.title.dough",
+      "ingredients": [
+        { "key": "MILK_25",         "grams": 140,  "bakerPercent": 28.00 },
+        { "key": "WHEAT_550_FLOUR", "grams": 360,  "bakerPercent": 72.00 },
+        { "key": "BUTTER",          "grams": 40,   "bakerPercent": 8.00 },
+        { "key": "SALT",            "grams": 12,   "bakerPercent": 2.40 },
+        { "key": "SUGAR",           "grams": 55,   "bakerPercent": 11.00 }
+      ]
+    },
+    {
+      "translationKey": "Kihistamiseks",
+      "ingredients": [
+        { "key": "BUTTER", "grams": 280, "bakerPercent": 56.00 }
+      ]
+    }
+  ],
+  "microNutrients": {
+    "dryTotal": 500,
+    "water":   { "grams": 315.8,  "percent": 63.16 },
+    "salt":    { "grams": 15.2,   "percent": 3.04 },
+    "sugar":   { "grams": 61.58,  "percent": 12.316 },
+    "fat":     { "grams": 270.8,  "percent": 54.16 },
+    "protein": { "grams": 61.72,  "percent": 12.344 },
+    "carbs":   { "grams": 347.9,  "percent": 69.58 },
+    "fiber":   { "grams": 19.6,   "percent": 3.92 }
+  },
+  "totalWeight": { "dough": 887, "others": 280, "total": 1167 }
+}
