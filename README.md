@@ -8,28 +8,25 @@ Predefined recipes included. Custom recipes can be imported via JSON paste. All 
 
 ## Prerequisites
 
-Install [Deno](https://deno.land/):
-
-```bash
-curl -fsSL https://deno.land/install.sh | sh
-```
+Install [Node.js](https://nodejs.org/) 20+ and npm 10+.
 
 ---
 
 ## Development
 
 ```bash
-deno task dev
+npm install
+npm run dev
 ```
 
-Open [http://localhost:8000](http://localhost:8000). The server watches `routes/` and `static/` for changes.
+Open [http://localhost:5173](http://localhost:5173).
 
 ---
 
 ## Tests
 
 ```bash
-deno task test
+npm test
 ```
 
 Runs pure calculation tests (resolution, sourdough split, baker%, weights) against fixture files in `tests/fixtures/`.
@@ -39,11 +36,11 @@ Runs pure calculation tests (resolution, sourdough split, baker%, weights) again
 ## Production build
 
 ```bash
-deno task build
-deno task start
+npm run build
+npm run preview
 ```
 
-`build` compiles islands and CSS into `_fresh/`. `start` serves the pre-built output.
+`build` compiles the app into `dist/`. `preview` serves the built output locally.
 
 ---
 
