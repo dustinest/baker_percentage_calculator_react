@@ -30,7 +30,7 @@ export default function RecipeCard({ recipe }: Props) {
               <p class="text-sm text-base-content/60 print:hidden">×{recipe.amount} {t("recipe.servings")}</p>
             )}
           </div>
-          <div class="flex gap-1 print:hidden">
+          <div class="join print:hidden">
             <button
               type="button"
               class="btn btn-sm btn-square"

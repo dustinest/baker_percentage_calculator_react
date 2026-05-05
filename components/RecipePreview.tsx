@@ -39,14 +39,17 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
   return (
     <>
       <div class="px-4">
+        <table class="table w-full">
+
       {bp.ingredients.map((group, gi) => (
-          <table key={gi} class={`table w-full mt-3 ${gi < bp.ingredients.length - 1 ? 'mb-3' : ''}`}>
+          <tbody key={gi}>
             {group.name && (
-                <caption class="text-left text-xs font-semibold uppercase tracking-wide text-base-content/50 mb-1">
-                  {resolveName(group.name, lang)}
-              </caption>
+                <tr>
+                  <td colspan={3} class={`text-left text-xs px-0 font-semibold uppercase tracking-wide text-base-content/50 pt-4`}>
+                    {resolveName(group.name, lang)}
+                  </td>
+                </tr>
             )}
-            <tbody>
               {group.ingredientWithPercent.map((ing, ii) => (
                 <tr key={ii}>
                   <td>{t(ing.name) !== ing.name ? t(ing.name) : ing.name}</td>
@@ -55,14 +58,14 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
                 </tr>
               ))}
             </tbody>
-          </table>
       ))}
+        </table>
       </div>
 
       {children}
 
       <div class="divider my-1" />
-      <div class="px-4">
+      <div className="flex w-full">
         <table class="table w-full">
           <tbody>
             <tr>
@@ -70,38 +73,38 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
               <td class="text-right tabular-nums print:text-xs">{fmt(bp.microNutrients.dry_total)}g</td>
               <td class="text-right tabular-nums print:text-xs">100%</td>
             </tr>
-            {(() => {
+          </tbody>
+        </table>
+
+        {(() => {
               const n = bp.microNutrients.nutrients[NutritionType.water];
               if (!n || n.grams < 0.1) return null;
               return (
+                  <>
+                  <div class="divider divider-horizontal"></div>
+                  <table class="table w-full">
+                    <tbody>
                 <tr>
                   <td class="print:text-xs">{t("ingredients.title.water")}</td>
                   <td class="text-right tabular-nums print:text-xs">{fmtG(n.grams)}g</td>
                   <td class="text-right tabular-nums print:text-xs">{fmtPct(n.percent)}%</td>
                 </tr>
-              );
+            </tbody>
+            </table>
+                  </>
+            );
             })()}
-          </tbody>
-        </table>
       </div>
 
       <div class="divider my-1" />
-      <div class="px-4">
-        <table class="table w-full">
-          <tbody>
-            {DISPLAYABLE_NUTRIENTS_TYPE_ARRAY.filter((type) => type !== NutritionType.water).map((type) => {
-              const n = bp.microNutrients.nutrients[type];
-              if (!n || n.grams < 0.1) return null;
-              return (
-                <tr key={type}>
-                  <td class="print:text-xs">{t(`ingredients.title.${type}`) || type}</td>
-                  <td class="text-right tabular-nums print:text-xs">{fmtG(n.grams)}g</td>
-                  <td class="text-right tabular-nums print:text-xs">{fmtPct(n.percent)}%</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+      <div class="px-4 pb-2 flex flex-wrap gap-1">
+        {DISPLAYABLE_NUTRIENTS_TYPE_ARRAY.filter((type) => type !== NutritionType.water).map((type) => {
+          const n = bp.microNutrients.nutrients[type];
+          if (!n || n.grams < 0.1) return null;
+          return (
+              <div key={type} class="badge badge badge-ghost badge-sm">{t(`ingredients.title.${type}`) || type}: {fmtG(n.grams)}g / {fmtPct(n.percent)}%</div>
+          );
+        })}
       </div>
 
       <div class="card-footer border-t border-base-300 print:border-base-200">
