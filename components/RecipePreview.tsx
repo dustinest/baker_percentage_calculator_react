@@ -4,7 +4,8 @@ import { t } from "../lib/i18n.ts";
 import { computeSummaryWeights } from "../lib/summary-weights.ts";
 
 const fmt = (n: number) => Math.round(n);
-const fmtPct = (n: number) => n.toFixed(2);
+const fmtPct = (n: number) => n == 100 ? 100 : n.toFixed(2);
+const fmtRnd100 = (n: number) =>  Math.round(n * 100) / 100;
 const fmtG = (n: number) => { const r = Math.round(n * 10) / 10; return r === Math.floor(r) ? `${r}` : r.toFixed(1); };
 const resolveName = (name: string | Record<string, string> | undefined, lang: string): string | null => {
   if (!name) return null;
@@ -49,7 +50,7 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
               {group.ingredientWithPercent.map((ing, ii) => (
                 <tr key={ii}>
                   <td>{t(ing.name) !== ing.name ? t(ing.name) : ing.name}</td>
-                  <td class="text-right tabular-nums">{fmt(ing.grams)}g</td>
+                  <td class="text-right tabular-nums">{fmtRnd100(ing.grams)}g</td>
                   <td class="text-right tabular-nums">{fmtPct(ing.percent)}%</td>
                 </tr>
               ))}
