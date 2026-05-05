@@ -7,8 +7,7 @@
     "reset": "Reset",
     "copyOf": "Copy",
     "enforce_starter": {
-      "button": "Use all in levain",
-      "legend": "As the levain algorithm tries to find a specific amount but you would like to use all ingredients in it, you may need to indicate that everything in this list belongs to the levain."
+      "button": "Entire group goes into the levain, not just part of it."
     },
     "description": {
       "generic": "Description"

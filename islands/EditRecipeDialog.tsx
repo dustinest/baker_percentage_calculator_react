@@ -112,6 +112,8 @@ export default function EditRecipeDialog({ recipe }: Props) {
     c.ingredients[gi].ingredients = c.ingredients[gi].ingredients.filter((_, i) => i !== ii);
   });
 
+  const setStarter = (gi: number, v: boolean) => updateDraft((c) => { c.ingredients[gi].starter = v; });
+
   const pickStandardIng = (gi: number, ii: number, key: string, currentGrams: number) => {
     const ing = getIngredientGrams(key, currentGrams || 0);
     if (!ing) return;
@@ -368,9 +370,28 @@ export default function EditRecipeDialog({ recipe }: Props) {
                     </tbody>
                   </table>
 
+                  <div>
                   <button type="button" class="btn btn-xs btn-ghost mt-2" onClick={() => addIng(gi)}>
                     + {t("edit.ingredients.add_ingredient")}
                   </button>
+                  </div>
+
+                  {gi === 0 && (
+                      <>
+                        <div class="divider my-1" />
+                    <label class="flex items-center gap-1.5 cursor-pointer mt-2">
+                      <input
+                        type="checkbox"
+                        class="checkbox checkbox-xs"
+                        checked={group.starter === true}
+                        onChange={(e) => setStarter(gi, (e.target as HTMLInputElement).checked)}
+                      />
+                      <span class="text-xs">{t("edit.enforce_starter.button")}</span>
+                    </label>
+                      </>
+                  )}
+
+
                 </div>
               );
             })}

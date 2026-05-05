@@ -66,18 +66,18 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
         <table class="table w-full">
           <tbody>
             <tr>
-              <td>{t("ingredients.title.dry")}</td>
-              <td class="text-right tabular-nums">{fmt(bp.microNutrients.dry_total)}g</td>
-              <td class="text-right tabular-nums">100%</td>
+              <td class="print:text-xs">{t("ingredients.title.dry")}</td>
+              <td class="text-right tabular-nums print:text-xs">{fmt(bp.microNutrients.dry_total)}g</td>
+              <td class="text-right tabular-nums print:text-xs">100%</td>
             </tr>
             {(() => {
               const n = bp.microNutrients.nutrients[NutritionType.water];
               if (!n || n.grams < 0.1) return null;
               return (
                 <tr>
-                  <td>{t("ingredients.title.water")}</td>
-                  <td class="text-right tabular-nums">{fmtG(n.grams)}g</td>
-                  <td class="text-right tabular-nums">{fmtPct(n.percent)}%</td>
+                  <td class="print:text-xs">{t("ingredients.title.water")}</td>
+                  <td class="text-right tabular-nums print:text-xs">{fmtG(n.grams)}g</td>
+                  <td class="text-right tabular-nums print:text-xs">{fmtPct(n.percent)}%</td>
                 </tr>
               );
             })()}
@@ -94,9 +94,9 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
               if (!n || n.grams < 0.1) return null;
               return (
                 <tr key={type}>
-                  <td>{t(`ingredients.title.${type}`) || type}</td>
-                  <td class="text-right tabular-nums">{fmtG(n.grams)}g</td>
-                  <td class="text-right tabular-nums">{fmtPct(n.percent)}%</td>
+                  <td class="print:text-xs">{t(`ingredients.title.${type}`) || type}</td>
+                  <td class="text-right tabular-nums print:text-xs">{fmtG(n.grams)}g</td>
+                  <td class="text-right tabular-nums print:text-xs">{fmtPct(n.percent)}%</td>
                 </tr>
               );
             })}
