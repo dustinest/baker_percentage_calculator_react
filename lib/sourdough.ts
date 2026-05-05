@@ -235,7 +235,6 @@ export const splitStarterAndDough = (
         ingredients: others.length > 0 ? [...toAdd, ...others] : [...toAdd],
         bakingTime: [],
         innerTemperature: null,
-        description: null,
         starter: group.starter,
       }));
       return;
@@ -246,14 +245,12 @@ export const splitStarterAndDough = (
       ingredients: starterIngredients,
       bakingTime: [],
       innerTemperature: null,
-      description: null,
     }));
     result.push(copyRecipeIngredientsType({
       name: group.name || "ingredients.title.dough",
       ingredients: nonStarter,
       bakingTime: group.bakingTime,
       innerTemperature: group.innerTemperature,
-      description: group.description,
     }));
   });
 

@@ -80,9 +80,6 @@ export default function RecipeCard({ recipe }: Props) {
             </div>
           )}
 
-          {recipe.description && (
-            <div class="px-4 pb-3">{recipe.description}</div>
-          )}
         </RecipePreview>
       )}
 

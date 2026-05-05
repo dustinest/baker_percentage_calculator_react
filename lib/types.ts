@@ -73,7 +73,6 @@ export type BakingTimeType = {
 export type BakingAwareType = {
   innerTemperature: NumberIntervalType | null;
   bakingTime: BakingTimeType[];
-  description: string | null;
 };
 
 export const copyNumberIntervalType = (v: NumberIntervalType): NumberIntervalType =>
@@ -97,7 +96,6 @@ export type RecipeIngredientsType = {
 export const copyRecipeIngredientsType = (v: RecipeIngredientsType): RecipeIngredientsType => ({
   ingredients: v.ingredients.map(copyIngredientGramsType),
   name: v.name,
-  description: v.description,
   bakingTime: v.bakingTime.map(copyBakingTimeType),
   starter: v.starter,
   innerTemperature: v.innerTemperature ? copyNumberIntervalType(v.innerTemperature) : null,
@@ -121,7 +119,6 @@ export const nameForLang = (name: string | Record<string, string>, lang: string)
 export const copyRecipeType = (v: RecipeType): RecipeType => ({
   innerTemperature: v.innerTemperature ? copyNumberIntervalType(v.innerTemperature) : null,
   bakingTime: v.bakingTime.map(copyBakingTimeType),
-  description: v.description,
   amount: v.amount,
   name: v.name,
   ingredients: v.ingredients.map(copyRecipeIngredientsType),

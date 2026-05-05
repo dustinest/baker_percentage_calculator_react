@@ -91,7 +91,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
   });
 
   const addGroup = () => updateDraft((c) => {
-    c.ingredients.push({ name: { et: "", en: "" }, ingredients: [], bakingTime: [], innerTemperature: null, description: null, starter: false });
+    c.ingredients.push({ name: { et: "", en: "" }, ingredients: [], bakingTime: [], innerTemperature: null,  starter: false });
   });
 
   const addIng = (gi: number) => updateDraft((c) => {

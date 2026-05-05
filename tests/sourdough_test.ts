@@ -11,7 +11,6 @@ const makeGroup = (flourGrams: number, waterGrams: number): RecipeIngredientsTyp
   ],
   bakingTime: [],
   innerTemperature: null,
-  description: null,
 });
 
 Deno.test("calculateSourDoughStarter: 20g flour + 20g water → fridge bumped to 10g", () => {

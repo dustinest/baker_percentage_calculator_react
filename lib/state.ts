@@ -97,10 +97,9 @@ export const addNewRecipe = () => {
     id: "",
     name: { et: "Uus retsept", en: "New recipe" },
     amount: 1,
-    ingredients: [{ ingredients: [], bakingTime: [], innerTemperature: null, description: null }],
+    ingredients: [{ ingredients: [], bakingTime: [], innerTemperature: null }],
     bakingTime: [],
     innerTemperature: null,
-    description: null,
   };
 };
 

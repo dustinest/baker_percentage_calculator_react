@@ -62,7 +62,6 @@ export const recalculateBakerPercentage = (ingredients: RecipeIngredientsType[])
     return {
       name: group.name,
       starter: group.starter,
-      description: group.description,
       ingredients: group.ingredients.map(copyIngredientGramsType),
       bakingTime: group.bakingTime.map(copyBakingTimeType),
       innerTemperature: group.innerTemperature ? copyNumberIntervalType(group.innerTemperature) : null,

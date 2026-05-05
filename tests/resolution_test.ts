@@ -32,7 +32,7 @@ Deno.test("resolution: percent-based ingredients resolve to correct grams", () =
 });
 
 Deno.test("resolution: grams-based ingredients pass through unchanged", () => {
-  const sai = readJsonRecipe(PREDEFINED_RECIPES.find((r) => r.name === "Sai")!);
+  const sai = readJsonRecipe(PREDEFINED_RECIPES.find((r) => nameStr(r.name) === "Sai")!);
   const flour = sai.ingredients[0].ingredients.find((i) => i.type === "WHEAT_550_FLOUR");
   assertEquals(flour?.grams, 462);
 });

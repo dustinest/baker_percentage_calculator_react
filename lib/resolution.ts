@@ -135,7 +135,6 @@ export const readJsonRecipe = (recipe: JsonRecipe): RecipeType => {
     ingredients: [],
     bakingTime: resolveBakingTime(recipe.bakingTime),
     innerTemperature: resolveInnerTemperature(recipe.innerTemperature),
-    description: null,
     amount: recipe.amount || 1,
   };
 
@@ -147,7 +146,6 @@ export const readJsonRecipe = (recipe: JsonRecipe): RecipeType => {
   for (const group of recipe.ingredients) {
     const recipeGroup: RecipeIngredientsType = {
       name: group.name,
-      description: null,
       bakingTime: resolveBakingTime(group.bakingTime),
       innerTemperature: resolveInnerTemperature(group.innerTemperature),
       starter: group.starter === true,
