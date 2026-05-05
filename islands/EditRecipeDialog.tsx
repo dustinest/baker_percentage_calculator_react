@@ -244,7 +244,8 @@ export default function EditRecipeDialog({ recipe }: Props) {
               const usedKeys = new Set(group.ingredients.map((i) => i.type).filter((t) => t && t !== "other"));
               const nameRecord = isCustom ? group.name as Record<string, string> : null;
               return (
-                <div key={gi} class="border border-base-300 rounded-lg p-3">
+                  <div key={gi} class="card w-full border border-base-300">
+                    <div class="card-body p-2">
                   {isCustom ? (
                     <div class="flex gap-2 items-start mb-2">
                       <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -377,8 +378,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
                   </div>
 
                   {gi === 0 && (
-                      <>
-                        <div class="divider my-1" />
+                      <div class="card-footer border-t border-base-300 print:border-base-200 mt-2">
                     <label class="flex items-center gap-1.5 cursor-pointer mt-2">
                       <input
                         type="checkbox"
@@ -388,11 +388,12 @@ export default function EditRecipeDialog({ recipe }: Props) {
                       />
                       <span class="text-xs">{t("edit.enforce_starter.button")}</span>
                     </label>
-                      </>
+                      </div>
                   )}
 
 
                 </div>
+                  </div>
               );
             })}
 

@@ -40,7 +40,7 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
     <>
       <div class="px-4">
       {bp.ingredients.map((group, gi) => (
-          <table key={gi} class={`table w-full ${gi < bp.ingredients.length - 1 ? 'mb-3' : ''}`}>
+          <table key={gi} class={`table w-full mt-3 ${gi < bp.ingredients.length - 1 ? 'mb-3' : ''}`}>
             {group.name && (
                 <caption class="text-left text-xs font-semibold uppercase tracking-wide text-base-content/50 mb-1">
                   {resolveName(group.name, lang)}
