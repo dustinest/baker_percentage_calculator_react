@@ -59,7 +59,11 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
     bakingTime: [
       { time: 20, temperature: 240, steam: true },
       { time: 20, temperature: 240 },
-      { time: 25, temperature: 180, label: { et: "Kukkel 90g", en: "Bun 90g" } },
+      {
+        time: 25,
+        temperature: 180,
+        label: { et: "Kukkel 90g", en: "Bun 90g" },
+      },
     ],
     innerTemperature: { from: 88, until: 99 },
     ingredients: [{
@@ -71,7 +75,10 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
     }],
   },
   {
-    name: { et: "Sai seemnete ja kaerahelvestega", en: "Bread with seeds and oats" },
+    name: {
+      et: "Sai seemnete ja kaerahelvestega",
+      en: "Bread with seeds and oats",
+    },
     bakingTime: [
       { time: 20, temperature: 240, steam: true },
       { time: 20, temperature: 240 },
@@ -187,9 +194,15 @@ export const PREDEFINED_RECIPES: JsonRecipe[] = [
     ],
   },
   {
-    name: { et: "Plaadikook", en: "Pie dough" },
-    description: "Pirukad küpseta umbes 30 - 40 minutit 180℃",
-    bakingTime: [{ time: { from: 20, until: 30 }, temperature: 210 }],
+    name: { et: "Plaadikook", en: "Tray bake" },
+    bakingTime: [
+      { time: { from: 20, until: 30 }, temperature: 210 },
+      {
+        time: 35,
+        temperature: 180,
+        label: { et: "Pirukad (umbes)", en: "Pies (approx.)" },
+      },
+    ],
     innerTemperature: { from: 82, until: 88 },
     ingredients: [{
       ingredients: [
