@@ -53,7 +53,14 @@
       "label_et": "Silt (ET)",
       "label_en": "Silt (EN)"
     },
-    "preview_hint": "Lisa jahu ja vedelik, et eelvaade näha"
+    "preview_hint": "Lisa jahu ja vedelik, et eelvaade näha",
+    "import": {
+      "hint": "Kleebi JSON retsept alla ja vajuta \"Impordi\".",
+      "placeholder": "{ \"name\": \"Minu retsept\", \"ingredients\": [...] }",
+      "button": "Impordi",
+      "error_format": "Vigane JSON formaat — name ja ingredients on kohustuslikud",
+      "error_json": "JSON viga: {{message}}"
+    }
   },
   "baking_instructions": {
     "steam": "Auruta {{minutes}} minutit {{temperature}}℃",
@@ -148,7 +155,12 @@
     }
   },
   "messages": {
-    "no_recipes": "Retsepte ei leitud või pole valitud!"
+    "no_recipes": "Retsepte ei leitud või pole valitud!",
+    "select_recipe": "Vali vasakult retsept, mida kuvada"
+  },
+  "navigation": {
+    "select_all": "Vali kõik",
+    "selected": "{{count}} valitud"
   },
   "snackbar": {
     "recipes_one": "üks retsept",
@@ -162,7 +174,9 @@
     "cancel": "Tühista",
     "add_recipe": "Lisa uus retsept",
     "sort": "Sorteeri",
-    "print": "Prindi retseptid"
+    "print": "Prindi retseptid",
+    "copy_to_clipboard": "Kopeeri lõikelauale",
+    "import": "Impordi"
   },
   "recipe": {
     "servings": "portsjonit"

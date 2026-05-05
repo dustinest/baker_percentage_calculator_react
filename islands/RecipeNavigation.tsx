@@ -93,7 +93,7 @@ export default function RecipeNavigation() {
               onChange={() => allSelected ? selectNone() : selectAll()}
             />
             <span class="text-sm font-medium">
-              {selectedCount > 0 ? `${selectedCount} valitud` : "Vali kõik"}
+              {selectedCount > 0 ? t("navigation.selected", { count: selectedCount }) : t("navigation.select_all")}
             </span>
           </label>
         </li>

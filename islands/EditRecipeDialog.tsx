@@ -149,14 +149,14 @@ export default function EditRecipeDialog({ recipe }: Props) {
     try {
       const parsed = JSON.parse(importText.value);
       if (!parsed.name || !Array.isArray(parsed.ingredients)) {
-        importError.value = "Vigane JSON formaat — name ja ingredients on kohustuslikud";
+        importError.value = t("edit.import.error_format");
         return;
       }
       const resolved = readJsonRecipe(parsed);
       addImportedRecipe(resolved);
       close();
     } catch (e) {
-      importError.value = `JSON viga: ${e instanceof Error ? e.message : String(e)}`;
+      importError.value = t("edit.import.error_json", { message: e instanceof Error ? e.message : String(e) });
     }
   };
 
@@ -521,7 +521,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
                 type="button"
                 class="absolute top-2 right-2 btn btn-xs btn-ghost opacity-60 hover:opacity-100"
                 onClick={handleCopy}
-                title="Copy to clipboard"
+                title={t("actions.copy_to_clipboard")}
               >
                 {copied.value ? <IconCheck class="h-4 w-4 text-success" /> : <IconCopy />}
               </button>
@@ -533,11 +533,11 @@ export default function EditRecipeDialog({ recipe }: Props) {
         {activeTab.value === "import" && (
           <div class="space-y-3">
             <p class="text-sm text-base-content/70">
-              Kleebi JSON retsept alla ja vajuta "Impordi".
+              {t("edit.import.hint")}
             </p>
             <textarea
               class="textarea textarea-bordered w-full h-48 font-mono text-xs"
-              placeholder='{ "name": "Minu retsept", "ingredients": [...] }'
+              placeholder={t("edit.import.placeholder")}
               value={importText.value}
               onInput={(e) => { importText.value = (e.target as HTMLTextAreaElement).value; }}
             />
@@ -547,7 +547,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
               </div>
             )}
             <button type="button" class="btn btn-primary btn-sm" onClick={handleImport}>
-              Impordi
+              {t("actions.import")}
             </button>
           </div>
         )}

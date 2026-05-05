@@ -53,7 +53,14 @@
       "label_et": "Label (ET)",
       "label_en": "Label (EN)"
     },
-    "preview_hint": "Add flour and liquid to see preview"
+    "preview_hint": "Add flour and liquid to see preview",
+    "import": {
+      "hint": "Paste a JSON recipe below and click \"Import\".",
+      "placeholder": "{ \"name\": \"My recipe\", \"ingredients\": [...] }",
+      "button": "Import",
+      "error_format": "Invalid JSON format — name and ingredients are required",
+      "error_json": "JSON error: {{message}}"
+    }
   },
   "baking_instructions": {
     "steam": "Steam {{minutes}} minutes {{temperature}}℃",
@@ -149,7 +156,12 @@
     "other": "Others"
   },
   "messages": {
-    "no_recipes": "No recipes found or selected!"
+    "no_recipes": "No recipes found or selected!",
+    "select_recipe": "Select a recipe from the left to display"
+  },
+  "navigation": {
+    "select_all": "Select all",
+    "selected": "{{count}} selected"
   },
   "snackbar": {
     "recipes_one": "one recipe",
@@ -163,7 +175,9 @@
     "cancel": "Cancel",
     "add_recipe": "Add new recipe",
     "sort": "Sort",
-    "print": "Print recipes"
+    "print": "Print recipes",
+    "copy_to_clipboard": "Copy to clipboard",
+    "import": "Import"
   },
   "recipe": {
     "servings": "servings"
