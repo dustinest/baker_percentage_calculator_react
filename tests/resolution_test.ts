@@ -1,7 +1,10 @@
-import { assertEquals, assertAlmostEquals } from "@std/assert";
+import { test, expect } from "vitest";
 import { readJsonRecipe } from "../lib/resolution.ts";
 import { PREDEFINED_RECIPES } from "../lib/recipes.ts";
 import { nameStr } from "../lib/types.ts";
+
+const assertClose = (actual: number, expected: number, delta: number, msg?: string) =>
+  expect(Math.abs(actual - expected), msg).toBeLessThan(delta);
 
 // Expected resolved grams for percent-based ingredients per recipe
 const EXPECTED: Record<string, Record<string, number>> = {
@@ -13,7 +16,7 @@ const EXPECTED: Record<string, Record<string, number>> = {
   "Kaneelirullid":  { CARDAMOM: 1, CINNAMON: 15.8 },
 };
 
-Deno.test("resolution: percent-based ingredients resolve to correct grams", () => {
+test("resolution: percent-based ingredients resolve to correct grams", () => {
   for (const jsonRecipe of PREDEFINED_RECIPES) {
     const recipe = readJsonRecipe(jsonRecipe);
     const expected = EXPECTED[nameStr(recipe.name)];
@@ -23,7 +26,7 @@ Deno.test("resolution: percent-based ingredients resolve to correct grams", () =
     for (const [key, expectedGrams] of Object.entries(expected)) {
       const found = allIngredients.find((i) => i.type === key);
       if (!found) throw new Error(`${recipe.name}: ingredient ${key} not found`);
-      assertAlmostEquals(
+      assertClose(
         found.grams, expectedGrams, 0.1,
         `${recipe.name} ${key}: expected ${expectedGrams}g, got ${found.grams}g`,
       );
@@ -31,14 +34,14 @@ Deno.test("resolution: percent-based ingredients resolve to correct grams", () =
   }
 });
 
-Deno.test("resolution: grams-based ingredients pass through unchanged", () => {
+test("resolution: grams-based ingredients pass through unchanged", () => {
   const sai = readJsonRecipe(PREDEFINED_RECIPES.find((r) => nameStr(r.name) === "Sai")!);
   const flour = sai.ingredients[0].ingredients.find((i) => i.type === "WHEAT_550_FLOUR");
-  assertEquals(flour?.grams, 462);
+  expect(flour?.grams).toEqual(462);
 });
 
-Deno.test("resolution: all 11 recipes resolve without error", () => {
-  assertEquals(PREDEFINED_RECIPES.length, 11);
+test("resolution: all 11 recipes resolve without error", () => {
+  expect(PREDEFINED_RECIPES.length).toEqual(11);
   for (const r of PREDEFINED_RECIPES) {
     readJsonRecipe(r); // must not throw
   }

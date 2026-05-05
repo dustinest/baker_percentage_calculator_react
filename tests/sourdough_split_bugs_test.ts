@@ -1,4 +1,4 @@
-import { assertEquals, assertNotEquals } from "@std/assert";
+import { test, expect } from "vitest";
 import { readJsonRecipe } from "../lib/resolution.ts";
 import { splitStarterAndDough } from "../lib/sourdough.ts";
 import { PREDEFINED_RECIPES } from "../lib/recipes.ts";
@@ -16,42 +16,42 @@ const hasMilk = (group: ReturnType<typeof splitStarterAndDough>[0]) =>
 // branch. Result: milk ends up in split[0] (Eeltaigen) instead of split[1]
 // (Taigen). Reference PDFs show milk must always stay in Taigen.
 
-Deno.test("Bug 1: Vastlakuklid — milk stays in Taigen, not Eeltaigen", () => {
+test("Bug 1: Vastlakuklid — milk stays in Taigen, not Eeltaigen", () => {
   const split = splitStarterAndDough(recipe("Vastlakuklid").ingredients);
-  assertEquals(hasMilk(split[0]), false, "milk must not be in Eeltaigen");
-  assertEquals(hasMilk(split[1]), true, "milk must be in Taigen");
+  expect(hasMilk(split[0]), "milk must not be in Eeltaigen").toBe(false);
+  expect(hasMilk(split[1]), "milk must be in Taigen").toBe(true);
 });
 
-Deno.test("Bug 1: Kaneelirullid — milk stays in Taigen, not Eeltaigen", () => {
+test("Bug 1: Kaneelirullid — milk stays in Taigen, not Eeltaigen", () => {
   const split = splitStarterAndDough(recipe("Kaneelirullid").ingredients);
-  assertEquals(hasMilk(split[0]), false, "milk must not be in Eeltaigen");
-  assertEquals(hasMilk(split[1]), true, "milk must be in Taigen");
+  expect(hasMilk(split[0]), "milk must not be in Eeltaigen").toBe(false);
+  expect(hasMilk(split[1]), "milk must be in Taigen").toBe(true);
 });
 
-Deno.test("Bug 1: Plaadikook — milk stays in Taigen, not Eeltaigen", () => {
+test("Bug 1: Plaadikook — milk stays in Taigen, not Eeltaigen", () => {
   const split = splitStarterAndDough(recipe("Plaadikook").ingredients);
-  assertEquals(hasMilk(split[0]), false, "milk must not be in Eeltaigen");
-  assertEquals(hasMilk(split[1]), true, "milk must be in Taigen");
+  expect(hasMilk(split[0]), "milk must not be in Eeltaigen").toBe(false);
+  expect(hasMilk(split[1]), "milk must be in Taigen").toBe(true);
 });
 
-Deno.test("Bug 1: Moskva saiakesed — milk stays in Taigen, not Eeltaigen", () => {
+test("Bug 1: Moskva saiakesed — milk stays in Taigen, not Eeltaigen", () => {
   const split = splitStarterAndDough(recipe("Moskva saiakesed").ingredients);
-  assertEquals(hasMilk(split[0]), false, "milk must not be in Eeltaigen");
-  assertEquals(hasMilk(split[1]), true, "milk must be in Taigen");
+  expect(hasMilk(split[0]), "milk must not be in Eeltaigen").toBe(false);
+  expect(hasMilk(split[1]), "milk must be in Taigen").toBe(true);
 });
 
-Deno.test("Bug 1: Croissant — milk stays in Taigen, not Eeltaigen", () => {
+test("Bug 1: Croissant — milk stays in Taigen, not Eeltaigen", () => {
   const split = splitStarterAndDough(recipe("Croissant").ingredients);
-  assertEquals(hasMilk(split[0]), false, "milk must not be in Eeltaigen");
-  assertEquals(hasMilk(split[1]), true, "milk must be in Taigen");
+  expect(hasMilk(split[0]), "milk must not be in Eeltaigen").toBe(false);
+  expect(hasMilk(split[1]), "milk must be in Taigen").toBe(true);
 });
 
 // Sanity check: Pikk sai hits the else-branch (water ratio 41.8% > 40%),
 // so the milk rule never fires — milk has always been in Taigen correctly.
-Deno.test("Bug 1 (sanity): Pikk sai — milk already stays in Taigen (not broken)", () => {
+test("Bug 1 (sanity): Pikk sai — milk already stays in Taigen (not broken)", () => {
   const split = splitStarterAndDough(recipe("Pikk sai").ingredients);
-  assertEquals(hasMilk(split[0]), false, "milk must not be in Eeltaigen");
-  assertEquals(hasMilk(split[1]), true, "milk must be in Taigen");
+  expect(hasMilk(split[0]), "milk must not be in Eeltaigen").toBe(false);
+  expect(hasMilk(split[1]), "milk must be in Taigen").toBe(true);
 });
 
 // ── Bug 2: Pannkook second group has no name (no "Taigen" header in display) ─
@@ -60,9 +60,9 @@ Deno.test("Bug 1 (sanity): Pikk sai — milk already stays in Taigen (not broken
 // in the recipe JSON, so it's displayed without a section header, making all
 // ingredients appear under one "Eeltaigen" block.
 
-Deno.test("Bug 2: Pannkook — produces 2 groups and second group has a name", () => {
+test("Bug 2: Pannkook — produces 2 groups and second group has a name", () => {
   const split = splitStarterAndDough(recipe("Pannkook").ingredients);
-  assertEquals(split.length, 2, "should have 2 groups");
-  assertNotEquals(split[1].name, undefined, "second group must have a name for its Taigen header");
-  assertNotEquals(split[1].name, null, "second group name must not be null");
+  expect(split.length, "should have 2 groups").toEqual(2);
+  expect(split[1].name, "second group must have a name for its Taigen header").not.toBeUndefined();
+  expect(split[1].name, "second group name must not be null").not.toBeNull();
 });
