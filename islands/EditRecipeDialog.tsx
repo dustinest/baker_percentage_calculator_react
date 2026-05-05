@@ -91,7 +91,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
   });
 
   const addGroup = () => updateDraft((c) => {
-    c.ingredients.push({ name: { et: "", en: "" }, ingredients: [], bakingTime: [], innerTemperature: null,  starter: false });
+    c.ingredients.push({ name: { et: "", en: "" }, ingredients: [], starter: false });
   });
 
   const addIng = (gi: number) => updateDraft((c) => {
@@ -117,6 +117,32 @@ export default function EditRecipeDialog({ recipe }: Props) {
     if (!ing) return;
     updateDraft((c) => { c.ingredients[gi].ingredients[ii] = ing; });
   };
+
+  const addBakingTime = () => updateDraft((c) => {
+    c.bakingTime.push({ time: { from: 20, until: 20 }, temperature: { from: 200, until: 200 }, steam: false });
+  });
+
+  const delBakingTime = (i: number) => updateDraft((c) => {
+    c.bakingTime = c.bakingTime.filter((_, idx) => idx !== i);
+  });
+
+  const setBakingTimeInterval = (i: number, field: "time" | "temperature", part: "from" | "until", v: number) =>
+    updateDraft((c) => { c.bakingTime[i][field][part] = v; });
+
+  const setBakingTimeSteam = (i: number, v: boolean) => updateDraft((c) => { c.bakingTime[i].steam = v; });
+
+  const setBakingTimeLabel = (i: number, lang: string, v: string) => updateDraft((c) => {
+    const cur = { ...(c.bakingTime[i].label ?? { et: "", en: "" }) };
+    cur[lang] = v;
+    c.bakingTime[i].label = cur;
+  });
+
+  const setInnerTemperature = (part: "from" | "until", v: number) => updateDraft((c) => {
+    if (!c.innerTemperature) c.innerTemperature = { from: v, until: v };
+    else c.innerTemperature[part] = v;
+  });
+
+  const clearInnerTemperature = () => updateDraft((c) => { c.innerTemperature = null; });
 
   const handleImport = () => {
     importError.value = "";
@@ -352,6 +378,112 @@ export default function EditRecipeDialog({ recipe }: Props) {
             <button type="button" class="btn btn-sm btn-ghost w-full" onClick={addGroup}>
               + {t("edit.ingredients.add")}
             </button>
+
+            <div class="space-y-2">
+              {d.bakingTime.map((bt, i) => {
+                const hasLabel = bt.label !== undefined;
+                return (
+                  <div key={i} class="border border-base-300 rounded-lg p-3 space-y-2">
+                    <div class="flex gap-2 items-center flex-wrap">
+                      <span class="text-xs text-base-content/50 w-full sm:w-auto">{t("edit.baking.time")}</span>
+                      <input
+                        type="number" class="input input-bordered input-xs w-16 text-right" min={1}
+                        value={bt.time.from}
+                        onInput={(e) => setBakingTimeInterval(i, "time", "from", Number((e.target as HTMLInputElement).value))}
+                      />
+                      <span class="text-xs">–</span>
+                      <input
+                        type="number" class="input input-bordered input-xs w-16 text-right" min={1}
+                        value={bt.time.until}
+                        onInput={(e) => setBakingTimeInterval(i, "time", "until", Number((e.target as HTMLInputElement).value))}
+                      />
+                      <span class="text-xs text-base-content/50">{t("edit.baking.temperature")}</span>
+                      <input
+                        type="number" class="input input-bordered input-xs w-16 text-right" min={1}
+                        value={bt.temperature.from}
+                        onInput={(e) => setBakingTimeInterval(i, "temperature", "from", Number((e.target as HTMLInputElement).value))}
+                      />
+                      <span class="text-xs">–</span>
+                      <input
+                        type="number" class="input input-bordered input-xs w-16 text-right" min={1}
+                        value={bt.temperature.until}
+                        onInput={(e) => setBakingTimeInterval(i, "temperature", "until", Number((e.target as HTMLInputElement).value))}
+                      />
+                      <label class="flex items-center gap-1 cursor-pointer">
+                        <input
+                          type="checkbox" class="checkbox checkbox-xs"
+                          checked={bt.steam}
+                          onChange={(e) => setBakingTimeSteam(i, (e.target as HTMLInputElement).checked)}
+                        />
+                        <span class="text-xs">{t("edit.baking.steam")}</span>
+                      </label>
+                      <div class="ml-auto flex gap-1">
+                        <button type="button" class="btn btn-xs btn-ghost"
+                          onClick={() => {
+                            if (hasLabel) {
+                              updateDraft((c) => { c.bakingTime[i].label = undefined; });
+                            } else {
+                              updateDraft((c) => { c.bakingTime[i].label = { et: "", en: "" }; });
+                            }
+                          }}>
+                          {hasLabel ? "–" : "+"} {t("edit.baking.add_label")}
+                        </button>
+                        <button type="button" class="btn btn-xs btn-ghost text-error" onClick={() => delBakingTime(i)}>×</button>
+                      </div>
+                    </div>
+                    {hasLabel && (
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <label class="input input-bordered input-xs flex items-center gap-2">
+                          <span>🇪🇪</span>
+                          <input type="text" class="grow" placeholder={t("edit.baking.label_et")}
+                            value={bt.label?.et ?? ""}
+                            onInput={(e) => setBakingTimeLabel(i, "et", (e.target as HTMLInputElement).value)}
+                          />
+                        </label>
+                        <label class="input input-bordered input-xs flex items-center gap-2">
+                          <span>🇬🇧</span>
+                          <input type="text" class="grow" placeholder={t("edit.baking.label_en")}
+                            value={bt.label?.en ?? ""}
+                            onInput={(e) => setBakingTimeLabel(i, "en", (e.target as HTMLInputElement).value)}
+                          />
+                        </label>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+              <button type="button" class="btn btn-sm btn-ghost w-full" onClick={addBakingTime}>
+                + {t("edit.baking.add")}
+              </button>
+
+              {d.innerTemperature
+                ? (
+                  <div class="flex items-center gap-2 flex-wrap border border-base-300 rounded-lg p-3">
+                    <span class="text-xs text-base-content/50">{t("edit.baking_instructions.inner_temperature")}</span>
+                    <input
+                      type="number" class="input input-bordered input-xs w-16 text-right" min={1}
+                      value={d.innerTemperature.from}
+                      onInput={(e) => setInnerTemperature("from", Number((e.target as HTMLInputElement).value))}
+                    />
+                    <span class="text-xs">–</span>
+                    <input
+                      type="number" class="input input-bordered input-xs w-16 text-right" min={1}
+                      value={d.innerTemperature.until}
+                      onInput={(e) => setInnerTemperature("until", Number((e.target as HTMLInputElement).value))}
+                    />
+                    <span class="text-xs">°C</span>
+                    <button type="button" class="btn btn-xs btn-ghost text-error ml-auto" onClick={clearInnerTemperature}>
+                      {t("edit.baking.remove_inner_temperature")}
+                    </button>
+                  </div>
+                )
+                : (
+                  <button type="button" class="btn btn-sm btn-ghost w-full" onClick={() => updateDraft((c) => { c.innerTemperature = { from: 88, until: 99 }; })}>
+                    + {t("edit.baking.add_inner_temperature")}
+                  </button>
+                )
+              }
+            </div>
 
             <div class="border border-base-300 rounded-lg overflow-hidden">
               {canSave

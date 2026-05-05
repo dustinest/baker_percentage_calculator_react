@@ -1,9 +1,7 @@
 import {
   BakerPercentageResult,
-  copyBakingTimeType,
   copyIngredientGramsType,
   copyNutrientPercentType,
-  copyNumberIntervalType,
   DISPLAYABLE_NUTRIENTS_TYPE_ARRAY,
   DRY_NUTRIENTS,
   IngredientWithPercentType,
@@ -63,8 +61,6 @@ export const recalculateBakerPercentage = (ingredients: RecipeIngredientsType[])
       name: group.name,
       starter: group.starter,
       ingredients: group.ingredients.map(copyIngredientGramsType),
-      bakingTime: group.bakingTime.map(copyBakingTimeType),
-      innerTemperature: group.innerTemperature ? copyNumberIntervalType(group.innerTemperature) : null,
       ingredientWithPercent,
     } as RecipeIngredientsWithPercentType;
   });

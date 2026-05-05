@@ -42,6 +42,17 @@
       "weight": "Change weight",
       "percent": "Percent based on dry ingredients"
     },
+    "baking": {
+      "add": "Add baking step",
+      "add_inner_temperature": "Add inner temperature",
+      "remove_inner_temperature": "Remove inner temperature",
+      "time": "Time (min)",
+      "temperature": "Temperature (°C)",
+      "steam": "Steam",
+      "add_label": "Add label",
+      "label_et": "Label (ET)",
+      "label_en": "Label (EN)"
+    },
     "preview_hint": "Add flour and liquid to see preview"
   },
   "baking_instructions": {

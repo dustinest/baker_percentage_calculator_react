@@ -42,6 +42,17 @@
       "weight": "Muuda kaalu",
       "percent": "Protsenti kuivainete suhtes"
     },
+    "baking": {
+      "add": "Lisa küpsetusaeg",
+      "add_inner_temperature": "Lisa sisetemperatuur",
+      "remove_inner_temperature": "Eemalda sisetemperatuur",
+      "time": "Aeg (min)",
+      "temperature": "Temperatuur (°C)",
+      "steam": "Aur",
+      "add_label": "Lisa silt",
+      "label_et": "Silt (ET)",
+      "label_en": "Silt (EN)"
+    },
     "preview_hint": "Lisa jahu ja vedelik, et eelvaade näha"
   },
   "baking_instructions": {

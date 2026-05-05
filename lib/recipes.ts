@@ -21,8 +21,6 @@ interface JsonIngredientsIngredient {
 export interface JsonIngredients {
   name?: string | Record<string, string>;
   ingredients: JsonIngredientsIngredient[];
-  bakingTime?: JsonBakingTime[];
-  innerTemperature?: JsonNumberInterval;
   starter?: boolean;
 }
 

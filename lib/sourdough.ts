@@ -233,8 +233,6 @@ export const splitStarterAndDough = (
       result.push(copyRecipeIngredientsType({
         name: group.name || "ingredients.title.sourdough_starter_dough",
         ingredients: others.length > 0 ? [...toAdd, ...others] : [...toAdd],
-        bakingTime: [],
-        innerTemperature: null,
         starter: group.starter,
       }));
       return;
@@ -243,14 +241,10 @@ export const splitStarterAndDough = (
     result.push(copyRecipeIngredientsType({
       name: "ingredients.title.sourdough_starter_dough",
       ingredients: starterIngredients,
-      bakingTime: [],
-      innerTemperature: null,
     }));
     result.push(copyRecipeIngredientsType({
       name: group.name || "ingredients.title.dough",
       ingredients: nonStarter,
-      bakingTime: group.bakingTime,
-      innerTemperature: group.innerTemperature,
     }));
   });
 
