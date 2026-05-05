@@ -47,23 +47,15 @@ deno task start
 
 ---
 
-## Deploy to Cloudflare Pages
+## Deploy to Deno Deploy
 
 1. Push the repo to GitHub.
 
-2. In the [Cloudflare Pages dashboard](https://dash.cloudflare.com/), create a new project and connect the GitHub repo.
+2. Go to [dash.deno.com](https://dash.deno.com), create a new project, and link it to this GitHub repo. Note the project name.
 
-3. Set build configuration:
-   - **Framework preset:** None
-   - **Build command:** `deno run -A dev.ts build`
-   - **Build output directory:** `_fresh`
+3. In `.github/workflows/deploy.yml`, replace `YOUR_PROJECT_NAME` with your actual project name.
 
-4. Add an environment variable so Cloudflare installs Deno during the build:
-   - `DENO_VERSION` → `2.x` (or the specific version you use)
-
-5. Save and deploy. Cloudflare Pages runs the build command and serves the `_fresh/` output.
-
-> **Note:** Fresh is a server-rendered framework. For full SSR support on Cloudflare, you may need [Cloudflare Workers](https://workers.cloudflare.com/) with a custom entry point instead of Pages. For a simpler alternative, [Deno Deploy](https://deno.com/deploy) natively supports Fresh apps with zero configuration.
+4. Push to `master`. The GitHub Actions workflow builds the app and deploys automatically via OIDC — no tokens to store.
 
 ---
 
