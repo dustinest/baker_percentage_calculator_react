@@ -1,6 +1,7 @@
 import type { ComponentChildren } from "preact";
 import { BakerPercentageResult, DISPLAYABLE_NUTRIENTS_TYPE_ARRAY, RecipeType } from "../lib/types.ts";
 import { t } from "../lib/i18n.ts";
+import { computeSummaryWeights } from "../lib/summary-weights.ts";
 
 const fmt = (n: number) => Math.round(n);
 const fmtPct = (n: number) => n.toFixed(2);
@@ -20,21 +21,7 @@ type Props = {
 };
 
 export default function RecipePreview({ bp, recipe, lang, children }: Props) {
-  const groupTotals = bp.ingredients.map((g) => ({
-    name: g.name,
-    grams: g.ingredientWithPercent.reduce((s, i) => s + i.grams, 0),
-  }));
-  const totalGrams = groupTotals.reduce((s, g) => s + g.grams, 0);
-  const displayGroups = groupTotals.filter(
-    (g) => g.name !== "ingredients.title.sourdough_starter_dough",
-  );
-  const customGroups = displayGroups.filter(
-    (g) => g.name && typeof g.name === "object",
-  );
-  const doughGrams = displayGroups
-    .filter((g) => !g.name || typeof g.name === "string")
-    .reduce((s, g) => s + g.grams, 0);
-  const showDough = customGroups.length > 0;
+  const { doughGrams, customGroups, totalGrams, showDough } = computeSummaryWeights(bp);
   const perPiece = recipe.amount > 1 ? totalGrams / recipe.amount : null;
 
   const items: string[] = [];
