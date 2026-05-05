@@ -21,7 +21,7 @@
       "ingredients": [
         { "key": "MILK_25",         "grams": 210, "bakerPercent": 43.48 },
         { "key": "WHEAT_405_FLOUR", "grams": 400, "bakerPercent": 82.82 },
-        { "key": "BUTTER",          "grams": 75,  "bakerPercent": 15.53 },
+        { "key": "BUTTER_82",          "grams": 75,  "bakerPercent": 15.53 },
         { "key": "SALT",            "grams": 5,   "bakerPercent": 1.04 },
         { "key": "SUGAR_BROWN",     "grams": 50,  "bakerPercent": 10.35 },
         { "key": "CARDAMOM",        "grams": 1,   "bakerPercent": 0.21 }

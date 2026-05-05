@@ -105,7 +105,7 @@
       "milk": {
         "generic": "Milk",
         "generic_other": "Milk ({{count}}% fat)",
-        "fat_25": "Milk (2.5% fat)"
+        "fat_25": "Milk (2.5%)"
       },
       "spice": {
         "generic": "Spice",
@@ -123,7 +123,9 @@
           "generic": "Wheat flour",
           "generic_other": "Wheat flour ({{count}} ash)",
           "whole_grain": "Whole grain wheat flour",
-          "durum": "Durum flour"
+          "durum": "Durum flour",
+          "ash_405": "Wheat flour 405",
+          "ash_550": "Wheat flour 550"
         },
         "barley": {
           "generic": "Barley",
@@ -137,7 +139,8 @@
       },
       "butter": {
         "generic": "Butter",
-        "generic_other": "Butter ({{count}}% fat)"
+        "generic_other": "Butter ({{count}}% fat)",
+        "fat_82": "Butter (82%)"
       },
       "egg": {
         "generic": "Egg",
@@ -183,7 +186,12 @@
     "import": "Import"
   },
   "recipe": {
-    "servings": "servings"
+    "servings": "servings",
+    "copy_prefix": "Copy — "
+  },
+  "toast": {
+    "recipe_updated": "Recipe updated",
+    "recipe_imported": "Recipe imported"
   },
   "Kihistamiseks": "Lamination"
 }

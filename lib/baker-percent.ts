@@ -1,6 +1,5 @@
 import {
   BakerPercentageResult,
-  copyIngredientGramsType,
   copyNutrientPercentType,
   DISPLAYABLE_NUTRIENTS_TYPE_ARRAY,
   DRY_NUTRIENTS,
@@ -57,12 +56,7 @@ export const recalculateBakerPercentage = (ingredients: RecipeIngredientsType[])
         ? ing.grams * 100 / microNutrients.dry_total
         : 0,
     }));
-    return {
-      name: group.name,
-      starter: group.starter,
-      ingredients: group.ingredients.map(copyIngredientGramsType),
-      ingredientWithPercent,
-    } as RecipeIngredientsWithPercentType;
+    return { ...group, ingredientWithPercent } as RecipeIngredientsWithPercentType;
   });
   return { microNutrients, ingredients: percentages };
 };

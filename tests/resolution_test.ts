@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
 import { readJsonRecipe } from "../lib/resolution.ts";
 import { PREDEFINED_RECIPES } from "../lib/recipes.ts";
-import { nameStr } from "../lib/types.ts";
+import { nameStr, NutritionType } from "../lib/types.ts";
 
 const assertClose = (actual: number, expected: number, delta: number, msg?: string) =>
   expect(Math.abs(actual - expected), msg).toBeLessThan(delta);
@@ -45,4 +45,56 @@ test("resolution: all 11 recipes resolve without error", () => {
   for (const r of PREDEFINED_RECIPES) {
     readJsonRecipe(r); // must not throw
   }
+});
+
+// ── Edge cases exercised by the HasValue / undefined-distinction pattern ───────
+
+test("resolution: grams: 0 is treated as explicit zero, not as missing", () => {
+  // If the code confuses 'grams === undefined' with 'grams === 0' (e.g. by using
+  // || instead of !== undefined), a 0g ingredient would be assigned the default
+  // grams (100) or treated as percent-based. The correct result is 0g.
+  const recipe = readJsonRecipe({
+    name: "test",
+    ingredients: [{
+      ingredients: [
+        { type: "WHEAT_550_FLOUR", grams: 100 },
+        { type: "WATER", grams: 0 },
+      ],
+    }],
+  });
+  const water = recipe.ingredients[0].ingredients.find((i) => i.type === "WATER");
+  expect(water?.grams).toEqual(0);
+});
+
+test("resolution: DRY ingredient without extra nutrients has only the dry nutrient", () => {
+  const recipe = readJsonRecipe({
+    name: "test",
+    ingredients: [{
+      ingredients: [
+        { type: "WHEAT_550_FLOUR", grams: 100 },
+        { type: "DRY", name: "Plain dry", grams: 10 },
+      ],
+    }],
+  });
+  const dry = recipe.ingredients[0].ingredients.find((i) => i.name === "Plain dry");
+  expect(dry?.nutrients).toEqual([{ type: NutritionType.dry, percent: 100 }]);
+});
+
+test("resolution: DRY ingredient with extra nutrients includes them alongside dry", () => {
+  // If the code fails to check whether nutrients were provided (e.g. treats an
+  // empty default array as 'nutrients were explicitly given'), extra nutrients
+  // would be incorrectly added or omitted.
+  const recipe = readJsonRecipe({
+    name: "test",
+    ingredients: [{
+      ingredients: [
+        { type: "WHEAT_550_FLOUR", grams: 100 },
+        { type: "DRY", name: "Enriched dry", grams: 10, nutrients: [{ type: "protein", percent: 80 }] },
+      ],
+    }],
+  });
+  const dry = recipe.ingredients[0].ingredients.find((i) => i.name === "Enriched dry");
+  const types = dry?.nutrients.map((n) => n.type);
+  expect(types).toContain(NutritionType.dry);
+  expect(types).toContain(NutritionType.protein);
 });

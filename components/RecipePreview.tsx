@@ -1,5 +1,5 @@
 import type { ComponentChildren } from "preact";
-import { BakerPercentageResult, DISPLAYABLE_NUTRIENTS_TYPE_ARRAY, NutritionType, RecipeType } from "../lib/types.ts";
+import { BakerPercentageResult, DISPLAYABLE_NUTRIENTS_TYPE_ARRAY, nameForLang, NutritionType, RecipeType } from "../lib/types.ts";
 import { t } from "../lib/i18n.ts";
 import { computeSummaryWeights } from "../lib/summary-weights.ts";
 
@@ -10,8 +10,7 @@ const fmtG = (n: number) => { const r = Math.round(n * 10) / 10; return r === Ma
 const resolveName = (name: string | Record<string, string> | undefined, lang: string): string | null => {
   if (!name) return null;
   if (typeof name === "string") return t(name) !== name ? t(name) : name;
-  const key = lang === "ee" ? "et" : "en";
-  return name[key] ?? name["et"] ?? name["en"] ?? null;
+  return nameForLang(name, lang) || null;
 };
 
 type Props = {

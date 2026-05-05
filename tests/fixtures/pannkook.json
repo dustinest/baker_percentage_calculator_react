@@ -21,7 +21,7 @@
     {
       "translationKey": "ingredients.title.dough",
       "ingredients": [
-        { "key": "BUTTER", "grams": 50,   "bakerPercent": 13.81 },
+        { "key": "BUTTER_82", "grams": 50,   "bakerPercent": 13.81 },
         { "key": "SALT",   "grams": 7.5,  "bakerPercent": 2.07 },
         { "key": "SUGAR",  "grams": 14,   "bakerPercent": 3.87 },
         { "key": "EGG",    "grams": 256,  "bakerPercent": 70.72 }

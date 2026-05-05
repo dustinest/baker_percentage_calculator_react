@@ -76,7 +76,7 @@ const calculateStarterFlour = (totalFlour: number): number => {
 };
 
 export const calculateSourDoughStarter = (group: RecipeIngredientsType): StarterCalculationResult => {
-  const dal = calculateDryAndLiquid(group.ingredients.map(copyIngredientGramsType));
+  const dal = calculateDryAndLiquid(group.ingredients);
   const flour = Math.floor(dal.totals.flour);
   const water = Math.floor(dal.totals.water);
   const liquid = Math.floor(dal.totals.liquid);
@@ -127,8 +127,7 @@ const sortScore = (nutrients: NutrientPercentType[]): number => {
   const calc = DISPLAY_ORDER.reduce((acc, t) => { acc[t] = 0; return acc; }, {} as Record<string, number>);
   nutrients.forEach((n) => { if (calc[n.type] !== undefined) calc[n.type] += n.percent; });
 
-  // Preserved verbatim: bug checks flour===50 twice (should check water), but produces correct result
-  if (calc[NutritionType.flour] === 50 && calc[NutritionType.flour] === 50) return 0;
+  if (calc[NutritionType.water] === 50 && calc[NutritionType.flour] === 50) return 0;
 
   for (let i = 0; i < DISPLAY_ORDER.length; i++) {
     const val = calc[DISPLAY_ORDER[i]];
@@ -166,8 +165,8 @@ const fillSlot = (
         leftoversOut.push(remapIngredient(ingredient, ingredient.grams - remaining - slot.fridge));
       }
     } else {
-      starterOut.push(remapIngredient(ingredient, remaining));
-      leftoversOut.push(remapIngredient(ingredient, ingredient.grams - remaining));
+      starterOut.push(remapIngredient(ingredient, ingredient.grams));
+      counted += ingredient.grams;
     }
   }
 };

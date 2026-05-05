@@ -21,7 +21,7 @@
       "ingredients": [
         { "key": "MILK_25",         "grams": 140,  "bakerPercent": 28.00 },
         { "key": "WHEAT_550_FLOUR", "grams": 360,  "bakerPercent": 72.00 },
-        { "key": "BUTTER",          "grams": 40,   "bakerPercent": 8.00 },
+        { "key": "BUTTER_82",          "grams": 40,   "bakerPercent": 8.00 },
         { "key": "SALT",            "grams": 12,   "bakerPercent": 2.40 },
         { "key": "SUGAR",           "grams": 55,   "bakerPercent": 11.00 }
       ]
@@ -29,7 +29,7 @@
     {
       "translationKey": "Kihistamiseks",
       "ingredients": [
-        { "key": "BUTTER", "grams": 280, "bakerPercent": 56.00 }
+        { "key": "BUTTER_82", "grams": 280, "bakerPercent": 56.00 }
       ]
     }
   ],
