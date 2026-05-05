@@ -21,7 +21,7 @@
       "ingredients": [
         { "key": "MILK_25",         "grams": 385, "bakerPercent": 47.65 },
         { "key": "WHEAT_550_FLOUR", "grams": 685, "bakerPercent": 84.78 },
-        { "key": "BUTTER",          "grams": 200, "bakerPercent": 24.75 },
+        { "key": "BUTTER_82",          "grams": 200, "bakerPercent": 24.75 },
         { "key": "SALT",            "grams": 7.5, "bakerPercent": 0.93 }
       ]
     }

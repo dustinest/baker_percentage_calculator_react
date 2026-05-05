@@ -27,7 +27,7 @@ import RecipePreview from "../components/RecipePreview.tsx";
 
 const INGREDIENT_GROUPS: { labelKey: string; keys: (keyof StandardIngredientKeys)[] }[] = [
   { labelKey: "ingredients.title.dry",   keys: ["WHOLE_RYE_FLOUR", "WHOLE_RYE_MALT_FLOUR", "WHOLE_WHEAT_FLOUR", "DURUM_WHEAT", "WHEAT_405_FLOUR", "WHEAT_550_FLOUR", "BARLEY", "SEEDS"] },
-  { labelKey: "ingredients.title.fat",   keys: ["BUTTER", "OIL", "OLIVE_OIL"] },
+  { labelKey: "ingredients.title.fat",   keys: ["BUTTER_82", "OIL", "OLIVE_OIL"] },
   { labelKey: "ingredients.title.liquid", keys: ["WATER", "MILK_25"] },
   { labelKey: "ingredients.title.other", keys: ["SALT", "SUGAR", "SUGAR_BROWN", "EGG", "CARDAMOM", "CINNAMON"] },
 ];

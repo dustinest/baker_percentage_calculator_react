@@ -128,7 +128,9 @@
           "generic": "Nisujahu",
           "generic_other": "Nisujahu {{count}}",
           "whole_grain": "Täistera nisujahu",
-          "durum": "Durum jahu"
+          "durum": "Durum jahu",
+          "ash_405": "Nisujahu 405",
+          "ash_550": "Nisujahu 550"
         },
         "barley": {
           "generic": "Kaer",
@@ -142,7 +144,8 @@
       },
       "butter": {
         "generic": "Või",
-        "generic_other": "Või ({{count}}%)"
+        "generic_other": "Või ({{count}}%)",
+        "fat_82": "Või (82%)"
       },
       "egg": {
         "generic": "Muna",

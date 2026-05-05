@@ -23,7 +23,7 @@ export interface StandardIngredientKeys {
   SUGAR: IngredientType;
   SUGAR_BROWN: IngredientType;
   WATER: IngredientType;
-  BUTTER: IngredientType;
+  BUTTER_82: IngredientType;
   OIL: IngredientType;
   OLIVE_OIL: IngredientType;
   MILK_25: IngredientType;
@@ -45,7 +45,7 @@ export const StandardIngredients: StandardIngredientKeys = Object.freeze({
   SUGAR:              createPredefined("sugar.generic",         NutritionType.sugar,   100),
   SUGAR_BROWN:        createPredefined("sugar.brown",           NutritionType.sugar,    97, NutritionType.liquid,  3),
   WATER:              createPredefined("water.generic",         NutritionType.water,   100),
-  BUTTER:             createPredefined("butter.generic",        NutritionType.fat,      82, NutritionType.water, 16, NutritionType.protein,  1, NutritionType.salt,    1),
+  BUTTER_82:          createPredefined("butter.fat_82",         NutritionType.fat,      82, NutritionType.water, 16, NutritionType.protein,  1, NutritionType.salt,    1),
   OIL:                createPredefined("oil.generic",           NutritionType.fat,     100),
   OLIVE_OIL:          createPredefined("oil.olive",             NutritionType.fat,     100),
   MILK_25:            createPredefined("milk.fat_25",           NutritionType.fat,     2.5, NutritionType.water, 89, NutritionType.protein, 3.3, NutritionType.sugar,  4.7, NutritionType.other, 0.5),
@@ -56,8 +56,8 @@ export const StandardIngredients: StandardIngredientKeys = Object.freeze({
   WHOLE_RYE_MALT_FLOUR: createPredefined("flour.rye.malt",      NutritionType.flour,   100, NutritionType.whole_grain, 100, NutritionType.liquid,  6, NutritionType.fat, 2, NutritionType.protein, 11, NutritionType.sugar, 8, NutritionType.carbs, 58, NutritionType.fiber, 14, NutritionType.other, 1),
   WHOLE_WHEAT_FLOUR:  createPredefined("flour.wheat.whole_grain", NutritionType.flour, 100, NutritionType.whole_grain, 100, NutritionType.liquid, 11, NutritionType.fat, 2, NutritionType.protein, 13, NutritionType.sugar, 1, NutritionType.carbs, 60, NutritionType.fiber, 12, NutritionType.other, 1),
   DURUM_WHEAT:        createPredefined("flour.wheat.durum",     NutritionType.flour,   100, NutritionType.whole_grain, 100, NutritionType.liquid, 11, NutritionType.fat, 2, NutritionType.protein, 13, NutritionType.sugar, 1, NutritionType.carbs, 60, NutritionType.fiber, 12, NutritionType.other, 1),
-  WHEAT_405_FLOUR:    createPredefined("flour.wheat.generic",   NutritionType.flour,   100, NutritionType.ash, 405, NutritionType.liquid, 12, NutritionType.fat, 1, NutritionType.protein, 10, NutritionType.carbs, 73, NutritionType.fiber, 3, NutritionType.other, 1),
-  WHEAT_550_FLOUR:    createPredefined("flour.wheat.generic",   NutritionType.flour,   100, NutritionType.ash, 550, NutritionType.liquid, 12, NutritionType.fat, 1, NutritionType.protein, 11, NutritionType.carbs, 71, NutritionType.fiber, 4, NutritionType.other, 1),
+  WHEAT_405_FLOUR:    createPredefined("flour.wheat.ash_405",   NutritionType.flour,   100, NutritionType.ash, 405, NutritionType.liquid, 12, NutritionType.fat, 1, NutritionType.protein, 10, NutritionType.carbs, 73, NutritionType.fiber, 3, NutritionType.other, 1),
+  WHEAT_550_FLOUR:    createPredefined("flour.wheat.ash_550",   NutritionType.flour,   100, NutritionType.ash, 550, NutritionType.liquid, 12, NutritionType.fat, 1, NutritionType.protein, 11, NutritionType.carbs, 71, NutritionType.fiber, 4, NutritionType.other, 1),
   BARLEY:             createPredefined("flour.barley.generic",  NutritionType.dry,     100, NutritionType.liquid, 10, NutritionType.fat, 2, NutritionType.protein, 10, NutritionType.sugar, 1, NutritionType.carbs, 60, NutritionType.fiber, 15, NutritionType.other, 2),
   SEEDS:              createPredefined("flour.seeds.generic",   NutritionType.dry,     100, NutritionType.liquid,  5, NutritionType.fat, 45, NutritionType.protein, 20, NutritionType.carbs, 12, NutritionType.fiber, 15, NutritionType.other, 3),
 } as StandardIngredientKeys);
