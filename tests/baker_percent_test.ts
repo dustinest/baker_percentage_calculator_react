@@ -3,7 +3,7 @@ import { readJsonRecipe } from "../lib/resolution.ts";
 import { splitStarterAndDough } from "../lib/sourdough.ts";
 import { recalculateBakerPercentage } from "../lib/baker-percent.ts";
 import { PREDEFINED_RECIPES } from "../lib/recipes.ts";
-import { NutritionType } from "../lib/types.ts";
+import { nameStr, NutritionType } from "../lib/types.ts";
 
 interface FixtureMicro {
   dryTotal: number;
@@ -29,7 +29,7 @@ Deno.test("baker-percent: micro nutrients match fixtures for all 11 recipes", as
     const recipe = readJsonRecipe(jsonRecipe);
     let fixture: Fixture;
     try {
-      fixture = JSON.parse(await Deno.readTextFile(fixtureFile(recipe.name)));
+      fixture = JSON.parse(await Deno.readTextFile(fixtureFile(nameStr(recipe.name))));
     } catch { continue; }
 
     const split = await splitStarterAndDough(recipe.ingredients);
@@ -59,7 +59,7 @@ Deno.test("baker-percent: ingredient baker% matches fixtures", async () => {
     const recipe = readJsonRecipe(jsonRecipe);
     let fixture: { recipe: string; groups: Array<{ ingredients: Array<{ key: string; bakerPercent: number }> }> };
     try {
-      fixture = JSON.parse(await Deno.readTextFile(fixtureFile(recipe.name)));
+      fixture = JSON.parse(await Deno.readTextFile(fixtureFile(nameStr(recipe.name))));
     } catch { continue; }
 
     const split = await splitStarterAndDough(recipe.ingredients);

@@ -135,7 +135,7 @@ export const readJsonRecipe = (recipe: JsonRecipe): RecipeType => {
     ingredients: [],
     bakingTime: resolveBakingTime(recipe.bakingTime),
     innerTemperature: resolveInnerTemperature(recipe.innerTemperature),
-    description: recipe.description ?? null,
+    description: null,
     amount: recipe.amount || 1,
   };
 
@@ -147,7 +147,7 @@ export const readJsonRecipe = (recipe: JsonRecipe): RecipeType => {
   for (const group of recipe.ingredients) {
     const recipeGroup: RecipeIngredientsType = {
       name: group.name,
-      description: group.description ?? null,
+      description: null,
       bakingTime: resolveBakingTime(group.bakingTime),
       innerTemperature: resolveInnerTemperature(group.innerTemperature),
       starter: group.starter === true,
@@ -206,7 +206,6 @@ export const recipeToJson = (recipe: RecipeType): JsonRecipe => {
         }),
       };
       if (group.name) g.name = group.name;
-      if (group.description) g.description = group.description;
       if (group.starter) g.starter = true;
       if (group.bakingTime?.length) g.bakingTime = group.bakingTime.map((bt) => ({
         time: normalizeInterval(bt.time),
@@ -218,7 +217,6 @@ export const recipeToJson = (recipe: RecipeType): JsonRecipe => {
     }),
   };
   if (recipe.amount > 1) result.amount = recipe.amount;
-  if (recipe.description) result.description = recipe.description;
   if (recipe.bakingTime?.length) result.bakingTime = recipe.bakingTime.map((bt) => ({
     time: normalizeInterval(bt.time),
     temperature: normalizeInterval(bt.temperature),

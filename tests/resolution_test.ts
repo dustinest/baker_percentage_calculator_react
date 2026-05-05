@@ -1,6 +1,7 @@
 import { assertEquals, assertAlmostEquals } from "@std/assert";
 import { readJsonRecipe } from "../lib/resolution.ts";
 import { PREDEFINED_RECIPES } from "../lib/recipes.ts";
+import { nameStr } from "../lib/types.ts";
 
 // Expected resolved grams for percent-based ingredients per recipe
 const EXPECTED: Record<string, Record<string, number>> = {
@@ -15,7 +16,7 @@ const EXPECTED: Record<string, Record<string, number>> = {
 Deno.test("resolution: percent-based ingredients resolve to correct grams", () => {
   for (const jsonRecipe of PREDEFINED_RECIPES) {
     const recipe = readJsonRecipe(jsonRecipe);
-    const expected = EXPECTED[recipe.name];
+    const expected = EXPECTED[nameStr(recipe.name)];
     if (!expected) continue;
 
     const allIngredients = recipe.ingredients.flatMap((g) => g.ingredients);

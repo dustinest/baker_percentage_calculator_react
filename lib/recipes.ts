@@ -23,7 +23,6 @@ export interface JsonIngredients {
   ingredients: JsonIngredientsIngredient[];
   bakingTime?: JsonBakingTime[];
   innerTemperature?: JsonNumberInterval;
-  description?: string;
   starter?: boolean;
 }
 
@@ -34,7 +33,6 @@ export interface JsonRecipe {
   bakingTime?: JsonBakingTime[];
   innerTemperature?: JsonNumberInterval;
   ingredients: JsonIngredients[];
-  description?: string;
 }
 
 export const PREDEFINED_RECIPES: JsonRecipe[] = [

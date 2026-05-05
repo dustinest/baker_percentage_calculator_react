@@ -2,6 +2,7 @@ import { assertAlmostEquals } from "@std/assert";
 import { readJsonRecipe } from "../lib/resolution.ts";
 import { splitStarterAndDough } from "../lib/sourdough.ts";
 import { PREDEFINED_RECIPES } from "../lib/recipes.ts";
+import { nameStr } from "../lib/types.ts";
 
 interface Fixture { recipe: string; totalWeight: { dough: number; others: number; total: number } }
 
@@ -20,7 +21,7 @@ Deno.test("total-weight: dough/others/total match fixtures", async () => {
     const recipe = readJsonRecipe(jsonRecipe);
     let fixture: Fixture;
     try {
-      fixture = JSON.parse(await Deno.readTextFile(fixtureFile(recipe.name)));
+      fixture = JSON.parse(await Deno.readTextFile(fixtureFile(nameStr(recipe.name))));
     } catch { continue; }
 
     const split = await splitStarterAndDough(recipe.ingredients);
@@ -38,8 +39,8 @@ Deno.test("total-weight: dough/others/total match fixtures", async () => {
     const othersWeight = sumGrams(otherGroups);
     const totalWeight = doughWeight + othersWeight;
 
-    assertAlmostEquals(doughWeight, fixture.totalWeight.dough, 0.5, `${recipe.name}: dough weight`);
-    assertAlmostEquals(othersWeight, fixture.totalWeight.others, 0.5, `${recipe.name}: others weight`);
-    assertAlmostEquals(totalWeight, fixture.totalWeight.total, 0.5, `${recipe.name}: total weight`);
+    assertAlmostEquals(doughWeight, fixture.totalWeight.dough, 0.5, `${nameStr(recipe.name)}: dough weight`);
+    assertAlmostEquals(othersWeight, fixture.totalWeight.others, 0.5, `${nameStr(recipe.name)}: others weight`);
+    assertAlmostEquals(totalWeight, fixture.totalWeight.total, 0.5, `${nameStr(recipe.name)}: total weight`);
   }
 });
