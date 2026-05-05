@@ -7,20 +7,18 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to Deno Deploy
+    name: Build and deploy to Cloudflare Pages
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
     steps:
       - uses: actions/checkout@v4
-      - uses: denoland/setup-deno@v2
+      - uses: actions/setup-node@v4
         with:
-          deno-version: v2.x
-      - name: Build
-        run: deno task build
-      - name: Deploy
-        uses: denoland/deployctl@v1
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - uses: cloudflare/wrangler-action@v3
         with:
-          project: YOUR_PROJECT_NAME
-          entrypoint: _fresh/server.js
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=YOUR_PROJECT_NAME

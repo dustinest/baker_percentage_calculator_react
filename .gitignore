@@ -1,9 +1,8 @@
-# Deno
-.deno/
+# Node
 node_modules/
 
-# Fresh build output
-_fresh/
+# Vite build output
+dist/
 
 # IDE
 .idea/

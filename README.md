@@ -47,15 +47,18 @@ deno task start
 
 ---
 
-## Deploy to Deno Deploy
+## Deploy to Cloudflare Pages
 
-1. Push the repo to GitHub.
+### Option A: Connect via Cloudflare dashboard (simplest)
 
-2. Go to [dash.deno.com](https://dash.deno.com), create a new project, and link it to this GitHub repo. Note the project name.
+1. Push to GitHub.
+2. In [Cloudflare Pages](https://pages.cloudflare.com/), create a project linked to this repo.
+3. Set: **Build command** = `npm run build`, **Build output directory** = `dist`.
+4. Every push to `master` deploys automatically.
 
-3. In `.github/workflows/deploy.yml`, replace `YOUR_PROJECT_NAME` with your actual project name.
+### Option B: GitHub Actions with Wrangler
 
-4. Push to `master`. The GitHub Actions workflow builds the app and deploys automatically via OIDC — no tokens to store.
+Set `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` as GitHub secrets, then replace `YOUR_PROJECT_NAME` in `.github/workflows/deploy.yml` with your Cloudflare Pages project name.
 
 ---
 
