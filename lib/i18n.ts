@@ -1,6 +1,6 @@
 import { signal } from "@preact/signals";
-import ee from "../locales/ee.json" with { type: "json" };
-import gb from "../locales/gb.json" with { type: "json" };
+import ee from "../locales/ee.json";
+import gb from "../locales/gb.json";
 
 export type Language = "ee" | "gb";
 
