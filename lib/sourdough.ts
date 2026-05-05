@@ -204,8 +204,8 @@ export const splitStarterAndDough = (
       return;
     }
     const nonStarter: IngredientGramsType[] = [
-      ...leftovers.filter((e) => Math.floor(e.grams) > 0),
-      ...cal.ingredients.other.filter((e) => Math.floor(e.grams) > 0).map((e) => remapIngredient(e)),
+      ...leftovers.filter((e) => e.grams > 0),
+      ...cal.ingredients.other.filter((e) => e.grams > 0).map((e) => remapIngredient(e)),
     ];
 
     if (group.starter) {

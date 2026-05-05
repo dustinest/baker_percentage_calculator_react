@@ -37,14 +37,14 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
 
   return (
     <>
+      <div class="px-4">
       {bp.ingredients.map((group, gi) => (
-        <div key={gi} class="px-4 pb-3">
-          {group.name && (
-            <p class="text-xs font-semibold uppercase tracking-wide text-base-content/50 mb-1">
-              {resolveName(group.name, lang)}
-            </p>
-          )}
-          <table class="table w-full">
+          <table key={gi} class={`table w-full ${gi < bp.ingredients.length - 1 ? 'mb-3' : ''}`}>
+            {group.name && (
+                <caption class="text-left text-xs font-semibold uppercase tracking-wide text-base-content/50 mb-1">
+                  {resolveName(group.name, lang)}
+              </caption>
+            )}
             <tbody>
               {group.ingredientWithPercent.map((ing, ii) => (
                 <tr key={ii}>
@@ -55,13 +55,13 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
               ))}
             </tbody>
           </table>
-        </div>
       ))}
+      </div>
 
       {children}
 
-      <div class="px-4 pb-3">
-        <div class="divider my-1" />
+      <div class="divider my-1" />
+      <div class="px-4">
         <table class="table w-full">
           <tbody>
             <tr>
@@ -84,8 +84,8 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
         </table>
       </div>
 
-      <div class="px-4 pb-3">
-        <div class="divider my-1" />
+      <div class="divider my-1" />
+      <div class="px-4">
         <table class="table w-full">
           <tbody>
             {DISPLAYABLE_NUTRIENTS_TYPE_ARRAY.filter((type) => type !== NutritionType.water).map((type) => {

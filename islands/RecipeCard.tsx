@@ -54,8 +54,9 @@ export default function RecipeCard({ recipe }: Props) {
       {bp && (
         <RecipePreview bp={bp} recipe={recipe} lang={language.value}>
           {(recipe.bakingTime.length > 0 || recipe.innerTemperature) && (
-            <div class="px-4 pb-3">
+              <>
               <div class="divider my-1" />
+            <div class="px-4">
               <div class="space-y-1 text-center">
                 {recipe.bakingTime.map((bt, i) => (
                   <p key={i}>
@@ -78,6 +79,7 @@ export default function RecipeCard({ recipe }: Props) {
                 )}
               </div>
             </div>
+              </>
           )}
 
         </RecipePreview>
