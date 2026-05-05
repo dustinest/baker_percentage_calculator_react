@@ -65,7 +65,6 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
       {children}
 
       <div class="divider my-1" />
-      <div className="flex w-full">
         <table class="table w-full">
           <tbody>
             <tr>
@@ -73,28 +72,20 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
               <td class="text-right tabular-nums print:text-xs">{fmt(bp.microNutrients.dry_total)}g</td>
               <td class="text-right tabular-nums print:text-xs">100%</td>
             </tr>
-          </tbody>
-        </table>
 
         {(() => {
               const n = bp.microNutrients.nutrients[NutritionType.water];
               if (!n || n.grams < 0.1) return null;
               return (
-                  <>
-                  <div class="divider divider-horizontal"></div>
-                  <table class="table w-full">
-                    <tbody>
                 <tr>
                   <td class="print:text-xs">{t("ingredients.title.water")}</td>
                   <td class="text-right tabular-nums print:text-xs">{fmtG(n.grams)}g</td>
                   <td class="text-right tabular-nums print:text-xs">{fmtPct(n.percent)}%</td>
                 </tr>
-            </tbody>
-            </table>
-                  </>
             );
             })()}
-      </div>
+          </tbody>
+        </table>
 
       <div class="divider my-1" />
       <div class="px-4 pb-2 flex flex-wrap gap-1">
@@ -102,7 +93,7 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
           const n = bp.microNutrients.nutrients[type];
           if (!n || n.grams < 0.1) return null;
           return (
-              <div key={type} class="badge badge badge-ghost badge-sm">{t(`ingredients.title.${type}`) || type}: {fmtG(n.grams)}g / {fmtPct(n.percent)}%</div>
+              <div key={type} class="badge badge-ghost badge-sm">{t(`ingredients.title.${type}`) || type}: {fmtG(n.grams)}g / {fmtPct(n.percent)}%</div>
           );
         })}
       </div>
