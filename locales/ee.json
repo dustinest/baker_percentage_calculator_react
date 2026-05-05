@@ -182,7 +182,12 @@
     "import": "Impordi"
   },
   "recipe": {
-    "servings": "portsjonit"
+    "servings": "portsjonit",
+    "copy_prefix": "Koopia — "
+  },
+  "toast": {
+    "recipe_updated": "Retsept uuendatud",
+    "recipe_imported": "Retsept imporditud"
   },
   "Kihistamiseks": "Kihistamiseks"
 }

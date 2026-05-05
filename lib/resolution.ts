@@ -1,14 +1,11 @@
 import {
   BakingTimeType,
   DRY_NUTRIENTS,
-  GramsAmountType,
   IngredientGramsType,
-  IngredientType,
   nameStr,
   NutrientPercentType,
   NutritionType,
   NumberIntervalType,
-  PercentAmountType,
   RecipeIngredientsType,
   RecipeType,
 } from "./types.ts";
@@ -69,13 +66,6 @@ const resolveBakingTime = (bakingTimes?: Array<{ time: NumberIntervalType | numb
 
 // ── Ingredient reader ───────────────────────────────────────────────────────
 
-type HasValue<T> = { hadValue: boolean; value: T };
-
-const resolveValue = <T>(value: T | undefined | null, defaultValue: T): HasValue<T> => ({
-  hadValue: value != null,
-  value: value != null ? value : defaultValue,
-});
-
 type RawIngredient = {
   type?: string;
   grams?: number;
@@ -85,45 +75,26 @@ type RawIngredient = {
   nutrients?: NutrientPercentType[];
 };
 
-type ResolveTestType = {
-  id: HasValue<string>;
-  grams: HasValue<number>;
-  percent: HasValue<number>;
-  type: string;
-  name: HasValue<string>;
-  nutrients: HasValue<NutrientPercentType[]>;
-};
-
-const readJsonIngredient = (ingredient: RawIngredient): [IngredientGramsType, ResolveTestType] => {
+const readJsonIngredient = (ingredient: RawIngredient): { ing: IngredientGramsType; grams?: number; percent?: number } => {
   if (ingredient.type == null) throw new Error(`Type is required`);
 
-  const resultTest: ResolveTestType = {
-    id: resolveValue((ingredient as IngredientType).id, ""),
-    grams: resolveValue((ingredient as GramsAmountType).grams, 100),
-    percent: resolveValue((ingredient as PercentAmountType).percent, -1),
-    type: ingredient.type,
-    name: resolveValue((ingredient as IngredientType).name, ""),
-    nutrients: resolveValue((ingredient as IngredientType).nutrients, []),
-  };
-
-  // Custom "DRY" type (extra ingredient, not in StandardIngredients)
   if (ingredient.type === "DRY") {
-    if (!resultTest.name.hadValue) throw new Error(`.name required for DRY type`);
+    if (!ingredient.name) throw new Error(`.name required for DRY type`);
     const id = resolveJsonExtraStandardIngredient(
-      { type: "DRY", name: resultTest.name.value, id: resultTest.id.value || undefined },
-      resultTest.grams.value,
+      { type: "DRY", name: ingredient.name, id: ingredient.id || undefined },
+      ingredient.grams ?? 100,
     );
     const dryNutrients: NutrientPercentType[] = [{ type: NutritionType.dry, percent: 100 }];
-    if (resultTest.nutrients.hadValue && resultTest.nutrients.value.length > 0) {
-      dryNutrients.push(...resultTest.nutrients.value);
+    if (ingredient.nutrients && ingredient.nutrients.length > 0) {
+      dryNutrients.push(...ingredient.nutrients);
     }
-    return [getCustomIngredient(id, resultTest.name.value, resultTest.grams.value, dryNutrients, "DRY"), resultTest];
+    return { ing: getCustomIngredient(id, ingredient.name, ingredient.grams ?? 100, dryNutrients, "DRY"), grams: ingredient.grams, percent: ingredient.percent };
   }
 
-  const ingredientGrams = getIngredientGrams(resultTest.type, resultTest.grams.value);
-  if (ingredientGrams != null) return [ingredientGrams, resultTest];
+  const ingredientGrams = getIngredientGrams(ingredient.type, ingredient.grams ?? 100);
+  if (ingredientGrams != null) return { ing: ingredientGrams, grams: ingredient.grams, percent: ingredient.percent };
 
-  throw new Error(`Could not resolve type ${resultTest.type}`);
+  throw new Error(`Could not resolve type ${ingredient.type}`);
 };
 
 // ── Recipe reader ───────────────────────────────────────────────────────────
@@ -140,7 +111,7 @@ export const readJsonRecipe = (recipe: JsonRecipe): RecipeType => {
 
   const toBeCalculated = {
     flour: { amount: 0, percent: 100 },
-    percent: [] as [IngredientGramsType, ResolveTestType][],
+    percent: [] as [IngredientGramsType, number][],
   };
 
   for (const group of recipe.ingredients) {
@@ -151,7 +122,7 @@ export const readJsonRecipe = (recipe: JsonRecipe): RecipeType => {
     };
 
     for (const raw of group.ingredients) {
-      const [ingredient, resolveTest] = readJsonIngredient(raw as RawIngredient);
+      const { ing: ingredient, grams: rawGrams, percent: rawPercent } = readJsonIngredient(raw as RawIngredient);
       recipeGroup.ingredients.push(ingredient);
 
       const dryPercent = ingredient.nutrients
@@ -159,14 +130,14 @@ export const readJsonRecipe = (recipe: JsonRecipe): RecipeType => {
         .reduce((max, n) => Math.max(max, n.percent), 0);
 
       if (dryPercent <= 0) {
-        if (!resolveTest.grams.hadValue) toBeCalculated.percent.push([ingredient, resolveTest]);
+        if (rawGrams === undefined && rawPercent !== undefined) toBeCalculated.percent.push([ingredient, rawPercent]);
         continue;
       }
-      if (resolveTest.grams.hadValue) {
-        toBeCalculated.flour.amount += resolveTest.grams.value * dryPercent / 100;
-      } else if (resolveTest.percent.hadValue) {
-        toBeCalculated.flour.percent -= resolveTest.percent.value * 100 / dryPercent;
-        toBeCalculated.percent.push([ingredient, resolveTest]);
+      if (rawGrams !== undefined) {
+        toBeCalculated.flour.amount += rawGrams * dryPercent / 100;
+      } else if (rawPercent !== undefined) {
+        toBeCalculated.flour.percent -= rawPercent * 100 / dryPercent;
+        toBeCalculated.percent.push([ingredient, rawPercent]);
       } else {
         throw new Error(`Unresolved item: no amount nor percent`);
       }
@@ -179,8 +150,8 @@ export const readJsonRecipe = (recipe: JsonRecipe): RecipeType => {
   if (toBeCalculated.flour.percent <= 0) throw new Error(`Total flour percent in ${result.name} exceeds 100%`);
 
   const totalFlourAmount = 100 * toBeCalculated.flour.amount / toBeCalculated.flour.percent;
-  for (const [ingredient, resolveTest] of toBeCalculated.percent) {
-    ingredient.grams = Math.round(resolveTest.percent.value * totalFlourAmount / 10) / 10;
+  for (const [ingredient, percent] of toBeCalculated.percent) {
+    ingredient.grams = Math.round(percent * totalFlourAmount / 10) / 10;
   }
   return result;
 };
@@ -211,6 +182,7 @@ export const recipeToJson = (recipe: RecipeType): JsonRecipe => {
     time: normalizeInterval(bt.time),
     temperature: normalizeInterval(bt.temperature),
     ...(bt.steam ? { steam: true } : {}),
+    ...(bt.label ? { label: bt.label } : {}),
   }));
   if (recipe.innerTemperature) result.innerTemperature = normalizeInterval(recipe.innerTemperature);
   const id = resolveJsonRecipeTypeId(result);

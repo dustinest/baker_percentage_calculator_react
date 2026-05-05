@@ -108,9 +108,15 @@ export default function EditRecipeDialog({ recipe }: Props) {
     c.ingredients = c.ingredients.filter((_, i) => i !== gi);
   });
 
-  const delIng = (gi: number, ii: number) => updateDraft((c) => {
-    c.ingredients[gi].ingredients = c.ingredients[gi].ingredients.filter((_, i) => i !== ii);
-  });
+  const delIng = (gi: number, ii: number) => {
+    const id = draft.value.ingredients[gi].ingredients[ii].id;
+    const next = new Set(customIngIds.value);
+    next.delete(id);
+    customIngIds.value = next;
+    updateDraft((c) => {
+      c.ingredients[gi].ingredients = c.ingredients[gi].ingredients.filter((_, i) => i !== ii);
+    });
+  };
 
   const setStarter = (gi: number, v: boolean) => updateDraft((c) => { c.ingredients[gi].starter = v; });
 

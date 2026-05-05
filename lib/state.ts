@@ -9,7 +9,11 @@ import { splitStarterAndDough } from "./sourdough.ts";
 import { recalculateBakerPercentage } from "./baker-percent.ts";
 import { PREDEFINED_RECIPES } from "./recipes.ts";
 import { parseUrlIds, syncUrlEffect } from "./url.ts";
-import { language } from "./i18n.ts";
+import { language, t } from "./i18n.ts";
+import ee from "../locales/ee.json";
+import gb from "../locales/gb.json";
+
+const COPY_PREFIXES: Record<string, string> = { et: ee.recipe.copy_prefix, en: gb.recipe.copy_prefix };
 
 // ── Bootstrap resolved recipes ───────────────────────────────────────────────
 
@@ -35,14 +39,14 @@ export const showToast = (msg: string) => {
 
 let debounceTimer: number | undefined;
 
-const recalculate = async () => {
+const recalculate = () => {
   const ids = selectedIds.value;
   const recipes = allRecipes.value;
   const newMap = new Map<string, BakerPercentageAwareRecipe>();
 
   for (const recipe of recipes) {
     if (!ids.has(recipe.id)) continue;
-    const split = await splitStarterAndDough(recipe.ingredients);
+    const split = splitStarterAndDough(recipe.ingredients);
     const bp = recalculateBakerPercentage(split);
     newMap.set(recipe.id, { ...recipe, bakerPercentage: bp });
   }
@@ -85,9 +89,9 @@ export const copyRecipe = (recipe: RecipeType) => {
   const copied = copyRecipeType(recipe);
   copied.id = "";
   if (typeof copied.name === "object") {
-    copied.name = Object.fromEntries(Object.entries(copied.name).map(([k, v]) => [k, `Koopia — ${v}`]));
+    copied.name = Object.fromEntries(Object.entries(copied.name).map(([k, v]) => [k, `${COPY_PREFIXES[k] ?? COPY_PREFIXES["en"]}${v}`]));
   } else {
-    copied.name = `Koopia — ${copied.name}`;
+    copied.name = `${COPY_PREFIXES["et"]}${copied.name}`;
   }
   editingRecipe.value = copied;
 };
@@ -113,11 +117,11 @@ export const addImportedRecipe = (recipe: RecipeType) => {
   const existing = allRecipes.value.find((r) => r.id === recipe.id);
   if (existing) {
     updateRecipe(recipe);
-    showToast("Retsept uuendatud");
+    showToast(t("toast.recipe_updated"));
   } else {
     allRecipes.value = [...allRecipes.value, recipe];
     selectedIds.value = new Set([...selectedIds.value, recipe.id]);
-    showToast("Retsept imporditud");
+    showToast(t("toast.recipe_imported"));
   }
 };
 

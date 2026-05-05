@@ -1,13 +1,10 @@
-import { BakerPercentageAwareRecipe, nameForLang } from "../lib/types.ts";
+import { BakerPercentageAwareRecipe, intervalStr, nameForLang } from "../lib/types.ts";
 import { t } from "../lib/i18n.ts";
 import { copyRecipe, editingRecipe, language } from "../lib/state.ts";
 import EditRecipeDialog from "./EditRecipeDialog.tsx";
 import IconEdit from "../components/icons/IconEdit.tsx";
 import IconCopyPlus from "../components/icons/IconCopyPlus.tsx";
 import RecipePreview from "../components/RecipePreview.tsx";
-
-const intervalStr = (iv: { from: number; until: number }) =>
-  iv.from === iv.until ? `${iv.from}` : `${iv.from}–${iv.until}`;
 
 type Props = { recipe: BakerPercentageAwareRecipe };
 
@@ -60,7 +57,7 @@ export default function RecipeCard({ recipe }: Props) {
               <div class="space-y-1 text-center">
                 {recipe.bakingTime.map((bt, i) => (
                   <p key={i}>
-                    {bt.label && <span class="font-semibold">{bt.label[language.value === "ee" ? "et" : "en"] ?? bt.label["et"] ?? bt.label["en"]}: </span>}
+                    {bt.label && <span class="font-semibold">{nameForLang(bt.label, language.value)}: </span>}
                     {bt.steam ? t("baking_instructions.steam", {
                       minutes: intervalStr(bt.time),
                       temperature: intervalStr(bt.temperature),

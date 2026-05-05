@@ -183,7 +183,12 @@
     "import": "Import"
   },
   "recipe": {
-    "servings": "servings"
+    "servings": "servings",
+    "copy_prefix": "Copy — "
+  },
+  "toast": {
+    "recipe_updated": "Recipe updated",
+    "recipe_imported": "Recipe imported"
   },
   "Kihistamiseks": "Lamination"
 }

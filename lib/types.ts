@@ -118,6 +118,9 @@ export const nameStr = (name: string | Record<string, string>): string =>
 export const nameForLang = (name: string | Record<string, string>, lang: string): string =>
   typeof name === "string" ? name : (lang === "ee" ? (name["et"] ?? name["en"]) : (name["en"] ?? name["et"])) ?? "";
 
+export const intervalStr = (iv: NumberIntervalType): string =>
+  iv.from === iv.until ? `${iv.from}` : `${iv.from}–${iv.until}`;
+
 export const copyRecipeType = (v: RecipeType): RecipeType => ({
   innerTemperature: v.innerTemperature ? copyNumberIntervalType(v.innerTemperature) : null,
   bakingTime: v.bakingTime.map(copyBakingTimeType),
