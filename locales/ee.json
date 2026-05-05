@@ -41,7 +41,8 @@
     "mode": {
       "weight": "Muuda kaalu",
       "percent": "Protsenti kuivainete suhtes"
-    }
+    },
+    "preview_hint": "Lisa jahu ja vedelik, et eelvaade näha"
   },
   "baking_instructions": {
     "steam": "Auruta {{minutes}} minutit {{temperature}}℃",

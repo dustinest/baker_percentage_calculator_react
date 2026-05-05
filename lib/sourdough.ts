@@ -72,7 +72,9 @@ export const calculateSourDoughStarter = (group: RecipeIngredientsType): Starter
   const flour = Math.floor(dal.totals.flour);
   const water = Math.floor(dal.totals.water);
   const liquid = Math.floor(dal.totals.liquid);
-  const fridgeAmt = calculateStarterFlour(dal.totals.flour);
+  let fridgeAmt = calculateStarterFlour(dal.totals.flour);
+  // If percentage-based amount is too small but ingredients allow it, bump to 5 (→ 10g total fridge)
+  if (fridgeAmt < 5 && flour >= 5 && liquid >= 5) fridgeAmt = 5;
 
   const result: StarterCalculationResult = {
     starter: {

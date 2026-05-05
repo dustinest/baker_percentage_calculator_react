@@ -1,7 +1,38 @@
 import { assertEquals, assertAlmostEquals } from "@std/assert";
 import { readJsonRecipe } from "../lib/resolution.ts";
-import { splitStarterAndDough } from "../lib/sourdough.ts";
+import { calculateSourDoughStarter, splitStarterAndDough } from "../lib/sourdough.ts";
 import { PREDEFINED_RECIPES } from "../lib/recipes.ts";
+import { nameStr, NutritionType, RecipeIngredientsType } from "../lib/types.ts";
+
+const makeGroup = (flourGrams: number, waterGrams: number): RecipeIngredientsType => ({
+  ingredients: [
+    ...(flourGrams > 0 ? [{ id: "f", name: "flour", grams: flourGrams, nutrients: [{ type: NutritionType.flour, percent: 100 }] }] : []),
+    ...(waterGrams > 0 ? [{ id: "w", name: "water", grams: waterGrams, nutrients: [{ type: NutritionType.water, percent: 100 }] }] : []),
+  ],
+  bakingTime: [],
+  innerTemperature: null,
+  description: null,
+});
+
+Deno.test("calculateSourDoughStarter: 20g flour + 20g water → fridge bumped to 10g", () => {
+  const cal = calculateSourDoughStarter(makeGroup(20, 20));
+  assertEquals(cal.starter.flour.fridge + cal.starter.liquid.fridge, 10);
+});
+
+Deno.test("calculateSourDoughStarter: 5g flour + 5g water → fridge bumped to 10g", () => {
+  const cal = calculateSourDoughStarter(makeGroup(5, 5));
+  assertEquals(cal.starter.flour.fridge + cal.starter.liquid.fridge, 10);
+});
+
+Deno.test("calculateSourDoughStarter: 100g flour + 4g water → fridge not bumped (liquid < 5g)", () => {
+  const cal = calculateSourDoughStarter(makeGroup(100, 4));
+  assertEquals(cal.starter.flour.fridge + cal.starter.liquid.fridge, 4);
+});
+
+Deno.test("calculateSourDoughStarter: 500g flour + 200g water → normal fridge amount", () => {
+  const cal = calculateSourDoughStarter(makeGroup(500, 200));
+  assertEquals(cal.starter.flour.fridge + cal.starter.liquid.fridge, 20);
+});
 
 interface FixtureIngredient { key: string; grams: number; bakerPercent: number }
 interface FixtureGroup { translationKey: string; ingredients: FixtureIngredient[] }
@@ -19,7 +50,7 @@ const ingredientKey = (ing: { id: string; type?: string }): string =>
 Deno.test("sourdough: split matches fixtures for all 11 recipes", async () => {
   for (const jsonRecipe of PREDEFINED_RECIPES) {
     const recipe = readJsonRecipe(jsonRecipe);
-    const fixturePath = `${FIXTURES_DIR}/${recipe.name
+    const fixturePath = `${FIXTURES_DIR}/${nameStr(recipe.name)
       .toLowerCase()
       .replace(/ä/g, "a").replace(/ö/g, "o").replace(/ü/g, "u").replace(/õ/g, "o")
       .replace(/\s+/g, "_")

@@ -41,7 +41,8 @@
     "mode": {
       "weight": "Change weight",
       "percent": "Percent based on dry ingredients"
-    }
+    },
+    "preview_hint": "Add flour and liquid to see preview"
   },
   "baking_instructions": {
     "steam": "Steam {{minutes}} minutes {{temperature}}℃",

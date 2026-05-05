@@ -21,6 +21,9 @@ import {
 import { readJsonRecipe } from "../lib/resolution.ts";
 import { getIngredientGrams, StandardIngredients, StandardIngredientKeys } from "../lib/ingredients.ts";
 import { t } from "../lib/i18n.ts";
+import { calculateSourDoughStarter, splitStarterAndDough } from "../lib/sourdough.ts";
+import { recalculateBakerPercentage } from "../lib/baker-percent.ts";
+import RecipePreview from "../components/RecipePreview.tsx";
 
 const INGREDIENT_GROUPS: { labelKey: string; keys: (keyof StandardIngredientKeys)[] }[] = [
   { labelKey: "ingredients.title.dry",   keys: ["WHOLE_RYE_FLOUR", "WHOLE_RYE_MALT_FLOUR", "WHOLE_WHEAT_FLOUR", "DURUM_WHEAT", "WHEAT_405_FLOUR", "WHEAT_550_FLOUR", "BARLEY", "SEEDS"] },
@@ -142,26 +145,21 @@ export default function EditRecipeDialog({ recipe }: Props) {
     }, 0);
 
   const canSave = (() => {
-    const defaultGroup = d.ingredients.find((g) => !g.name);
-    if (!defaultGroup) return true;
-    const hasFlour = defaultGroup.ingredients.some(
-      (ing) => ing.grams > 0 && ing.nutrients.some((n) => n.type === NutritionType.flour),
-    );
-    const hasLiquid = defaultGroup.ingredients.some(
-      (ing) => ing.grams > 0 && ing.nutrients.some((n) => n.type === NutritionType.water),
-    );
-    return hasFlour && hasLiquid;
+    if (d.ingredients.length === 0) return false;
+    const cal = calculateSourDoughStarter(d.ingredients[0]);
+    const starterGrams = cal.starter.flour.fridge + cal.starter.liquid.fridge;
+    return starterGrams >= 10;
   })();
 
   return (
     <dialog class="modal modal-open" onClick={(e) => e.target === e.currentTarget && close()}>
-      <div class="modal-box max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-        <div class="flex justify-between items-center mb-4">
+      <div class="modal-box max-w-3xl w-full max-h-[90vh] flex flex-col overflow-hidden">
+        <div class="flex justify-between items-center mb-4 flex-none">
           <h3 class="font-bold text-lg">{nameForLang(d.name, language.value)}</h3>
           <button type="button" class="btn btn-sm btn-circle btn-ghost" onClick={close}>✕</button>
         </div>
 
-        <div role="tablist" class="tabs tabs-bordered mb-4">
+        <div role="tablist" class="tabs tabs-bordered mb-4 flex-none">
           {(["edit", "json", "import"] as Tab[]).map((tab) => (
             <button
               type="button"
@@ -175,6 +173,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
           ))}
         </div>
 
+        <div class="flex-1 overflow-y-auto">
         {activeTab.value === "edit" && (
           <div class="space-y-4">
             <div class="form-control">
@@ -353,6 +352,17 @@ export default function EditRecipeDialog({ recipe }: Props) {
             <button type="button" class="btn btn-sm btn-ghost w-full" onClick={addGroup}>
               + {t("edit.ingredients.add")}
             </button>
+
+            <div class="border border-base-300 rounded-lg overflow-hidden">
+              {canSave
+                ? <RecipePreview
+                    bp={recalculateBakerPercentage(splitStarterAndDough(d.ingredients))}
+                    recipe={d}
+                    lang={language.value}
+                  />
+                : <p class="text-sm text-base-content/50 text-center py-4">{t("edit.preview_hint")}</p>
+              }
+            </div>
           </div>
         )}
 
@@ -409,8 +419,9 @@ export default function EditRecipeDialog({ recipe }: Props) {
             </button>
           </div>
         )}
+        </div>
 
-        <div class="modal-action">
+        <div class="modal-action flex-none border-t border-base-300 mt-0 pt-3">
           {activeTab.value === "edit" ? (
             <>
               <button type="button" class="btn btn-ghost btn-sm" onClick={close}>{t("actions.cancel")}</button>
