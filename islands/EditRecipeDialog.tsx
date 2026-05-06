@@ -437,7 +437,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
                           />
                           <span class="text-xs text-base-content/50">–</span>
                           <input
-                            type="number" class="input input-bordered input-xs w-16" min={1}
+                            type="number" class="input input-bordered input-xs w-16 text-right" min={1}
                             value={bt.time.until}
                             onInput={(e) => setBakingTimeInterval(i, "time", "until", Number((e.target as HTMLInputElement).value))}
                           />
@@ -453,7 +453,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
                           />
                           <span class="text-xs text-base-content/50">–</span>
                           <input
-                            type="number" class="input input-bordered input-xs w-16" min={1}
+                            type="number" class="input input-bordered input-xs w-16 text-right" min={1}
                             value={bt.temperature.until}
                             onInput={(e) => setBakingTimeInterval(i, "temperature", "until", Number((e.target as HTMLInputElement).value))}
                           />
