@@ -3,17 +3,11 @@
     "edit": "Muuda",
     "name": "Nimi",
     "delete": "Kustuta",
-    "reset": "Lähtesta",
     "copyOf": "Kopeeri",
-    "hydration": "Hüdratsioon",
     "enforce_starter": {
       "button": "Kogu grupp läheb eeltaignasse, mitte ainult osa sellest."
     },
-    "description": {
-      "generic": "Kirjeldus"
-    },
     "ingredients": {
-      "title": "Nimetus",
       "add": "Lisa uus grupp",
       "ingredient": "Koostisosa",
       "add_ingredient": "Lisa koostisosa",
@@ -22,24 +16,10 @@
       "custom": "Muu"
     },
     "baking_instructions": {
-      "steam": "Auruta",
-      "time": "Aeg",
-      "temperature": "Temperatuur",
       "inner_temperature": "Sisetemperatuur"
     },
     "amount": {
-      "button": "Kogus: {{count}}",
-      "tab": {
-        "calculate": "Arvuta",
-        "change": "Muuda"
-      },
-      "title": "Retsepti kogus",
-      "calculate": "Kalkuleeri kogus",
-      "change": "Muuda koguse number"
-    },
-    "mode": {
-      "weight": "Muuda kaalu",
-      "percent": "Protsenti kuivainete suhtes"
+      "title": "Retsepti kogus"
     },
     "baking": {
       "add": "Lisa küpsetusaeg",
@@ -56,7 +36,6 @@
     "import": {
       "hint": "Kleebi JSON retsept alla ja vajuta \"Impordi\".",
       "placeholder": "{ \"name\": \"Minu retsept\", \"ingredients\": [...] }",
-      "button": "Impordi",
       "error_format": "Vigane JSON formaat — name ja ingredients on kohustuslikud",
       "error_json": "JSON viga: {{message}}"
     }
@@ -84,9 +63,7 @@
     }
   },
   "totals": {
-    "total": "Kokku",
-    "dough": "Tainas",
-    "other": "Muud"
+    "total": "Kokku"
   },
   "ingredient": {
     "sourdough_starter": {
@@ -141,7 +118,6 @@
     }
   },
   "messages": {
-    "no_recipes": "Retsepte ei leitud või pole valitud!",
     "select_recipe": "Vali vasakult retsept, mida kuvada"
   },
   "navigation": {
@@ -151,7 +127,6 @@
   },
   "actions": {
     "save": "Salvesta",
-    "change": "Muuda",
     "cancel": "Tühista",
     "add_recipe": "Lisa uus retsept",
     "sort": "Sorteeri",

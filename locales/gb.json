@@ -3,17 +3,11 @@
     "edit": "Change",
     "name": "Name",
     "delete": "Delete",
-    "reset": "Reset",
     "copyOf": "Copy",
-    "hydration": "Hydration",
     "enforce_starter": {
       "button": "Entire group goes into the levain, not just part of it."
     },
-    "description": {
-      "generic": "Description"
-    },
     "ingredients": {
-      "title": "Ingredients title",
       "add": "Add new group",
       "ingredient": "Ingredient",
       "add_ingredient": "Add ingredient",
@@ -22,24 +16,10 @@
       "custom": "Custom"
     },
     "baking_instructions": {
-      "steam": "Steam",
-      "time": "Time",
-      "temperature": "Temperature",
       "inner_temperature": "Inner temperature"
     },
     "amount": {
-      "button": "Amount: {{count}}",
-      "tab": {
-        "calculate": "Calculate",
-        "change": "Change"
-      },
-      "title": "Recipe amount",
-      "calculate": "Calculate ingredients amount",
-      "change": "Change ingredients amount number"
-    },
-    "mode": {
-      "weight": "Change weight",
-      "percent": "Percent based on dry ingredients"
+      "title": "Recipe amount"
     },
     "baking": {
       "add": "Add baking step",
@@ -56,7 +36,6 @@
     "import": {
       "hint": "Paste a JSON recipe below and click \"Import\".",
       "placeholder": "{ \"name\": \"My recipe\", \"ingredients\": [...] }",
-      "button": "Import",
       "error_format": "Invalid JSON format — name and ingredients are required",
       "error_json": "JSON error: {{message}}"
     }
@@ -84,9 +63,7 @@
     }
   },
   "totals": {
-    "total": "Total",
-    "dough": "Dough",
-    "other": "Others"
+    "total": "Total"
   },
   "ingredient": {
     "sourdough_starter": {
@@ -141,7 +118,6 @@
     }
   },
   "messages": {
-    "no_recipes": "No recipes found or selected!",
     "select_recipe": "Select a recipe from the left to display"
   },
   "navigation": {
@@ -151,7 +127,6 @@
   },
   "actions": {
     "save": "Save",
-    "change": "Change",
     "cancel": "Cancel",
     "add_recipe": "Add new recipe",
     "sort": "Sort",
