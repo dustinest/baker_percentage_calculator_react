@@ -1,5 +1,5 @@
 import { test, expect } from "vitest";
-import { readJsonRecipe } from "../lib/resolution.ts";
+import { readJsonRecipe } from "../lib/json_recipe";
 import { splitStarterAndDough } from "../lib/sourdough.ts";
 import { PREDEFINED_RECIPES } from "../lib/recipes.ts";
 import { nameStr, NutritionType, RecipeIngredientsType } from "../lib/types.ts";

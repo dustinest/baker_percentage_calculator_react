@@ -1,5 +1,5 @@
 import { test, expect } from "vitest";
-import { readJsonRecipe } from "../lib/resolution.ts";
+import { readJsonRecipe, recipeToJson } from "../lib/json_recipe";
 import { PREDEFINED_RECIPES } from "../lib/recipes.ts";
 import { nameStr, NutritionType } from "../lib/types.ts";
 
@@ -97,4 +97,42 @@ test("resolution: DRY ingredient with extra nutrients includes them alongside dr
   const types = dry?.nutrients.map((n) => n.type);
   expect(types).toContain(NutritionType.dry);
   expect(types).toContain(NutritionType.protein);
+});
+
+// ── recipeToJson ──────────────────────────────────────────────────────────────
+
+test("recipeToJson: round-trips a grams-based recipe without data loss", () => {
+  const original = PREDEFINED_RECIPES.find((r) => nameStr(r.name) === "Sai")!;
+  const roundTripped = recipeToJson(readJsonRecipe(original));
+
+  const origIngredients = original.ingredients.flatMap((g) => g.ingredients);
+  const rtIngredients = roundTripped.ingredients.flatMap((g) => g.ingredients);
+  expect(rtIngredients.length).toEqual(origIngredients.length);
+  for (const ing of origIngredients) {
+    if (ing.grams !== undefined) {
+      const found = rtIngredients.find((i) => i.type === ing.type);
+      expect(found?.grams, `grams for ${ing.type}`).toEqual(ing.grams);
+    }
+  }
+});
+
+test("recipeToJson: preserves bakingTime and innerTemperature intervals", () => {
+  const täis = PREDEFINED_RECIPES.find((r) => nameStr(r.name) === "Täisteraleib")!;
+  const rt = recipeToJson(readJsonRecipe(täis));
+
+  expect(rt.bakingTime).toBeDefined();
+  expect(rt.innerTemperature).toBeDefined();
+  // single-value temperature collapses to a number
+  expect(typeof (rt.bakingTime![0].temperature)).toEqual("number");
+  // range stays an object
+  const rangeStep = rt.bakingTime!.find((bt) => typeof bt.time === "object");
+  if (rangeStep) expect(typeof rangeStep.time).toEqual("object");
+});
+
+test("recipeToJson: amount > 1 is preserved, amount 1 is omitted", () => {
+  const base = PREDEFINED_RECIPES[0];
+  const with1 = recipeToJson(readJsonRecipe({ ...base, amount: 1 }));
+  const with2 = recipeToJson(readJsonRecipe({ ...base, amount: 2 }));
+  expect(with1.amount).toBeUndefined();
+  expect(with2.amount).toEqual(2);
 });

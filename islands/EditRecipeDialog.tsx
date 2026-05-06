@@ -18,7 +18,7 @@ import {
   recipeToJsonExport,
   updateRecipe,
 } from "../lib/state.ts";
-import { readJsonRecipe } from "../lib/resolution.ts";
+import { readJsonRecipe } from "../lib/json_recipe";
 import { getIngredientGrams, StandardIngredients, StandardIngredientKeys } from "../lib/ingredients.ts";
 import { t } from "../lib/i18n.ts";
 import { calculateSourDoughStarter, splitStarterAndDough } from "../lib/sourdough.ts";

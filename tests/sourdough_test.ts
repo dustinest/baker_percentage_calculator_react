@@ -1,6 +1,6 @@
 import { test, expect } from "vitest";
 import { readFileSync } from "node:fs";
-import { readJsonRecipe } from "../lib/resolution.ts";
+import { readJsonRecipe } from "../lib/json_recipe";
 import { calculateSourDoughStarter, splitStarterAndDough } from "../lib/sourdough.ts";
 import { PREDEFINED_RECIPES } from "../lib/recipes.ts";
 import { nameStr, NutritionType, RecipeIngredientsType } from "../lib/types.ts";

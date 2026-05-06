@@ -4,7 +4,7 @@ import {
   copyRecipeType,
   RecipeType,
 } from "./types.ts";
-import { readJsonRecipe, recipeToJson } from "./resolution.ts";
+import { readJsonRecipe, recipeToJson } from "./json_recipe";
 import { splitStarterAndDough } from "./sourdough.ts";
 import { recalculateBakerPercentage } from "./baker-percent.ts";
 import { PREDEFINED_RECIPES } from "./recipes.ts";
