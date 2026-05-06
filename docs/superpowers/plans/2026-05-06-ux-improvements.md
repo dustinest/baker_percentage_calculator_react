@@ -516,15 +516,15 @@ Replace with:
 <div class="flex items-end gap-3 flex-wrap">
   <div>
     <div class="text-xs text-base-content/50 mb-1">{t("edit.baking.time")}</div>
-    <div class="flex items-center gap-1 border border-base-300 rounded px-2 py-1">
+    <div class="flex items-center gap-1">
       <input
-        type="number" class="input input-xs w-14 text-right" min={1}
+        type="number" class="input input-bordered input-xs w-16 text-right" min={1}
         value={bt.time.from}
         onInput={(e) => setBakingTimeInterval(i, "time", "from", Number((e.target as HTMLInputElement).value))}
       />
       <span class="text-xs text-base-content/50">–</span>
       <input
-        type="number" class="input input-xs w-14" min={1}
+        type="number" class="input input-bordered input-xs w-16" min={1}
         value={bt.time.until}
         onInput={(e) => setBakingTimeInterval(i, "time", "until", Number((e.target as HTMLInputElement).value))}
       />
@@ -532,15 +532,15 @@ Replace with:
   </div>
   <div>
     <div class="text-xs text-base-content/50 mb-1">{t("edit.baking.temperature")}</div>
-    <div class="flex items-center gap-1 border border-base-300 rounded px-2 py-1">
+    <div class="flex items-center gap-1">
       <input
-        type="number" class="input input-xs w-16 text-right" min={1}
+        type="number" class="input input-bordered input-xs w-16 text-right" min={1}
         value={bt.temperature.from}
         onInput={(e) => setBakingTimeInterval(i, "temperature", "from", Number((e.target as HTMLInputElement).value))}
       />
       <span class="text-xs text-base-content/50">–</span>
       <input
-        type="number" class="input input-xs w-16" min={1}
+        type="number" class="input input-bordered input-xs w-16" min={1}
         value={bt.temperature.until}
         onInput={(e) => setBakingTimeInterval(i, "temperature", "until", Number((e.target as HTMLInputElement).value))}
       />
@@ -570,7 +570,7 @@ Replace with:
 </div>
 ```
 
-Note: `input input-xs` (without `input-bordered`) inside the pill container avoids double borders. The pill container's `border border-base-300 rounded` provides the grouping visual.
+Each pair is grouped by its label above and close proximity. Inputs keep `input-bordered` — no outer wrapper border is added.
 
 - [ ] **Step 2: Type-check**
 

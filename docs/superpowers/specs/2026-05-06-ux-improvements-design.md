@@ -34,7 +34,7 @@ Replace the current single flat `flex` row with a layout where each range pair (
 ```
 
 Implementation:
-- Each pair: `<div>` with `<div class="text-xs text-base-content/50 mb-1">` label above, then `<div class="flex items-center gap-1 border border-base-300 rounded px-2 py-1">` wrapping the two inputs and dash.
+- Each pair: `<div>` with `<div class="text-xs text-base-content/50 mb-1">` label above, then `<div class="flex items-center gap-1">` wrapping the two `input-bordered` inputs and dash. No outer border on the grouping div — the label above and close proximity provide the grouping visual without double borders.
 - The outer row: `flex items-end gap-3 flex-wrap`
 - Steam checkbox and action buttons align to `items-center` with `ml-auto` on the button group.
 - Label inputs (when toggled) remain in a second row below, unchanged.
