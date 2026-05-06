@@ -14,4 +14,4 @@ dist/
 # Local tools
 .myollamaenhancer/
 
-docs/superpowers
+.superpowers/
