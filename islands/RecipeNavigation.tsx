@@ -5,11 +5,13 @@ import { nameForLang, RecipeType } from "../lib/types.ts";
 import {
   addNewRecipe,
   allRecipes,
+  compactMode,
   initUrlSync,
   language,
   selectAll,
   selectNone,
   selectedIds,
+  showPercent,
   toggleSelected,
 } from "../lib/state.ts";
 import { t } from "../lib/i18n.ts";
@@ -20,6 +22,7 @@ export default function RecipeNavigation() {
   }, []);
 
   const showSort = useSignal(false);
+  const showView = useSignal(false);
   const sortDraft = useSignal<RecipeType[]>([]);
   const listRef = useRef<HTMLUListElement>(null);
 
@@ -112,9 +115,39 @@ export default function RecipeNavigation() {
               </button>
             </li>
             <li>
-              <button type="button" class="btn btn-sm btn-ghost w-full justify-start" onClick={openSort}>
-                ⇅ {t("actions.sort")}
+              <button
+                type="button"
+                class="btn btn-sm btn-ghost w-full justify-between"
+                onClick={() => { showView.value = !showView.value; }}
+              >
+                <span>{t("view.title")}</span>
+                <span class="text-xs opacity-40">{showView.value ? "▾" : "▸"}</span>
               </button>
+              {showView.value && (
+                <div class="flex flex-col gap-2 px-2 pt-1 pb-2">
+                  <label class="cursor-pointer flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      class="checkbox checkbox-sm"
+                      checked={showPercent.value}
+                      onChange={() => { showPercent.value = !showPercent.value; }}
+                    />
+                    <span class="text-sm">{t("view.show_percent")}</span>
+                  </label>
+                  <label class="cursor-pointer flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      class="checkbox checkbox-sm"
+                      checked={compactMode.value}
+                      onChange={() => { compactMode.value = !compactMode.value; }}
+                    />
+                    <span class="text-sm">{t("view.compact")}</span>
+                  </label>
+                  <button type="button" class="btn btn-sm btn-ghost w-full justify-start" onClick={openSort}>
+                    ⇅ {t("actions.sort")}
+                  </button>
+                </div>
+              )}
             </li>
           </ul>
         </div>
