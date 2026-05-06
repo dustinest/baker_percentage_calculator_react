@@ -1,7 +1,7 @@
 {
   "recipe": "Sai seemnete ja kaerahelvestega",
   "amount": 1,
-  "notes": "Water and salt are percent-based. totalFlourAmount = 462 (flour) + 10 (barley) + 12 (seeds) = 484 because BARLEY/SEEDS have NutritionType.dry which counts toward the dry total in readJsonRecipe.",
+  "notes": "Water and salt are percent-based. totalFlourAmount = 462 (flour) + 10 (oats) + 12 (seeds) = 484 because OATS/SEEDS have NutritionType.dry which counts toward the dry total in readJsonRecipe.",
   "levainAlgorithm": {
     "condition": "default_26pct",
     "fridge": 9,
@@ -28,7 +28,7 @@
         { "key": "WATER",           "grams": 237,  "bakerPercent": 48.97 },
         { "key": "WHEAT_550_FLOUR", "grams": 342,  "bakerPercent": 70.66 },
         { "key": "SALT",            "grams": 7.5,  "bakerPercent": 1.55 },
-        { "key": "BARLEY",          "grams": 10,   "bakerPercent": 2.07 },
+        { "key": "OATS",            "grams": 10,   "bakerPercent": 2.07 },
         { "key": "SEEDS",           "grams": 12,   "bakerPercent": 2.48 }
       ]
     }
