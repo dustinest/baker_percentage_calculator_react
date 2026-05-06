@@ -585,6 +585,9 @@ export default function EditRecipeDialog({ recipe }: Props) {
         <div class="modal-action flex-none border-t border-base-300 mt-0 pt-3">
           {activeTab.value === "edit" ? (
             <>
+              {!canSave && (
+                <p class="flex-1 text-xs text-warning self-center">{t("edit.save_blocked")}</p>
+              )}
               <button type="button" class="btn btn-ghost btn-sm" onClick={close}>{t("actions.cancel")}</button>
               <button type="button" class="btn btn-primary btn-sm" onClick={save} disabled={!canSave}>{t("actions.save")}</button>
             </>
