@@ -92,7 +92,7 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
           const n = bp.microNutrients.nutrients[type];
           if (!n || n.grams < 0.1) return null;
           return (
-              <div key={type} class="badge badge-ghost badge-sm">{t(`ingredients.title.${type}`) || type}: {fmtG(n.grams)}g / {fmtPct(n.percent)}%</div>
+              <div key={type} class="badge badge-ghost badge-sm">{t(`ingredients.title.${type}`) || type} {fmtG(n.grams)}g ({Math.round(n.percent)}%)</div>
           );
         })}
       </div>
