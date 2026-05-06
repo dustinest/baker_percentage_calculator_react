@@ -1,14 +1,14 @@
 {
   "edit": {
-    "hydration": "Vedelik",
-    "enforce_starter": {
-      "button": "Kogu grupp läheb eeltaignasse, mitte ainult osa sellest."
-    },
     "edit": "Muuda",
     "name": "Nimi",
     "delete": "Kustuta",
     "reset": "Lähtesta",
     "copyOf": "Kopeeri",
+    "hydration": "Vedelik",
+    "enforce_starter": {
+      "button": "Kogu grupp läheb eeltaignasse, mitte ainult osa sellest."
+    },
     "description": {
       "generic": "Kirjeldus"
     },
@@ -86,16 +86,13 @@
   "totals": {
     "total": "Kokku",
     "dough": "Tainas",
-    "other": "Teised"
+    "other": "Muud"
   },
   "ingredient": {
     "sourdough_starter": {
       "name": "Juuretis"
     },
     "predefined": {
-      "water": {
-        "generic": "Vesi"
-      },
       "salt": {
         "generic": "Sool"
       },
@@ -103,59 +100,43 @@
         "generic": "Suhkur",
         "brown": "Pruunsuhkur"
       },
+      "water": {
+        "generic": "Vesi"
+      },
       "oil": {
-        "generic": "õli",
+        "generic": "Õli",
         "olive": "Oliivõli"
       },
       "milk": {
-        "generic": "Piim",
-        "generic_other": "Piim ({{count}}%)",
         "fat_25": "Piim (2,5%)"
       },
+      "butter": {
+        "fat_82": "Või (82%)"
+      },
+      "egg": {
+        "generic": "Muna"
+      },
       "spice": {
-        "generic": "Vürts",
         "cardamom": "Kardemon",
         "cinnamon": "Kaneel"
       },
       "flour": {
-        "generic": "Jahu",
         "rye": {
-          "generic": "Rukkijahu",
           "whole_grain": "Täistera rukkijahu",
           "malt": "Rukkilinnase jahu"
         },
         "wheat": {
-          "generic": "Nisujahu",
-          "generic_other": "Nisujahu {{count}}",
           "whole_grain": "Täistera nisujahu",
           "durum": "Durum jahu",
           "ash_405": "Nisujahu 405",
           "ash_550": "Nisujahu 550"
         },
-        "barley": {
-          "generic": "Kaer",
-          "generic_other": "Kaer ({{count}} ash)",
-          "whole_grain": "Täistera kaer"
+        "oats": {
+          "generic": "Kaer"
         },
         "seeds": {
-          "generic": "Seemned",
-          "generic_other": "Seemned ({{count}} ash)"
+          "generic": "Seemned"
         }
-      },
-      "butter": {
-        "generic": "Või",
-        "generic_other": "Või ({{count}}%)",
-        "fat_82": "Või (82%)"
-      },
-      "egg": {
-        "generic": "Muna",
-        "generic_other": "{{count}} muna"
-      },
-      "fat": {
-        "generic": "Rasv"
-      },
-      "dry": {
-        "generic": "Kuiv"
       }
     }
   },
@@ -167,12 +148,6 @@
     "title": "Pagari %",
     "select_all": "Vali kõik",
     "selected": "{{count}} valitud"
-  },
-  "snackbar": {
-    "recipes_one": "üks retsept",
-    "recipes_other": "{{count}} retsepti",
-    "print_pages_one": "Prindid ühe kahepoolse lehe",
-    "print_pages_other": "Prindid {{count}} kahepoolse lehte"
   },
   "actions": {
     "save": "Salvesta",
@@ -191,6 +166,5 @@
   "toast": {
     "recipe_updated": "Retsept uuendatud",
     "recipe_imported": "Retsept imporditud"
-  },
-  "Kihistamiseks": "Kihistamiseks"
+  }
 }

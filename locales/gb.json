@@ -1,11 +1,11 @@
 {
   "edit": {
-    "hydration": "Hydration",
     "edit": "Change",
     "name": "Name",
     "delete": "Delete",
     "reset": "Reset",
     "copyOf": "Copy",
+    "hydration": "Hydration",
     "enforce_starter": {
       "button": "Entire group goes into the levain, not just part of it."
     },
@@ -83,14 +83,16 @@
       "dry": "Dry"
     }
   },
+  "totals": {
+    "total": "Total",
+    "dough": "Dough",
+    "other": "Others"
+  },
   "ingredient": {
     "sourdough_starter": {
       "name": "Sourdough starter"
     },
     "predefined": {
-      "water": {
-        "generic": "Water"
-      },
       "salt": {
         "generic": "Salt"
       },
@@ -98,67 +100,45 @@
         "generic": "Sugar",
         "brown": "Brown sugar"
       },
+      "water": {
+        "generic": "Water"
+      },
       "oil": {
         "generic": "Oil",
         "olive": "Olive oil"
       },
       "milk": {
-        "generic": "Milk",
-        "generic_other": "Milk ({{count}}% fat)",
         "fat_25": "Milk (2.5%)"
       },
+      "butter": {
+        "fat_82": "Butter (82%)"
+      },
+      "egg": {
+        "generic": "Egg"
+      },
       "spice": {
-        "generic": "Spice",
         "cardamom": "Cardamom",
         "cinnamon": "Cinnamon"
       },
       "flour": {
-        "generic": "Flour",
         "rye": {
-          "generic": "Rye flour",
           "whole_grain": "Whole grain rye flour",
           "malt": "Rye malt flour"
         },
         "wheat": {
-          "generic": "Wheat flour",
-          "generic_other": "Wheat flour ({{count}} ash)",
           "whole_grain": "Whole grain wheat flour",
           "durum": "Durum flour",
           "ash_405": "Wheat flour 405",
           "ash_550": "Wheat flour 550"
         },
-        "barley": {
-          "generic": "Barley",
-          "generic_other": "Barley ({{count}} ash)",
-          "whole_grain": "Whole grain barley"
+        "oats": {
+          "generic": "Oats"
         },
         "seeds": {
-          "generic": "Seeds",
-          "generic_other": "Seeds ({{count}} ash)"
+          "generic": "Seeds"
         }
-      },
-      "butter": {
-        "generic": "Butter",
-        "generic_other": "Butter ({{count}}% fat)",
-        "fat_82": "Butter (82%)"
-      },
-      "egg": {
-        "generic": "Egg",
-        "generic_one": "{{count}} egg",
-        "generic_other": "{{count}} eggs"
-      },
-      "fat": {
-        "generic": "Fat"
-      },
-      "dry": {
-        "generic": "Dry"
       }
     }
-  },
-  "totals": {
-    "total": "Total",
-    "dough": "Dough",
-    "other": "Others"
   },
   "messages": {
     "no_recipes": "No recipes found or selected!",
@@ -168,12 +148,6 @@
     "title": "Sourdough %",
     "select_all": "Select all",
     "selected": "{{count}} selected"
-  },
-  "snackbar": {
-    "recipes_one": "one recipe",
-    "recipes_other": "{{count}} recipes",
-    "print_pages_one": "Print one double side page",
-    "print_pages_other": "Print {{count}} double side pages"
   },
   "actions": {
     "save": "Save",
@@ -192,6 +166,5 @@
   "toast": {
     "recipe_updated": "Recipe updated",
     "recipe_imported": "Recipe imported"
-  },
-  "Kihistamiseks": "Lamination"
+  }
 }
