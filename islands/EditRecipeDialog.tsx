@@ -413,32 +413,40 @@ export default function EditRecipeDialog({ recipe }: Props) {
                 const hasLabel = bt.label !== undefined;
                 return (
                   <div key={i} class="border border-base-300 rounded-lg p-3 space-y-2">
-                    <div class="flex gap-2 items-center flex-wrap">
-                      <span class="text-xs text-base-content/50 w-full sm:w-auto">{t("edit.baking.time")}</span>
-                      <input
-                        type="number" class="input input-bordered input-xs w-16 text-right" min={1}
-                        value={bt.time.from}
-                        onInput={(e) => setBakingTimeInterval(i, "time", "from", Number((e.target as HTMLInputElement).value))}
-                      />
-                      <span class="text-xs">–</span>
-                      <input
-                        type="number" class="input input-bordered input-xs w-16 text-right" min={1}
-                        value={bt.time.until}
-                        onInput={(e) => setBakingTimeInterval(i, "time", "until", Number((e.target as HTMLInputElement).value))}
-                      />
-                      <span class="text-xs text-base-content/50">{t("edit.baking.temperature")}</span>
-                      <input
-                        type="number" class="input input-bordered input-xs w-16 text-right" min={1}
-                        value={bt.temperature.from}
-                        onInput={(e) => setBakingTimeInterval(i, "temperature", "from", Number((e.target as HTMLInputElement).value))}
-                      />
-                      <span class="text-xs">–</span>
-                      <input
-                        type="number" class="input input-bordered input-xs w-16 text-right" min={1}
-                        value={bt.temperature.until}
-                        onInput={(e) => setBakingTimeInterval(i, "temperature", "until", Number((e.target as HTMLInputElement).value))}
-                      />
-                      <label class="flex items-center gap-1 cursor-pointer">
+                    <div class="flex items-end gap-3 flex-wrap">
+                      <div>
+                        <div class="text-xs text-base-content/50 mb-1">{t("edit.baking.time")}</div>
+                        <div class="flex items-center gap-1">
+                          <input
+                            type="number" class="input input-bordered input-xs w-16 text-right" min={1}
+                            value={bt.time.from}
+                            onInput={(e) => setBakingTimeInterval(i, "time", "from", Number((e.target as HTMLInputElement).value))}
+                          />
+                          <span class="text-xs text-base-content/50">–</span>
+                          <input
+                            type="number" class="input input-bordered input-xs w-16" min={1}
+                            value={bt.time.until}
+                            onInput={(e) => setBakingTimeInterval(i, "time", "until", Number((e.target as HTMLInputElement).value))}
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <div class="text-xs text-base-content/50 mb-1">{t("edit.baking.temperature")}</div>
+                        <div class="flex items-center gap-1">
+                          <input
+                            type="number" class="input input-bordered input-xs w-16 text-right" min={1}
+                            value={bt.temperature.from}
+                            onInput={(e) => setBakingTimeInterval(i, "temperature", "from", Number((e.target as HTMLInputElement).value))}
+                          />
+                          <span class="text-xs text-base-content/50">–</span>
+                          <input
+                            type="number" class="input input-bordered input-xs w-16" min={1}
+                            value={bt.temperature.until}
+                            onInput={(e) => setBakingTimeInterval(i, "temperature", "until", Number((e.target as HTMLInputElement).value))}
+                          />
+                        </div>
+                      </div>
+                      <label class="flex items-center gap-1 cursor-pointer pb-1">
                         <input
                           type="checkbox" class="checkbox checkbox-xs"
                           checked={bt.steam}
@@ -446,7 +454,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
                         />
                         <span class="text-xs">{t("edit.baking.steam")}</span>
                       </label>
-                      <div class="ml-auto flex gap-1">
+                      <div class="ml-auto flex gap-1 pb-1">
                         <button type="button" class="btn btn-xs btn-ghost"
                           onClick={() => {
                             if (hasLabel) {
