@@ -32,6 +32,7 @@ export default function RecipeCard({ recipe }: Props) {
               type="button"
               class="btn btn-sm btn-square"
               title={t("edit.edit")}
+              aria-label={t("edit.edit")}
               onClick={() => { editingRecipe.value = recipe; }}
             >
               <IconEdit />
@@ -40,6 +41,7 @@ export default function RecipeCard({ recipe }: Props) {
               type="button"
               class="btn btn-sm btn-square"
               title={t("edit.copyOf")}
+              aria-label={t("edit.copyOf")}
               onClick={() => copyRecipe(recipe)}
             >
               <IconCopyPlus />
