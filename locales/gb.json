@@ -16,15 +16,15 @@
       "custom": "Custom"
     },
     "baking_instructions": {
-      "inner_temperature": "Inner temperature"
+      "inner_temperature": "Internal temperature"
     },
     "amount": {
-      "title": "Recipe amount"
+      "title": "Servings"
     },
     "baking": {
       "add": "Add baking step",
-      "add_inner_temperature": "Add inner temperature",
-      "remove_inner_temperature": "Remove inner temperature",
+      "add_inner_temperature": "Add internal temperature",
+      "remove_inner_temperature": "Remove internal temperature",
       "time": "Time (min)",
       "temperature": "Temperature (°C)",
       "steam": "Steam",
@@ -41,13 +41,12 @@
     }
   },
   "baking_instructions": {
-    "steam": "Steam {{minutes}} minutes {{temperature}}℃",
-    "bake": "Bake {{minutes}} minutes {{temperature}}℃",
-    "inner_temperature": "Inner temperature {{temperature}}℃"
+    "steam": "Steam for {{minutes}} min at {{temperature}}°C",
+    "bake": "Bake for {{minutes}} min at {{temperature}}°C",
+    "inner_temperature": "Internal temperature {{temperature}}°C"
   },
   "ingredients": {
     "title": {
-      "baker_percentage": "Baker's percentage",
       "dough": "Dough",
       "sourdough_starter_dough": "Levain",
       "water": "Water",
@@ -121,7 +120,7 @@
     "select_recipe": "Select a recipe from the left to display"
   },
   "navigation": {
-    "title": "Sourdough %",
+    "title": "Baker's %",
     "select_all": "Select all",
     "selected": "{{count}} selected"
   },
