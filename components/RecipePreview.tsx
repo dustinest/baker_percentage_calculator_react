@@ -2,6 +2,7 @@ import type { ComponentChildren } from "preact";
 import { BakerPercentageResult, DISPLAYABLE_NUTRIENTS_TYPE_ARRAY, nameForLang, NutritionType, RecipeType } from "../lib/types.ts";
 import { t } from "../lib/i18n.ts";
 import { computeSummaryWeights } from "../lib/summary-weights.ts";
+import { showPercent } from "../lib/state.ts";
 
 const fmt = (n: number) => Math.round(n);
 const fmtPct = (n: number) => n == 100 ? 100 : n.toFixed(2);
@@ -53,7 +54,7 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
                 <tr key={ii}>
                   <td>{t(ing.name) !== ing.name ? t(ing.name) : ing.name}</td>
                   <td class="text-right tabular-nums">{fmtRnd100(ing.grams)}g</td>
-                  <td class="text-right tabular-nums">{fmtPct(ing.percent)}%</td>
+                  {showPercent.value && <td class="text-right tabular-nums">{fmtPct(ing.percent)}%</td>}
                 </tr>
               ))}
             </tbody>
@@ -69,7 +70,7 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
             <tr>
               <td class="print:text-xs">{t("ingredients.title.dry")}</td>
               <td class="text-right tabular-nums print:text-xs">{fmt(bp.microNutrients.dry_total)}g</td>
-              <td class="text-right tabular-nums print:text-xs">100%</td>
+              {showPercent.value && <td class="text-right tabular-nums print:text-xs">100%</td>}
             </tr>
 
         {(() => {
@@ -79,7 +80,7 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
                 <tr>
                   <td class="print:text-xs">{t("ingredients.title.water")}</td>
                   <td class="text-right tabular-nums print:text-xs">{fmtG(n.grams)}g</td>
-                  <td class="text-right tabular-nums print:text-xs">{fmtPct(n.percent)}%</td>
+                  {showPercent.value && <td class="text-right tabular-nums print:text-xs">{fmtPct(n.percent)}%</td>}
                 </tr>
             );
             })()}
