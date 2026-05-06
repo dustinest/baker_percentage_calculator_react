@@ -202,7 +202,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
               class={`tab ${activeTab.value === tab ? "tab-active" : ""}`}
               onClick={() => { activeTab.value = tab; }}
             >
-              {tab === "edit" ? t("edit.edit") : tab === "json" ? "JSON" : "Import"}
+              {tab === "edit" ? t("edit.edit") : tab === "json" ? t("edit.tab.json") : t("edit.tab.import")}
             </button>
           ))}
         </div>
@@ -357,6 +357,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
                               <input
                                 type="number"
                                 class="input input-bordered input-xs w-full text-right"
+                                title={t("edit.ingredients.baker_percent_hint")}
                                 value={(ing.grams * 100 / dryTotal).toFixed(1)}
                                 min={0}
                                 step={0.1}
