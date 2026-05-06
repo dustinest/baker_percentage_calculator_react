@@ -4,7 +4,7 @@ import gb from "../locales/gb.json";
 
 export type Language = "ee" | "gb";
 
-export const language = signal<Language>("ee");
+export const language = signal<Language>(navigator?.language?.startsWith("et") ? "ee" : "gb");
 
 export const t = (key: string, vars?: Record<string, string | number>): string => {
   const parts = key.split(".");

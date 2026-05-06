@@ -140,9 +140,9 @@
     "import": "Impordi"
   },
   "view": {
-    "title": "Vaade",
-    "show_percent": "Näita %",
-    "compact": "Kompaktne"
+    "title": "Muuda vaadet",
+    "show_percent": "Näita pagari protsenti",
+    "compact": "Kompaktne vaade"
   },
   "recipe": {
     "servings": "portsjonit",

@@ -26,13 +26,8 @@ export const selectedIds = signal<Set<string>>(new Set());
 export const editingRecipe = signal<RecipeType | null>(null);
 export const bakerResults = signal<Map<string, BakerPercentageAwareRecipe>>(new Map());
 export const toast = signal<{ msg: string; key: number } | null>(null);
-export const showPercent = signal(localStorage.getItem("bp_show_percent") !== "false");
-export const compactMode = signal(localStorage.getItem("bp_compact_mode") === "true");
-
-effect(() => {
-  localStorage.setItem("bp_show_percent", String(showPercent.value));
-  localStorage.setItem("bp_compact_mode", String(compactMode.value));
-});
+export const showPercent = signal(true);
+export const compactMode = signal(false);
 
 export { language };
 

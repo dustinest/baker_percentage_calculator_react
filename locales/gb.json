@@ -140,9 +140,9 @@
     "import": "Import"
   },
   "view": {
-    "title": "View",
-    "show_percent": "Show %",
-    "compact": "Compact"
+    "title": "View preferences",
+    "show_percent": "Show baker percentage",
+    "compact": "Compact view"
   },
   "recipe": {
     "servings": "servings",

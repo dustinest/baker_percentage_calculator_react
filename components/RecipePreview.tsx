@@ -70,7 +70,7 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
             <tr>
               <td class="print:text-xs">{t("ingredients.title.dry")}</td>
               <td class="text-right tabular-nums print:text-xs">{fmt(bp.microNutrients.dry_total)}g</td>
-              {showPercent.value && <td class="text-right tabular-nums print:text-xs">100%</td>}
+              <td class="text-right tabular-nums print:text-xs">100%</td>
             </tr>
 
         {(() => {
@@ -80,7 +80,7 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
                 <tr>
                   <td class="print:text-xs">{t("ingredients.title.water")}</td>
                   <td class="text-right tabular-nums print:text-xs">{fmtG(n.grams)}g</td>
-                  {showPercent.value && <td class="text-right tabular-nums print:text-xs">{fmtPct(n.percent)}%</td>}
+                  <td class="text-right tabular-nums print:text-xs">{fmtPct(n.percent)}%</td>
                 </tr>
             );
             })()}

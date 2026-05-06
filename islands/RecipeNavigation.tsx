@@ -114,66 +114,69 @@ export default function RecipeNavigation() {
                 + {t("actions.add_recipe")}
               </button>
             </li>
-            <li>
-              <button
-                type="button"
-                class="btn btn-sm btn-ghost w-full justify-between"
-                onClick={() => { showView.value = !showView.value; }}
-              >
-                <span>{t("view.title")}</span>
-                <span class="text-xs opacity-40">{showView.value ? "▾" : "▸"}</span>
-              </button>
-              {showView.value && (
-                <div class="flex flex-col gap-2 px-2 pt-1 pb-2">
-                  <label class="cursor-pointer flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      class="checkbox checkbox-sm"
-                      checked={showPercent.value}
-                      onChange={() => { showPercent.value = !showPercent.value; }}
-                    />
-                    <span class="text-sm">{t("view.show_percent")}</span>
-                  </label>
-                  <label class="cursor-pointer flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      class="checkbox checkbox-sm"
-                      checked={compactMode.value}
-                      onChange={() => { compactMode.value = !compactMode.value; }}
-                    />
-                    <span class="text-sm">{t("view.compact")}</span>
-                  </label>
-                  <button type="button" class="btn btn-sm btn-ghost w-full justify-start" onClick={openSort}>
-                    ⇅ {t("actions.sort")}
-                  </button>
-                </div>
-              )}
-            </li>
           </ul>
         </div>
 
+        <div class={`overflow-hidden transition-all duration-200 ease-out ${showView.value ? "max-h-48" : "max-h-0"}`}>
+          <div class="border-t border-base-300 px-4 py-3 flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <button type="button" class="btn btn-sm btn-ghost px-0" onClick={openSort}>
+                ⇅ {t("actions.sort")}
+              </button>
+              <div class="flex gap-1">
+                <button
+                  type="button"
+                  class={`btn btn-xs ${language.value === "ee" ? "btn-primary" : "btn-ghost"}`}
+                  onClick={() => { language.value = "ee"; }}
+                >
+                  🇪🇪
+                </button>
+                <button
+                  type="button"
+                  class={`btn btn-xs ${language.value === "gb" ? "btn-primary" : "btn-ghost"}`}
+                  onClick={() => { language.value = "gb"; }}
+                >
+                  🇬🇧
+                </button>
+              </div>
+            </div>
+            <label class="cursor-pointer flex items-center gap-2">
+              <input
+                type="checkbox"
+                class="checkbox checkbox-sm"
+                checked={showPercent.value}
+                onChange={() => { showPercent.value = !showPercent.value; }}
+              />
+              <span class="text-sm">{t("view.show_percent")}</span>
+            </label>
+            <label class="cursor-pointer flex items-center gap-2">
+              <input
+                type="checkbox"
+                class="checkbox checkbox-sm"
+                checked={compactMode.value}
+                onChange={() => { compactMode.value = !compactMode.value; }}
+              />
+              <span class="text-sm">{t("view.compact")}</span>
+            </label>
+          </div>
+        </div>
+
         <div class="flex-none flex items-center justify-between px-4 py-2 border-t border-base-300">
-          <div class="flex gap-1">
-            <button type="button" class="btn btn-xs btn-ghost" onClick={() => globalThis.print()}>
-              🖨 {t("actions.print")}
-            </button>
-          </div>
-          <div class="flex gap-1">
-            <button
-              type="button"
-              class={`btn btn-xs ${language.value === "ee" ? "btn-primary" : "btn-ghost"}`}
-              onClick={() => { language.value = "ee"; }}
-            >
-              🇪🇪
-            </button>
-            <button
-              type="button"
-              class={`btn btn-xs ${language.value === "gb" ? "btn-primary" : "btn-ghost"}`}
-              onClick={() => { language.value = "gb"; }}
-            >
-              🇬🇧
-            </button>
-          </div>
+          <button type="button" class="btn btn-xs btn-ghost" onClick={() => globalThis.print()}>
+            🖨 {t("actions.print")}
+          </button>
+          <button
+            type="button"
+            class={`btn btn-xs btn-ghost${showView.value ? " btn-active" : ""}`}
+            title={t("view.title")}
+            aria-label={t("view.title")}
+            onClick={() => { showView.value = !showView.value; }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </button>
         </div>
       </div>
 
