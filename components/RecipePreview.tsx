@@ -39,13 +39,6 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
     <>
       <div class="px-4">
         <table class="table w-full">
-          <thead class="print:hidden">
-            <tr>
-              <th class="font-normal text-xs text-base-content/50 px-0"></th>
-              <th class="font-normal text-xs text-base-content/50 text-right">g</th>
-              <th class="font-normal text-xs text-base-content/50 text-right">%</th>
-            </tr>
-          </thead>
 
       {bp.ingredients.map((group, gi) => (
           <tbody key={gi}>
