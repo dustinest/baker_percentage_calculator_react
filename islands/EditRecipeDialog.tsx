@@ -384,7 +384,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
                             )}
                           </td>
                           <td>
-                            <button type="button" class="btn btn-xs btn-ghost text-error px-1" onClick={() => delIng(gi, ii)}>×</button>
+                            <button type="button" class="btn btn-xs btn-ghost text-error" onClick={() => delIng(gi, ii)}>×</button>
                           </td>
                         </tr>
                       ))}
