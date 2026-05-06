@@ -19,3 +19,23 @@
     opacity: 0.25;
   }
 }
+
+.compact-mode .table td,
+.compact-mode .table th {
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+}
+
+.compact-mode .divider {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.compact-mode .card-body {
+  padding-top: 0.625rem;
+}
+
+.compact-mode .badge {
+  padding-top: 0;
+  padding-bottom: 0;
+}

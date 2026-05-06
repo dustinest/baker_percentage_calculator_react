@@ -1,10 +1,11 @@
 import RecipeNavigation from "./islands/RecipeNavigation";
 import RecipeList from "./islands/RecipeList";
 import Toast from "./components/Toast";
+import { compactMode } from "./lib/state.ts";
 
 export default function App() {
   return (
-    <div class="bg-base-100 min-h-screen">
+    <div class={`bg-base-100 min-h-screen${compactMode.value ? " compact-mode" : ""}`}>
       <div class="drawer lg:drawer-open">
         <input id="nav-drawer" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content flex flex-col">
