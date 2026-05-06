@@ -234,16 +234,29 @@ export default function EditRecipeDialog({ recipe }: Props) {
               </div>
             </div>
 
-            <label class="input input-bordered input-sm flex items-center gap-2 w-fit">
-              <span class="label-text text-base-content/60">{t("edit.amount.title")}</span>
-              <input
-                type="number"
-                class="w-16 text-right"
-                value={d.amount}
-                min={1}
-                onInput={(e) => setAmount(Number((e.target as HTMLInputElement).value))}
-              />
-            </label>
+            <div class="flex items-center gap-2">
+              <span class="label-text text-sm text-base-content/60">{t("edit.amount.title")}</span>
+              <div class="join">
+                <button
+                  type="button"
+                  class="btn btn-sm join-item"
+                  disabled={d.amount <= 1}
+                  onClick={() => setAmount(d.amount - 1)}
+                >−</button>
+                <input
+                  type="number"
+                  class="input input-bordered input-sm join-item w-16 text-center"
+                  value={d.amount}
+                  min={1}
+                  onInput={(e) => setAmount(Number((e.target as HTMLInputElement).value))}
+                />
+                <button
+                  type="button"
+                  class="btn btn-sm join-item"
+                  onClick={() => setAmount(d.amount + 1)}
+                >+</button>
+              </div>
+            </div>
 
             {d.ingredients.map((group, gi) => {
               const isCustom = group.name !== undefined && typeof group.name === "object";
