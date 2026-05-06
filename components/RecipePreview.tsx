@@ -45,7 +45,7 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
           <tbody key={gi}>
             {group.name && (
                 <tr>
-                  <td colspan={3} class={`text-left text-xs px-0 font-semibold uppercase tracking-wide text-base-content/50 pt-4`}>
+                  <td colspan={showPercent.value ? 3 : 2} class={`text-left text-xs px-0 font-semibold uppercase tracking-wide text-base-content/50 pt-4`}>
                     {resolveName(group.name, lang)}
                   </td>
                 </tr>
