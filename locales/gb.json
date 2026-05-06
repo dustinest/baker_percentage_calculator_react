@@ -139,6 +139,11 @@
     "copy_to_clipboard": "Copy to clipboard",
     "import": "Import"
   },
+  "view": {
+    "title": "View",
+    "show_percent": "Show %",
+    "compact": "Compact"
+  },
   "recipe": {
     "servings": "servings",
     "copy_prefix": "Copy — "

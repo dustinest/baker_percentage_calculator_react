@@ -139,6 +139,11 @@
     "copy_to_clipboard": "Kopeeri lõikelauale",
     "import": "Impordi"
   },
+  "view": {
+    "title": "Vaade",
+    "show_percent": "Näita %",
+    "compact": "Kompaktne"
+  },
   "recipe": {
     "servings": "portsjonit",
     "copy_prefix": "Koopia — "
