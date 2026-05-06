@@ -154,7 +154,11 @@ export default function RecipeNavigation() {
             <ul ref={listRef} class="space-y-1">
               {sortDraft.value.map((recipe) => (
                 <li key={recipe.id} class="flex items-center gap-2 p-2 rounded bg-base-200 cursor-grab active:cursor-grabbing">
-                  <span class="text-base-content/40 select-none">⠿</span>
+                  <svg width="12" height="16" viewBox="0 0 12 16" fill="currentColor" class="text-base-content/40 select-none flex-shrink-0" aria-hidden="true">
+                    <circle cx="3" cy="3" r="1.5"/><circle cx="9" cy="3" r="1.5"/>
+                    <circle cx="3" cy="8" r="1.5"/><circle cx="9" cy="8" r="1.5"/>
+                    <circle cx="3" cy="13" r="1.5"/><circle cx="9" cy="13" r="1.5"/>
+                  </svg>
                   <span class="flex-1 text-sm select-none">{nameForLang(recipe.name, language.value)}</span>
                 </li>
               ))}
