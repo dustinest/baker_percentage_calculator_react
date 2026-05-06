@@ -4,6 +4,11 @@
     "name": "Name",
     "delete": "Delete",
     "copyOf": "Copy",
+    "save_blocked": "Levain too small — need at least 10g fridge starter.",
+    "tab": {
+      "json": "JSON",
+      "import": "Import"
+    },
     "enforce_starter": {
       "button": "Entire group goes into the levain, not just part of it."
     },
@@ -12,6 +17,7 @@
       "ingredient": "Ingredient",
       "add_ingredient": "Add ingredient",
       "baker_percent": "Baker %",
+      "baker_percent_hint": "Edit % to recalculate grams",
       "choose": "Choose ingredient",
       "custom": "Custom"
     },

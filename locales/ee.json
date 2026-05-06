@@ -4,6 +4,11 @@
     "name": "Nimi",
     "delete": "Kustuta",
     "copyOf": "Kopeeri",
+    "save_blocked": "Eeltaigen liiga väike — vajad vähemalt 10g külmkapi juuretist.",
+    "tab": {
+      "json": "JSON",
+      "import": "Impordi"
+    },
     "enforce_starter": {
       "button": "Kogu grupp läheb eeltaignasse, mitte ainult osa sellest."
     },
@@ -12,6 +17,7 @@
       "ingredient": "Koostisosa",
       "add_ingredient": "Lisa koostisosa",
       "baker_percent": "Pagari %",
+      "baker_percent_hint": "Muuda % grammi ümberarvutamiseks",
       "choose": "Vali koostisosa",
       "custom": "Muu"
     },
