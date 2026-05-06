@@ -19,7 +19,7 @@
       "inner_temperature": "Sisetemperatuur"
     },
     "amount": {
-      "title": "Retsepti kogus"
+      "title": "Portsjonid"
     },
     "baking": {
       "add": "Lisa küpsetusaeg",
@@ -32,22 +32,21 @@
       "label_et": "Silt (ET)",
       "label_en": "Silt (EN)"
     },
-    "preview_hint": "Lisa jahu ja vedelik, et eelvaade näha",
+    "preview_hint": "Lisa jahu ja vedelik, et näha eelvaadet",
     "import": {
-      "hint": "Kleebi JSON retsept alla ja vajuta \"Impordi\".",
+      "hint": "Kleebi JSON retsept allolevasse välja ja vajuta \"Impordi\".",
       "placeholder": "{ \"name\": \"Minu retsept\", \"ingredients\": [...] }",
       "error_format": "Vigane JSON formaat — name ja ingredients on kohustuslikud",
       "error_json": "JSON viga: {{message}}"
     }
   },
   "baking_instructions": {
-    "steam": "Auruta {{minutes}} minutit {{temperature}}℃",
-    "bake": "Küpseta {{minutes}} minutit {{temperature}}℃",
-    "inner_temperature": "Sisetemperatuur {{temperature}}℃"
+    "steam": "Auruta {{minutes}} minutit {{temperature}}°C juures",
+    "bake": "Küpseta {{minutes}} minutit {{temperature}}°C juures",
+    "inner_temperature": "Sisetemperatuur {{temperature}}°C"
   },
   "ingredients": {
     "title": {
-      "baker_percentage": "Pagari protsent",
       "dough": "Taigen",
       "sourdough_starter_dough": "Eeltaigen",
       "water": "Vesi",
