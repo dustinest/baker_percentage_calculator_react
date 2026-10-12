@@ -33,7 +33,7 @@ cp .env.example .env
 
 | Variable | Description |
 |---|---|
-| `VITE_SITE_URL` | Public site origin, no trailing slash (e.g. `https://juuretis.foxjunior.com`). Vite inserts it into `index.html` at build time for the canonical URL and the Open Graph / Twitter share headers (`og:url`, `og:image`). |
+| `VITE_SITE_URL` | Public site origin, no trailing slash (e.g. `https://juuretis-app.foxjunior.com`). Vite inserts it into `index.html` at build time for the canonical URL and the Open Graph / Twitter share headers (`og:url`, `og:image`). |
 
 `.env` is gitignored; `.env.example` is committed. Because the value is baked in at build time, it must be set wherever `npm run build` runs, see [Deploy](#deploy-to-cloudflare-pages).
 
