@@ -25,97 +25,83 @@ export default function RecipePreview({ bp, recipe, lang, children }: Props) {
   const { doughGrams, customGroups, totalGrams, showDough } = computeSummaryWeights(bp);
   const perPiece = recipe.amount > 1 ? totalGrams / recipe.amount : null;
 
-  const items: string[] = [];
-  if (showDough) items.push(`${t("ingredients.title.dough")}: ${fmtG(doughGrams)}g`);
-  if (perPiece) items.push(`1/${recipe.amount} = ${fmtG(perPiece)}g`);
-  customGroups.forEach((g) => items.push(`${resolveName(g.name, lang)}: ${fmtG(g.grams)}g`));
-  items.push(`${t("totals.total")}: ${fmtG(totalGrams)}g`);
-
-  const rows: Array<[string] | [string, string]> = [];
-  for (let i = 0; i < items.length; i += 2) {
-    rows.push(i + 1 < items.length ? [items[i], items[i + 1]] : [items[i]]);
-  }
+  const tags: { label: string; grams: number }[] = [];
+  if (showDough) tags.push({ label: t("ingredients.title.dough"), grams: doughGrams });
+  if (perPiece) tags.push({ label: `1/${recipe.amount}`, grams: perPiece });
+  customGroups.forEach((g) => tags.push({ label: resolveName(g.name, lang) ?? "", grams: g.grams }));
 
   return (
     <>
-      <div class="px-4">
-        <table class="table w-full">
-
-      {bp.ingredients.map((group, gi) => (
-          <tbody key={gi}>
-            {group.name && (
+      <div class="px-5">
+        <table class="recipe-table w-full text-[0.9375rem] print:text-[13pt]">
+          {bp.ingredients.map((group, gi) => (
+            <tbody key={gi}>
+              {group.name && (
                 <tr>
-                  <td colspan={showPercent.value ? 3 : 2} class={`text-left text-xs px-0 font-semibold uppercase tracking-wide text-base-content/50 pt-4`}>
+                  <td colspan={showPercent.value ? 3 : 2} class="border-b-0 pt-4 pb-1 text-sm font-semibold text-secondary print:text-[11pt]">
                     {resolveName(group.name, lang)}
                   </td>
                 </tr>
-            )}
+              )}
               {group.ingredientWithPercent.map((ing, ii) => (
                 <tr key={ii}>
                   <td>{t(ing.name) !== ing.name ? t(ing.name) : ing.name}</td>
-                  <td class="text-right tabular-nums">{fmtRnd100(ing.grams)}g</td>
-                  {showPercent.value && <td class="text-right tabular-nums">{fmtPct(ing.percent)}%</td>}
+                  <td class="text-right font-semibold whitespace-nowrap">{fmtRnd100(ing.grams)} g</td>
+                  {showPercent.value && <td class="text-right text-base-content/55 w-20 pl-4 whitespace-nowrap">{fmtPct(ing.percent)}%</td>}
                 </tr>
               ))}
             </tbody>
-      ))}
+          ))}
         </table>
       </div>
 
       {children}
 
-      <div class="divider my-1" />
-        <table class="table w-full">
+      <div class="px-5 pt-4 pb-3 print:text-[9pt]">
+        <table class="recipe-table w-full text-base-content/75">
           <tbody>
             <tr>
-              <td class="print:text-xs">{t("ingredients.title.dry")}</td>
-              <td class="text-right tabular-nums print:text-xs">{fmt(bp.microNutrients.dry_total)}g</td>
-              <td class="text-right tabular-nums print:text-xs">100%</td>
+              <td>{t("ingredients.title.dry")}</td>
+              <td class="text-right whitespace-nowrap">{fmt(bp.microNutrients.dry_total)} g</td>
+              <td class="text-right w-20 text-base-content/55">100%</td>
             </tr>
-
-        {(() => {
+            {(() => {
               const n = bp.microNutrients.nutrients[NutritionType.water];
               if (!n || n.grams < 0.1) return null;
               return (
                 <tr>
-                  <td class="print:text-xs">{t("ingredients.title.water")}</td>
-                  <td class="text-right tabular-nums print:text-xs">{fmtG(n.grams)}g</td>
-                  <td class="text-right tabular-nums print:text-xs">{fmtPct(n.percent)}%</td>
+                  <td>{t("ingredients.title.water")}</td>
+                  <td class="text-right whitespace-nowrap">{fmtG(n.grams)} g</td>
+                  <td class="text-right w-20 text-base-content/55">{fmtPct(n.percent)}%</td>
                 </tr>
-            );
+              );
             })()}
           </tbody>
         </table>
 
-      <div class="divider my-1" />
-      <div class="px-4 pb-2 flex flex-wrap gap-1">
-        {DISPLAYABLE_NUTRIENTS_TYPE_ARRAY.filter((type) => type !== NutritionType.water).map((type) => {
-          const n = bp.microNutrients.nutrients[type];
-          if (!n || n.grams < 0.1) return null;
-          return (
-              <div key={type} class="badge badge-ghost badge-sm">{t(`ingredients.title.${type}`) || type} {fmtG(n.grams)}g ({Math.round(n.percent)}%)</div>
-          );
-        })}
+        <ul class="flex flex-wrap gap-x-3 gap-y-0.5 mt-2 text-xs text-base-content/60">
+          {DISPLAYABLE_NUTRIENTS_TYPE_ARRAY.filter((type) => type !== NutritionType.water).map((type) => {
+            const n = bp.microNutrients.nutrients[type];
+            if (!n || n.grams < 0.1) return null;
+            return (
+              <li key={type}>{t(`ingredients.title.${type}`) || type} {fmtG(n.grams)} g ({Math.round(n.percent)}%)</li>
+            );
+          })}
+        </ul>
       </div>
 
-      <div class="card-footer border-t border-base-300 print:border-base-200">
-        <table class="table w-full">
-          <tbody>
-            {rows.map((row, i) => (
-              <tr key={i}>
-                {row.length === 2 ? (
-                  <>
-                    <td class="text-right border-r border-base-300 pr-2 w-1/2 tabular-nums">{row[0]}</td>
-                    <td class="text-left pl-2 tabular-nums">{row[1]}</td>
-                  </>
-                ) : (
-                  <td colspan={2} class="text-center tabular-nums">{row[0]}</td>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <dl class="flex flex-wrap gap-x-5 gap-y-1 px-5 py-3 border-t border-base-300 print:text-[9pt]">
+        {tags.map((tag, i) => (
+          <div key={i} class="flex gap-1.5">
+            <dt class="text-base-content/60">{tag.label}</dt>
+            <dd>{fmtG(tag.grams)} g</dd>
+          </div>
+        ))}
+        <div class="flex gap-1.5 ml-auto">
+          <dt class="text-base-content/60">{t("totals.total")}</dt>
+          <dd class="font-semibold">{fmtG(totalGrams)} g</dd>
+        </div>
+      </dl>
     </>
   );
 }

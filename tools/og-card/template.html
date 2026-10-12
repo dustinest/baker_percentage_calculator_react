@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!--
+  Source for public/og_card.png (1200×630 share image). Technical use only: not part of the site.
+  Edit texts or styles here, then run `npm run og-card` to regenerate the PNG.
+  Colours and fonts match the app's "rukkilill" theme in styles.css.
+-->
+<html lang="et">
+<head>
+<meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500&family=Young+Serif&display=block" rel="stylesheet" />
+<style>
+  * { margin: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; background: #ebede6; color: #2a211f; font-family: "Libre Franklin", sans-serif; }
+  .card { position: absolute; inset: 40px; display: flex; flex-direction: column; background: #fbfbf8; border: 2px solid #d5d6cc; border-radius: 16px; padding: 0 64px; }
+  .body { flex: 1; display: flex; align-items: center; gap: 48px; }
+  .text { flex: 1; }
+  h1 { font-family: "Young Serif", serif; font-weight: 400; font-size: 96px; line-height: 1; letter-spacing: -0.01em; }
+  .en-name { margin-top: 10px; font-family: "Young Serif", serif; font-size: 44px; line-height: 1.1; color: #7a4a30; }
+  .tagline, .tagline-en { max-width: 640px; text-wrap: balance; line-height: 1.35; }
+  .tagline { margin-top: 34px; font-size: 28px; }
+  .tagline-en { margin-top: 22px; font-size: 24px; color: #7b7470; }
+  .logo { width: 250px; height: 250px; flex: none; }
+  .foot { border-top: 2px solid #d5d6cc; padding: 22px 0 26px; font-size: 28px; font-weight: 500; color: #3550c4; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="body">
+      <div class="text">
+        <h1>Juuretiseköök</h1>
+        <p class="en-name">Sourdough Kitchen</p>
+        <p class="tagline">Sirvi juuretisega retsepte või kohanda pärmitaigna retsepte sobivaks.</p>
+        <p class="tagline-en">Browse sourdough recipes or convert your yeast dough recipes.</p>
+      </div>
+      <img class="logo" src="../../public/logo.svg" alt="" />
+    </div>
+    <div class="foot">juuretis-app.foxjunior.com</div>
+  </div>
+</body>
+</html>

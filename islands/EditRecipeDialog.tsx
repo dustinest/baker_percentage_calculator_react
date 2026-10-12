@@ -189,11 +189,11 @@ export default function EditRecipeDialog({ recipe }: Props) {
     <dialog class="modal modal-open" onClick={(e) => e.target === e.currentTarget && close()}>
       <div class="modal-box max-w-3xl w-full max-h-[90vh] flex flex-col overflow-hidden">
         <div class="flex justify-between items-center mb-4 flex-none">
-          <h3 class="font-bold text-lg">{nameForLang(d.name, language.value)}</h3>
+          <h3 class="font-display text-xl">{nameForLang(d.name, language.value) || t("actions.add_recipe")}</h3>
           <button type="button" class="btn btn-sm btn-circle btn-ghost" onClick={close}>✕</button>
         </div>
 
-        <div role="tablist" class="tabs tabs-bordered mb-4 flex-none">
+        <div role="tablist" class="tabs tabs-border mb-4 flex-none">
           {(["edit", "json", "import"] as Tab[]).map((tab) => (
             <button
               type="button"
@@ -212,8 +212,8 @@ export default function EditRecipeDialog({ recipe }: Props) {
           <div class="space-y-4">
             <div class="form-control">
               <label class="label"><span class="label-text">{t("edit.name")}</span></label>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-0">
-                <label class="input input-bordered input-sm flex items-center gap-2">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <label class="input input-bordered input-sm w-full flex items-center gap-2">
                   <span>🇪🇪</span>
                   <input
                     type="text"
@@ -222,7 +222,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
                     onInput={(e) => setNameLang("et", (e.target as HTMLInputElement).value)}
                   />
                 </label>
-                <label class="input input-bordered input-sm flex items-center gap-2">
+                <label class="input input-bordered input-sm w-full flex items-center gap-2">
                   <span>🇬🇧</span>
                   <input
                     type="text"
@@ -263,12 +263,12 @@ export default function EditRecipeDialog({ recipe }: Props) {
               const usedKeys = new Set(group.ingredients.map((i) => i.type).filter((t) => t && t !== "other"));
               const nameRecord = isCustom ? group.name as Record<string, string> : null;
               return (
-                  <div key={gi} class="card w-full border border-base-300">
+                  <div key={gi} class="card w-full border border-base-300 bg-base-100">
                     <div class="card-body p-2">
                   {isCustom ? (
                     <div class="flex gap-2 items-start mb-2">
                       <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <label class="input input-bordered input-xs flex items-center gap-2">
+                        <label class="input input-bordered input-xs w-full flex items-center gap-2">
                           <span>🇪🇪</span>
                           <input
                             type="text"
@@ -277,7 +277,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
                             onInput={(e) => setGrpNameLang(gi, "et", (e.target as HTMLInputElement).value)}
                           />
                         </label>
-                        <label class="input input-bordered input-xs flex items-center gap-2">
+                        <label class="input input-bordered input-xs w-full flex items-center gap-2">
                           <span>🇬🇧</span>
                           <input
                             type="text"
@@ -292,7 +292,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
                       </button>
                     </div>
                   ) : group.name && (
-                    <p class="text-xs font-semibold uppercase text-base-content/50 mb-2">
+                    <p class="text-sm font-semibold text-secondary mb-2">
                       {typeof group.name === "string" ? (t(group.name) || group.name) : nameForLang(group.name, language.value)}
                     </p>
                   )}
@@ -483,14 +483,14 @@ export default function EditRecipeDialog({ recipe }: Props) {
                     </div>
                     {hasLabel && (
                       <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <label class="input input-bordered input-xs flex items-center gap-2">
+                        <label class="input input-bordered input-xs w-full flex items-center gap-2">
                           <span>🇪🇪</span>
                           <input type="text" class="grow" placeholder={t("edit.baking.label_et")}
                             value={bt.label?.et ?? ""}
                             onInput={(e) => setBakingTimeLabel(i, "et", (e.target as HTMLInputElement).value)}
                           />
                         </label>
-                        <label class="input input-bordered input-xs flex items-center gap-2">
+                        <label class="input input-bordered input-xs w-full flex items-center gap-2">
                           <span>🇬🇧</span>
                           <input type="text" class="grow" placeholder={t("edit.baking.label_en")}
                             value={bt.label?.en ?? ""}
@@ -575,7 +575,7 @@ export default function EditRecipeDialog({ recipe }: Props) {
               >
                 {copied.value ? <IconCheck class="h-4 w-4 text-success" /> : <IconCopy />}
               </button>
-              <pre class="text-xs overflow-auto max-h-96 bg-base-200 p-3 rounded">{json}</pre>
+              <pre class="text-xs overflow-auto max-h-96 bg-base-200 p-3 rounded-field">{json}</pre>
             </div>
           );
         })()}

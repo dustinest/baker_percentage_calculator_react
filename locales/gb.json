@@ -127,6 +127,7 @@
   },
   "navigation": {
     "title": "Sourdough Kitchen",
+    "tagline": "Browse sourdough recipes or convert your yeast dough recipes.",
     "select_all": "Select all",
     "selected": "{{count}} selected"
   },

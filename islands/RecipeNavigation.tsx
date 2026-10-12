@@ -65,11 +65,11 @@ export default function RecipeNavigation() {
 
   return (
     <>
-      <div class="flex flex-col h-screen w-64 bg-base-200">
+      <div class="flex flex-col h-screen w-64 bg-base-200 border-r border-base-300">
 
-        <div class="flex-none flex items-center gap-2 px-4 py-3">
+        <div class="flex-none flex items-center gap-2 px-4 pt-5 pb-4">
           <img src="/logo.svg" class="h-8 w-8 flex-shrink-0" alt="" />
-          <span class="text-lg font-bold">{t("navigation.title")}</span>
+          <span class="font-display text-xl leading-tight">{t("navigation.title")}</span>
         </div>
 
         <div class="flex-1 overflow-y-auto">
@@ -78,11 +78,11 @@ export default function RecipeNavigation() {
               <label class="cursor-pointer flex items-center gap-2">
                 <input
                   type="checkbox"
-                  class="checkbox checkbox-sm"
+                  class="checkbox checkbox-sm checkbox-primary"
                   checked={allSelected}
                   onChange={() => allSelected ? selectNone() : selectAll()}
                 />
-                <span class="text-sm font-medium">
+                <span class="text-sm font-medium text-base-content/70">
                   {selectedCount > 0 ? t("navigation.selected", { count: selectedCount }) : t("navigation.select_all")}
                 </span>
               </label>
@@ -95,7 +95,7 @@ export default function RecipeNavigation() {
                 <label class="cursor-pointer flex items-center gap-2">
                   <input
                     type="checkbox"
-                    class="checkbox checkbox-sm"
+                    class="checkbox checkbox-sm checkbox-primary"
                     checked={selectedIds.value.has(recipe.id)}
                     onChange={() => toggleSelected(recipe.id)}
                   />
@@ -110,7 +110,7 @@ export default function RecipeNavigation() {
             <div class="divider my-1" />
 
             <li>
-              <button type="button" class="btn btn-sm btn-ghost w-full justify-start" onClick={addNewRecipe}>
+              <button type="button" class="btn btn-sm btn-ghost w-full justify-start text-primary" onClick={addNewRecipe}>
                 + {t("actions.add_recipe")}
               </button>
             </li>
@@ -184,7 +184,7 @@ export default function RecipeNavigation() {
         <dialog class="modal modal-open" onClick={(e) => e.target === e.currentTarget && closeSort()}>
           <div class="modal-box max-w-sm">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="font-bold text-lg">{t("actions.sort")}</h3>
+              <h3 class="font-display text-xl">{t("actions.sort")}</h3>
               <button type="button" class="btn btn-sm btn-circle btn-ghost" onClick={closeSort}>✕</button>
             </div>
             <ul ref={listRef} class="space-y-1">

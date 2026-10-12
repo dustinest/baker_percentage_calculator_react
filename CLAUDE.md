@@ -55,7 +55,7 @@ All edits go through `updateDraft((c: RecipeType) => { ... })`, which deep-copie
 - Open Graph / Twitter / canonical tags are static in `index.html` and use `%VITE_SITE_URL%`, which Vite replaces at build time. If the variable is unset, the placeholder ships literally and share previews break silently.
 - `VITE_SITE_URL` comes from `.env` locally (gitignored; template in `.env.example`). Live site: `https://juuretis-app.foxjunior.com`.
 - Production is built by Cloudflare Pages' own Git integration, so `VITE_SITE_URL` must be set in the Cloudflare project's Variables and Secrets (then redeploy). `.github/workflows/deploy.yml` is a separate GitHub Actions deploy that is not what publishes the site.
-- `public/og_card.png` is the 1200×630 share image.
+- `public/og_card.png` is the 1200×630 share image. Regenerate it from `tools/og-card/template.html` with `npm run og-card` (see `tools/og-card/README.md`).
 
 ## Tests
 

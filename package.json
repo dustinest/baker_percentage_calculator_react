@@ -12,7 +12,8 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "lint": "eslint . --max-warnings=2"
+    "lint": "eslint . --max-warnings=2",
+    "og-card": "node tools/og-card/generate.mjs"
   },
   "dependencies": {
     "@preact/signals": "^2.9.0",

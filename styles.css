@@ -1,29 +1,151 @@
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes: false;
+}
+
+/* "Rukkilill": rye field with cornflowers. Cool linen, rye-crumb ink, crust accents, cornflower blue for actions. */
+@plugin "daisyui/theme" {
+  name: "rukkilill";
+  default: true;
+  color-scheme: light;
+  --color-base-100: #fbfbf8;
+  --color-base-200: #ebede6;
+  --color-base-300: #d5d6cc;
+  --color-base-content: #2a211f;
+  --color-primary: #3550c4;
+  --color-primary-content: #fbfbf8;
+  --color-secondary: #7a4a30;
+  --color-secondary-content: #fbfbf8;
+  --color-accent: #3550c4;
+  --color-accent-content: #fbfbf8;
+  --color-neutral: #2a211f;
+  --color-neutral-content: #ebede6;
+  --color-info: #3550c4;
+  --color-info-content: #fbfbf8;
+  --color-success: #3f6b3a;
+  --color-success-content: #fbfbf8;
+  --color-warning: #9a5b00;
+  --color-warning-content: #fbfbf8;
+  --color-error: #b3261e;
+  --color-error-content: #fbfbf8;
+  --radius-selector: 0.25rem;
+  --radius-field: 0.375rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@plugin "daisyui/theme" {
+  name: "rukkilill-dark";
+  prefersdark: true;
+  color-scheme: dark;
+  --color-base-100: #231d1b;
+  --color-base-200: #1a1514;
+  --color-base-300: #3a312d;
+  --color-base-content: #ebe5dd;
+  --color-primary: #93a6ff;
+  --color-primary-content: #1a1514;
+  --color-secondary: #d1a283;
+  --color-secondary-content: #1a1514;
+  --color-accent: #93a6ff;
+  --color-accent-content: #1a1514;
+  --color-neutral: #ebe5dd;
+  --color-neutral-content: #1a1514;
+  --color-info: #93a6ff;
+  --color-info-content: #1a1514;
+  --color-success: #8fbf86;
+  --color-success-content: #1a1514;
+  --color-warning: #e0a85a;
+  --color-warning-content: #1a1514;
+  --color-error: #f08a80;
+  --color-error-content: #1a1514;
+  --radius-selector: 0.25rem;
+  --radius-field: 0.375rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@theme {
+  --font-sans: "Libre Franklin", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Young Serif", ui-serif, Georgia, serif;
+}
+
+body {
+  font-feature-settings: "tnum" 1;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+@layer components {
+  /* Ingredient tables: hairline rows, quiet labels, grams carry the weight. */
+  .recipe-table td {
+    padding: 0.3rem 0;
+    border-bottom: 1px solid color-mix(in oklab, var(--color-base-300) 60%, transparent);
+  }
+
+  .recipe-table tbody tr:last-child td {
+    border-bottom-width: 0;
+  }
+}
 
 @media print {
   html {
     font-size: 10.5pt;
   }
 
-  .table tr:first-child > * {
-    border-top-width: 0;
-  }
-
-  .table tr:last-child > * {
-    border-bottom-width: 0;
+  /* Paper is white and ink is black: drop tints, darken muted text and hairlines. */
+  :root,
+  :root:not([data-theme]) {
+    color-scheme: light;
+    --color-base-100: #fff;
+    --color-base-200: #fff;
+    --color-base-300: #b8b8b8;
+    --color-base-content: #000;
+    --color-secondary: #000;
   }
 
   .divider::before,
   .divider::after {
     opacity: 0.25;
   }
+
+  /* One recipe per page. Page breaks are only reliable in block flow, so flatten the drawer grid around the cards. */
+  .drawer,
+  .drawer-content {
+    display: block !important;
+  }
+
+  .recipe-card {
+    break-inside: avoid;
+  }
+
+  .recipe-card + .recipe-card {
+    break-before: page;
+  }
 }
 
-.compact-mode .table td,
-.compact-mode .table th {
-  padding-top: 0.2rem;
-  padding-bottom: 0.2rem;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+.compact-mode .recipe-table td {
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
 }
 
 .compact-mode .divider {

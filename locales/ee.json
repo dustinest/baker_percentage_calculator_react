@@ -127,6 +127,7 @@
   },
   "navigation": {
     "title": "Juuretiseköök",
+    "tagline": "Sirvi juuretisega retsepte või kohanda pärmitaigna retsepte sobivaks.",
     "select_all": "Vali kõik",
     "selected": "{{count}} valitud"
   },
