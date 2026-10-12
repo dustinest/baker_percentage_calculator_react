@@ -126,7 +126,7 @@
     "select_recipe": "Vali vasakult retsept, mida kuvada"
   },
   "navigation": {
-    "title": "Pagari %",
+    "title": "Juuretiseköök",
     "select_all": "Vali kõik",
     "selected": "{{count}} valitud"
   },

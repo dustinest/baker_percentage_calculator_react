@@ -16,3 +16,8 @@ dist/
 
 .superpowers/
 docs/superpowers
+
+# Local env (see .env.example)
+.env
+.env.*
+!.env.example

@@ -126,7 +126,7 @@
     "select_recipe": "Select a recipe from the left to display"
   },
   "navigation": {
-    "title": "Baker's %",
+    "title": "Sourdough Kitchen",
     "select_all": "Select all",
     "selected": "{{count}} selected"
   },
